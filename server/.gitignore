@@ -35,3 +35,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### 다음을 추가함 ###
+../.idea
