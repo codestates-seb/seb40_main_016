@@ -1,16 +1,22 @@
 package com.cocoa.catdog.user.entity;
 
+import com.cocoa.catdog.article.entity.Article;
+import com.cocoa.catdog.article.entity.Like;
+import com.cocoa.catdog.article.entity.Report;
 import com.cocoa.catdog.audit.AuditingEntity;
+import com.cocoa.catdog.comment.entity.Comment;
+import com.cocoa.catdog.wallet.entity.Wallet;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.usertype.UserType;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
 public class User extends AuditingEntity {
@@ -44,6 +50,31 @@ public class User extends AuditingEntity {
 
     @Enumerated(value = EnumType.STRING)
     private UserType userType;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Wallet wallet;
+
+    @OneToMany(mappedBy = "user")
+    private List<Article> articles = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "followingUser")
+    private List<Follow> followingUsers = new ArrayList<>();
+
+    @OneToMany(mappedBy = "followedUser")
+    private List<Follow> followedUsers = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<Like> likes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<Report> reports = new ArrayList<>();
+
+    public void addWallet(Wallet wallet) {
+        this.wallet = wallet;
+    }
 
     public enum UserStatus {
         USER_ACTIVE("활동중"),

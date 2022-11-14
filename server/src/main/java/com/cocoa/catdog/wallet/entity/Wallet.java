@@ -2,21 +2,18 @@ package com.cocoa.catdog.wallet.entity;
 
 
 import com.cocoa.catdog.audit.AuditingEntity;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.cocoa.catdog.order.entity.Order;
+import com.cocoa.catdog.user.entity.User;
+import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Wallet extends AuditingEntity {
 
     @Id
@@ -25,6 +22,32 @@ public class Wallet extends AuditingEntity {
 
     private int yummy;
 
+    /*
+    * Wallet 생성자
+    * Wallet 생성시 User에 Wallet 등록
+    * */
+    public Wallet (int yummy, User user) {
+        this.yummy = yummy;
+        this.user = user;
+        user.addWallet(this);
+    }
 
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "USER_ID")
+    private User user;
+
+    @OneToMany(mappedBy = "WALLET_ID")
+    private List<Order> orders = new ArrayList<>();
+
+    @OneToMany(mappedBy = "giveWlt")
+    private List<GiveTake> gives = new ArrayList<>();
+
+    @OneToMany(mappedBy = "takeWlt")
+    private List<GiveTake> takes = new ArrayList<>();
+
+    public void addUser(User user) {
+        this.user = user;
+    }
 
 }

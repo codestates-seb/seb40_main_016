@@ -1,16 +1,17 @@
 package com.cocoa.catdog.article.entity;
 
 import com.cocoa.catdog.audit.AuditingEntity;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.cocoa.catdog.user.entity.User;
+import com.cocoa.catdog.wallet.entity.GiveTake;
+import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
 public class Article extends AuditingEntity {
@@ -28,7 +29,7 @@ public class Article extends AuditingEntity {
 
     private int likeCnt;
 
-    private int  views;
+    private int views;
 
     private int reportCnt;
 
@@ -36,6 +37,20 @@ public class Article extends AuditingEntity {
 
     @Enumerated(value = EnumType.STRING)
     private ArticleStatus articleStatus = ArticleStatus.PUBLIC;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "USER_ID")
+    private User user;
+
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
+    private List<Like> likes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
+    private List<Report> reports = new ArrayList<>();
+
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
+    private List<GiveTake> giveTakes = new ArrayList<>();
+
 
     public enum ArticleStatus {
 
