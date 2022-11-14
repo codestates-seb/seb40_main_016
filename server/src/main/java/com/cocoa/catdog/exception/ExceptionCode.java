@@ -15,9 +15,11 @@ public enum ExceptionCode {
 
     USER_UNAUTHORIZED(403, "User unauthorized"),
 
-    ANSWER_NOT_FOUND(404,"Answer not found")
+    ANSWER_NOT_FOUND(404,"Answer not found"),
+
+    COMMENT_NOT_FOUND(404, "Comment not found");
            
-            ;
+
 
 
         private final int status;

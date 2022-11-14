@@ -25,4 +25,18 @@ public class CommentReport {
     @JoinColumn(name = "COMMENT_ID")
     private Comment comment;
 
+    //==연관관계 메서드==//
+    public void addUser(User user) {
+        if (this.user == null) {
+            this.user = user;
+        }
+    }
+
+    public void addComment(Comment comment) {
+        if (this.comment == null) {
+            this.comment = comment;
+        }
+        comment.addCommentReport(this);
+    }
+
 }

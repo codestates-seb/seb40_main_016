@@ -76,6 +76,17 @@ public class User extends AuditingEntity {
         this.wallet = wallet;
     }
 
+    public void addComment(Comment comment) {
+        if(!comments.contains(comment)) {
+            comments.add(comment);
+        }
+        comment.addUser(this);
+    }
+
+    public void removeComment (Comment comment) {
+        comments.remove(comment);
+    }
+
     public enum UserStatus {
         USER_ACTIVE("활동중"),
         USER_SLEEP("휴면 상태"),
