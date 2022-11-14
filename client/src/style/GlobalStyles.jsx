@@ -52,6 +52,7 @@ const GlobalStyle = createGlobalStyle`
     --color-yellow: #ffcc41
     --color-orange: #FF864B
     --color-faded-orange: #FFEDE6
+    --color-red: #D20000
     --color-blue: #445cb4
     --color-sky: #63bff3
     --color-faded-sky: #EEFAFF
