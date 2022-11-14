@@ -1,4 +1,5 @@
 import { createGlobalStyle } from "styled-components";
+import variables from "./GloabalVariables";
 
 const GlobalStyle = createGlobalStyle`
   html, body, div, span, applet, object, iframe,
@@ -46,24 +47,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   :root {
-    --color-black: #0c0d0e
-    --color-madium-black: #3b4045
-    --color-light-black: #6a737c
-    --color-yellow: #ffcc41
-    --color-orange: #FF864B
-    --color-faded-orange: #FFEDE6
-    --color-red: #D20000
-    --color-blue: #445cb4
-    --color-sky: #63bff3
-    --color-faded-sky: #EEFAFF
-    --color-green: #5AB3B1
-    --color-ivory: #F1F0ED
-
-    --fs-pc-xlarge: 27px
-    --fs-pc-large: 20px
-    --fs-pc-regular: 16px 
-    --fs-pc-small: 14px 
-    --fs-pc-xsmall: 11px 
+    ${variables}
   }
 `;
 
