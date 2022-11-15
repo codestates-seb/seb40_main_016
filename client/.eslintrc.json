@@ -21,6 +21,7 @@
     "sourceType": "module"
   },
   "rules": {
+    "no-unused-vars": "off",
     "react/react-in-jsx-scope": 0,
     "react/jsx-uses-react": 0,
     "react/prop-types": "off",
