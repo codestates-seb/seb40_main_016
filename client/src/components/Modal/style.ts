@@ -45,19 +45,24 @@ export const Popup = styled.div<PopupProp>`
   transform: translate(-50%, -50%);
 
   min-height: 200px;
+  max-height: 90vh;
+  overflow: auto;
   width: calc(100% - 16px * 2);
   max-width: ${(props) => props.maxWidth};
 
   border-radius: 20px;
   box-sizing: border-box;
-  overflow: hidden;
   background-color: #fff;
   box-shadow: 0px 0px 8px -1px rgba(0, 0, 0, 0.4);
 
   @media screen and (min-width: var(--pc-start)) {
     width: 50%;
     height: 50%;
-  } ;
+  }
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 interface PopupHeaderProp {
