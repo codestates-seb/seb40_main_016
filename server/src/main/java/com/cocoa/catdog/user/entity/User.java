@@ -107,6 +107,7 @@ public class User extends AuditingEntity {
         }
     }
 
+
     public enum UserGender {
         MALE("수"),
         FEMALE("암");

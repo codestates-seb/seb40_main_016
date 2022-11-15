@@ -1,5 +1,6 @@
 spring:
   h2:
+    mem:
     console:
       enabled: true
       path: /h2

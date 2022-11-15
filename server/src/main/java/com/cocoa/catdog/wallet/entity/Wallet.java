@@ -26,7 +26,6 @@ public class Wallet extends AuditingEntity {
     @JoinColumn(name = "USER_ID")
     private User user;
 
-
     public void setUser(User user) {
         this.user = user;
         if (user.getWallet() != this) {
