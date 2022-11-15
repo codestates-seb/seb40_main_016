@@ -1,2 +1,10 @@
-package com.cocoa.catdog.auth;public class LoginDto {
+package com.cocoa.catdog.auth;
+
+import lombok.Getter;
+
+@Getter
+public class LoginDto {
+    private String email; // == 유저email
+    private String password;
 }
+

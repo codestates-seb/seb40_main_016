@@ -1,5 +1,6 @@
-package com.cocoa.catdog.userdetails;
+package com.cocoa.catdog.auth.userdetails;
 
+import com.cocoa.catdog.auth.CustomAuthorityUtils;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -42,7 +43,7 @@ public class UsersDetailsService implements UserDetailsService {
             return authorityUtils.createAuthorities(this.getRoles());
         }
 
-        @Override //  시큐리티상에서 유저네임은 유저아이디이므로 이메일과 같다
+        @Override //  시큐리티상에서 유저네임은 유저아이디이므로 이메일과 동일
         public String getUsername() {
             return getEmail();
         }
