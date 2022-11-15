@@ -8,6 +8,7 @@
     "jsx": "react-jsx",
     "moduleResolution": "node"
   },
+  "include": ["src", "src/custom.d.ts"]
   // "compilerOptions": {
   //   "target": "es5",
   //   "lib": ["dom", "dom.iterable", "esnext"],
@@ -25,5 +26,5 @@
   //   "noEmit": true, // 결과 파일 내보낼지 여부
   //   "jsx": "react-jsx" // JSX 코드 생성 설정: 'preserve', 'react-native', 혹은 'react'.
   // },
-  "include": ["src", "src/custom.d.ts"]
+  // "include": ["src"]
 }
