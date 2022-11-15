@@ -1,3 +1,13 @@
+/*
+담당 : 송인선
+생성 : 2022.11.15
+수정 : -
+소개 : 헤더 컴포넌트 (로그인 전)
+설명 : 
+  - 페이지에서 공통적으로 사용되는 헤더 컴포넌트입니다.
+  - 현 단계에서는 타입 적용할 부분이 없었습니다.
+*/
+
 import styled from "styled-components";
 import { ReactComponent as Logo } from "../assets/img/logo.svg";
 import { ReactComponent as SearchIcon } from "../assets/img/search-icon.svg";
