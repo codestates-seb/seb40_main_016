@@ -1,2 +1,4 @@
-package com.cocoa.catdog.article.mapper;public interface ArticleMapper {
+package com.cocoa.catdog.article.mapper;
+
+public interface ArticleMapper {
 }

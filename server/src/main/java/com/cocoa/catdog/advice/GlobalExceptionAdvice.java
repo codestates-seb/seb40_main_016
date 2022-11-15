@@ -2,9 +2,8 @@ package com.cocoa.catdog.advice;
 
 
 import com.cocoa.catdog.exception.BusinessLogicException;
-import com.nimbusds.oauth2.sdk.ErrorResponse;
+import com.cocoa.catdog.response.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -14,6 +13,8 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.ConstraintViolationException;
 
 @RestController
 @Slf4j
