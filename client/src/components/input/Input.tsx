@@ -70,7 +70,9 @@ const InputStyle = styled.input<{ height?: string; inputColor?: string; fontSize
     font-size: ${`var(--fs-${fontSize})`};
 
     &:focus {
-        border: 1px solid var(--color-sky);
+      outline: none;
+      border: 1px solid var(--color-sky);
+    }
   `}
 `;
 
