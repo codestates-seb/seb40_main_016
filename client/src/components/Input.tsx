@@ -93,7 +93,7 @@ function Input({
       <InputStyle
         className={className}
         type={type}
-        value={value}
+        defaultValue={value}
         placeholder={placeholder}
         height={height}
         inputColor={inputColor}
