@@ -44,6 +44,14 @@ public class UserService {
                 .ifPresent(userName -> findUser.setUserName(userName));
         Optional.ofNullable(user.getContent())
                 .ifPresent(content -> findUser.setContent(content));
+        Optional.ofNullable(user.getUserGender())
+                .ifPresent(userGender -> findUser.setUserGender(userGender));
+        Optional.ofNullable(user.getUserBirth())
+                .ifPresent(userBirth -> findUser.setUserBirth(userBirth));
+        Optional.ofNullable(user.getUserImg())
+                .ifPresent(userImg -> findUser.setUserImg(userImg));
+        Optional.ofNullable(user.getUserType())
+                .ifPresent(userType -> findUser.setUserType(userType));
         return userRepository.save(findUser);
     }
 
@@ -62,13 +70,13 @@ public class UserService {
         return userRepository.findAll(PageRequest.of(page,size, Sort.by("userId").descending()));
     }
 
-    //유저 삭제 todo 유저 상태 변경 적용으로 처리 변경
+    //유저 삭제
     public void deleteUser(long userId) {
         User findUser = findVerifiedUser(userId);
         userRepository.delete(findUser);
     }
 
-    // 유저 있는 지 확인
+    // 유저 있는지 확인
     private User findVerifiedUser(long userId) {
         Optional<User> optionalUser = userRepository.findById(userId);
         //유저정보가 없으면 예외 발생

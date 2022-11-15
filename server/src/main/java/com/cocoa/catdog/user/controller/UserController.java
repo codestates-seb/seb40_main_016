@@ -8,6 +8,7 @@ import com.cocoa.catdog.user.entity.User;
 import com.cocoa.catdog.user.mapper.UserMapper;
 import com.cocoa.catdog.user.service.UserService;
 
+import com.cocoa.catdog.wallet.entity.Wallet;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -31,6 +32,7 @@ public class UserController {
     @PostMapping
     public ResponseEntity postUser(@Valid @RequestBody UserPostDto userPostDto) {
         User user = mapper.userPostDtoToUser(userPostDto);
+        user.setWallet(new Wallet());
         User response = userService.createUser(user);
 
         return new ResponseEntity<>(

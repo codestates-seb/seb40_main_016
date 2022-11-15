@@ -7,7 +7,6 @@ import com.cocoa.catdog.audit.AuditingEntity;
 import com.cocoa.catdog.comment.entity.Comment;
 import com.cocoa.catdog.wallet.entity.Wallet;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -40,11 +39,10 @@ public class User extends AuditingEntity {
 
     private String userGender;
 
-    private LocalDate userBirth;
-
     @Column(length = 200)
     private String content;
-    // 자기소개 정보
+
+    private LocalDate userBirth;
 
     @Getter
     private UserStatus userStatus = UserStatus.USER_ACTIVE;
@@ -77,8 +75,11 @@ public class User extends AuditingEntity {
     @OneToMany(mappedBy = "user")
     private List<Report> reports = new ArrayList<>();
 
-    public void addWallet(Wallet wallet) {
+    public void setWallet(Wallet wallet) {
         this.wallet = wallet;
+        if (wallet.getUser() != this) {
+            wallet.setUser(this);
+        }
     }
 
     public enum UserStatus {
@@ -103,6 +104,18 @@ public class User extends AuditingEntity {
 
         UserType(String type) {
             this.type = type;
+        }
+    }
+
+    public enum UserGender {
+        MALE("수"),
+        FEMALE("암");
+
+        @Getter
+        private String gender;
+
+        UserGender(String gender) {
+            this.gender = gender;
         }
     }
 

@@ -15,10 +15,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class UserPostDto {
 
-    @NotBlank
+    @NotBlank(message = "이메일은 공백이 아니어야 합니다.")
     @Email
     private String email;
-
 
     @NotBlank
     private String userName;
@@ -26,10 +25,11 @@ public class UserPostDto {
     @NotBlank
     private String password;
 
-
     private String content;
-/*    private String userType;
-    private String userGender;*/
+    private String userType;
+    private String userGender;
+    private String userImg;
+    private String userBirth;
 
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;

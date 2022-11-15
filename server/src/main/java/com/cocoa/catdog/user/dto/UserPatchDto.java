@@ -11,13 +11,13 @@ public class UserPatchDto {
 
     private long userId;
 
-    private String email;
-
     private String userName;
 
     private String content;
-/*    private String userType;
-    private String userGender;*/
+    private String userType;
+    private String userGender;
+    private String userImg;
+    private String userBirth;
 
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
