@@ -1,6 +1,7 @@
 package com.cocoa.catdog.article.Dto;
 
 import com.cocoa.catdog.article.entity.Article;
+import com.cocoa.catdog.user.dto.UserDto;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;

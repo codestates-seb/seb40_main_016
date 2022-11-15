@@ -37,7 +37,7 @@ public class Wallet extends AuditingEntity {
     @JoinColumn(name = "USER_ID")
     private User user;
 
-    @OneToMany(mappedBy = "WALLET_ID")
+    @OneToMany(mappedBy = "wallet")
     private List<Order> orders = new ArrayList<>();
 
     @OneToMany(mappedBy = "giveWlt")

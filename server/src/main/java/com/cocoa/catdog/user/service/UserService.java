@@ -19,7 +19,7 @@ public class UserService {
 
 
     @Transactional(readOnly = true)
-    public User findVerified(Long userId) {
+    public User findVerifiedUser(Long userId) {
         Optional<User> optionalUser = userRepository.findById(userId);
         User findUser = optionalUser.orElseThrow(
                 () -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
