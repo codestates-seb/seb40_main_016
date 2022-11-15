@@ -1,10 +1,12 @@
 import { css } from "styled-components";
 
 const variables = css`
+  --color-white: #ffffff;
   --color-black: #0c0d0e;
   --color-madium-black: #3b4045;
   --color-light-black: #6a737c;
   --color-gray: #bfbfbf;
+  --color-dark-gray: #b3b3b3;
   --color-yellow: #ffcc41;
   --color-orange: #ff864b;
   --color-faded-orange: #ffede6;
