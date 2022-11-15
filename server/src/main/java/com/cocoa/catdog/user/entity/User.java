@@ -16,9 +16,10 @@ import java.util.List;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Setter
+@NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@Table(name = "USERS")
 public class User extends AuditingEntity {
 
     @Id
@@ -34,7 +35,7 @@ public class User extends AuditingEntity {
     @Column(nullable = false, length = 100)
     private String userName;
 
-    @ColumnDefault("url")
+    // todo 유저 기본 이미지 url 추가 필요-s3 업로드
     private String userImg;
 
     private String userGender;
@@ -50,6 +51,10 @@ public class User extends AuditingEntity {
 
     @Enumerated(value = EnumType.STRING)
     private UserType userType;
+
+    // 유저 권한 관리를 위한 필드 추가
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> roles = new ArrayList<>();
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Wallet wallet;
@@ -81,7 +86,7 @@ public class User extends AuditingEntity {
         USER_SLEEP("휴면 상태"),
         USER_DROPPED("탈퇴");
 
-        @Enumerated(value = EnumType.STRING)
+        @Getter
         private String status;
 
         UserStatus(String status) {
@@ -99,6 +104,12 @@ public class User extends AuditingEntity {
         UserType(String type) {
             this.type = type;
         }
+    }
+
+    public User(String userName, String email, String password) {
+        this.userName = userName;
+        this.email = email;
+        this.password = password;
     }
 
 }
