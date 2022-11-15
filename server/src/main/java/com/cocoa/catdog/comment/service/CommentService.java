@@ -50,7 +50,7 @@ public class CommentService {
         Comment findComment = findComment(commentId);
         Optional.ofNullable(comment.getContent())
                 .ifPresent(content -> findComment.changeContent(content));
-
+        System.out.println("asd"+comment.getContent());
         return findComment;
     }
 

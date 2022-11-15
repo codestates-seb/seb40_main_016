@@ -66,6 +66,8 @@ public class Comment extends AuditingEntity {
     public void addUser (User user) {
         if(getUser() == null) {
             this.user = user;
+        } else {
+            return;
         }
         user.addComment(this);
     }
@@ -73,6 +75,8 @@ public class Comment extends AuditingEntity {
     public void addArticle(Article article) {
         if(getArticle() == null) {
             this.article = article;
+        } else {
+            return;
         }
         article.addComment(this);
     }
@@ -80,6 +84,8 @@ public class Comment extends AuditingEntity {
     public void addCommentLike(CommentLike commentLike) {
         if(!commentLikes.contains(commentLike)) {
             commentLikes.add(commentLike);
+        } else {
+            return;
         }
         commentLike.addComment(this);
     }
@@ -87,6 +93,8 @@ public class Comment extends AuditingEntity {
     public void addCommentReport(CommentReport commentReport) {
         if(!commentReports.contains(commentReport)) {
             commentReports.add(commentReport);
+        } else {
+            return;
         }
         commentReport.addComment(this);
     }
