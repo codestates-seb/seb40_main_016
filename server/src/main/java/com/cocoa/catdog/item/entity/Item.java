@@ -14,6 +14,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
+@Table(name = "items")
 public class Item extends AuditingEntity {
 
     @Id
@@ -27,7 +28,6 @@ public class Item extends AuditingEntity {
     @Column(nullable = false)
     private String itemName;
 
-    @ColumnDefault("url")
     private String itemImg;
 
 

@@ -9,11 +9,15 @@ import com.cocoa.catdog.comment.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/comments")
 @RequiredArgsConstructor
+@Validated
 public class CommentController {
     private final CommentService commentService;
     private final CommentMapper commentMapper;
@@ -23,7 +27,7 @@ public class CommentController {
     * 댓글 등록
     * */
     @PostMapping("/{article-id}")
-    public ResponseEntity<CommentResponseDto> postComment (@RequestBody CommentDto.Post postDto,
+    public ResponseEntity<CommentResponseDto> postComment (@RequestBody @Valid CommentDto.Post postDto,
                                                            @PathVariable("article-id") Long articleId,
                                                            @RequestParam Long userId) {
         Comment comment = commentMapper.postToComment(postDto);
@@ -36,7 +40,7 @@ public class CommentController {
     * 댓글 수정
     * */
     @PatchMapping("/{comment-id}")
-    public ResponseEntity<CommentResponseDto> patchComment (@RequestBody CommentDto.Patch patchDto,
+    public ResponseEntity<CommentResponseDto> patchComment (@RequestBody @Valid CommentDto.Patch patchDto,
                                                             @PathVariable("comment-id") Long commentId,
                                                             @RequestParam Long userId) {
         Comment comment = commentMapper.patchToComment(patchDto);
@@ -71,7 +75,7 @@ public class CommentController {
     * */
     @PostMapping("/{comment-id}/report")
     public ResponseEntity<HttpStatus> reportComment (@RequestParam("comment-id") Long commentId,
-                                                     @RequestBody CommentDto.Report reportDto,
+                                                     @RequestBody @Valid CommentDto.Report reportDto,
                                                      @RequestParam Long userId) {
         CommentReport commentReport = commentMapper.reportToCommentReport(reportDto);
         commentService.reportComment(commentReport, commentId, userId);
