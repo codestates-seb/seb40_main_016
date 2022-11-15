@@ -1,9 +1,11 @@
-import HeaderBefore from "./components/HeaderBefore";
+// import HeaderBefore from "./components/HeaderBefore";
+import HeaderAfter from "./components/HeaderAfter";
 
 function App() {
   return (
     <div className="App">
-      <HeaderBefore />
+      {/* <HeaderBefore /> */}
+      <HeaderAfter />
     </div>
   );
 }

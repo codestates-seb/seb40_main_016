@@ -8,13 +8,13 @@
   - 사용 예시: 
   <Button 
     className="loginBtn"
-    onClick={onClick},
-    width="150px",
-    height="30px",
-    buttonColor="yellow",
-    btnHoverColor="light-black",
-    textColor="black",
-    fontSize="pc-regular",
+    onClick={onClick}
+    width="150px"
+    height="30px"
+    btnColor="yellow"
+    btnHoverColor="light-black"
+    textColor="black"
+    fontSize="pc-regular"
     isShadow={true}
   >
     내용
@@ -22,9 +22,9 @@
 */
 
 import { ReactNode } from "react";
-import styled, { css } from "styled-components";
+import { ButtonStyle } from "./style";
 
-interface ButtonProps {
+export interface ButtonProps {
   className?: string;
   children: ReactNode;
   onClick: () => void;
@@ -36,38 +36,6 @@ interface ButtonProps {
   fontSize?: string;
   isShadow?: boolean;
 }
-
-const ButtonStyle = styled.button<ButtonProps>`
-  cursor: pointer;
-  border-style: none;
-  border-radius: 15px;
-  ${({
-    width = "150px",
-    height = "40px",
-    btnColor = "ivory",
-    btnHoverColor = "dark-ivory",
-    textColor = "black",
-    fontSize = "pc-regular",
-    isShadow = false,
-  }) => css`
-    width: ${width};
-    height: ${height};
-    background-color: ${`var(--color-${btnColor})`};
-    color: ${`var(--color-${textColor})`};
-    font-size: ${`var(--fs-${fontSize})`};
-    box-shadow: ${isShadow ? "0px 3px 3px var(--color-gray)" : "none"};
-
-    &:hover {
-      background-color: ${`var(--color-${btnHoverColor})`};
-    }
-
-    &:active {
-      margin-left: 1px;
-      margin-top: 1px;
-      box-shadow: none;
-    }
-  `}
-`;
 
 function Button({
   className,
