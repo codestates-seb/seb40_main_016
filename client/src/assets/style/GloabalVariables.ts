@@ -4,6 +4,7 @@ const variables = css`
   --color-black: #0c0d0e;
   --color-madium-black: #3b4045;
   --color-light-black: #6a737c;
+  --color-gray: #bfbfbf;
   --color-yellow: #ffcc41;
   --color-orange: #ff864b;
   --color-faded-orange: #ffede6;
@@ -13,6 +14,7 @@ const variables = css`
   --color-faded-sky: #eefaff;
   --color-green: #5ab3b1;
   --color-ivory: #f1f0ed;
+  --color-dark-ivory: #e4e0db;
 
   --fs-pc-xlarge: 27px;
   --fs-pc-large: 20px;
