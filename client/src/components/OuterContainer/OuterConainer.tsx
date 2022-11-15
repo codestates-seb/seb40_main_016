@@ -24,7 +24,7 @@ const Wrapper = styled.div`
 `;
 
 interface Prop {
-  children?: React.ReactNode;
+  children: React.ReactNode;
   className?: string;
 }
 
