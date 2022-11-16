@@ -1,7 +1,7 @@
 /*
 담당 : 송인선
 생성 : 2022.11.15
-수정 : -
+수정 : 2022.11.16
 소개 : 헤더 컴포넌트 (로그인 후)
 설명 : 
   - 페이지에서 공통적으로 사용되는 헤더 컴포넌트입니다.
@@ -28,6 +28,7 @@ const Header = styled.div`
   background-color: var(--color-white);
   height: var(--header-height);
   box-shadow: 0px 0px 10px -3px var(--color-light-black);
+  z-index: 2;
 
   .inner {
     display: flex;
