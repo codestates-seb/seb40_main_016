@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.security.Principal;
 
 @RestController
 @RequestMapping("articles")
@@ -42,7 +43,7 @@ public class ArticleController {
     @ResponseStatus(HttpStatus.OK)
     ArticleDto.Response getArticle(@PathVariable("article-id") Long articleId,
                                    @RequestHeader(name = "Authorization", required = false) String token) {
-        Article foundArticle = articleService.findVerifiedQuestion(articleId);
+        Article foundArticle = articleService.findArticle(articleId);
         return mapper.entityToResponseDto(foundArticle);
     }
 

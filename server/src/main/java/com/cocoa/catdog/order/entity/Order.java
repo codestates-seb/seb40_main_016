@@ -30,4 +30,12 @@ public class Order extends AuditingEntity {
     private List<OrderItem> orderItems = new ArrayList<>();
 
 
+    //==연관관계 메서드==//
+    public void addOrderItem(OrderItem orderItem) {
+        if(!orderItems.contains(orderItem)) {
+            orderItems.add(orderItem);
+            orderItem.addOrder(this);
+        }
+    }
+
 }
