@@ -8,6 +8,7 @@ public enum ExceptionCode {
     USER_NOT_FOUND(404, "User not found"),
 
     USER_EXISTS(409, "User exists"),
+    FOLLOW_EXISTS(409, "followed already"),
 
     USER_RESIGNED(422, "User resigned"),
 

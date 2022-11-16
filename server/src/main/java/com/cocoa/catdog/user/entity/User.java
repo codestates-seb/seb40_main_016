@@ -7,7 +7,6 @@ import com.cocoa.catdog.audit.AuditingEntity;
 import com.cocoa.catdog.comment.entity.Comment;
 import com.cocoa.catdog.wallet.entity.Wallet;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -16,9 +15,10 @@ import java.util.List;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Setter
+@NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@Table(name = "USERS")
 public class User extends AuditingEntity {
 
     @Id
@@ -34,22 +34,25 @@ public class User extends AuditingEntity {
     @Column(nullable = false, length = 100)
     private String userName;
 
-    @ColumnDefault("url")
+    // todo 유저 기본 이미지 url 추가 필요-s3 업로드
     private String userImg;
 
     private String userGender;
 
-    private LocalDate userBirth;
-
     @Column(length = 200)
     private String content;
-    // 자기소개 정보
+
+    private LocalDate userBirth;
 
     @Getter
     private UserStatus userStatus = UserStatus.USER_ACTIVE;
 
     @Enumerated(value = EnumType.STRING)
     private UserType userType;
+
+    // 유저 권한 관리를 위한 필드 추가
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> roles = new ArrayList<>();
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Wallet wallet;
@@ -72,8 +75,11 @@ public class User extends AuditingEntity {
     @OneToMany(mappedBy = "user")
     private List<Report> reports = new ArrayList<>();
 
-    public void addWallet(Wallet wallet) {
+    public void setWallet(Wallet wallet) {
         this.wallet = wallet;
+        if (wallet.getUser() != this) {
+            wallet.setUser(this);
+        }
     }
 
     public enum UserStatus {
@@ -81,7 +87,7 @@ public class User extends AuditingEntity {
         USER_SLEEP("휴면 상태"),
         USER_DROPPED("탈퇴");
 
-        @Enumerated(value = EnumType.STRING)
+        @Getter
         private String status;
 
         UserStatus(String status) {
@@ -99,6 +105,25 @@ public class User extends AuditingEntity {
         UserType(String type) {
             this.type = type;
         }
+    }
+
+
+    public enum UserGender {
+        MALE("수"),
+        FEMALE("암");
+
+        @Getter
+        private String gender;
+
+        UserGender(String gender) {
+            this.gender = gender;
+        }
+    }
+
+    public User(String userName, String email, String password) {
+        this.userName = userName;
+        this.email = email;
+        this.password = password;
     }
 
 }
