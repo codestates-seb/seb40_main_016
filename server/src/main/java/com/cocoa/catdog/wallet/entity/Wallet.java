@@ -43,3 +43,4 @@ public class Wallet extends AuditingEntity {
     private List<GiveTake> takes = new ArrayList<>();
 
 }
+
