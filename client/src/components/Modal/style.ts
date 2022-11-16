@@ -94,5 +94,17 @@ export const PopupHeader = styled.div<PopupHeaderProp>`
         fill: var(--color-light-black);
       }
     }
+
+    &.orange {
+      path {
+        fill: var(--color-orange);
+      }
+
+      &:hover {
+        path {
+          filter: brightness(1.5);
+        }
+      }
+    }
   }
 `;
