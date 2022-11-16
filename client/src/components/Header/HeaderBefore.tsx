@@ -16,6 +16,8 @@ import { ReactComponent as MansaeCat } from "../../assets/img/mansae-cat.svg";
 import InnerContainer from "../InnerContainer/InnerContainer";
 
 const Header = styled.div`
+  position: fixed;
+  width: 100%;
   height: var(--header-height);
   box-shadow: 0px 0px 10px -3px var(--color-light-black);
 
@@ -149,7 +151,7 @@ const Btn = styled.button`
   }
 `;
 
-function HeaderBefore() {
+const HeaderBefore = () => {
   return (
     <Header>
       <InnerContainer className="inner">
@@ -168,6 +170,6 @@ function HeaderBefore() {
       </InnerContainer>
     </Header>
   );
-}
+};
 
 export default HeaderBefore;

@@ -21,6 +21,8 @@ import { ReactComponent as MenuIcon } from "../../assets/img/menu-icon.svg";
 import InnerContainer from "../InnerContainer/InnerContainer";
 
 const Header = styled.div`
+  position: fixed;
+  width: 100%;
   height: var(--header-height);
   box-shadow: 0px 0px 10px -3px var(--color-light-black);
 
