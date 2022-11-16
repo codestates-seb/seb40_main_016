@@ -35,4 +35,20 @@ public class ArticleService {
         return articleRepository.findById(articleId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.ARTICLE_NOT_FOUND));
     }
+
+    public Article updateArticle(Article newArticle, Long userId) {
+        Article article = findVerifiedQuestion(newArticle.getArticleId());
+
+        if (!article.getUser().getUserId().equals(userId)) {
+            throw new BusinessLogicException(ExceptionCode.USER_UNAUTHORIZED);
+        }
+        article.setArticleImg(newArticle.getArticleImg());
+        article.setContent(newArticle.getContent());
+
+        return article;
+    }
+
+
+
+
 }

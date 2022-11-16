@@ -30,7 +30,25 @@ public class ArticleController {
     @PatchMapping("/{article-id}")
     @ResponseStatus(HttpStatus.OK)
     ArticleDto.Response patchArticle(@PathVariable("article-id") Long articleId,
-                                     )
+//                                     @RequestHeader(name = "Authorization") String token,
+                                     @RequestBody ArticleDto.Patch patchDto) {
+        patchDto.setArticleId(articleId);
+        Article article = mapper.patchDtoToEntity(patchDto);
+
+        return mapper.entityToResponseDto(articleService.updateArticle(article, 1L));
+    }
+
+    @GetMapping("/{article-id")
+    @ResponseStatus(HttpStatus.OK)
+    ArticleDto.Response getArticle(@PathVariable("article-id") Long articleId,
+                                   @RequestHeader(name = "Authorization", required = false) String token) {
+        Article foundArticle = articleService.findVerifiedQuestion(articleId);
+        return mapper.entityToResponseDto(foundArticle);
+    }
+
+//    @GetMapping
+//    @ResponseStatus(HttpStatus.OK)
+//
 
 
 }

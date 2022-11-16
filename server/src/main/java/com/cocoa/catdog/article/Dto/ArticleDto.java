@@ -5,6 +5,7 @@ import com.cocoa.catdog.user.dto.UserDto;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
+import java.util.List;
 
 public class ArticleDto {
 
@@ -48,6 +49,7 @@ public class ArticleDto {
 
         public  void setArticleId(Long articleId) {this.articleId = articleId;}
     }
+
 
 
 }
