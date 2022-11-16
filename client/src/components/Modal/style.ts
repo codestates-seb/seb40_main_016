@@ -7,7 +7,6 @@ interface BgProp {
 
 export const Bg = styled.div<BgProp>`
   display: ${(props) => (props.isOn ? "block" : "none")};
-  position: relative;
   position: fixed;
   left: 0;
   top: 0;
@@ -92,6 +91,18 @@ export const PopupHeader = styled.div<PopupHeaderProp>`
       circle,
       path {
         fill: var(--color-light-black);
+      }
+    }
+
+    &.orange {
+      path {
+        fill: var(--color-orange);
+      }
+
+      &:hover {
+        path {
+          filter: brightness(1.5);
+        }
       }
     }
   }
