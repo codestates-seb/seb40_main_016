@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 public class ErrorResponse {
     private final Integer status;
     private final String message;
+
     private final List<FieldError> fieldErrors;
     private final List<ConstraintViolationError> violationErrors;
 

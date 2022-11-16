@@ -1,10 +1,8 @@
 package com.cocoa.catdog.user.entity;
 
 import com.cocoa.catdog.audit.AuditingEntity;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -12,6 +10,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@Builder
 public class Follow extends AuditingEntity {
 
     @Id

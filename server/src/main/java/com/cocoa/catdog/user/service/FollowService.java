@@ -1,38 +1,37 @@
 package com.cocoa.catdog.user.service;
 
+import com.cocoa.catdog.exception.BusinessLogicException;
+import com.cocoa.catdog.exception.ExceptionCode;
+import com.cocoa.catdog.user.entity.Follow;
+import com.cocoa.catdog.user.entity.User;
+import com.cocoa.catdog.user.repository.FollowRepository;
+import com.cocoa.catdog.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.cocoa.catdog.auth.CustomAuthorityUtils;
-import com.cocoa.catdog.exception.BusinessLogicException;
-import com.cocoa.catdog.exception.ExceptionCode;
-import com.cocoa.catdog.user.entity.User;
-import com.cocoa.catdog.user.repository.UserRepository;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class FollowService {
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final CustomAuthorityUtils authorityUtils;
+    private final FollowRepository followRepository;
 
-    //회원 가입
-    public User createUser(User user) {
-        verifyExistsEmail(user.getEmail());
-        //패스워드 암호화
-        String encryptedPassword = passwordEncoder.encode(user.getPassword());
-        user.setPassword(encryptedPassword);
-        //db에 유저 역할 정보 저장
-        List<String> roles = authorityUtils.createRoles(user.getEmail());
-        user.setRoles(roles);
-        return userRepository.save(user);
+    //팔로우
+    public Follow createFollow(long followerId, long followedId) {
+//        verifyExistsFollow(followerId, followedId);
+        //db에 팔로우 내역 저장
+
+        Follow follow = Follow.builder()
+                .followingUser(userRepository.findByUserId(followerId))
+                .followedUser(userRepository.findByUserId(followedId))
+                .build();
+
+        return followRepository.save(follow);
     }
 
     //유저 정보 수정 (이메일은 고유값으로 변경 불가, 비밀번호, 이름, 소개 변경 가능)
@@ -84,10 +83,10 @@ public class UserService {
 
     }
 
-    //가입된 이메일인지 확인
-    private void verifyExistsEmail(String email) {
-        Optional<User> user = userRepository.findByEmail(email);
-        if(user.isPresent())
-            throw new BusinessLogicException(ExceptionCode.USER_EXISTS);
+    //이미 팔로우 되어 있는지 확인
+    private void verifyExistsFollow(long followerId, long followedId) {
+        Optional<Follow> follow = followRepository.findByFollowingUser(followedId);
+        if(follow.isPresent())
+            throw new BusinessLogicException(ExceptionCode.FOLLOW_EXISTS);
     }
 }
