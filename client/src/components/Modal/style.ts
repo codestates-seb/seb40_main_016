@@ -7,7 +7,6 @@ interface BgProp {
 
 export const Bg = styled.div<BgProp>`
   display: ${(props) => (props.isOn ? "block" : "none")};
-  position: relative;
   position: fixed;
   left: 0;
   top: 0;
