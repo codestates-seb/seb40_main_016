@@ -21,6 +21,8 @@ import { ReactComponent as MansaeCat } from "../../assets/img/mansae-cat.svg";
 import { ReactComponent as MenuIcon } from "../../assets/img/menu-icon.svg";
 import InnerContainer from "../InnerContainer/InnerContainer";
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import MenuList from "./MenuList";
 
 const Header = styled.div`
   position: fixed;
@@ -158,6 +160,12 @@ const Btn = styled.button`
 `;
 
 const HeaderAfter = () => {
+  const [isOn, setIsOn] = useState<boolean>(false);
+
+  const handleMenuOn = () => {
+    setIsOn(!isOn);
+  };
+
   return (
     <Header>
       <InnerContainer className="inner">
@@ -190,9 +198,10 @@ const HeaderAfter = () => {
           <Btn>
             <LogoutIcon />
           </Btn>
-          <Btn className="menu-icon">
+          <Btn className="menu-icon" onClick={handleMenuOn}>
             <MenuIcon />
           </Btn>
+          {isOn ? <MenuList handleMenuOn={handleMenuOn}></MenuList> : ""}
         </MenuBox>
       </InnerContainer>
     </Header>
