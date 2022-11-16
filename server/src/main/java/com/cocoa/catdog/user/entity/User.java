@@ -18,6 +18,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+
 @Table(name = "USERS")
 public class User extends AuditingEntity {
 
@@ -33,6 +34,7 @@ public class User extends AuditingEntity {
 
     @Column(nullable = false, length = 100)
     private String userName;
+
 
     // todo 유저 기본 이미지 url 추가 필요-s3 업로드
     private String userImg;
@@ -80,6 +82,19 @@ public class User extends AuditingEntity {
         if (wallet.getUser() != this) {
             wallet.setUser(this);
         }
+    }
+
+    public void addComment(Comment comment) {
+        if(!comments.contains(comment)) {
+            comments.add(comment);
+        } else {
+            return;
+        }
+        comment.addUser(this);
+    }
+
+    public void removeComment (Comment comment) {
+        comments.remove(comment);
     }
 
     public enum UserStatus {

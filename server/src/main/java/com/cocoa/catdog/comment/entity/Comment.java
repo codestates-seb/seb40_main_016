@@ -1,5 +1,6 @@
 package com.cocoa.catdog.comment.entity;
 
+import com.cocoa.catdog.article.entity.Article;
 import com.cocoa.catdog.article.entity.Like;
 import com.cocoa.catdog.article.entity.Report;
 import com.cocoa.catdog.audit.AuditingEntity;
@@ -35,12 +36,70 @@ public class Comment extends AuditingEntity {
     @JoinColumn(name = "USER_ID")
     private User user;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ARTICLE_ID")
+    private Article article;
+
     @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL)
     private List<CommentLike> commentLikes = new ArrayList<>();
 
     @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL)
     private List<CommentReport> commentReports = new ArrayList<>();
 
+    //==수정 메서드==//
+    public void changeContent (String content) {
+        if(content != null) {
+            this.content = content;
+        }
+    }
+
+    public void changeLikeCnt (int likeCnt) {
+        this.likeCnt = likeCnt;
+    }
+
+    public void changeReportCnt (int reportCnt) {
+        this.reportCnt = reportCnt;
+    }
+
+
+    //==연관관계 메서드==//
+    public void addUser (User user) {
+        if(getUser() == null) {
+            this.user = user;
+        } else {
+            return;
+        }
+        user.addComment(this);
+    }
+
+    public void addArticle(Article article) {
+        if(getArticle() == null) {
+            this.article = article;
+        } else {
+            return;
+        }
+        article.addComment(this);
+    }
+
+    public void addCommentLike(CommentLike commentLike) {
+        if(!commentLikes.contains(commentLike)) {
+            commentLikes.add(commentLike);
+        } else {
+            return;
+        }
+        commentLike.addComment(this);
+    }
+
+    public void addCommentReport(CommentReport commentReport) {
+        if(!commentReports.contains(commentReport)) {
+            commentReports.add(commentReport);
+        } else {
+            return;
+        }
+        commentReport.addComment(this);
+    }
+
+    //==댓글 상태==//
     public enum CommentStatus {
 
         PUBLIC("공개"),

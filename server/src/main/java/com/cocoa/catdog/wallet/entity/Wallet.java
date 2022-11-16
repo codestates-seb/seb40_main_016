@@ -28,7 +28,6 @@ public class Wallet extends AuditingEntity {
 
 
 
-
     public void setUser(User user) {
         this.user = user;
         if (user.getWallet() != this) {
@@ -36,6 +35,7 @@ public class Wallet extends AuditingEntity {
         }
     }
     
+
     @OneToMany(mappedBy = "wallet")
     private List<Order> orders = new ArrayList<>();
 
