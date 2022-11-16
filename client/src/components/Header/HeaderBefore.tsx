@@ -7,6 +7,7 @@
   - 페이지에서 공통적으로 사용되는 헤더 컴포넌트입니다.
   - 현 단계에서는 타입 적용할 부분이 없었습니다.
   - 반응형 적용
+  - 라우터 연결
 */
 
 import styled, { keyframes } from "styled-components";
@@ -14,10 +15,12 @@ import { ReactComponent as Logo } from "../../assets/img/logo.svg";
 import { ReactComponent as SearchIcon } from "../../assets/img/search-icon.svg";
 import { ReactComponent as MansaeCat } from "../../assets/img/mansae-cat.svg";
 import InnerContainer from "../InnerContainer/InnerContainer";
+import { Link } from "react-router-dom";
 
 const Header = styled.div`
   position: fixed;
   width: 100%;
+  background-color: var(--color-white);
   height: var(--header-height);
   box-shadow: 0px 0px 10px -3px var(--color-light-black);
 
@@ -83,7 +86,7 @@ const SearchBox = styled.form`
   position: relative;
   border-radius: 10px;
 
-  .searchicon {
+  .search-icon {
     position: absolute;
     top: 5px;
     left: 10px;
@@ -156,16 +159,24 @@ const HeaderBefore = () => {
     <Header>
       <InnerContainer className="inner">
         <LogoBox>
-          <Logo className="logo" />
-          <MansaeCat className="logo-responsive" />
+          <Link to="/">
+            <Logo className="logo" />
+          </Link>
+          <Link to="/">
+            <MansaeCat className="logo-responsive" />
+          </Link>
         </LogoBox>
         <SearchBox>
-          <SearchIcon className="searchicon" />
+          <SearchIcon className="search-icon" />
           <SearchInput type="text" placeholder="search..." />
         </SearchBox>
         <MenuBox>
-          <Btn>Login</Btn>
-          <Btn>Signup</Btn>
+          <Link to="/login">
+            <Btn>Login</Btn>
+          </Link>
+          <Link to="/signup">
+            <Btn>Signup</Btn>
+          </Link>
         </MenuBox>
       </InnerContainer>
     </Header>
