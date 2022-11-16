@@ -26,14 +26,17 @@ public class Wallet extends AuditingEntity {
     @JoinColumn(name = "USER_ID")
     private User user;
 
+
+
+
     public void setUser(User user) {
         this.user = user;
         if (user.getWallet() != this) {
             user.setWallet(this);
         }
     }
-
-    @OneToMany(mappedBy = "orderId")
+    
+    @OneToMany(mappedBy = "wallet")
     private List<Order> orders = new ArrayList<>();
 
     @OneToMany(mappedBy = "giveWlt")

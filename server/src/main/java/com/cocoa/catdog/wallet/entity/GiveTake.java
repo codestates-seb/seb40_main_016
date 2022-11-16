@@ -29,6 +29,7 @@ public class GiveTake extends AuditingEntity {
     @JoinColumn(name = "TAKE_WLT_ID")
     private Wallet takeWlt;
 
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ARTICLE_ID")
     private Article article;

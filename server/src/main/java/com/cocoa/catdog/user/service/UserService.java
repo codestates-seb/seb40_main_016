@@ -13,7 +13,6 @@ import com.cocoa.catdog.exception.BusinessLogicException;
 import com.cocoa.catdog.exception.ExceptionCode;
 import com.cocoa.catdog.user.entity.User;
 import com.cocoa.catdog.user.repository.UserRepository;
-
 import java.util.List;
 import java.util.Optional;
 

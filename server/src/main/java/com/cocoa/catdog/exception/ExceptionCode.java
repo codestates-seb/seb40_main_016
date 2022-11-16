@@ -10,8 +10,8 @@ public enum ExceptionCode {
     USER_EXISTS(409, "User exists"),
     FOLLOW_EXISTS(409, "followed already"),
 
-    USER_RESIGNED(422, "User resigned"),
-
+    USER_SLEEP(411,"휴면 상태"),
+    USER_DROPPED(412,"탈퇴"),
     ARTICLE_NOT_FOUND(404, "Question not found"),
 
     USER_UNAUTHORIZED(403, "User unauthorized"),
