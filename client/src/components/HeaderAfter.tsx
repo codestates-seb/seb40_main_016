@@ -6,6 +6,7 @@
 설명 : 
   - 페이지에서 공통적으로 사용되는 헤더 컴포넌트입니다.
   - 현 단계에서는 타입 적용할 부분이 없었습니다.
+  - 반응형 적용
 */
 
 import styled, { keyframes } from "styled-components";
@@ -134,7 +135,7 @@ const Btn = styled.button`
   width: 40px;
   height: 40px;
   border-radius: 100%;
-  background-color: white;
+  background-color: var(--color-white);
   border: none;
   flex-shrink: 0;
   animation: ${FadeOut("0", "1")} 1s ease-in-out forwards;
@@ -148,12 +149,6 @@ const Btn = styled.button`
     transform: scale(1.1, 1.1);
     transition: all 0.2s;
   }
-`;
-
-const BtnList = styled.div`
-  width: 100px;
-  height: 100px;
-  border: 1px solid red;
 `;
 
 const HeaderAfter = () => {
@@ -186,7 +181,6 @@ const HeaderAfter = () => {
           </Btn>
         </MenuBox>
       </InnerContainer>
-      <BtnList />
     </Header>
   );
 };

@@ -116,13 +116,11 @@ const Small = (from: string, to: string, fontSmall: string, fontXSmall: string) 
   from {
     width: ${from};
     height: ${from};
-    /* font-size: var(--fs-pc-small); */
     font-size: ${fontSmall};
   }
   to {
     width: ${to};
     height: ${to};
-    /* font-size: var(--fs-pc-xsmall); */
     font-size: ${fontXSmall};
   }
 `;
