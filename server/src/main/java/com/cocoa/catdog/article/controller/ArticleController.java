@@ -38,7 +38,7 @@ public class ArticleController {
         return mapper.entityToResponseDto(articleService.updateArticle(article, 1L));
     }
 
-    @GetMapping("/{article-id")
+    @GetMapping("/{article-id}")
     @ResponseStatus(HttpStatus.OK)
     ArticleDto.Response getArticle(@PathVariable("article-id") Long articleId,
                                    @RequestHeader(name = "Authorization", required = false) String token) {
