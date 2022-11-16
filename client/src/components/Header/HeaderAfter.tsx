@@ -10,15 +10,15 @@
 */
 
 import styled, { keyframes } from "styled-components";
-import { ReactComponent as Logo } from "../assets/img/logo.svg";
-import { ReactComponent as SearchIcon } from "../assets/img/search-icon.svg";
-import { ReactComponent as AddIcon } from "../assets/img/add-icon.svg";
-import { ReactComponent as ShopIcon } from "../assets/img/shop-icon.svg";
-import { ReactComponent as MyIcon } from "../assets/img/my-icon.svg";
-import { ReactComponent as LogoutIcon } from "../assets/img/logout-icon.svg";
-import { ReactComponent as MansaeCat } from "../assets/img/mansae-cat.svg";
-import { ReactComponent as MenuIcon } from "../assets/img/menu-icon.svg";
-import InnerContainer from "./InnerContainer/InnerContainer";
+import { ReactComponent as Logo } from "../../assets/img/logo.svg";
+import { ReactComponent as SearchIcon } from "../../assets/img/search-icon.svg";
+import { ReactComponent as AddIcon } from "../../assets/img/add-icon.svg";
+import { ReactComponent as ShopIcon } from "../../assets/img/shop-icon.svg";
+import { ReactComponent as MyIcon } from "../../assets/img/my-icon.svg";
+import { ReactComponent as LogoutIcon } from "../../assets/img/logout-icon.svg";
+import { ReactComponent as MansaeCat } from "../../assets/img/mansae-cat.svg";
+import { ReactComponent as MenuIcon } from "../../assets/img/menu-icon.svg";
+import InnerContainer from "../InnerContainer/InnerContainer";
 
 const Header = styled.div`
   height: var(--header-height);

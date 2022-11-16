@@ -10,10 +10,10 @@
 */
 
 import styled, { keyframes } from "styled-components";
-import { ReactComponent as Logo } from "../assets/img/logo.svg";
-import { ReactComponent as SearchIcon } from "../assets/img/search-icon.svg";
-import { ReactComponent as MansaeCat } from "../assets/img/mansae-cat.svg";
-import InnerContainer from "./InnerContainer/InnerContainer";
+import { ReactComponent as Logo } from "../../assets/img/logo.svg";
+import { ReactComponent as SearchIcon } from "../../assets/img/search-icon.svg";
+import { ReactComponent as MansaeCat } from "../../assets/img/mansae-cat.svg";
+import InnerContainer from "../InnerContainer/InnerContainer";
 
 const Header = styled.div`
   height: var(--header-height);
