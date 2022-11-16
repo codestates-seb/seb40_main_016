@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ScrollToTop from "./utills/ScrollToTop";
 // import HeaderBefore from "./components/Header/HeaderBefore";
 import HeaderAfter from "./components/Header/HeaderAfter";
+import Footer from "./components/Footer/Footer";
 import Main from "./pages/Main/Main";
 import Signup from "./pages/Signup/Signup";
 import Login from "./pages/Login/Signup";
@@ -21,6 +22,7 @@ function App() {
           <Route index path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
+      <Footer />
     </>
   );
 }
