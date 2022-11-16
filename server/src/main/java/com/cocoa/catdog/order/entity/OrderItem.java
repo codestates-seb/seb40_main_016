@@ -12,6 +12,7 @@ import javax.persistence.*;
 
 @Entity
 @Getter
+@Builder
 public class OrderItem extends AuditingEntity {
 
     @Id
@@ -29,5 +30,19 @@ public class OrderItem extends AuditingEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ITEM_ID")
     private Item item;
+
+    //==연관관계메서드==//
+    public void addOrder(Order order) {
+        if(this.order == null) {
+            this.order = order;
+            order.addOrderItem(this);
+        }
+    }
+
+    public void addItem(Item item) {
+        if(this.item == null) {
+            this.item = item;
+        }
+    }
 
 }
