@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ScrollToTop from "./utills/ScrollToTop";
-// import HeaderBefore from "./components/HeaderBefore";
-import HeaderAfter from "./components/HeaderAfter";
+// import HeaderBefore from "./components/Header/HeaderBefore";
+import HeaderAfter from "./components/Header/HeaderAfter";
 import Main from "./pages/Main/Main";
 import Signup from "./pages/Signup/Signup";
 import Login from "./pages/Login/Signup";
@@ -12,6 +12,7 @@ function App() {
     <>
       <BrowserRouter>
         <ScrollToTop />
+        {/* <HeaderBefore /> */}
         <HeaderAfter />
         <Routes>
           <Route index path="/" element={<Main />} />
