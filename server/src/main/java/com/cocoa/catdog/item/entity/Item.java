@@ -27,7 +27,6 @@ public class Item extends AuditingEntity {
     @Column(nullable = false)
     private String itemName;
 
-    @ColumnDefault("url")
     private String itemImg;
 
 
