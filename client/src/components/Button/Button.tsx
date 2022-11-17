@@ -1,7 +1,8 @@
 /*
 담당 : 김윤희
 생성 : 2022.11.15
-수정 : -
+수정 : 
+  -2022.11.17 (이수련) disabled 옵션 추가
 소개 : 버튼 컴포넌트
 설명 : 
   - 페이지에서 공통적으로 사용되는 버튼 컴포넌트입니다.
@@ -35,6 +36,7 @@ export interface ButtonProps {
   textColor?: string;
   fontSize?: string;
   isShadow?: boolean;
+  disabled?: boolean;
 }
 
 function Button({
@@ -48,6 +50,7 @@ function Button({
   textColor,
   fontSize,
   isShadow,
+  disabled,
 }: ButtonProps) {
   return (
     <ButtonStyle
@@ -60,6 +63,7 @@ function Button({
       fontSize={fontSize}
       isShadow={isShadow}
       onClick={onClick}
+      disabled={disabled}
     >
       {children}
     </ButtonStyle>
