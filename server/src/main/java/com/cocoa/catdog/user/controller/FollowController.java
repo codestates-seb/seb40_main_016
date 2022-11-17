@@ -21,9 +21,10 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("/follow")
+@RequestMapping
 @Validated
 @RequiredArgsConstructor
 public class FollowController {
@@ -31,54 +32,36 @@ public class FollowController {
     private final FollowMapper mapper;
 
     //팔로우
-    @PostMapping("/{follower-id}/{followed-id}")
-    public ResponseEntity postUser(@PathVariable("follower-id") long followerId, @PathVariable("followed-id") long followedId) {
+    @PostMapping("/follow/{follower-id}/{followed-id}")
+    public ResponseEntity addFollow(@PathVariable("follower-id") long followerId, @PathVariable("followed-id") long followedId) {
         Follow response = followService.createFollow(followerId, followedId);
 
         return new ResponseEntity<>(mapper.followToFollowResponseDto(response), HttpStatus.CREATED);
     }
-/*
+
+    //한 유저가 팔로우하고 있는 유저 목록 조회
+    @GetMapping("/follow/{user-id}")
+    public ResponseEntity getFollow(@PathVariable("user-id") long userId) {
+        List<Follow> response = followService.getFollow(userId);
+
+        return new ResponseEntity<>(mapper.followsToFollowInfoResponseDto(response), HttpStatus.OK);
+    }
+
+    //나를 팔로우하고 있는 유저 목록 조회
+    @GetMapping("/follower/{user-id}")
+    public ResponseEntity getFollower(@PathVariable("user-id") long userId) {
+        List<Follow> response = followService.getFollower(userId);
+
+        return new ResponseEntity<>(mapper.followsToFollowerInfoResponseDto(response), HttpStatus.OK);
+    }
 
     //팔로우 취소
-    @DeleteMapping("/{user-id}")
-    public ResponseEntity deleteUser(@PathVariable("user-id") long userId) {
-        userService.deleteUser(userId);
+    @DeleteMapping("/follow/{user-id}/{unfollow-id}")
+    public ResponseEntity unFollow(@PathVariable("user-id") long userId, @PathVariable("unfollow-id") long userId2) {
+
+        followService.unFollow(userId, userId2);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
-    //특정 유저의 팔로우 목록 조회
-    @GetMapping("/{user-id}")
-    public ResponseEntity getUser(@PathVariable("user-id") long userId) {
-        User user = userService.findUser(userId);
-
-        return new ResponseEntity<>(
-                new SingleResponseDto<>(mapper.userToUserResponseDto(user)), HttpStatus.OK);
-    }
-
-    //팔로우 정보 수정
-    @PatchMapping("/{user-id}")
-    public ResponseEntity patchUser(@PathVariable("user-id") long userId, @Valid @RequestBody UserPatchDto userPatchDto) {
-        userPatchDto.setUserId(userId);
-        User user = mapper.userPatchDtoToUser(userPatchDto);
-        User response = userService.updateUser(user);
-
-        return new ResponseEntity<>(
-                new SingleResponseDto<>(mapper.userToUserResponseDto(response)), HttpStatus.OK);
-    }
-
-    //전체회원 조회
-    @GetMapping
-    public ResponseEntity getUsers(@Positive @RequestParam int page,
-                                   @Positive @RequestParam int size) {
-        Page<User> pageUsers = userService.findUsers(page-1, size);
-        List<User> users = pageUsers.getContent();
-        //서비스 구현
-        return new ResponseEntity<>(
-                new MultiResponseDto<>(mapper.usersToUserResponseDto(users), pageUsers), HttpStatus.OK);
-
-    }
-*/
-
 
 }
