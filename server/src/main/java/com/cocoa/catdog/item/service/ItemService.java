@@ -20,6 +20,7 @@ import java.util.Optional;
 public class ItemService {
     private final ItemRepository itemRepository;
 
+    @Transactional
     public Item createItem (Item item) {
         return itemRepository.save(item);
     }
