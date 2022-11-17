@@ -1,9 +1,11 @@
 package com.cocoa.catdog.user.controller;
 
+import com.cocoa.catdog.auth.jwt.JwtTokenizer;
 import com.cocoa.catdog.response.MultiResponseDto;
 import com.cocoa.catdog.response.SingleResponseDto;
 import com.cocoa.catdog.user.dto.UserPatchDto;
 import com.cocoa.catdog.user.dto.UserPostDto;
+import com.cocoa.catdog.user.dto.UserResponseDto;
 import com.cocoa.catdog.user.entity.User;
 import com.cocoa.catdog.user.mapper.UserMapper;
 import com.cocoa.catdog.user.service.UserService;
@@ -27,6 +29,7 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
     private final UserMapper mapper;
+    private final JwtTokenizer jwtTokenizer;
 
     //회원가입
     @PostMapping
@@ -75,4 +78,11 @@ public class UserController {
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @GetMapping("/profile")
+    @ResponseStatus(HttpStatus.OK)
+    public UserResponseDto getProfile(@RequestHeader(name = "Authorization") String token) {
+        return mapper.userToUserResponseDto(userService.findUser(jwtTokenizer.getUserId(token)));
+    }
+
 }

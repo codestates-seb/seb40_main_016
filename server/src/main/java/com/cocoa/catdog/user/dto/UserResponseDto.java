@@ -25,7 +25,6 @@ public class UserResponseDto {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public String getUserStatus() { return userStatus.getStatus(); }
 /*
     유저가 가진 yummy를 지갑에서 가져와 표시
     public int getYummy() { return wallet.getYummy();}
