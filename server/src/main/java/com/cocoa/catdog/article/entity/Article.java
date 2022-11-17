@@ -55,6 +55,12 @@ public class Article extends AuditingEntity {
 
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
     private List<GiveTake> giveTakes = new ArrayList<>();
+    @Builder
+    public Article (Long articleId, String articleImg, String content) {
+        this.articleId = articleId;
+        this.articleImg = articleImg;
+        this.content = content;
+    }
 
     public void addComment (Comment comment) {
         if(!comments.contains(comment)) {

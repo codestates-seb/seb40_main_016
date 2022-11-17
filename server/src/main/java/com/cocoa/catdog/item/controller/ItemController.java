@@ -44,8 +44,7 @@ public class ItemController {
     public ResponseEntity getItems(@RequestHeader(name = "Authorization", required = false) String token) {
         Page<Item> itemPage = itemService.findItems(0, 10);
         List<Item> items = itemPage.getContent();
-//        Wallet wallet = userService.findUser(jwtTokenizer.getUserId(token)).getWallet();
-        Wallet wallet = userService.findUser(1L).getWallet();
+        Wallet wallet = userService.findUser(jwtTokenizer.getUserId(token)).getWallet();
         new ItemResponseDto.Multi(itemMapper.itemsToResponses(items), itemPage, walletMapper.walletToResponse(wallet));
 
         return new ResponseEntity<>(

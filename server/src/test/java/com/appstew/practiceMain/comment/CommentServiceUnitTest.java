@@ -51,7 +51,7 @@ public class CommentServiceUnitTest {
         testUser.setUserId(1L); testUser.setEmail("test@gmail.com");
         testUser.setPassword("password"); testUser.setUserName("test_name");
         testArticle = Article.builder().articleId(1L).articleImg("testurl")
-                .content("글 내용").comments(new ArrayList<>()).build();
+                .content("글 내용").build();
         Comment comment = Comment.builder().commentId(1L).content("댓글내용").build();
 
         given(userService.findUser(Mockito.anyLong())).willReturn(testUser);

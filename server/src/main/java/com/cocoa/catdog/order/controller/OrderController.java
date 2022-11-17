@@ -1,5 +1,6 @@
 package com.cocoa.catdog.order.controller;
 
+import com.cocoa.catdog.auth.jwt.JwtTokenizer;
 import com.cocoa.catdog.item.entity.Item;
 import com.cocoa.catdog.order.dto.OrderDto;
 import com.cocoa.catdog.order.dto.OrderResponseDto;
@@ -18,17 +19,18 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/wallet")
 @RequiredArgsConstructor
 @Validated
 public class OrderController {
     private final OrderService orderService;
     private final OrderMapper orderMapper;
+    private final JwtTokenizer jwtTokenizer;
 
-    @PostMapping("/wallet")
-    public ResponseEntity<OrderResponseDto> postOrder (@RequestBody @Valid OrderDto.Post postDto
-                                                       /*@RequestParam Long userId*/) {
-        Long userId = 1L;
+    @PostMapping
+    public ResponseEntity<OrderResponseDto> postOrder (@RequestBody @Valid OrderDto.Post postDto,
+                                                       @RequestHeader(name = "Authorization") String token) {
+        Long userId = jwtTokenizer.getUserId(token);
         Order order = orderMapper.postToOrder(postDto);
         Order createdOrder = orderService.createOrder(order, userId);
 
