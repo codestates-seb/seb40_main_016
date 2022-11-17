@@ -59,10 +59,8 @@ public class Article extends AuditingEntity {
     public void addComment (Comment comment) {
         if(!comments.contains(comment)) {
             comments.add(comment);
-        } else {
-            return;
+            comment.addArticle(this);
         }
-        comment.addArticle(this);
 
     }
 

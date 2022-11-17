@@ -41,10 +41,8 @@ public class CommentReport {
     public void addComment(Comment comment) {
         if (this.comment == null) {
             this.comment = comment;
-        } else {
-            return;
+            comment.addCommentReport(this);
         }
-        comment.addCommentReport(this);
     }
 
 }

@@ -47,15 +47,12 @@ public class CommentServiceUnitTest {
 
     @BeforeEach
     public void beforeEach() {
-/*        testUser = User.builder().userId(1L).email("test@gmail.com")
-                .password("password").userName("test_name").comments(new ArrayList<>()).build();*/
         testUser = new User();
         testUser.setUserId(1L); testUser.setEmail("test@gmail.com");
         testUser.setPassword("password"); testUser.setUserName("test_name");
         testArticle = Article.builder().articleId(1L).articleImg("testurl")
                 .content("글 내용").comments(new ArrayList<>()).build();
-        Comment comment = Comment.builder().commentId(1L).content("댓글내용")
-                .commentLikes(new ArrayList<>()).commentReports(new ArrayList<>()).build();
+        Comment comment = Comment.builder().commentId(1L).content("댓글내용").build();
 
         given(userService.findUser(Mockito.anyLong())).willReturn(testUser);
         given(articleService.findArticle(Mockito.anyLong())).willReturn(testArticle);
@@ -170,6 +167,7 @@ public class CommentServiceUnitTest {
 
         //then
         assertThat(testComment.getCommentLikes().get(0).getUser().getUserId()).isEqualTo(userId);
+        assertThat(testComment.getLikeCnt()).isEqualTo(1);
     }
 
     @Test
