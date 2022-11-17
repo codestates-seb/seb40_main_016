@@ -1,8 +1,9 @@
 package com.cocoa.catdog.comment.entity;
 
-import com.cocoa.catdog.article.entity.Article;
 import com.cocoa.catdog.user.entity.User;
+import lombok.Builder;
 import lombok.Getter;
+
 
 import javax.persistence.*;
 
@@ -24,6 +25,12 @@ public class CommentReport {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "COMMENT_ID")
     private Comment comment;
+
+    @Builder
+    public CommentReport (Long commentReportId, String content) {
+        this.commentReportId = commentReportId;
+        this.content = content;
+    }
 
     public void addContent(String content) {
         if(this.content == null) {
