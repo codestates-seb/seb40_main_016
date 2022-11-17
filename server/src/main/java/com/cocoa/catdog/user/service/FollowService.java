@@ -93,4 +93,15 @@ public class FollowService {
         User findUser = optionalUser.orElseThrow(()-> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
         return findUser;
     }
+
+    public Optional <Follow> isFollow(long userId, long userId2) {
+        // 팔로우 하고 받는 유저 찾기
+        User findUser1 = findUser(userId);
+        User findUser2 = findUser(userId2);
+        //팔로우가 있으면 예외 발생
+        Optional <Follow> follow = followRepository.findByFollowingUserAndFollowedUser(findUser1, findUser2);
+
+        return follow;
+        }
+
 }

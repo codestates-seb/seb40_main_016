@@ -1,25 +1,13 @@
 package com.cocoa.catdog.user.controller;
 
-import com.cocoa.catdog.response.MultiResponseDto;
-import com.cocoa.catdog.response.SingleResponseDto;
-import com.cocoa.catdog.user.dto.UserPatchDto;
-import com.cocoa.catdog.user.dto.UserPostDto;
 import com.cocoa.catdog.user.entity.Follow;
-import com.cocoa.catdog.user.entity.User;
 import com.cocoa.catdog.user.mapper.FollowMapper;
-import com.cocoa.catdog.user.mapper.UserMapper;
 import com.cocoa.catdog.user.service.FollowService;
-import com.cocoa.catdog.user.service.UserService;
-import com.cocoa.catdog.wallet.entity.Wallet;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
-import javax.validation.constraints.Positive;
 import java.util.List;
 import java.util.Optional;
 
@@ -64,4 +52,14 @@ public class FollowController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    //팔로우 상태 체크
+    @GetMapping("/follow/{follower-id}/{followed-id}")
+    public ResponseEntity isFollow(@PathVariable("follower-id") long followerId, @PathVariable("followed-id") long followedId) {
+        Optional<Follow> response = followService.isFollow(followerId, followedId);
+        if (response.isPresent()) {
+            return new ResponseEntity<>("ok", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("none", HttpStatus.NO_CONTENT);
+        }
+    }
 }
