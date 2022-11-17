@@ -15,7 +15,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@Builder
+@Table(name = "articles")
 public class Article extends AuditingEntity {
 
     @Id
