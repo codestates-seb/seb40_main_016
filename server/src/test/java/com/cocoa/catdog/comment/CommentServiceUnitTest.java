@@ -1,4 +1,4 @@
-package com.appstew.practiceMain.comment;
+package com.cocoa.catdog.comment;
 
 import com.cocoa.catdog.article.entity.Article;
 import com.cocoa.catdog.article.service.ArticleService;
