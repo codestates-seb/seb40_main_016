@@ -5,17 +5,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Getter;
 
-
 @Builder
 @Getter
-public class FollowResponseDto {
-    private long followId;
-
-    @JsonIgnore
-    private User followingUser;
-    public long getFollowerId() { return followingUser.getUserId();}
+public class FollowInfoResponseDto {
     @JsonIgnore
     private User followedUser;
     public long getFollowedId() { return followedUser.getUserId();}
-
+    public String getFollowedName() { return followedUser.getUserName();}
+    public String getFollowedImg() { return followedUser.getUserImg();}
 }

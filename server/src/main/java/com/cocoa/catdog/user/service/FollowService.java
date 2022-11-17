@@ -23,70 +23,74 @@ public class FollowService {
 
     //팔로우
     public Follow createFollow(long followerId, long followedId) {
-//        verifyExistsFollow(followerId, followedId);
-        //db에 팔로우 내역 저장
+        verifyExistsFollow(followerId, followedId);
 
         Follow follow = Follow.builder()
                 .followingUser(userRepository.findByUserId(followerId))
                 .followedUser(userRepository.findByUserId(followedId))
                 .build();
 
+
         return followRepository.save(follow);
     }
 
-    //유저 정보 수정 (이메일은 고유값으로 변경 불가, 비밀번호, 이름, 소개 변경 가능)
-    public User updateUser(User user) {
-        User findUser = findVerifiedUser(user.getUserId());
+    // 내가 팔로우 하고 있는 유저 목록 조회
+    public List<Follow> getFollow(long userId) {
+        List<Follow> follows = followRepository.findByFollowingUser(userRepository.findById(userId));
 
-        Optional.ofNullable(user.getUserName())
-                .ifPresent(userName -> findUser.setUserName(userName));
-        Optional.ofNullable(user.getContent())
-                .ifPresent(content -> findUser.setContent(content));
-        Optional.ofNullable(user.getUserGender())
-                .ifPresent(userGender -> findUser.setUserGender(userGender));
-        Optional.ofNullable(user.getUserBirth())
-                .ifPresent(userBirth -> findUser.setUserBirth(userBirth));
-        Optional.ofNullable(user.getUserImg())
-                .ifPresent(userImg -> findUser.setUserImg(userImg));
-        Optional.ofNullable(user.getUserType())
-                .ifPresent(userType -> findUser.setUserType(userType));
-        return userRepository.save(findUser);
+        return follows;
     }
 
-    //유저 id로 찾기
-    public User findUser(long userId) {
-        return findVerifiedUser(userId);
+    // 나를 팔로우 하고 있는 유저 목록 조회
+    public List<Follow> getFollower(long userId) {
+        List<Follow> follows = followRepository.findByFollowedUser(userRepository.findById(userId));
+
+        return follows;
     }
 
-    //유저 이름으로 찾기
-    public User findUserName(String username){
-        return userRepository.findByUserName(username);
+    // 팔로우 하는 유저수 조회
+    public Long getFollowCnt(long userId) {
+        // 내가 팔로우 하는 수
+        List<Follow> follows = followRepository.findByFollowingUser(userRepository.findById(userId));
+        long followCnt =  follows.stream().count();
+     return followCnt;
     }
 
-    //전체 유저 조회
-    public Page<User> findUsers(int page, int size) {
-        return userRepository.findAll(PageRequest.of(page,size, Sort.by("userId").descending()));
+    //팔로우 취소
+    public void unFollow(long userId, long userId2) {
+
+        Follow findFollow = findVerifiedFollow(userId, userId2);
+        followRepository.delete(findFollow);
     }
 
-    //유저 삭제
-    public void deleteUser(long userId) {
-        User findUser = findVerifiedUser(userId);
-        userRepository.delete(findUser);
-    }
+    // 팔로우 찾기
+    private Follow findVerifiedFollow(long userId, long userId2) {
+        // 팔로우 하고 받는 유저 찾기
+        User findUser1 = findUser(userId);
+        User findUser2 = findUser(userId2);
 
-    // 유저 있는지 확인
-    private User findVerifiedUser(long userId) {
-        Optional<User> optionalUser = userRepository.findById(userId);
-        //유저정보가 없으면 예외 발생
-        User findUser = optionalUser.orElseThrow(()-> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
-        return findUser;
+        //팔로우가 없으면 예외 발생 시키고 찾은 팔로우 리턴
+        Optional <Follow> optionalFollow = followRepository.findByFollowingUserAndFollowedUser(findUser1, findUser2);
+        Follow findFollow = optionalFollow.orElseThrow(()-> new BusinessLogicException(ExceptionCode.FOLLOW_EXISTS));
+        return findFollow;
 
     }
 
     //이미 팔로우 되어 있는지 확인
-    private void verifyExistsFollow(long followerId, long followedId) {
-        Optional<Follow> follow = followRepository.findByFollowingUser(followedId);
+    private void verifyExistsFollow(long userId, long userId2) {
+        // 팔로우 하고 받는 유저 찾기
+        User findUser1 = findUser(userId);
+        User findUser2 = findUser(userId2);
+        //팔로우가 있으면 예외 발생
+        Optional <Follow> follow = followRepository.findByFollowingUserAndFollowedUser(findUser1, findUser2);
         if(follow.isPresent())
             throw new BusinessLogicException(ExceptionCode.FOLLOW_EXISTS);
+    }
+
+    // 팔로우 내에서 유저 찾기
+    private User findUser(long userId) {
+        Optional <User> optionalUser=userRepository.findById(userId);
+        User findUser = optionalUser.orElseThrow(()-> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
+        return findUser;
     }
 }
