@@ -10,8 +10,6 @@ import java.util.List;
 public class ArticleDto {
 
     @Getter
-    @NoArgsConstructor
-    @AllArgsConstructor
     @Builder
     public static class Response {
         private Long articleId;
@@ -37,8 +35,6 @@ public class ArticleDto {
     }
 
     @Getter
-    @NoArgsConstructor
-    @AllArgsConstructor
     @Builder
     public static class Patch {
         private Long articleId;

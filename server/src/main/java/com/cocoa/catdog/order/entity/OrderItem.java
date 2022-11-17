@@ -3,16 +3,15 @@ package com.cocoa.catdog.order.entity;
 import com.cocoa.catdog.audit.AuditingEntity;
 import com.cocoa.catdog.item.entity.Item;
 import com.cocoa.catdog.wallet.entity.Wallet;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
-@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class OrderItem extends AuditingEntity {
 
     @Id
@@ -23,11 +22,19 @@ public class OrderItem extends AuditingEntity {
 
     private int quantity;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ORDER_ID")
-    private Order order;
+    @Builder
+    public OrderItem (Long orderItemId, int orderPrice, int quantity) {
+        this.orderItemId = orderItemId;
+        this.orderPrice = orderPrice;
+        this.quantity = quantity;
+    }
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ORDER_ID")
+    @JsonBackReference
+    private Order order;
+
+    @ManyToOne(fetch = FetchType.EAGER)  // Response로 불러오기 실패 -> (LAZY -> EAGER)
     @JoinColumn(name = "ITEM_ID")
     private Item item;
 

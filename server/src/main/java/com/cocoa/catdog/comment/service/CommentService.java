@@ -88,6 +88,7 @@ public class CommentService {
     /*
     * 댓글 좋아요
     * */
+    @Transactional
     public void likeComment (Long commentId, Long userId) {
         //엔티티 조회
         Comment comment = findComment(commentId);
@@ -105,6 +106,7 @@ public class CommentService {
     /*
     * 댓글 신고
     * */
+    @Transactional
     public void reportComment(CommentReport commentReport, Long commentId, Long userId) {
         //엔티티 조회
         Comment comment = findComment(commentId);

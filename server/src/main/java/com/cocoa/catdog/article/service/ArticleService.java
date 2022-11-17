@@ -9,8 +9,14 @@ import com.cocoa.catdog.exception.ExceptionCode;
 import com.cocoa.catdog.user.entity.User;
 import com.cocoa.catdog.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -51,6 +57,23 @@ public class ArticleService {
         return article;
     }
 
+    public Page<Article> findArticles(int page, int size) {
+        return articleRepository.findAll(PageRequest.of(
+                page, size, Sort.by("articleId").descending()));
+    }
+
+    public void deleteArticle(Long articleId, Long userId) {
+        Optional<Article> optionalArticle = articleRepository.findById(articleId);
+        optionalArticle.ifPresentOrElse(article -> {
+            if (!Objects.equals(article.getUser().getUserId(), userId)) {
+                throw new BusinessLogicException(ExceptionCode.USER_UNAUTHORIZED);
+            }
+            articleRepository.delete(article);
+
+        }, () -> {
+            return;
+        });
+    }
 
 
 

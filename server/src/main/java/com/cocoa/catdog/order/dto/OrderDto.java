@@ -9,6 +9,6 @@ public class OrderDto {
     @Getter
     public static class Post {
         @Valid
-        private List<OrderItemDto.Post> orderItemPostDtos;
+        private List<OrderItemDto.Post> orderItems;
     }
 }

@@ -28,8 +28,9 @@ public class CommentController {
     * */
     @PostMapping("/{article-id}")
     public ResponseEntity<CommentResponseDto> postComment (@RequestBody @Valid CommentDto.Post postDto,
-                                                           @PathVariable("article-id") Long articleId,
-                                                           @RequestParam Long userId) {
+                                                           @PathVariable("article-id") Long articleId
+                                                           /*@RequestParam Long userId*/) {
+        Long userId = 1L;
         Comment comment = commentMapper.postToComment(postDto);
         Comment createdComment = commentService.createComment(comment, articleId, userId);
 
@@ -41,8 +42,9 @@ public class CommentController {
     * */
     @PatchMapping("/{comment-id}")
     public ResponseEntity<CommentResponseDto> patchComment (@RequestBody @Valid CommentDto.Patch patchDto,
-                                                            @PathVariable("comment-id") Long commentId,
-                                                            @RequestParam Long userId) {
+                                                            @PathVariable("comment-id") Long commentId
+                                                            /*@RequestParam Long userId*/) {
+        Long userId = 1L;
         Comment comment = commentMapper.patchToComment(patchDto);
         Comment updatedComment = commentService.updateComment(comment, commentId);
 
@@ -63,8 +65,9 @@ public class CommentController {
     * 댓글 좋아요
     * */
     @PostMapping("/{comment-id}/likes")
-    public ResponseEntity<HttpStatus> likeComment (@PathVariable("comment-id") Long commentId,
-                                                   @RequestParam Long userId) {
+    public ResponseEntity<HttpStatus> likeComment (@PathVariable("comment-id") Long commentId
+                                                   /*@RequestParam Long userId*/) {
+        Long userId = 1L;
         commentService.likeComment(commentId, userId);
 
         return new ResponseEntity<>(HttpStatus.OK);
@@ -75,8 +78,9 @@ public class CommentController {
     * */
     @PostMapping("/{comment-id}/report")
     public ResponseEntity<HttpStatus> reportComment (@RequestParam("comment-id") Long commentId,
-                                                     @RequestBody @Valid CommentDto.Report reportDto,
-                                                     @RequestParam Long userId) {
+                                                     @RequestBody @Valid CommentDto.Report reportDto
+                                                     /*@RequestParam Long userId*/) {
+        Long userId = 1L;
         CommentReport commentReport = commentMapper.reportToCommentReport(reportDto);
         commentService.reportComment(commentReport, commentId, userId);
 

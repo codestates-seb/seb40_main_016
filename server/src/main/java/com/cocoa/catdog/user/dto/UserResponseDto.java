@@ -34,6 +34,7 @@ public class UserResponseDto {
     @JsonIgnore
     private List<Follow> followedUsers;
     public int getFollowerCnt() { return followedUsers.size();}
+
 /*
     유저가 가진 yummy를 지갑에서 가져와 표시
     public int getYummy() { return wallet.getYummy();}
