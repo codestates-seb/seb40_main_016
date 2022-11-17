@@ -79,7 +79,7 @@ public class CommentController {
     * 댓글 신고
     * */
     @PostMapping("/{comment-id}/report")
-    public ResponseEntity<HttpStatus> reportComment (@RequestParam("comment-id") Long commentId,
+    public ResponseEntity<HttpStatus> reportComment (@PathVariable("comment-id") Long commentId,
                                                      @RequestBody @Valid CommentDto.Report reportDto,
                                                      @RequestHeader(name = "Authorization") String token) {
         Long userId = jwtTokenizer.getUserId(token);
