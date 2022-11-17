@@ -33,9 +33,7 @@ public class CommentLike {
     public void addComment(Comment comment) {
         if (this.comment == null) {
             this.comment = comment;
-        } else {
-            return;
+            comment.addCommentLike(this);
         }
-        comment.addCommentLike(this);
     }
 }

@@ -4,6 +4,7 @@ import com.cocoa.catdog.audit.AuditingEntity;
 import com.cocoa.catdog.order.entity.Order;
 import com.cocoa.catdog.user.entity.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -19,7 +20,7 @@ public class Wallet extends AuditingEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long walletId;
 
-    private int yummy;
+    private int yummy = 1000000;
 
     @OneToOne
     @JsonIgnore
@@ -34,9 +35,14 @@ public class Wallet extends AuditingEntity {
             user.setWallet(this);
         }
     }
+
+    public void minusYummy(int yummy) {
+        this.yummy -= yummy;
+    }
     
 
     @OneToMany(mappedBy = "wallet")
+    @JsonManagedReference
     private List<Order> orders = new ArrayList<>();
 
     @OneToMany(mappedBy = "giveWlt")
@@ -44,6 +50,15 @@ public class Wallet extends AuditingEntity {
 
     @OneToMany(mappedBy = "takeWlt")
     private List<GiveTake> takes = new ArrayList<>();
+
+
+    //==연관관계 메서드==//
+    public void addOrder (Order order) {
+        if(!orders.contains(order)) {
+            orders.add(order);
+            order.addWallet(this);
+        }
+    }
 
 }
 

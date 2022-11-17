@@ -12,8 +12,6 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@Builder
 @Table(name = "items")
 public class Item extends AuditingEntity {
 
@@ -30,6 +28,20 @@ public class Item extends AuditingEntity {
 
     private String itemImg;
 
+    //==생성자==//
+    @Builder
+    public Item (Long itemId, int price, int stock, String itemName, String itemImg) {
+        this.itemId = itemId;
+        this.price = price;
+        this.stock = stock;
+        this.itemName = itemName;
+        this.itemImg = itemImg;
+    }
+
+
+    public void minusStock(int stock) {
+        this.stock -= stock;
+    }
 
 
 }

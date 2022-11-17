@@ -18,6 +18,9 @@ public enum ExceptionCode {
 
     ANSWER_NOT_FOUND(404,"Answer not found"),
 
+    OUT_OF_STOCK(404, "Out_of_stock"),
+    INSUFFICIENT_YUMMY(404, "Insufficient yummy"),
+    ITEM_NOT_FOUND(404, "Item not found"),
     COMMENT_NOT_FOUND(404, "Comment not found");
            
 

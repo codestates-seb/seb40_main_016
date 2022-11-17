@@ -14,8 +14,6 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@Builder
 public class Comment extends AuditingEntity {
 
     @Id
@@ -46,6 +44,13 @@ public class Comment extends AuditingEntity {
     @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL)
     private List<CommentReport> commentReports = new ArrayList<>();
 
+    //==생성자==//
+    @Builder
+    public Comment (Long commentId, String content) {
+        this.commentId = commentId;
+        this.content = content;
+    }
+
     //==수정 메서드==//
     public void changeContent (String content) {
         if(content != null) {
@@ -66,37 +71,29 @@ public class Comment extends AuditingEntity {
     public void addUser (User user) {
         if(getUser() == null) {
             this.user = user;
-        } else {
-            return;
+            user.addComment(this);
         }
-        user.addComment(this);
     }
 
     public void addArticle(Article article) {
         if(getArticle() == null) {
             this.article = article;
-        } else {
-            return;
+            article.addComment(this);
         }
-        article.addComment(this);
     }
 
     public void addCommentLike(CommentLike commentLike) {
         if(!commentLikes.contains(commentLike)) {
             commentLikes.add(commentLike);
-        } else {
-            return;
+            commentLike.addComment(this);
         }
-        commentLike.addComment(this);
     }
 
     public void addCommentReport(CommentReport commentReport) {
         if(!commentReports.contains(commentReport)) {
             commentReports.add(commentReport);
-        } else {
-            return;
+            commentReport.addComment(this);
         }
-        commentReport.addComment(this);
     }
 
     //==댓글 상태==//
