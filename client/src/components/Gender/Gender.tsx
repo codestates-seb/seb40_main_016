@@ -13,7 +13,9 @@
     />
 */
 import React, { useEffect, useRef } from "react";
+
 import { Wrapper, LabelStyle, RadioGroup, RadioBtn, RadioInput } from "./style";
+
 import { ReactComponent as BoyIcon } from "../../assets/img/boy-icon.svg";
 import { ReactComponent as GirlIcon } from "../../assets/img/girl-icon.svg";
 

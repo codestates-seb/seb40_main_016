@@ -1,14 +1,16 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
+
 import OuterContainer from "../../components/OuterContainer/OuterConainer";
 import InnerContainer from "../../components/InnerContainer/InnerContainer";
-import { ReactComponent as Step01Symbol } from "../../assets/img/finger-one-symbol.svg";
-import { ReactComponent as Step02Symbol } from "../../assets/img/finger-two-symbol.svg";
-import { ReactComponent as ArrowIcon } from "../../assets/img/arrow-icon.svg";
-import { SignupPage, Conts, Card, Header, StepNum, StepDesc, Footer, PrevStepBtn } from "./style";
 import StepType from "../../components/SignupTypeStep/StepType";
 import StepForm from "../../components/SignupFormStep/StepForm";
 import Button from "../../components/Button/Button";
-import { Link } from "react-router-dom";
+import { SignupPage, Conts, Card, Header, StepNum, StepDesc, Footer, PrevStepBtn } from "./style";
+
+import { ReactComponent as Step01Symbol } from "../../assets/img/finger-one-symbol.svg";
+import { ReactComponent as Step02Symbol } from "../../assets/img/finger-two-symbol.svg";
+import { ReactComponent as ArrowIcon } from "../../assets/img/arrow-icon.svg";
 
 const Signup = () => {
   interface UserInfo {
@@ -34,9 +36,12 @@ const Signup = () => {
   const [hasNoError, setHasNoError] = useState<boolean>(false); //error 메세지 난 것 없는지
   const [hasNoEmptyRequired, setHasNoEmptyRequired] = useState<boolean>(false); //빈 인풋 있는지
 
-  type Check = (requiredField: string[], userInfo: UserInfo) => boolean;
-  const checkAllWritten: Check = (arr, userInfo) => {
-    const EmptyArr: string[] = arr.filter((el) => {
+  interface Check {
+    requiredField: string[];
+    userInfo: UserInfo;
+  }
+  const checkAllWritten = ({ requiredField, userInfo }: Check) => {
+    const EmptyArr: string[] = requiredField.filter((el) => {
       return userInfo[el].length === 0;
     });
     return EmptyArr.length < 1;
@@ -44,7 +49,7 @@ const Signup = () => {
 
   const onFormChange = () => {
     let requiredField: string[] = ["userName", "email", "password"];
-    setHasNoEmptyRequired(checkAllWritten(requiredField, userInfo));
+    setHasNoEmptyRequired(checkAllWritten({ requiredField, userInfo }));
   };
 
   const onSubmitClick = (e: any) => {

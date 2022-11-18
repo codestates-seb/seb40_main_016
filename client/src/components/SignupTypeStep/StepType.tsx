@@ -1,6 +1,8 @@
 import { Dispatch, SetStateAction } from "react";
+
 import Button from "../../components/Button/Button";
 import styled from "styled-components";
+
 import { ReactComponent as HumanIcon } from "../../assets/img/human-icon.svg";
 import { ReactComponent as CatIcon } from "../../assets/img/cat-icon.svg";
 import { ReactComponent as DogIcon } from "../../assets/img/dog-icon.svg";

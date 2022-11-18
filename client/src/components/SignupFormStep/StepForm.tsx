@@ -1,9 +1,10 @@
 import { useState, ChangeEvent, Dispatch, SetStateAction, useEffect } from "react";
+
 import Input from "../../components/Input/Input";
 import Gender from "../../components/Gender/Gender";
-import { Wrapper } from "./style";
-import { isUserName, isEmail, isPassword } from "../../utills/Regex";
 import CheckBirth from "../../utills/BirthYearCheck";
+import { isUserName, isEmail, isPassword } from "../../utills/Regex";
+import { Wrapper } from "./style";
 
 interface UserInfo {
   [index: string]: string;
