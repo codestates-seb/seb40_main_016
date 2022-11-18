@@ -3,9 +3,14 @@ export interface SignupUserInfo {
   userName: string;
   email: string;
   password: string;
-  content: string;
-  userGender: "male" | "female";
-  userImg: string;
-  userType: "person" | "cat" | "dog" | "";
+  userGender: "MALE" | "FEMALE";
+  userType: "PERSON" | "CAT" | "DOG" | "";
   userBirth: string;
+}
+export interface SignupPersonInfo {
+  [index: string]: string;
+  userName: string;
+  email: string;
+  password: string;
+  userType: "PERSON" | "CAT" | "DOG" | "";
 }
