@@ -17,6 +17,7 @@ const FilterContainer = styled.main`
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 100%;
 `;
 
 const ImgContainer = styled.main`
@@ -29,11 +30,8 @@ const ImgContainer = styled.main`
 const ImgBox = styled.div`
   position: relative;
 
-  img {
-    object-fit: cover;
-  }
-
   .img-card {
+    max-height: 278px;
     border-radius: 30px;
     box-shadow: 0px 0px 10px 0px var(--color-light-black);
   }
@@ -115,13 +113,7 @@ const Main = () => {
                     </Info>
                   </InfoBox>
                 </Dim>
-                <ImageCard
-                  className="img-card"
-                  width="280px"
-                  height="280px"
-                  imgUrl={data.imgUrl}
-                  onClick={handleOpen}
-                ></ImageCard>
+                <ImageCard className="img-card" imgUrl={data.imgUrl} onClick={handleOpen}></ImageCard>
               </ImgBox>
             ))}
           </ImgContainer>
