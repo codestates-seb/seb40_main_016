@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import OuterContainer from "../../components/OuterContainer/OuterConainer";
@@ -11,19 +11,11 @@ import { SignupPage, Conts, Card, Header, StepNum, StepDesc, Footer, PrevStepBtn
 import { ReactComponent as Step01Symbol } from "../../assets/img/finger-one-symbol.svg";
 import { ReactComponent as Step02Symbol } from "../../assets/img/finger-two-symbol.svg";
 import { ReactComponent as ArrowIcon } from "../../assets/img/arrow-icon.svg";
-interface UserInfo {
-  [index: string]: string;
-  userName: string;
-  email: string;
-  password: string;
-  content: string;
-  userType: "person" | "cat" | "dog" | "";
-  userBirth: string;
-  userGender: string;
-}
+
+import { SignupUserInfo } from "../../types/user";
 
 const Signup = () => {
-  const [userInfo, setUserInfo] = useState<UserInfo>({
+  const [userInfo, setUserInfo] = useState<SignupUserInfo>({
     userName: "",
     email: "",
     password: "",
@@ -38,7 +30,7 @@ const Signup = () => {
 
   interface Check {
     requiredField: string[];
-    userInfo: UserInfo;
+    userInfo: SignupUserInfo;
   }
   const checkAllWritten = ({ requiredField, userInfo }: Check) => {
     const EmptyArr: string[] = requiredField.filter((el) => {
@@ -56,6 +48,10 @@ const Signup = () => {
     e.preventDefault();
     console.log("제출");
   };
+
+  useEffect(() => {
+    console.log(userInfo);
+  }, [userInfo]);
 
   return (
     <>

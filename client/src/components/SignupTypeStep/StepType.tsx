@@ -7,6 +7,8 @@ import { ReactComponent as PersonIcon } from "../../assets/img/person-icon.svg";
 import { ReactComponent as CatIcon } from "../../assets/img/cat-icon.svg";
 import { ReactComponent as DogIcon } from "../../assets/img/dog-icon.svg";
 
+import { SignupUserInfo } from "../../types/user";
+
 export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -27,20 +29,9 @@ export const Wrapper = styled.div`
   }
 `;
 
-interface UserInfo {
-  [index: string]: string;
-  userName: string;
-  email: string;
-  password: string;
-  content: string;
-  userType: "person" | "cat" | "dog" | "";
-  userBirth: string;
-  userGender: string;
-}
-
 interface Prop {
-  userInfo: UserInfo;
-  setUserInfo: Dispatch<SetStateAction<UserInfo>>;
+  userInfo: SignupUserInfo;
+  setUserInfo: Dispatch<SetStateAction<SignupUserInfo>>;
 }
 
 const StepType = ({ userInfo, setUserInfo }: Prop) => {

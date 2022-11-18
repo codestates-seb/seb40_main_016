@@ -21,13 +21,14 @@ import { ReactComponent as GirlIcon } from "../../assets/img/female-icon.svg";
 
 interface InputProps {
   className?: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void | React.Dispatch<React.SetStateAction<string>>;
+  onClickMale: () => void;
+  onClickFemale: () => void;
   height?: string;
   defaultValue?: "male" | "female";
   fontSize?: string;
 }
 
-function Gender({ className, onChange, height, defaultValue, fontSize }: InputProps) {
+function Gender({ className, onClickMale, onClickFemale, height, defaultValue, fontSize }: InputProps) {
   const boyRef = useRef<HTMLInputElement>(null);
   const girlRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
@@ -47,7 +48,7 @@ function Gender({ className, onChange, height, defaultValue, fontSize }: InputPr
           id={`${className}-choice-male`}
           name="gender"
           ref={boyRef}
-          onChange={onChange}
+          onChange={onClickMale}
           data-gender="male"
         />
         <RadioBtn className="male" htmlFor={`${className}-choice-male`}>
@@ -59,7 +60,7 @@ function Gender({ className, onChange, height, defaultValue, fontSize }: InputPr
           id={`${className}-choice-female`}
           name="gender"
           ref={girlRef}
-          onChange={onChange}
+          onChange={onClickFemale}
           data-gender="female"
         />
         <RadioBtn className="female" htmlFor={`${className}-choice-female`}>

@@ -6,20 +6,11 @@ import CheckBirth from "../../utills/BirthYearCheck";
 import { isUserName, isEmail, isPassword } from "../../utills/Regex";
 import { Wrapper } from "./style";
 
-interface UserInfo {
-  [index: string]: string;
-  userName: string;
-  email: string;
-  password: string;
-  content: string;
-  userType: "person" | "cat" | "dog" | "";
-  userBirth: string;
-  userGender: string;
-}
+import { SignupUserInfo } from "../../types/user";
 
 interface Prop {
-  userInfo: UserInfo;
-  setUserInfo: Dispatch<SetStateAction<UserInfo>>;
+  userInfo: SignupUserInfo;
+  setUserInfo: Dispatch<SetStateAction<SignupUserInfo>>;
   setHasNoError: (arg: boolean) => void;
 }
 
@@ -41,8 +32,11 @@ const StepForm = ({ userInfo, setUserInfo, setHasNoError }: Prop) => {
     setPasswordErr(!isPassword(e.target.value));
     setUserInfo({ ...userInfo, password: e.target.value });
   };
-  const onChangeGender = (e: ChangeEvent<HTMLInputElement>) => {
-    setUserInfo({ ...userInfo, userGender: String(e.target.dataset.gender) });
+  const onClickMale = () => {
+    setUserInfo({ ...userInfo, userGender: "male" });
+  };
+  const onClickFemale = () => {
+    setUserInfo({ ...userInfo, userGender: "female" });
   };
   const onChangeBirth = (e: ChangeEvent<HTMLInputElement>) => {
     setBirthErr(!CheckBirth(e.target.value));
@@ -114,7 +108,13 @@ const StepForm = ({ userInfo, setUserInfo, setHasNoError }: Prop) => {
         />
         {userInfo.userType !== "person" ? (
           <>
-            <Gender height="50px" fontSize="pc-regular" onChange={onChangeGender} defaultValue="male" />
+            <Gender
+              height="50px"
+              fontSize="pc-regular"
+              onClickMale={onClickMale}
+              onClickFemale={onClickFemale}
+              defaultValue="male"
+            />
             <Input
               type="date"
               value={userInfo.userBirth}
