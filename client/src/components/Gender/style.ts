@@ -35,11 +35,11 @@ export const RadioInput = styled.input`
     }
   }
 
-  &:checked + .boy {
+  &:checked + .male {
     background-color: var(--color-green);
     border-color: var(--color-green);
   }
-  &:checked + .girl {
+  &:checked + .female {
     background-color: var(--color-orange);
     border-color: var(--color-orange);
   }
@@ -70,13 +70,13 @@ export const RadioBtn = styled.label`
     }
   }
 
-  &.girl {
+  &.female {
     svg {
       height: 48%;
     }
   }
 
-  &.boy {
+  &.male {
     svg {
       height: 40%;
     }

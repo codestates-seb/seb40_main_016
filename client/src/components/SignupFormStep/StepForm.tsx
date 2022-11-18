@@ -12,7 +12,7 @@ interface UserInfo {
   email: string;
   password: string;
   content: string;
-  userType: "human" | "cat" | "dog" | "";
+  userType: "person" | "cat" | "dog" | "";
   userBirth: string;
   userGender: string;
 }
@@ -60,7 +60,7 @@ const StepForm = ({ userInfo, setUserInfo, setHasNoError }: Prop) => {
   return (
     <>
       <Wrapper>
-        {userInfo.userType === "human" ? (
+        {userInfo.userType === "person" ? (
           <Input
             type="text"
             value={userInfo.userName}
@@ -112,9 +112,9 @@ const StepForm = ({ userInfo, setUserInfo, setHasNoError }: Prop) => {
           isError={passwordErr}
           errorMsg="영문, 숫자 조합 8-10자리로 입력해 주세요."
         />
-        {userInfo.userType !== "human" ? (
+        {userInfo.userType !== "person" ? (
           <>
-            <Gender height="50px" fontSize="pc-regular" onChange={onChangeGender} defaultValue="boy" />
+            <Gender height="50px" fontSize="pc-regular" onChange={onChangeGender} defaultValue="male" />
             <Input
               type="date"
               value={userInfo.userBirth}

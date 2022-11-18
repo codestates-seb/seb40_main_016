@@ -3,7 +3,7 @@ import { Dispatch, SetStateAction } from "react";
 import Button from "../../components/Button/Button";
 import styled from "styled-components";
 
-import { ReactComponent as HumanIcon } from "../../assets/img/human-icon.svg";
+import { ReactComponent as PersonIcon } from "../../assets/img/person-icon.svg";
 import { ReactComponent as CatIcon } from "../../assets/img/cat-icon.svg";
 import { ReactComponent as DogIcon } from "../../assets/img/dog-icon.svg";
 
@@ -33,7 +33,7 @@ interface UserInfo {
   email: string;
   password: string;
   content: string;
-  userType: "human" | "cat" | "dog" | "";
+  userType: "person" | "cat" | "dog" | "";
   userBirth: string;
   userGender: string;
 }
@@ -48,9 +48,9 @@ const StepType = ({ userInfo, setUserInfo }: Prop) => {
     <>
       <Wrapper>
         <Button
-          className={userInfo.userType === "human" ? "type-btn active" : "type-btn"}
+          className={userInfo.userType === "person" ? "type-btn active" : "type-btn"}
           onClick={() => {
-            setUserInfo({ ...userInfo, userType: "human" });
+            setUserInfo({ ...userInfo, userType: "person" });
           }}
           width="100%"
           height="60px"
@@ -60,7 +60,7 @@ const StepType = ({ userInfo, setUserInfo }: Prop) => {
           fontSize="pc-regular"
           isShadow={true}
         >
-          <HumanIcon />
+          <PersonIcon />
         </Button>
         <Button
           className={userInfo.userType === "cat" ? "type-btn active" : "type-btn"}

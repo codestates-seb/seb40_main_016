@@ -9,21 +9,21 @@
     height="50px" 
     fontSize="pc-regular" 
     onChange={onChangeGender} 
-    defaultValue="boy" 
+    defaultValue="male" 
     />
 */
 import React, { useEffect, useRef } from "react";
 
 import { Wrapper, LabelStyle, RadioGroup, RadioBtn, RadioInput } from "./style";
 
-import { ReactComponent as BoyIcon } from "../../assets/img/boy-icon.svg";
-import { ReactComponent as GirlIcon } from "../../assets/img/girl-icon.svg";
+import { ReactComponent as BoyIcon } from "../../assets/img/male-icon.svg";
+import { ReactComponent as GirlIcon } from "../../assets/img/female-icon.svg";
 
 interface InputProps {
   className?: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void | React.Dispatch<React.SetStateAction<string>>;
   height?: string;
-  defaultValue?: "boy" | "girl";
+  defaultValue?: "male" | "female";
   fontSize?: string;
 }
 
@@ -31,9 +31,9 @@ function Gender({ className, onChange, height, defaultValue, fontSize }: InputPr
   const boyRef = useRef<HTMLInputElement>(null);
   const girlRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
-    if (defaultValue === "boy" && boyRef.current) {
+    if (defaultValue === "male" && boyRef.current) {
       boyRef.current.checked = true;
-    } else if (defaultValue === "girl" && girlRef.current) {
+    } else if (defaultValue === "female" && girlRef.current) {
       girlRef.current.checked = true;
     }
   }, []);
@@ -44,25 +44,25 @@ function Gender({ className, onChange, height, defaultValue, fontSize }: InputPr
       <RadioGroup height={height}>
         <RadioInput
           type="radio"
-          id={`${className}-choice-boy`}
+          id={`${className}-choice-male`}
           name="gender"
           ref={boyRef}
           onChange={onChange}
-          data-gender="boy"
+          data-gender="male"
         />
-        <RadioBtn className="boy" htmlFor={`${className}-choice-boy`}>
+        <RadioBtn className="male" htmlFor={`${className}-choice-male`}>
           <BoyIcon />
           남아
         </RadioBtn>
         <RadioInput
           type="radio"
-          id={`${className}-choice-girl`}
+          id={`${className}-choice-female`}
           name="gender"
           ref={girlRef}
           onChange={onChange}
-          data-gender="girl"
+          data-gender="female"
         />
-        <RadioBtn className="girl" htmlFor={`${className}-choice-girl`}>
+        <RadioBtn className="female" htmlFor={`${className}-choice-female`}>
           <GirlIcon />
           여아
         </RadioBtn>

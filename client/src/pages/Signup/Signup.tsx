@@ -11,18 +11,18 @@ import { SignupPage, Conts, Card, Header, StepNum, StepDesc, Footer, PrevStepBtn
 import { ReactComponent as Step01Symbol } from "../../assets/img/finger-one-symbol.svg";
 import { ReactComponent as Step02Symbol } from "../../assets/img/finger-two-symbol.svg";
 import { ReactComponent as ArrowIcon } from "../../assets/img/arrow-icon.svg";
+interface UserInfo {
+  [index: string]: string;
+  userName: string;
+  email: string;
+  password: string;
+  content: string;
+  userType: "person" | "cat" | "dog" | "";
+  userBirth: string;
+  userGender: string;
+}
 
 const Signup = () => {
-  interface UserInfo {
-    [index: string]: string;
-    userName: string;
-    email: string;
-    password: string;
-    content: string;
-    userType: "human" | "cat" | "dog" | "";
-    userBirth: string;
-    userGender: string;
-  }
   const [userInfo, setUserInfo] = useState<UserInfo>({
     userName: "",
     email: "",
@@ -30,7 +30,7 @@ const Signup = () => {
     content: "",
     userType: "",
     userBirth: "",
-    userGender: "boy",
+    userGender: "male",
   });
   const [step, setStep] = useState<number>(1);
   const [hasNoError, setHasNoError] = useState<boolean>(false); //error 메세지 난 것 없는지
