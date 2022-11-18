@@ -5,6 +5,7 @@ import OuterContainer from "../../components/OuterContainer/OuterConainer";
 import InnerContainer from "../../components/InnerContainer/InnerContainer";
 import SortTab from "../../components/SortTab/SortTab";
 import ImageCard from "../../components/ImageCard/ImageCard";
+import Button from "../../components/Button/Button";
 
 import { ReactComponent as HeartWIcon } from "../../assets/img/heart-w-icon.svg";
 import { ReactComponent as BoneWIcon } from "../../assets/img/bone-w-icon.svg";
@@ -16,8 +17,30 @@ const FilterContainer = styled.main`
   padding: 50px 0px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   width: 100%;
+`;
+
+const TabBox = styled.div``;
+
+const SortBox = styled.div`
+  width: 190px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  button {
+    box-shadow: 0px 2px 5px 0px var(--color-gray);
+
+    &.clicked {
+      background-color: var(--color-madium-black);
+      color: var(--color-white);
+
+      &:hover {
+        background-color: var(--color-madium-black);
+      }
+    }
+  }
 `;
 
 const ImgContainer = styled.main`
@@ -82,9 +105,19 @@ const Info = styled.div`
 
 const Main = () => {
   const [open, setOpen] = useState<boolean>(false);
+  const [sort, setSort] = useState<string>("new");
+  const [tab, setTab] = useState<string>("all");
 
   const handleOpen = () => {
     setOpen(!open);
+  };
+
+  const handleTabClick = (tab: string) => {
+    setTab(tab);
+  };
+
+  const handleSortClick = (sort: "new" | "favorite") => {
+    setSort(sort);
   };
 
   return (
@@ -92,7 +125,29 @@ const Main = () => {
       <OuterContainer>
         <InnerContainer>
           <FilterContainer>
-            <SortTab />
+            <TabBox>
+              <SortTab handleTabClick={handleTabClick} tab={tab} />
+            </TabBox>
+            <SortBox>
+              <Button
+                className={sort === "new" ? "clicked" : ""}
+                width="90px"
+                height="50px"
+                fontSize="pc-regular"
+                onClick={() => handleSortClick("new")}
+              >
+                New
+              </Button>
+              <Button
+                className={sort === "favorite" ? "clicked" : ""}
+                width="90px"
+                height="50px"
+                fontSize="pc-regular"
+                onClick={() => handleSortClick("favorite")}
+              >
+                Favorite
+              </Button>
+            </SortBox>
           </FilterContainer>
           <ImgContainer>
             {dummyData.map((data) => (

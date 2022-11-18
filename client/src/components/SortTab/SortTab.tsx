@@ -13,6 +13,7 @@ import styled, { keyframes } from "styled-components";
 import { ReactComponent as AllSymbol } from "../../assets/img/all-symbol.svg";
 import { ReactComponent as DogSymbol } from "../../assets/img/dog-symbol.svg";
 import { ReactComponent as CatSymbol } from "../../assets/img/cat-symbol.svg";
+import { ReactComponent as FollowIcon } from "../../assets/img/follow-icon.svg";
 
 const Bling = () => keyframes`
   0% { transform: scale(1); }
@@ -31,7 +32,7 @@ const Purse = () => keyframes`
 
 const Wrapper = styled.div`
   padding: 0px 13px;
-  width: 200px;
+  width: 250px;
   height: 60px;
   background-color: var(--color-ivory);
   border-radius: 40px;
@@ -56,6 +57,12 @@ const SortBtn = styled.button`
     background-color: var(--color-madium-black);
     box-shadow: 0px 0px 5px 0px var(--color-light-black);
     animation: ${Purse} 0.75s cubic-bezier(0.5, 0.5, 0, 1);
+
+    .follow-icon {
+      path {
+        fill: white;
+      }
+    }
   }
 
   .all-symbol {
@@ -67,6 +74,9 @@ const SortBtn = styled.button`
   .cat-symbol {
     width: 40px;
   }
+  .follow-icon {
+    width: 30px;
+  }
 
   svg {
     &:hover {
@@ -76,24 +86,26 @@ const SortBtn = styled.button`
   }
 `;
 
-const SortTab = () => {
-  const [filter, setFilter] = useState<string>("all");
+interface Props {
+  tab: string;
+  handleTabClick: (arg: string) => void;
+}
 
-  const handleClick = (name: "all" | "dog" | "cat") => {
-    setFilter(name);
-  };
-
+const SortTab = ({ tab, handleTabClick }: Props) => {
   return (
     <>
       <Wrapper>
-        <SortBtn className={filter === "all" ? "clicked" : ""} onClick={() => handleClick("all")}>
+        <SortBtn className={tab === "all" ? "clicked" : ""} onClick={() => handleTabClick("all")}>
           <AllSymbol className="all-symbol" />
         </SortBtn>
-        <SortBtn className={filter === "dog" ? "clicked" : ""} onClick={() => handleClick("dog")}>
+        <SortBtn className={tab === "dog" ? "clicked" : ""} onClick={() => handleTabClick("dog")}>
           <DogSymbol className="dog-symbol" />
         </SortBtn>
-        <SortBtn className={filter === "cat" ? "clicked" : ""} onClick={() => handleClick("cat")}>
+        <SortBtn className={tab === "cat" ? "clicked" : ""} onClick={() => handleTabClick("cat")}>
           <CatSymbol className="cat-symbol" />
+        </SortBtn>
+        <SortBtn className={tab === "follow" ? "clicked" : ""} onClick={() => handleTabClick("follow")}>
+          <FollowIcon className="follow-icon" />
         </SortBtn>
       </Wrapper>
     </>
