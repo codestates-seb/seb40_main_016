@@ -33,10 +33,10 @@ const StepForm = ({ userInfo, setUserInfo, setHasNoError }: Prop) => {
     setUserInfo({ ...userInfo, password: e.target.value });
   };
   const onClickMale = () => {
-    setUserInfo({ ...userInfo, userGender: "male" });
+    setUserInfo({ ...userInfo, userGender: "MALE" });
   };
   const onClickFemale = () => {
-    setUserInfo({ ...userInfo, userGender: "female" });
+    setUserInfo({ ...userInfo, userGender: "FEMALE" });
   };
   const onChangeBirth = (e: ChangeEvent<HTMLInputElement>) => {
     setBirthErr(!CheckBirth(e.target.value));
@@ -54,7 +54,7 @@ const StepForm = ({ userInfo, setUserInfo, setHasNoError }: Prop) => {
   return (
     <>
       <Wrapper>
-        {userInfo.userType === "person" ? (
+        {userInfo.userType === "PERSON" ? (
           <Input
             type="text"
             value={userInfo.userName}
@@ -106,14 +106,14 @@ const StepForm = ({ userInfo, setUserInfo, setHasNoError }: Prop) => {
           isError={passwordErr}
           errorMsg="영문, 숫자 조합 8-10자리로 입력해 주세요."
         />
-        {userInfo.userType !== "person" ? (
+        {userInfo.userType !== "PERSON" ? (
           <>
             <Gender
               height="50px"
               fontSize="pc-regular"
               onClickMale={onClickMale}
               onClickFemale={onClickFemale}
-              defaultValue="male"
+              defaultValue="MALE"
             />
             <Input
               type="date"

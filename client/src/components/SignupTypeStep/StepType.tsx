@@ -39,9 +39,9 @@ const StepType = ({ userInfo, setUserInfo }: Prop) => {
     <>
       <Wrapper>
         <Button
-          className={userInfo.userType === "person" ? "type-btn active" : "type-btn"}
+          className={userInfo.userType === "PERSON" ? "type-btn active" : "type-btn"}
           onClick={() => {
-            setUserInfo({ ...userInfo, userType: "person" });
+            setUserInfo({ ...userInfo, userType: "PERSON" });
           }}
           width="100%"
           height="60px"
@@ -54,9 +54,9 @@ const StepType = ({ userInfo, setUserInfo }: Prop) => {
           <PersonIcon />
         </Button>
         <Button
-          className={userInfo.userType === "cat" ? "type-btn active" : "type-btn"}
+          className={userInfo.userType === "CAT" ? "type-btn active" : "type-btn"}
           onClick={() => {
-            setUserInfo({ ...userInfo, userType: "cat" });
+            setUserInfo({ ...userInfo, userType: "CAT" });
           }}
           width="100%"
           height="60px"
@@ -69,9 +69,9 @@ const StepType = ({ userInfo, setUserInfo }: Prop) => {
           <CatIcon />
         </Button>
         <Button
-          className={userInfo.userType === "dog" ? "type-btn active" : "type-btn"}
+          className={userInfo.userType === "DOG" ? "type-btn active" : "type-btn"}
           onClick={() => {
-            setUserInfo({ ...userInfo, userType: "dog" });
+            setUserInfo({ ...userInfo, userType: "DOG" });
           }}
           width="100%"
           height="60px"

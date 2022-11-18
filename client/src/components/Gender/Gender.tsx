@@ -9,32 +9,33 @@
     height="50px" 
     fontSize="pc-regular" 
     onChange={onChangeGender} 
-    defaultValue="male" 
+    defaultValue="MALE" 
     />
 */
 import { useEffect, useRef } from "react";
 
 import { Wrapper, LabelStyle, RadioGroup, RadioBtn, RadioInput } from "./style";
 
-import { ReactComponent as BoyIcon } from "../../assets/img/male-icon.svg";
-import { ReactComponent as GirlIcon } from "../../assets/img/female-icon.svg";
+import { ReactComponent as MaleIcon } from "../../assets/img/male-icon.svg";
+import { ReactComponent as FemaleIcon } from "../../assets/img/female-icon.svg";
 
 interface InputProps {
   className?: string;
   onClickMale: () => void;
   onClickFemale: () => void;
   height?: string;
-  defaultValue?: "male" | "female";
+  defaultValue?: "MALE" | "FEMALE";
   fontSize?: string;
 }
 
 function Gender({ className, onClickMale, onClickFemale, height, defaultValue, fontSize }: InputProps) {
   const boyRef = useRef<HTMLInputElement>(null);
   const girlRef = useRef<HTMLInputElement>(null);
+
   useEffect(() => {
-    if (defaultValue === "male" && boyRef.current) {
+    if (defaultValue === "MALE" && boyRef.current) {
       boyRef.current.checked = true;
-    } else if (defaultValue === "female" && girlRef.current) {
+    } else if (defaultValue === "FEMALE" && girlRef.current) {
       girlRef.current.checked = true;
     }
   }, []);
@@ -43,16 +44,9 @@ function Gender({ className, onClickMale, onClickFemale, height, defaultValue, f
     <Wrapper className={className}>
       <LabelStyle fontSize={fontSize}>성별</LabelStyle>
       <RadioGroup height={height}>
-        <RadioInput
-          type="radio"
-          id={`${className}-choice-male`}
-          name="gender"
-          ref={boyRef}
-          onChange={onClickMale}
-          data-gender="male"
-        />
+        <RadioInput type="radio" id={`${className}-choice-male`} name="gender" ref={boyRef} onChange={onClickMale} />
         <RadioBtn className="male" htmlFor={`${className}-choice-male`}>
-          <BoyIcon />
+          <MaleIcon />
           남아
         </RadioBtn>
         <RadioInput
@@ -61,10 +55,9 @@ function Gender({ className, onClickMale, onClickFemale, height, defaultValue, f
           name="gender"
           ref={girlRef}
           onChange={onClickFemale}
-          data-gender="female"
         />
         <RadioBtn className="female" htmlFor={`${className}-choice-female`}>
-          <GirlIcon />
+          <FemaleIcon />
           여아
         </RadioBtn>
       </RadioGroup>

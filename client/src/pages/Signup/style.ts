@@ -22,7 +22,7 @@ export const Conts = styled.main`
 export const Card = styled.div`
   position: relative;
   box-sizing: border-box;
-  padding: 16px;
+  padding: 16px 16px 30px 16px;
   min-height: 300px;
   border-radius: 20px;
 
@@ -111,4 +111,15 @@ export const Footer = styled.footer`
     text-decoration: none;
     margin-left: 5px;
   }
+`;
+
+export const Notice = styled.div`
+  margin-top: 20px;
+  padding: 20px;
+  border-radius: 20px;
+
+  text-align: center;
+  font-size: var(--fs-pc-regular);
+  background-color: var(--color-faded-orange);
+  color: var(--color-red);
 `;
