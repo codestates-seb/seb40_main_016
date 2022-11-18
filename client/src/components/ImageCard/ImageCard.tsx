@@ -1,7 +1,7 @@
 /*
 담당 : 김윤희
 생성 : 2022.11.15
-수정 : -
+수정 : 2022.11.18 (송인선)
 소개 : 이미지카드 컴포넌트
 설명 : 
   - 메인페이지, 마이페이지에서 공통적으로 사용되는 이미지카드 컴포넌트입니다.
@@ -13,36 +13,40 @@
     imgUrl="이미지 주소"
     onClick={onClick}
   />
+  - 수정: width, height의 타입, 고정값 삭제.
+  <ImageCard
+    className="image"
+    imgUrl="이미지 주소"
+    onClick={onClick}
+  />
 */
 
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 
 interface ImageCardProps {
   className?: string;
-  width?: string;
-  height?: string;
   imgUrl: string;
   onClick: () => void;
 }
 
-const Wrapper = styled.div<{ width?: string; height?: string }>`
+const Wrapper = styled.div`
   cursor: pointer;
-
-  ${({ width = "250px", height = "250px" }) => css`
-    width: ${width};
-    height: ${height};
-  `}
+  display: flex;
+  align-items: stretch;
+  justify-content: stretch;
 
   img {
     width: 100%;
     height: 100%;
+    aspect-ratio: 1;
     border-radius: 30px;
+    object-fit: cover;
   }
 `;
 
-function ImageCard({ className, width, height, imgUrl, onClick }: ImageCardProps) {
+function ImageCard({ className, imgUrl, onClick }: ImageCardProps) {
   return (
-    <Wrapper className={className} width={width} height={height} onClick={onClick}>
+    <Wrapper className={className} onClick={onClick}>
       <img src={imgUrl} alt="img" />
     </Wrapper>
   );
