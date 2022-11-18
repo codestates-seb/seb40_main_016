@@ -13,6 +13,9 @@ import com.cocoa.catdog.exception.BusinessLogicException;
 import com.cocoa.catdog.exception.ExceptionCode;
 import com.cocoa.catdog.user.entity.User;
 import com.cocoa.catdog.user.repository.UserRepository;
+
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,6 +54,7 @@ public class UserService {
                 .ifPresent(userImg -> findUser.setUserImg(userImg));
         Optional.ofNullable(user.getUserType())
                 .ifPresent(userType -> findUser.setUserType(userType));
+
         return userRepository.save(findUser);
     }
 
@@ -68,6 +72,14 @@ public class UserService {
     public Page<User> findUsers(int page, int size) {
         return userRepository.findAll(PageRequest.of(page,size, Sort.by("userId").descending()));
     }
+
+    //생일 유저 조회
+    public Page<User> findBirthUsers(int page, int size) {
+        LocalDate today = LocalDate.now();
+        return userRepository.findByUserBirthIs(PageRequest.of(page,size, Sort.by("userId").descending()), today);
+    }
+
+
 
     //유저 삭제
     public void deleteUser(long userId) {

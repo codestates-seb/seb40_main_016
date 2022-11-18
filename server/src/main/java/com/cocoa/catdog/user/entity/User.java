@@ -87,8 +87,10 @@ public class User extends AuditingEntity {
     public void addComment(Comment comment) {
         if(!comments.contains(comment)) {
             comments.add(comment);
-            comment.addUser(this);
+        } else {
+            return;
         }
+        comment.addUser(this);
     }
 
     public void removeComment (Comment comment) {

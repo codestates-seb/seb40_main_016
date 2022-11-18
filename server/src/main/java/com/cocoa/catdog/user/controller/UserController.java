@@ -23,7 +23,7 @@ import javax.validation.constraints.Positive;
 import java.util.List;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping
 @Validated
 @RequiredArgsConstructor
 public class UserController {
@@ -32,7 +32,7 @@ public class UserController {
     private final JwtTokenizer jwtTokenizer;
 
     //회원가입
-    @PostMapping
+    @PostMapping("/user")
     public ResponseEntity postUser(@Valid @RequestBody UserPostDto userPostDto) {
         User user = mapper.userPostDtoToUser(userPostDto);
         user.setWallet(new Wallet());
@@ -42,7 +42,7 @@ public class UserController {
                 new SingleResponseDto<>(mapper.userToUserResponseDto(response)), HttpStatus.CREATED);
     }
     //회원정보 수정
-    @PatchMapping("/{user-id}")
+    @PatchMapping("/user/{user-id}")
     public ResponseEntity patchUser(@PathVariable("user-id") long userId, @Valid @RequestBody UserPatchDto userPatchDto) {
         userPatchDto.setUserId(userId);
         User user = mapper.userPatchDtoToUser(userPatchDto);
@@ -52,7 +52,7 @@ public class UserController {
                 new SingleResponseDto<>(mapper.userToUserResponseDto(response)), HttpStatus.OK);
     }
     //전체회원 조회
-    @GetMapping
+    @GetMapping("/user")
     public ResponseEntity getUsers(@Positive @RequestParam int page,
                                    @Positive @RequestParam int size) {
         Page<User> pageUsers = userService.findUsers(page-1, size);
@@ -63,7 +63,7 @@ public class UserController {
 
     }
     //특정회원 조회
-    @GetMapping("/{user-id}")
+    @GetMapping("/user/{user-id}")
     public ResponseEntity getUser(@PathVariable("user-id") long userId) {
         User user = userService.findUser(userId);
 
@@ -79,10 +79,20 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @GetMapping("/profile")
+    @GetMapping("/user/profile")
     @ResponseStatus(HttpStatus.OK)
     public UserResponseDto getProfile(@RequestHeader(name = "Authorization") String token) {
         return mapper.userToUserResponseDto(userService.findUser(jwtTokenizer.getUserId(token)));
     }
+    //전체회원 조회
+    @GetMapping("/user/birth")
+    public ResponseEntity getBirthUsers(@Positive @RequestParam int page,
+                                   @Positive @RequestParam int size) {
+        Page<User> pageUsers = userService.findUsers(page-1, size);
+        List<User> users = pageUsers.getContent();
+        //서비스 구현
+        return new ResponseEntity<>(
+                new MultiResponseDto<>(mapper.usersToUserBirthDto(users), pageUsers), HttpStatus.OK);
 
+    }
 }
