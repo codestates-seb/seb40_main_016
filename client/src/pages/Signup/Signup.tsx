@@ -23,6 +23,7 @@ const Signup = () => {
     userType: "",
     userBirth: "",
     userGender: "male",
+    userImg: "",
   });
   const [step, setStep] = useState<number>(1);
   const [hasNoError, setHasNoError] = useState<boolean>(false); //error 메세지 난 것 없는지

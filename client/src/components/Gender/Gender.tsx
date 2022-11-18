@@ -12,7 +12,7 @@
     defaultValue="male" 
     />
 */
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 
 import { Wrapper, LabelStyle, RadioGroup, RadioBtn, RadioInput } from "./style";
 

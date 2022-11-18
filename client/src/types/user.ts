@@ -5,6 +5,7 @@ export interface SignupUserInfo {
   password: string;
   content: string;
   userGender: "male" | "female";
+  userImg: string;
   userType: "person" | "cat" | "dog" | "";
   userBirth: string;
 }
