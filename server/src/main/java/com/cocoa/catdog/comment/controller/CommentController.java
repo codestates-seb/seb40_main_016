@@ -75,6 +75,15 @@ public class CommentController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @DeleteMapping("/{comment-id}/likes")
+    public ResponseEntity<HttpStatus> cancelLikeComment (@PathVariable("comment-id") Long commentId,
+                                                   @RequestHeader(name = "Authorization") String token) {
+        Long userId = jwtTokenizer.getUserId(token);
+        commentService.deleteLikeComment(commentId, userId);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     /*
     * 댓글 신고
     * */
