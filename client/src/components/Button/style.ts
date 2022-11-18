@@ -22,7 +22,7 @@ export const ButtonStyle = styled.button<ButtonProps>`
     font-size: ${`var(--fs-${fontSize})`};
     box-shadow: ${isShadow ? "0px 3px 3px var(--color-gray)" : "none"};
 
-    &:hover {
+    &:hover:not(:disabled) {
       background-color: ${`var(--color-${btnHoverColor})`};
     }
 
@@ -30,6 +30,11 @@ export const ButtonStyle = styled.button<ButtonProps>`
       margin-left: 1px;
       margin-top: 1px;
       box-shadow: none;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
     }
   `}
 `;
