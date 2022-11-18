@@ -19,15 +19,29 @@ const FilterContainer = styled.main`
   align-items: center;
   justify-content: space-between;
   width: 100%;
+
+  @media screen and (max-width: 736px) {
+    padding: 30px 0px;
+    flex-direction: column;
+  }
 `;
 
-const TabBox = styled.div``;
+const TabBox = styled.div`
+  @media screen and (max-width: 736px) {
+    margin-bottom: 20px;
+  }
+`;
 
 const SortBox = styled.div`
   width: 190px;
+  height: 51px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+  @media screen and (max-width: 736px) {
+    width: 150px;
+  }
 
   button {
     box-shadow: 0px 2px 5px 0px var(--color-gray);
@@ -40,6 +54,12 @@ const SortBox = styled.div`
         background-color: var(--color-madium-black);
       }
     }
+
+    @media screen and (max-width: 736px) {
+      width: 70px;
+      height: 50px;
+      font-size: var(--fs-pc-small);
+    }
   }
 `;
 
@@ -48,15 +68,25 @@ const ImgContainer = styled.main`
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-gap: 40px;
+
+  @media screen and (max-width: 736px) {
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 10px;
+  }
 `;
 
 const ImgBox = styled.div`
   position: relative;
+  overflow: hidden;
+  border-radius: 30px;
+  box-shadow: 0px 0px 10px 0px var(--color-light-black);
 
   .img-card {
     max-height: 278px;
-    border-radius: 30px;
-    box-shadow: 0px 0px 10px 0px var(--color-light-black);
+  }
+
+  @media screen and (max-width: 736px) {
+    border-radius: 0px;
   }
 `;
 
@@ -76,6 +106,10 @@ const Dim = styled.div`
       opacity: 1;
     }
   }
+
+  @media screen and (max-width: 736px) {
+    border-radius: 0px;
+  }
 `;
 
 const InfoBox = styled.div`
@@ -83,6 +117,12 @@ const InfoBox = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+
+  @media screen and (max-width: 736px) {
+    height: 65px;
+    flex-direction: column;
+    justify-content: space-between;
+  }
 `;
 
 const Info = styled.div`
