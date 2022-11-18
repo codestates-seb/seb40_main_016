@@ -68,6 +68,10 @@ dependencies {
 	// h2
 	runtimeOnly 'com.h2database:h2'
 
+	// s3 sdk 추가
+	implementation platform('com.amazonaws:aws-java-sdk-bom:1.12.343')
+	implementation 'com.amazonaws:aws-java-sdk-s3'
+
 }
 
 

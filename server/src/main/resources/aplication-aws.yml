@@ -3,3 +3,11 @@ cloud:
     credentials:
       accessKey: [AWS_ACCESS_KEY_ID]
       secretKey: [AWS_SECRET_ACCESS_KEY]
+    s3:
+      bucket: catdogbucket
+      folder:
+        [ folderName ]: [ folderName/ ]
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
