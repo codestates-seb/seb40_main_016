@@ -172,7 +172,7 @@ const Signup = () => {
                           <Button
                             className="signup-btn"
                             onClick={() => {
-                              navigate("/");
+                              navigate("/login");
                             }}
                             width="200px"
                             height="50px"
