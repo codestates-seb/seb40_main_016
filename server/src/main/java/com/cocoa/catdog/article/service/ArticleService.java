@@ -14,7 +14,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -27,9 +29,13 @@ public class ArticleService {
     private final ArticleMapper articleMapper;
     private final CommentMapper commentMapper;
 
-    public Article saveArticle(Article article, Long userId) {
+    public Article saveArticle(Article article, Long userId, List<MultipartFile> images) {
 
         User findUser = userService.findUser(userId);
+
+        for (MultipartFile multipartFile : images) {
+            String url = fileProcessService.upload
+        }
 
         article.setUser(findUser);
         findUser.getArticles().add(article);

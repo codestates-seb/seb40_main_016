@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
@@ -29,10 +30,11 @@ public class ArticleController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     ArticleDto.Response postArticle(@RequestHeader(name = "Authorization") String token,
-            @Valid @RequestBody ArticleDto.Post postDto) {
+            @Valid @RequestBody ArticleDto.Post postDto,
+                                    @RequestParam("articleImg") List<MultipartFile> images) {
         Article article = mapper.postDtoToEntity(postDto);
         return mapper.entityToResponseDto(
-                articleService.saveArticle(article, jwtTokenizer.getUserId(token)));
+                articleService.saveArticle(article, jwtTokenizer.getUserId(token), images));
     }
 
     @PatchMapping("/{article-id}")

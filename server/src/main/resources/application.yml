@@ -16,6 +16,10 @@ spring:
           auth: true
           starttls:
             enable: true
+cloud:
+  aws:
+    s3:
+      bucket:
 
 mail:
   address:
