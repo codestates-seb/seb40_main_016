@@ -78,6 +78,17 @@ export const PopupHeader = styled.div<PopupHeaderProp>`
   text-align: center;
   font-size: 20px;
 
+  .prevBtn {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 20px;
+    height: 20px;
+    padding: 13px 10px;
+    cursor: pointer;
+    transform: rotate(180deg);
+  }
+
   > svg {
     position: absolute;
     right: 0;
