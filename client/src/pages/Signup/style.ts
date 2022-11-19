@@ -110,6 +110,9 @@ export const Footer = styled.footer`
     color: var(--color-green);
     text-decoration: none;
     margin-left: 5px;
+    &:hover {
+      color: var(--color-dark-green);
+    }
   }
 `;
 

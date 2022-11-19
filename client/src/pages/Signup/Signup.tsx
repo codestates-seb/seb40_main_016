@@ -138,7 +138,6 @@ const Signup = () => {
                             btnHoverColor="orange"
                             textColor="black"
                             fontSize="pc-regular"
-                            isShadow={true}
                             disabled={userInfo.userType === ""}
                           >
                             다음
@@ -158,7 +157,6 @@ const Signup = () => {
                             btnHoverColor="orange"
                             textColor="black"
                             fontSize="pc-regular"
-                            isShadow={true}
                             disabled={!(hasNoError && hasNoEmptyRequired)}
                           >
                             완료
@@ -180,7 +178,6 @@ const Signup = () => {
                             btnHoverColor="orange"
                             textColor="black"
                             fontSize="pc-regular"
-                            isShadow={true}
                           >
                             확인
                           </Button>
