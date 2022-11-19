@@ -7,10 +7,16 @@ export interface SignupUserInfo {
   userType: "PERSON" | "CAT" | "DOG" | "";
   userBirth: string;
 }
+
 export interface SignupPersonInfo {
   [index: string]: string;
   userName: string;
   email: string;
   password: string;
   userType: "PERSON" | "CAT" | "DOG" | "";
+}
+
+export interface LoginInfo {
+  email: string;
+  password: string;
 }
