@@ -11,3 +11,15 @@ export const PostSignUp = async (body: SignupUserInfo | SignupPersonInfo) => {
   });
   return response;
 };
+
+export const GetMain = async (page: number, size: number) => {
+  const response = await axios.get(
+    `http://ec2-13-124-50-180.ap-northeast-2.compute.amazonaws.com:8080/articles?page=${page}&size=${size}`,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    },
+  );
+  return response;
+};

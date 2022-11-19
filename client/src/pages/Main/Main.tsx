@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 
 import OuterContainer from "../../components/OuterContainer/OuterConainer";
@@ -11,142 +11,15 @@ import { ReactComponent as HeartWIcon } from "../../assets/img/heart-w-icon.svg"
 import { ReactComponent as BoneWIcon } from "../../assets/img/bone-w-icon.svg";
 import { ReactComponent as EyeWIcon } from "../../assets/img/eye-w-icon..svg";
 
-import { dummyData } from "./DummyData";
+import { FilterContainer, TabBox, SortBox, ImgContainer, ImgBox, Dim, InfoBox, Info } from "./style";
 
-const FilterContainer = styled.main`
-  padding: 50px 0px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-
-  @media screen and (max-width: 736px) {
-    padding: 30px 0px;
-    flex-direction: column;
-  }
-`;
-
-const TabBox = styled.div`
-  @media screen and (max-width: 736px) {
-    margin-bottom: 20px;
-  }
-`;
-
-const SortBox = styled.div`
-  width: 190px;
-  height: 51px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  @media screen and (max-width: 736px) {
-    width: 150px;
-  }
-
-  button {
-    box-shadow: 0px 2px 5px 0px var(--color-gray);
-
-    &.clicked {
-      background-color: var(--color-madium-black);
-      color: var(--color-white);
-
-      &:hover {
-        background-color: var(--color-madium-black);
-      }
-    }
-
-    @media screen and (max-width: 736px) {
-      width: 70px;
-      height: 50px;
-      font-size: var(--fs-pc-small);
-    }
-  }
-`;
-
-const ImgContainer = styled.main`
-  padding: 0px 0px 50px 0px;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-gap: 40px;
-
-  @media screen and (max-width: 736px) {
-    grid-template-columns: repeat(3, 1fr);
-    grid-gap: 10px;
-  }
-`;
-
-const ImgBox = styled.div`
-  position: relative;
-  overflow: hidden;
-  border-radius: 30px;
-  box-shadow: 0px 0px 10px 0px var(--color-light-black);
-
-  .img-card {
-    max-height: 278px;
-  }
-
-  @media screen and (max-width: 736px) {
-    border-radius: 0px;
-  }
-`;
-
-const Dim = styled.div`
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  border-radius: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  &:hover {
-    background-color: #0c0d0e50;
-
-    .info {
-      opacity: 1;
-    }
-  }
-
-  @media screen and (max-width: 736px) {
-    border-radius: 0px;
-  }
-`;
-
-const InfoBox = styled.div`
-  opacity: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  @media screen and (max-width: 736px) {
-    height: 65px;
-    flex-direction: column;
-    justify-content: space-between;
-  }
-`;
-
-const Info = styled.div`
-  margin: 0px 10px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  color: var(--color-white);
-  font-size: var(--fs-pc-regular);
-
-  svg {
-    margin-right: 5px;
-    width: 18px;
-  }
-
-  .views {
-    width: 20px;
-  }
-`;
+import { GetMain } from "../../api/api";
 
 const Main = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [sort, setSort] = useState<string>("new");
   const [tab, setTab] = useState<string>("all");
+  const [articles, setArticles] = useState<Articles[]>([]);
 
   const handleOpen = () => {
     setOpen(!open);
@@ -159,6 +32,24 @@ const Main = () => {
   const handleSortClick = (sort: "new" | "favorite") => {
     setSort(sort);
   };
+
+  interface Articles {
+    articleId: number;
+    articleImg: string;
+    content: string;
+    likeCnt: number;
+    view: number;
+    reportCnt: number;
+    articleStatus: string;
+    yummyCnt: number;
+  }
+
+  useEffect(() => {
+    GetMain(1, 12).then((res: any) => {
+      console.log(res.data.data);
+      setArticles(res.data.data);
+    });
+  }, []);
 
   return (
     <div>
@@ -190,27 +81,28 @@ const Main = () => {
             </SortBox>
           </FilterContainer>
           <ImgContainer>
-            {dummyData.map((data) => (
-              <ImgBox key={data.id}>
-                <Dim>
-                  <InfoBox className="info">
-                    <Info>
-                      <HeartWIcon className="likes" />
-                      {data.likes}
-                    </Info>
-                    <Info>
-                      <BoneWIcon className="snacks" />
-                      {data.snacks}
-                    </Info>
-                    <Info>
-                      <EyeWIcon className="views" />
-                      {data.views}
-                    </Info>
-                  </InfoBox>
-                </Dim>
-                <ImageCard className="img-card" imgUrl={data.imgUrl} onClick={handleOpen}></ImageCard>
-              </ImgBox>
-            ))}
+            {articles &&
+              articles.map((article: Articles) => (
+                <ImgBox key={article.articleId}>
+                  <Dim>
+                    <InfoBox className="info">
+                      <Info>
+                        <HeartWIcon className="likes" />
+                        {article.likeCnt}
+                      </Info>
+                      <Info>
+                        <BoneWIcon className="snacks" />
+                        {article.yummyCnt}
+                      </Info>
+                      <Info>
+                        <EyeWIcon className="views" />
+                        {article.view}
+                      </Info>
+                    </InfoBox>
+                  </Dim>
+                  <ImageCard className="img-card" imgUrl={article.articleImg} onClick={handleOpen}></ImageCard>
+                </ImgBox>
+              ))}
           </ImgContainer>
         </InnerContainer>
       </OuterContainer>
