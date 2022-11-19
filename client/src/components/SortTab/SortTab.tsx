@@ -8,7 +8,6 @@
   - 기본은 all 버튼으로 적용되어있습니다.
 */
 
-import { useState } from "react";
 import styled, { keyframes } from "styled-components";
 import { ReactComponent as AllSymbol } from "../../assets/img/all-symbol.svg";
 import { ReactComponent as DogSymbol } from "../../assets/img/dog-symbol.svg";

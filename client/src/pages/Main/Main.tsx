@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import styled from "styled-components";
+import { useEffect, useState, useRef, useCallback } from "react";
 
 import OuterContainer from "../../components/OuterContainer/OuterConainer";
 import InnerContainer from "../../components/InnerContainer/InnerContainer";
@@ -7,11 +6,11 @@ import SortTab from "../../components/SortTab/SortTab";
 import ImageCard from "../../components/ImageCard/ImageCard";
 import Button from "../../components/Button/Button";
 
+import { FilterContainer, TabBox, SortBox, ImgContainer, ImgBox, Dim, InfoBox, Info } from "./style";
+
 import { ReactComponent as HeartWIcon } from "../../assets/img/heart-w-icon.svg";
 import { ReactComponent as BoneWIcon } from "../../assets/img/bone-w-icon.svg";
 import { ReactComponent as EyeWIcon } from "../../assets/img/eye-w-icon..svg";
-
-import { FilterContainer, TabBox, SortBox, ImgContainer, ImgBox, Dim, InfoBox, Info } from "./style";
 
 import { GetMain } from "../../api/api";
 
@@ -20,6 +19,10 @@ const Main = () => {
   const [sort, setSort] = useState<string>("new");
   const [tab, setTab] = useState<string>("all");
   const [articles, setArticles] = useState<Articles[]>([]);
+  const [page, setPage] = useState<number>(1);
+  const [load, setLoad] = useState<boolean>(false);
+  const preventRef = useRef<boolean>(true);
+  const obsRef = useRef<null>(null);
 
   const handleOpen = () => {
     setOpen(!open);
@@ -45,11 +48,37 @@ const Main = () => {
   }
 
   useEffect(() => {
-    GetMain(1, 12).then((res: any) => {
-      console.log(res.data.data);
-      setArticles(res.data.data);
-    });
+    getArticles();
+    const observer = new IntersectionObserver(handleObserver, { threshold: 0.5 });
+    if (obsRef.current) observer.observe(obsRef.current);
+    return () => {
+      observer.disconnect();
+    };
   }, []);
+
+  useEffect(() => {
+    getArticles();
+  }, [page]);
+
+  const handleObserver = (entries: any) => {
+    const target = entries[0];
+    if (target.isIntersecting && preventRef.current) {
+      preventRef.current = false;
+      setPage((prev) => prev + 1);
+    }
+  };
+
+  const getArticles = () => {
+    console.log("사진 불러오기");
+    setLoad(true);
+    GetMain(page).then((res: any) => {
+      if (res.data) {
+        setArticles(articles.concat(res.data.data));
+        preventRef.current = true;
+      }
+      setLoad(false);
+    });
+  };
 
   return (
     <div>
@@ -103,6 +132,8 @@ const Main = () => {
                   <ImageCard className="img-card" imgUrl={article.articleImg} onClick={handleOpen}></ImageCard>
                 </ImgBox>
               ))}
+            {load ? <div>로딩 중</div> : <></>}
+            <div ref={obsRef}></div>
           </ImgContainer>
         </InnerContainer>
       </OuterContainer>
