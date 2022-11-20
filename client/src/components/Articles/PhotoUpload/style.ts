@@ -25,7 +25,8 @@ export const CurrentPhoto = styled.img`
   object-fit: cover;
 `;
 
-export const PhotoChoiceWrapper = styled.div`
+export const PhotoChoiceWrapper = styled.label`
+  display: block;
   text-align: center;
   padding: 220px 0;
 

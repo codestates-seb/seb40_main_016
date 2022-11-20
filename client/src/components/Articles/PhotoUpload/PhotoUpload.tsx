@@ -120,11 +120,9 @@ const PhotoUpload = ({
     <PhotoWrapper>
       {currentPhotos && <CurrentPhoto src={currentPhotos} alt="preview" />}
 
-      <PhotoChoiceWrapper>
-        <label htmlFor="file" ref={uploadBoxRef}>
-          <EmptyPhoto className="emptyPhoto" />
-          <p>사진을 여기에 끌어다 놓으세요</p>
-        </label>
+      <PhotoChoiceWrapper htmlFor="file" ref={uploadBoxRef}>
+        <EmptyPhoto className="emptyPhoto" />
+        <p>사진을 여기에 끌어다 놓으세요</p>
         <UploadButton htmlFor="file">컴퓨터에서 선택</UploadButton>
         <input type="file" multiple accept="image/*" id="file" ref={inputRef} hidden />
       </PhotoChoiceWrapper>
