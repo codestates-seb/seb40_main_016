@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, useCallback } from "react";
+import { useEffect, useState, useRef, Suspense } from "react";
 
 import OuterContainer from "../../components/OuterContainer/OuterConainer";
 import InnerContainer from "../../components/InnerContainer/InnerContainer";
@@ -22,7 +22,8 @@ const Main = () => {
   const [page, setPage] = useState<number>(1);
   const [load, setLoad] = useState<boolean>(false);
   const preventRef = useRef<boolean>(true);
-  const obsRef = useRef<null>(null);
+  const endRef = useRef<boolean>(false);
+  const [lastIntersecting, setLastIntersecting] = useState<HTMLElement | null>(null);
 
   const handleOpen = () => {
     setOpen(!open);
@@ -47,38 +48,41 @@ const Main = () => {
     yummyCnt: number;
   }
 
-  useEffect(() => {
-    getArticles();
-    const observer = new IntersectionObserver(handleObserver, { threshold: 0.5 });
-    if (obsRef.current) observer.observe(obsRef.current);
-    return () => {
-      observer.disconnect();
-    };
-  }, []);
-
-  useEffect(() => {
-    getArticles();
-  }, [page]);
-
-  const handleObserver = (entries: any) => {
-    const target = entries[0];
-    if (target.isIntersecting && preventRef.current) {
-      preventRef.current = false;
-      setPage((prev) => prev + 1);
-    }
-  };
-
   const getArticles = () => {
-    console.log("사진 불러오기");
+    console.log(articles);
     setLoad(true);
     GetMain(page).then((res: any) => {
       if (res.data) {
+        if (res.data.end) {
+          endRef.current = true;
+        }
         setArticles(articles.concat(res.data.data));
         preventRef.current = true;
       }
       setLoad(false);
     });
   };
+
+  const onIntersect = (entries: any, observer: any) => {
+    entries.forEach((entry: any) => {
+      if (entry.isIntersecting) {
+        setPage((prev) => prev + 1);
+        observer.unobserve(entry.target);
+      }
+    });
+  };
+
+  useEffect(() => {
+    getArticles();
+  }, [page]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(onIntersect, { threshold: 0.5 });
+    if (lastIntersecting) {
+      observer.observe(lastIntersecting);
+    }
+    return () => observer && observer.disconnect();
+  }, [lastIntersecting]);
 
   return (
     <div>
@@ -112,7 +116,7 @@ const Main = () => {
           <ImgContainer>
             {articles &&
               articles.map((article: Articles) => (
-                <ImgBox key={article.articleId}>
+                <ImgBox key={article.articleId} ref={setLastIntersecting}>
                   <Dim>
                     <InfoBox className="info">
                       <Info>
@@ -133,7 +137,7 @@ const Main = () => {
                 </ImgBox>
               ))}
             {load ? <div>로딩 중</div> : <></>}
-            <div ref={obsRef}></div>
+            {/* <div ref={setLastIntersecting}></div> */}
           </ImgContainer>
         </InnerContainer>
       </OuterContainer>
