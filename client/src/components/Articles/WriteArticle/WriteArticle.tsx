@@ -1,11 +1,11 @@
 /*
 담당 : 김윤희
 생성 : 2022.11.19
-수정 : 
+수정 : 2022.11.20
 소개 : 글 작성 컴포넌트
 설명 : 
   - 글 작성, 수정시 사용되는 글 작성 컴포넌트입니다.
-  - 사용 예시: <WriteArticle uploadedPhotos={uploadedPhotos} setContent={setContent} />
+  - 사용 예시: <WriteArticle uploadedPhotos={uploadedPhotos} setContent={setContent} index={index} setIndex={setIndex} />
 */
 
 import { useState } from "react";
@@ -15,22 +15,21 @@ import { ReactComponent as ArrowCircleIcon } from "../../../assets/img/arrow-cir
 
 interface WriteArticleProps {
   uploadedPhotos: string[];
+  index: number;
+  setIndex: (arg: number) => void;
   setContent: (arg: string) => void;
 }
 
-const WriteArticle = ({ uploadedPhotos, setContent }: WriteArticleProps) => {
-  const [index, setIndex] = useState<number>(0);
-
-  const increaseIndex = () => index > 0 && setIndex((index) => index - 1);
-  const decreaseIndex = () => index < uploadedPhotos.length - 1 && setIndex((index) => index + 1);
-
+const WriteArticle = ({ uploadedPhotos, index, setIndex, setContent }: WriteArticleProps) => {
   return (
     <InnerWrapper>
       {uploadedPhotos.length > 0 && (
         <SelectedPhoto>
-          <ArrowCircleIcon className="prev" onClick={increaseIndex} />
+          {index > 0 && <ArrowCircleIcon className="prev" onClick={() => setIndex(index - 1)} />}
           <Photo src={uploadedPhotos[index]} alt="photo" />
-          <ArrowCircleIcon className="next" onClick={decreaseIndex} />
+          {index < uploadedPhotos.length - 1 && (
+            <ArrowCircleIcon className="next" onClick={() => setIndex(index + 1)} />
+          )}
         </SelectedPhoto>
       )}
       <ArticleWrapper>
