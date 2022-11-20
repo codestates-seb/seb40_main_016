@@ -15,6 +15,7 @@ const variables = css`
   --color-sky: #63bff3;
   --color-faded-sky: #eefaff;
   --color-green: #5ab3b1;
+  --color-dark-green: #4e9692;
   --color-ivory: #f1f0ed;
   --color-dark-ivory: #e4e0db;
 
