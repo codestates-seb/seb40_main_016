@@ -16,8 +16,8 @@ import { ReactComponent as ArrowCircleIcon } from "../../../assets/img/arrow-cir
 interface WriteArticleProps {
   uploadedPhotos: string[];
   index: number;
-  setIndex: (arg: number) => void;
-  setContent: (arg: string) => void;
+  setIndex: (arg: (arg: number) => number) => void;
+  setContent: (arg: () => string) => void;
 }
 
 const WriteArticle = ({ uploadedPhotos, index, setIndex, setContent }: WriteArticleProps) => {
@@ -25,10 +25,10 @@ const WriteArticle = ({ uploadedPhotos, index, setIndex, setContent }: WriteArti
     <InnerWrapper>
       {uploadedPhotos.length > 0 && (
         <SelectedPhoto>
-          {index > 0 && <ArrowCircleIcon className="prev" onClick={() => setIndex(index - 1)} />}
+          {index > 0 && <ArrowCircleIcon className="prev" onClick={() => setIndex((index) => index - 1)} />}
           <Photo src={uploadedPhotos[index]} alt="photo" />
           {index < uploadedPhotos.length - 1 && (
-            <ArrowCircleIcon className="next" onClick={() => setIndex(index + 1)} />
+            <ArrowCircleIcon className="next" onClick={() => setIndex((index) => index + 1)} />
           )}
         </SelectedPhoto>
       )}
@@ -37,7 +37,7 @@ const WriteArticle = ({ uploadedPhotos, index, setIndex, setContent }: WriteArti
           <Avatar width="50px" height="50px" />
           <Nickname>잭슨</Nickname>
         </Profile>
-        <Textarea placeholder="글 입력" onChange={(e) => setContent(e.target.value)} />
+        <Textarea placeholder="글 입력" onChange={(e) => setContent(() => e.target.value)} />
       </ArticleWrapper>
     </InnerWrapper>
   );

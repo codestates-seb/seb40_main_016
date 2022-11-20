@@ -27,9 +27,9 @@ interface PhotoUploadProps {
   uploadedPhotos: string[];
   previewPhotos: any[];
   currentPhotos: string;
-  setUploadedPhotos: (arg: string[]) => void;
-  setPreviewPhotos: (arg: any[]) => void;
-  setCurrentPhotos: (arg: string) => void;
+  setUploadedPhotos: (arg: (arg: string[]) => string[]) => void;
+  setPreviewPhotos: (arg: () => any[]) => void;
+  setCurrentPhotos: (arg: () => string) => void;
 }
 
 const PhotoUpload = ({
@@ -59,7 +59,7 @@ const PhotoUpload = ({
           const result = e.target.result as string;
 
           if (result) {
-            setUploadedPhotos([...uploadedPhotos, result].slice(0, 3));
+            setUploadedPhotos((state) => [...state, result].slice(0, 3));
           }
         };
 
@@ -103,7 +103,7 @@ const PhotoUpload = ({
 
       const deletePhoto = () => {
         uploadedPhotos.splice(uploadedPhotos.findIndex(isDeleteImage), 1);
-        setUploadedPhotos([...uploadedPhotos]);
+        setUploadedPhotos((state) => [...state]);
         if (uploadedPhotos.length === 0) setIsAddPhoto((isAddPhoto) => !isAddPhoto);
       };
 
@@ -112,8 +112,8 @@ const PhotoUpload = ({
       );
     });
 
-    setCurrentPhotos(uploadedPhotos[uploadedPhotos.length - 1]);
-    setPreviewPhotos(imageJSXs);
+    setCurrentPhotos(() => uploadedPhotos[uploadedPhotos.length - 1]);
+    setPreviewPhotos(() => imageJSXs);
   }, [uploadedPhotos]);
 
   return (

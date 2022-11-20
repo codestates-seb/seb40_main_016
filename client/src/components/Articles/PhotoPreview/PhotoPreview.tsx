@@ -14,7 +14,7 @@ import { ReactComponent as CloseBtn } from "../../../assets/img/close-icon.svg";
 interface PhotoPreviewProps {
   photoUrl: string;
   deletePhoto: () => void;
-  setCurrentPhotos: (arg: string) => void;
+  setCurrentPhotos: (arg: () => string) => void;
 }
 
 const Wrapper = styled.div`
@@ -43,7 +43,7 @@ const Wrapper = styled.div`
 
 const PhotoPreview = ({ photoUrl, deletePhoto, setCurrentPhotos }: PhotoPreviewProps) => {
   return (
-    <Wrapper onClick={() => setCurrentPhotos(photoUrl)}>
+    <Wrapper onClick={() => setCurrentPhotos(() => photoUrl)}>
       <img src={photoUrl} alt="preview" />
       <CloseBtn onClick={deletePhoto} width="20px" />
     </Wrapper>

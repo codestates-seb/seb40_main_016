@@ -14,17 +14,19 @@ const NewArticle = ({ isOn, setIsOn }: ArticleProps) => {
   const [uploadedPhotos, setUploadedPhotos] = useState<string[]>([]);
   const [previewPhotos, setPreviewPhotos] = useState([]);
   const [currentPhotos, setCurrentPhotos] = useState<string>("");
+  const [index, setIndex] = useState<number>(0);
   const [content, setContent] = useState("");
 
   const handlePhoto = () => {
     setIsPhoto(() => true);
+    setIndex(() => 0);
   };
 
   const resetPhoto = () => {
     setIsPhoto(() => true);
-    setUploadedPhotos([]);
-    setPreviewPhotos([]);
-    setCurrentPhotos("");
+    setUploadedPhotos(() => []);
+    setPreviewPhotos(() => []);
+    setCurrentPhotos(() => "");
   };
 
   const submitNewArticle = () => {
@@ -60,7 +62,7 @@ const NewArticle = ({ isOn, setIsOn }: ArticleProps) => {
           setCurrentPhotos={setCurrentPhotos}
         />
       ) : (
-        <WriteArticle uploadedPhotos={uploadedPhotos} setContent={setContent} />
+        <WriteArticle uploadedPhotos={uploadedPhotos} setContent={setContent} index={index} setIndex={setIndex} />
       )}
     </Modal>
   );
