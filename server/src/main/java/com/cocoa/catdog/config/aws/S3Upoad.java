@@ -24,9 +24,10 @@ public class S3Upoad {
                 multipartFile.getOriginalFilename();
 
         ObjectMetadata objMeta = new ObjectMetadata();
-        objMeta.setContentLengh(multipartFile.getInputStream().available());
+        objMeta.setContentLength(multipartFile.getInputStream().available());
 
-        amazonS3.putObject(bucket, s3FileName, multipartFile, getInputStream(),
+        amazonS3.putObject(bucket, s3FileName,
+                multipartFile.getInputStream(),
                 objMeta);
 
         return amazonS3.getUrl(bucket, s3FileName).toString();
