@@ -1,7 +1,7 @@
 /*
 담당 : 김윤희
 생성 : 2022.11.15
-수정 : 2022.11.18 (송인선)
+수정 : 2022.11.20 (송인선)
 소개 : 이미지카드 컴포넌트
 설명 : 
   - 메인페이지, 마이페이지에서 공통적으로 사용되는 이미지카드 컴포넌트입니다.
@@ -19,6 +19,7 @@
     imgUrl="이미지 주소"
     onClick={onClick}
   />
+  - 수정: img 태그에 loading="lazy" 속성 추가
 */
 
 import styled from "styled-components";
@@ -39,7 +40,6 @@ const Wrapper = styled.div`
     width: 100%;
     height: 100%;
     aspect-ratio: 1;
-    border-radius: 30px;
     object-fit: cover;
   }
 `;
@@ -47,7 +47,7 @@ const Wrapper = styled.div`
 function ImageCard({ className, imgUrl, onClick }: ImageCardProps) {
   return (
     <Wrapper className={className} onClick={onClick}>
-      <img src={imgUrl} alt="img" />
+      <img src={imgUrl} alt="img" loading="lazy" />
     </Wrapper>
   );
 }

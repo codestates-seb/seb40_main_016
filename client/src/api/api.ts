@@ -11,3 +11,12 @@ export const PostSignUp = async (body: SignupUserInfo | SignupPersonInfo) => {
   });
   return response;
 };
+
+export const GetMain = async (page: number) => {
+  const response = await axios.get(`${URL}/articles?page=${page}&size=12`, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  return response;
+};
