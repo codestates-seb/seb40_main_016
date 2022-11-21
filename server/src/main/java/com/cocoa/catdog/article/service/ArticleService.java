@@ -59,12 +59,14 @@ public class ArticleService {
     }
 
     public Page<Article> findArticles(int page, int size, String sort, String order, long userId) {
+        //쿼리 정리
         sort = queryFilter(sort);
         order = queryFilter(order);
 
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by(order).descending());
         Page<Article> articlePage;
 
+        //글목록을 쿼리별로 조회
         if(sort.equals("all")) {
             articlePage = articleRepository.findAll(pageRequest);
         } else if(sort.equals("followings")) {
@@ -111,7 +113,7 @@ public class ArticleService {
                 break;
             case "persons" : query = "PERSON";
                 break;
-            default: throw new BusinessLogicException(ExceptionCode.BAD_QUERY);
+            default: throw new BusinessLogicException(ExceptionCode.BAD_QUERY); //case에 맞지않는 쿼리는 전부 예외처리
 
         }
 
