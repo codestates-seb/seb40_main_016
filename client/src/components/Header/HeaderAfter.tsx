@@ -159,7 +159,11 @@ const Btn = styled.button`
   }
 `;
 
-const HeaderAfter = () => {
+interface HeaderProps {
+  popupHandler: () => void;
+}
+
+const HeaderAfter = ({ popupHandler }: HeaderProps) => {
   const [isOn, setIsOn] = useState<boolean>(false);
 
   const handleMenuOn = () => {
@@ -183,7 +187,7 @@ const HeaderAfter = () => {
         </SearchBox>
         <MenuBox>
           <Btn>
-            <AddIcon />
+            <AddIcon onClick={popupHandler} />
           </Btn>
           <Link to="/shop">
             <Btn>
