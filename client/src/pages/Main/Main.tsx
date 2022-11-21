@@ -73,10 +73,8 @@ const Main = () => {
   };
 
   const getArticles = () => {
-    console.log(articles);
     setLoading(true);
     GetMain(page).then((res: any) => {
-      // console.log(res.data.pageInfo); // 현재 페이지와 토탈 페이지가 다르면 api 요청 안보냄
       setTotalPage(res.data.pageInfo.totalPages);
       setArticles(articles.concat(res.data.data));
       setLoading(false);
