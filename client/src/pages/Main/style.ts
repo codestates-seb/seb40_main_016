@@ -88,6 +88,7 @@ export const Dim = styled.div`
 
   &:hover {
     background-color: #0c0d0e50;
+    cursor: pointer;
 
     .info {
       opacity: 1;

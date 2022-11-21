@@ -24,9 +24,8 @@ const Main = () => {
   const [tab, setTab] = useState<string>("all");
   const [articles, setArticles] = useState<Articles[]>([]);
   const [page, setPage] = useState<number>(1);
-  const [loading, setLoading] = useState<boolean>(true);
-  const preventRef = useRef<boolean>(true);
-  const endRef = useRef<boolean>(false);
+  const [totalPage, setTotalPage] = useState<number>(1);
+  const [loading, setLoading] = useState<boolean>(false);
   const [lastIntersecting, setLastIntersecting] = useState<HTMLElement | null>(null);
 
   const handleOpen = () => {
@@ -53,7 +52,7 @@ const Main = () => {
   }
 
   useEffect(() => {
-    getArticles();
+    if (page <= totalPage) getArticles();
   }, [page]);
 
   useEffect(() => {
@@ -75,14 +74,11 @@ const Main = () => {
 
   const getArticles = () => {
     console.log(articles);
+    setLoading(true);
     GetMain(page).then((res: any) => {
-      if (res.data) {
-        if (res.data.end) {
-          endRef.current = true;
-        }
-        setArticles(articles.concat(res.data.data));
-        preventRef.current = true;
-      }
+      // console.log(res.data.pageInfo); // 현재 페이지와 토탈 페이지가 다르면 api 요청 안보냄
+      setTotalPage(res.data.pageInfo.totalPages);
+      setArticles(articles.concat(res.data.data));
       setLoading(false);
     });
   };
