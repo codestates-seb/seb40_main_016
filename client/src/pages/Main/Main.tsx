@@ -1,5 +1,4 @@
 import { useEffect, useState, useRef } from "react";
-import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
 import OuterContainer from "../../components/OuterContainer/OuterConainer";
@@ -7,6 +6,7 @@ import InnerContainer from "../../components/InnerContainer/InnerContainer";
 import SortTab from "../../components/SortTab/SortTab";
 import ImageCard from "../../components/ImageCard/ImageCard";
 import Button from "../../components/Button/Button";
+import ImageSkeleton from "../../components/Skeleton/ImageSkeleton";
 
 import { FilterContainer, TabBox, SortBox, ImgContainer, ImgBox, Dim, InfoBox, Info } from "./style";
 
@@ -16,17 +16,16 @@ import { ReactComponent as EyeWIcon } from "../../assets/img/eye-w-icon..svg";
 
 import { GetMain } from "../../api/api";
 
-import ImageSkeleton from "../../components/Skeleton/ImageSkeleton";
-
 const Main = () => {
   const [open, setOpen] = useState<boolean>(false);
-  const [sort, setSort] = useState<string>("new");
   const [tab, setTab] = useState<string>("all");
+  const [sort, setSort] = useState<string>("latest");
   const [articles, setArticles] = useState<Articles[]>([]);
-  const [page, setPage] = useState<number>(1);
+  const [page, setPage] = useState<number>(0);
   const [totalPage, setTotalPage] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(false);
-  const [lastIntersecting, setLastIntersecting] = useState<HTMLElement | null>(null);
+  const obsRef = useRef(null);
+  const preventRef = useRef(true);
 
   const handleOpen = () => {
     setOpen(!open);
@@ -34,10 +33,12 @@ const Main = () => {
 
   const handleTabClick = (tab: string) => {
     setTab(tab);
+    setPage(1);
   };
 
-  const handleSortClick = (sort: "new" | "favorite") => {
+  const handleSortClick = (sort: "latest" | "likes") => {
     setSort(sort);
+    setPage(1);
   };
 
   interface Articles {
@@ -45,38 +46,47 @@ const Main = () => {
     articleImg: string;
     content: string;
     likeCnt: number;
-    view: number;
+    views: number;
     reportCnt: number;
     articleStatus: string;
     yummyCnt: number;
   }
 
   useEffect(() => {
-    if (page <= totalPage) getArticles();
+    const observer = new IntersectionObserver(obsHandler);
+    if (obsRef.current) observer.observe(obsRef.current);
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (page !== 0 && page <= totalPage) getArticles();
   }, [page]);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(onIntersect, { threshold: 1 });
-    if (lastIntersecting) {
-      observer.observe(lastIntersecting);
-    }
-    return () => observer && observer.disconnect();
-  }, [lastIntersecting]);
+    if (page !== 0) getArticles();
+  }, [tab, sort]);
 
-  const onIntersect = (entries: any, observer: any) => {
-    entries.forEach((entry: any) => {
-      if (entry.isIntersecting) {
-        setPage((prev) => prev + 1);
-        observer.unobserve(entry.target);
-      }
-    });
+  const obsHandler = (entries: any) => {
+    const target = entries[0];
+
+    if (target.isIntersecting && preventRef.current) {
+      preventRef.current = false;
+      setPage((prev) => prev + 1);
+    }
   };
 
   const getArticles = () => {
     setLoading(true);
-    GetMain(page).then((res: any) => {
+    GetMain(page, tab, sort).then((res: any) => {
+      if (res.data.pageInfo.page === 1) {
+        setArticles(res.data.data);
+      } else {
+        setArticles(articles.concat(res.data.data));
+      }
+      preventRef.current = true;
       setTotalPage(res.data.pageInfo.totalPages);
-      setArticles(articles.concat(res.data.data));
       setLoading(false);
     });
   };
@@ -91,47 +101,48 @@ const Main = () => {
             </TabBox>
             <SortBox>
               <Button
-                className={sort === "new" ? "clicked" : ""}
+                className={sort === "latest" ? "clicked" : ""}
                 width="90px"
                 height="50px"
                 fontSize="pc-regular"
-                onClick={() => handleSortClick("new")}
+                onClick={() => handleSortClick("latest")}
               >
                 New
               </Button>
               <Button
-                className={sort === "favorite" ? "clicked" : ""}
+                className={sort === "likes" ? "clicked" : ""}
                 width="90px"
                 height="50px"
                 fontSize="pc-regular"
-                onClick={() => handleSortClick("favorite")}
+                onClick={() => handleSortClick("likes")}
               >
                 Favorite
               </Button>
             </SortBox>
           </FilterContainer>
           <ImgContainer>
-            {articles.map((article: Articles) => (
-              <ImgBox key={article.articleId} ref={setLastIntersecting}>
-                <Dim>
-                  <InfoBox className="info">
-                    <Info>
-                      <HeartWIcon className="likes" />
-                      {article.likeCnt}
-                    </Info>
-                    <Info>
-                      <BoneWIcon className="snacks" />
-                      {article.yummyCnt}
-                    </Info>
-                    <Info>
-                      <EyeWIcon className="views" />
-                      {article.view}
-                    </Info>
-                  </InfoBox>
-                </Dim>
-                <ImageCard className="img-card" imgUrl={article.articleImg} onClick={handleOpen}></ImageCard>
-              </ImgBox>
-            ))}
+            {articles &&
+              articles.map((article: Articles) => (
+                <ImgBox key={article.articleId}>
+                  <Dim>
+                    <InfoBox className="info">
+                      <Info>
+                        <HeartWIcon className="likes" />
+                        {article.likeCnt}
+                      </Info>
+                      <Info>
+                        <BoneWIcon className="snacks" />
+                        {article.yummyCnt}
+                      </Info>
+                      <Info>
+                        <EyeWIcon className="views" />
+                        {article.views}
+                      </Info>
+                    </InfoBox>
+                  </Dim>
+                  <ImageCard className="img-card" imgUrl={article.articleImg} onClick={handleOpen}></ImageCard>
+                </ImgBox>
+              ))}
             {loading ? (
               Array(8)
                 .fill(0)
@@ -143,6 +154,7 @@ const Main = () => {
             ) : (
               <></>
             )}
+            <div ref={obsRef} />
           </ImgContainer>
         </InnerContainer>
       </OuterContainer>

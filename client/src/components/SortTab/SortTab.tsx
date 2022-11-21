@@ -97,13 +97,13 @@ const SortTab = ({ tab, handleTabClick }: Props) => {
         <SortBtn className={tab === "all" ? "clicked" : ""} onClick={() => handleTabClick("all")}>
           <AllSymbol className="all-symbol" />
         </SortBtn>
-        <SortBtn className={tab === "dog" ? "clicked" : ""} onClick={() => handleTabClick("dog")}>
+        <SortBtn className={tab === "dogs" ? "clicked" : ""} onClick={() => handleTabClick("dogs")}>
           <DogSymbol className="dog-symbol" />
         </SortBtn>
-        <SortBtn className={tab === "cat" ? "clicked" : ""} onClick={() => handleTabClick("cat")}>
+        <SortBtn className={tab === "cats" ? "clicked" : ""} onClick={() => handleTabClick("cats")}>
           <CatSymbol className="cat-symbol" />
         </SortBtn>
-        <SortBtn className={tab === "follow" ? "clicked" : ""} onClick={() => handleTabClick("follow")}>
+        <SortBtn className={tab === "followings" ? "clicked" : ""} onClick={() => handleTabClick("followings")}>
           <FollowIcon className="follow-icon" />
         </SortBtn>
       </Wrapper>
