@@ -6,6 +6,7 @@ import com.cocoa.catdog.article.entity.Article;
 import com.cocoa.catdog.article.mapper.ArticleMapper;
 import com.cocoa.catdog.article.service.ArticleService;
 import com.cocoa.catdog.auth.jwt.JwtTokenizer;
+import com.cocoa.catdog.config.aws.S3Uploader;
 import com.cocoa.catdog.dto.MultiResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -31,8 +32,10 @@ public class ArticleController {
     @ResponseStatus(HttpStatus.CREATED)
     ArticleDto.Response postArticle(@RequestHeader(name = "Authorization") String token,
             @Valid @RequestBody ArticleDto.Post postDto,
-                                    @RequestParam("articleImg") List<MultipartFile> images) {
+                                    @RequestParam("articleImg") List<MultipartFile> images
+                                    ) {
         Article article = mapper.postDtoToEntity(postDto);
+        S3Uploader.upload(images, "s3images");
         return mapper.entityToResponseDto(
                 articleService.saveArticle(article, jwtTokenizer.getUserId(token), images));
     }

@@ -4,9 +4,11 @@ package com.cocoa.catdog.config.aws;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,14 +18,16 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.UUID;
 
-import static com.amazonaws.services.s3.internal.S3ErrorResponseHandler.log;
 
+
+@Slf4j
+@Component
 @RequiredArgsConstructor
-@Service
-public class S3Upoad {
+public class S3Uploader {
+
 
     @Value("${cloud.aws.s3.bucket}")
-    private String bucket;
+    public String bucket;
     private final AmazonS3 amazonS3;
     private final AmazonS3Client client;
 
@@ -35,7 +39,7 @@ public class S3Upoad {
 
     private String upload(File file, String dirName) {
         String fileName = dirName + "/" + UUID.randomUUID() + file.getName();
-        String uploadImageUrl = putS3(File, fileName);
+        String uploadImageUrl = putS3(file, fileName);
         removeNewFile(file);
         return uploadImageUrl;
 
@@ -44,7 +48,7 @@ public class S3Upoad {
     private String putS3(File file, String fileName) {
         client.putObject(new PutObjectRequest(bucket, fileName, file)
                 .withCannedAcl(CannedAccessControlList.PublicRead));
-        return client.getURL(bucket, fileName).toString();
+        return client.getUrl(bucket, fileName).toString();
 
     }
 
@@ -64,10 +68,10 @@ public class S3Upoad {
             try (FileOutputStream fos = new FileOutputStream(convertFile)) {
                 fos.write(multipartFile.getBytes());
             }
+            return Optional.of(convertFile);
         }
-        return Optional.of(convertFile);
+        return Optional.empty();
     }
-    return Optional.empty();
 
 
 //    public String update(MultipartFile multipartFile) throws IOException {
