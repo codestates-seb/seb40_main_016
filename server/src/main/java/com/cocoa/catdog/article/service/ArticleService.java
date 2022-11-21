@@ -99,13 +99,17 @@ public class ArticleService {
 
     private String queryFilter(String query) {
         switch (query) {
+            //order
+            case "latest" : query = "articleId";
+                break;
             case "likes" : query = "likeCnt";
                 break;
             case "views" :
+                break;
+
+            //sort
             case "all" :
             case "followings" :
-                break;
-            case "latest" : query = "articleId";
                 break;
             case "dogs" : query = "DOG";
                 break;
