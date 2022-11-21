@@ -2,7 +2,7 @@ import { useState } from "react";
 import Modal from "../../components/Modal/Modal";
 import PhotoUpload from "../../components/Articles/PhotoUpload/PhotoUpload";
 import WriteArticle from "../../components/Articles/WriteArticle/WriteArticle";
-import { SubmitNewArticle } from "../../api/api";
+import { registerArticle } from "../../api/article";
 
 interface ArticleProps {
   isOn: boolean;
@@ -15,7 +15,8 @@ const NewArticle = ({ isOn, setIsOn }: ArticleProps) => {
   const [previewPhotos, setPreviewPhotos] = useState([]);
   const [currentPhotos, setCurrentPhotos] = useState<string>("");
   const [index, setIndex] = useState<number>(0);
-  const [content, setContent] = useState("");
+  const [files, setFiles] = useState<File[]>([]);
+  const [content, setContent] = useState<string>("");
 
   const handlePhoto = () => {
     setIsPhoto(() => true);
@@ -30,12 +31,15 @@ const NewArticle = ({ isOn, setIsOn }: ArticleProps) => {
   };
 
   const submitNewArticle = () => {
-    const body = {
-      articleImg: "",
-      content: content,
-    };
+    const formData = new FormData();
 
-    SubmitNewArticle(body).then((res: any) => {
+    for (let i = 0; i < files.length; i++) {
+      formData.append("image", files[i]);
+    }
+
+    formData.append("content", JSON.stringify(content));
+
+    registerArticle(formData).then((res: any) => {
       if (res.status(201)) alert("글 작성 완료!");
     });
   };
@@ -60,6 +64,8 @@ const NewArticle = ({ isOn, setIsOn }: ArticleProps) => {
           setUploadedPhotos={setUploadedPhotos}
           setPreviewPhotos={setPreviewPhotos}
           setCurrentPhotos={setCurrentPhotos}
+          // formData={formData}
+          setFiles={setFiles}
         />
       ) : (
         <WriteArticle uploadedPhotos={uploadedPhotos} setContent={setContent} index={index} setIndex={setIndex} />
