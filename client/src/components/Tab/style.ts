@@ -7,7 +7,7 @@ interface DirectionProp {
 export const Wrapper = styled.div<DirectionProp>`
   display: flex;
   justify-content: center;
-  gap: 10px;
+  gap: 20px;
 
   ${(props) =>
     props.barPosition === "top" &&
@@ -29,29 +29,29 @@ export const Radio = styled.input<DirectionProp>`
     content: "";
     display: inline-block;
     position: absolute;
-    top: 0;
     left: 0;
     background-color: var(--color-black);
     width: 100%;
+    height: 4px;
 
     ${(props) =>
       props.barPosition === "top" &&
       css`
-        border-top: 4px solid var(--color-black);
+        top: 0;
       `}
 
     ${(props) =>
       props.barPosition === "bottom" &&
       css`
-        border-bottom: 4px solid var(--color-black);
+        bottom: 0;
       `}
   }
 `;
 
 export const TabBtn = styled.label`
   position: relative;
-  display: inline-block;
-  padding: 10px 10px 6px 10px;
-  height: 100%;
+  display: flex;
+  align-items: center;
+  height: 44px;
   cursor: pointer;
 `;
