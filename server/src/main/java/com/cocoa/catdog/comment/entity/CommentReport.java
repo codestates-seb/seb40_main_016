@@ -1,14 +1,17 @@
 package com.cocoa.catdog.comment.entity;
 
 import com.cocoa.catdog.user.entity.User;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 
 import javax.persistence.*;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CommentReport {
 
     @Id

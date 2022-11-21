@@ -14,6 +14,10 @@ public class CommentResponseDto {
     private int likeCnt;
     private int reportCnt;
     private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
     private Comment.CommentStatus commentStatus;
+    private boolean gotLiked;
+
+    public void addGotLiked(boolean gotLiked) {
+        this.gotLiked = gotLiked;
+    }
 }

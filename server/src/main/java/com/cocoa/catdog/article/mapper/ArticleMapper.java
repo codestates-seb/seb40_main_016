@@ -2,6 +2,7 @@ package com.cocoa.catdog.article.mapper;
 
 import com.cocoa.catdog.article.Dto.ArticleDto;
 import com.cocoa.catdog.article.entity.Article;
+import com.cocoa.catdog.article.entity.Report;
 import org.mapstruct.Mapper;
 
 import java.util.List;
@@ -15,4 +16,6 @@ public interface ArticleMapper {
     ArticleDto.Response entityToResponseDto(Article article);
 
     List<ArticleDto.Response> entityListToResponseDtoList(List<Article> articles);
+
+    Report reportToReportDto(ArticleDto.Report report);
 }

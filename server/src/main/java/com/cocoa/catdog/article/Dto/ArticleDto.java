@@ -21,8 +21,12 @@ public class ArticleDto {
         private int reportCnt;
         private int YummyCnt;
         private LocalDateTime createdAt;
-        private LocalDateTime updatedAt;
         private Article.ArticleStatus articleStatus;
+        private boolean gotLiked;
+
+        public void addGotLiked(boolean gotLiked) {
+            this.gotLiked = gotLiked;
+        }
 
     }
 
@@ -47,6 +51,12 @@ public class ArticleDto {
         private String content;
 
         public  void setArticleId(Long articleId) {this.articleId = articleId;}
+    }
+
+    @Getter
+    public static class Report {
+        @NotBlank
+        private String content;
     }
 
 

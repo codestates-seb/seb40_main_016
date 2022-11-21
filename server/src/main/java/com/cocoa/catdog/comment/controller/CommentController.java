@@ -7,13 +7,17 @@ import com.cocoa.catdog.comment.entity.Comment;
 import com.cocoa.catdog.comment.entity.CommentReport;
 import com.cocoa.catdog.comment.mapper.CommentMapper;
 import com.cocoa.catdog.comment.service.CommentService;
+import com.cocoa.catdog.response.MultiResponseDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/comments")
@@ -62,6 +66,30 @@ public class CommentController {
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    /*
+    * 댓글 조회
+    * */
+    @GetMapping("/{article-id}")
+    public ResponseEntity getComments (@PathVariable("article-id") Long articleId,
+                                       @RequestParam(required = false, defaultValue = "1") int page,
+                                       @RequestHeader(name = "Authorization", required = false, defaultValue = "null") String token) {
+        long userId = token.equals("null") ? 0 : jwtTokenizer.getUserId(token);
+        Page<Comment> pageComments = commentService.findComments(page - 1, 10);
+        List<Comment> comments = pageComments.getContent();
+
+        List<CommentResponseDto> commentResponseDtos =
+                commentMapper.commentsToResponses(comments)
+                .stream()
+                .map(dto -> {
+                    dto.addGotLiked(commentService.checkLikeComment(dto.getCommentId(), userId));
+                    return dto;
+                })
+                .collect(Collectors.toList());
+
+        return new ResponseEntity<>(new MultiResponseDto<>(commentResponseDtos, pageComments), HttpStatus.OK);
+    }
+
 
     /*
     * 댓글 좋아요

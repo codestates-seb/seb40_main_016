@@ -22,4 +22,20 @@ public class Like {
     @JoinColumn(name = "ARTICLE_ID")
     private Article article;
 
+    //==연관관계 메서드==//
+    public void addUser(User user) {
+        if(this.user == null) {
+            this.user = user;
+            user.addLike(this);
+        }
+    }
+
+    public void addArticle(Article article) {
+        if(this.article == null) {
+            this.article = article;
+            article.addLike(this);
+
+        }
+    }
+
 }
