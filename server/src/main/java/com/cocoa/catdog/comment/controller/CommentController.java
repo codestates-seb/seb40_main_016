@@ -75,6 +75,9 @@ public class CommentController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    /*
+    * 댓글 좋아요 취소
+    * */
     @DeleteMapping("/{comment-id}/likes")
     public ResponseEntity<HttpStatus> cancelLikeComment (@PathVariable("comment-id") Long commentId,
                                                    @RequestHeader(name = "Authorization") String token) {

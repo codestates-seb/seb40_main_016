@@ -97,7 +97,7 @@ public class CommentService {
         User user = userService.findUser(userId);
 
         //좋아요 중복여부 검증
-        verifiedLikeComment(commentId, userId);
+        verifiedCommentLike(commentId, userId);
 
         //commentLike 생성 후 조회한 엔티티 주입
         CommentLike commentLike = new CommentLike();
@@ -118,14 +118,14 @@ public class CommentService {
         User user = userService.findUser(userId);
 
         //좋아요 존재여부 검증
-        verifiedDoNotLikeComment(commentId, userId);
+        verifiedNotCommentLike(commentId, userId);
 
         //삭제할 commentLike 조회 후 엔티티 매핑 해제 (Comment -> CommentLike로 cascade 된 상태기 때문에 끊어줘야함)
-        CommentLike commentLike = findLikeComment(commentId, userId);
+        CommentLike commentLike = findCommentLike(commentId, userId);
         comment.removeCommentLike(commentLike);
 
         //commentLike 삭제
-        commentLikeRepository.delete(findLikeComment(commentId, userId));
+        commentLikeRepository.delete(findCommentLike(commentId, userId));
 
         //comment의 likeCnt 최신화
         comment.changeLikeCnt(comment.getCommentLikes().size());
@@ -153,7 +153,7 @@ public class CommentService {
     /*
     * 댓글 좋아요 여부 조회
     * */
-    private CommentLike findLikeComment(Long commentId, Long userId) {
+    private CommentLike findCommentLike(Long commentId, Long userId) {
         return commentLikeRepository.findByComment_CommentIdAndUser_UserId(commentId, userId);
     }
 
@@ -161,8 +161,8 @@ public class CommentService {
     /*
     * 댓글 좋아요 중복여부 검증
     * */
-    private void verifiedLikeComment(Long commentId, Long userId) {
-        Optional<CommentLike> optionalCommentLike = Optional.ofNullable(findLikeComment(commentId, userId));
+    private void verifiedCommentLike(Long commentId, Long userId) {
+        Optional<CommentLike> optionalCommentLike = Optional.ofNullable(findCommentLike(commentId, userId));
         if(optionalCommentLike.isPresent()) {
             throw new BusinessLogicException(ExceptionCode.EXIST_COMMENT_LIKE);
         }
@@ -171,8 +171,8 @@ public class CommentService {
     /*
     * 댓글 좋아요 존재여부 검증
     * */
-    private void verifiedDoNotLikeComment(Long commentId, Long userId) {
-        Optional<CommentLike> optionalCommentLike = Optional.ofNullable(findLikeComment(commentId, userId));
+    private void verifiedNotCommentLike(Long commentId, Long userId) {
+        Optional<CommentLike> optionalCommentLike = Optional.ofNullable(findCommentLike(commentId, userId));
         if(optionalCommentLike.isEmpty()) {
             throw new BusinessLogicException(ExceptionCode.NOT_EXIST_COMMENT_LIKE);
         }
@@ -183,7 +183,7 @@ public class CommentService {
     * */
     public boolean checkLikeComment(Long commentId, Long userId) {
         try{
-            verifiedLikeComment(commentId, userId);
+            verifiedCommentLike(commentId, userId);
             return false;
         } catch (BusinessLogicException e) {
             return true;
@@ -193,7 +193,7 @@ public class CommentService {
     /*
     * 댓글 신고 여부 조회
     * */
-    private CommentReport findReportComment (Long commentId, Long userId) {
+    private CommentReport findCommentReport (Long commentId, Long userId) {
         return commentReportRepository.findByComment_CommentIdAndUser_UserId(commentId, userId);
     }
 
@@ -201,7 +201,7 @@ public class CommentService {
     * 댓글 신고 중복여부 검증
     * */
     private void verifiedReportComment(Long commentId, Long userId) {
-        Optional<CommentReport> optionalCommentReport = Optional.ofNullable(findReportComment(commentId, userId));
+        Optional<CommentReport> optionalCommentReport = Optional.ofNullable(findCommentReport(commentId, userId));
         if(optionalCommentReport.isPresent()) {
             throw new BusinessLogicException(ExceptionCode.EXIST_COMMENT_REPORT);
         }

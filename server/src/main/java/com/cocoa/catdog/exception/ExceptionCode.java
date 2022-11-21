@@ -23,6 +23,8 @@ public enum ExceptionCode {
 
     FOLLOW_NOT_FOUND(404, "Follow not found"),
 
+    BAD_QUERY(404, "Bad query"),
+
     NOT_EXIST_COMMENT_LIKE(404, "Not exist comment like"),
 
     EXIST_COMMENT_LIKE(404, "Exist comment like"),
