@@ -41,7 +41,7 @@ public class SecurityConfiguration {
                 .headers().frameOptions().sameOrigin()
                 .and()
                 .csrf().disable()
- //               .cors(withDefaults())    - CorsFilter에서 대신 적용해 비활성화 처리
+//                .cors(withDefaults())   // - CorsFilter에서 대신 적용해 비활성화 처리
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .formLogin().disable()
@@ -69,6 +69,7 @@ public class SecurityConfiguration {
         configuration.addAllowedHeader("*");
         configuration.setAllowedOriginPatterns(Arrays.asList("*"));
         configuration.setAllowedMethods(Arrays.asList("GET","POST", "PATCH", "DELETE","OPTIONS"));
+        configuration.setExposedHeaders(Arrays.asList("*"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;

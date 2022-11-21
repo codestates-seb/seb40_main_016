@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 import com.cocoa.catdog.user.entity.User;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -24,7 +25,7 @@ public class UserResponseDto {
 
     private String userType;
     private String userGender;
-    private String userBirth;
+    private LocalDate userBirth;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 

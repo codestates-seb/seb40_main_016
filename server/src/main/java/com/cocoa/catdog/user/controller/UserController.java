@@ -26,6 +26,7 @@ import java.util.List;
 @RequestMapping
 @Validated
 @RequiredArgsConstructor
+@CrossOrigin(origins ="*", exposedHeaders = {"*"})
 public class UserController {
     private final UserService userService;
     private final UserMapper mapper;
