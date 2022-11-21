@@ -34,7 +34,7 @@ public class ArticleService {
         User findUser = userService.findUser(userId);
 
         for (MultipartFile multipartFile : images) {
-            String url = fileProcessService.upload
+            String url = fileProcessService.upload;
         }
 
         article.setUser(findUser);
