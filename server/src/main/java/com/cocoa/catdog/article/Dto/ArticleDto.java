@@ -5,6 +5,7 @@ import com.cocoa.catdog.user.dto.UserDto;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class ArticleDto {
@@ -19,6 +20,8 @@ public class ArticleDto {
         private int views;
         private int reportCnt;
         private int YummyCnt;
+        private LocalDateTime createdAt;
+        private LocalDateTime updatedAt;
         private Article.ArticleStatus articleStatus;
 
     }

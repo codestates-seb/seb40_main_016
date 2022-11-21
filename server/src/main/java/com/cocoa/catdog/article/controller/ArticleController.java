@@ -60,7 +60,7 @@ public class ArticleController {
     MultiResponseDto<ArticleDto.Response> getArticles(@Positive @RequestParam(required = false, defaultValue = "1") int page,
                                                       @RequestParam(required = false, defaultValue = "all") String sort,
                                                       @RequestParam(required = false, defaultValue = "latest") String order,
-                                                      @RequestHeader(name = "Authorization", required = false) String token) {
+                                                      @RequestHeader(name = "Authorization", required = false) String token) { //defaultValue 추가 요
         Page<Article> pageArticles = articleService.findArticles(page -1, 30, sort, order, jwtTokenizer.getUserId(token));
         List<Article> articles = pageArticles.getContent();
 
