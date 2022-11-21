@@ -29,7 +29,7 @@ public class ArticleController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     ArticleDto.Response postArticle(@RequestHeader(name = "Authorization") String token,
-            @Valid @RequestBody ArticleDto.Post postDto) {
+                                    @Valid @RequestBody ArticleDto.Post postDto) {
         Article article = mapper.postDtoToEntity(postDto);
         return mapper.entityToResponseDto(
                 articleService.saveArticle(article, jwtTokenizer.getUserId(token)));
@@ -57,9 +57,11 @@ public class ArticleController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    MultiResponseDto<ArticleDto.Response> getArticles(@Positive @RequestParam int page,
-                                                     @Positive @RequestParam int size) {
-        Page<Article> pageArticles = articleService.findArticles(page -1, size);
+    MultiResponseDto<ArticleDto.Response> getArticles(@Positive @RequestParam(required = false, defaultValue = "1") int page,
+                                                      @RequestParam(required = false, defaultValue = "all") String sort,
+                                                      @RequestParam(required = false, defaultValue = "latest") String order,
+                                                      @RequestHeader(name = "Authorization", required = false) String token) {
+        Page<Article> pageArticles = articleService.findArticles(page -1, 30, sort, order, jwtTokenizer.getUserId(token));
         List<Article> articles = pageArticles.getContent();
 
         return MultiResponseDto.of(mapper.entityListToResponseDtoList(articles), pageArticles);

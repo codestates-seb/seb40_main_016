@@ -5,6 +5,7 @@ import com.cocoa.catdog.article.entity.Like;
 import com.cocoa.catdog.article.entity.Report;
 import com.cocoa.catdog.audit.AuditingEntity;
 import com.cocoa.catdog.comment.entity.Comment;
+import com.cocoa.catdog.comment.entity.CommentLike;
 import com.cocoa.catdog.wallet.entity.Wallet;
 import lombok.*;
 

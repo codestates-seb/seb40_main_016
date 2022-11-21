@@ -16,7 +16,7 @@ public class ArticleDto {
         private String articleImg;
         private String content;
         private int likeCnt;
-        private int view;
+        private int views;
         private int reportCnt;
         private int YummyCnt;
         private Article.ArticleStatus articleStatus;

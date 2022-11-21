@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -57,9 +58,30 @@ public class ArticleService {
         return article;
     }
 
-    public Page<Article> findArticles(int page, int size) {
-        return articleRepository.findAll(PageRequest.of(
-                page, size, Sort.by("articleId").descending()));
+    public Page<Article> findArticles(int page, int size, String sort, String order, long userId) {
+        //쿼리 정리
+        sort = queryFilter(sort);
+        order = queryFilter(order);
+
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(order).descending());
+        Page<Article> articlePage;
+
+        //글목록을 쿼리별로 조회
+        if(sort.equals("all")) {
+            articlePage = articleRepository.findAll(pageRequest);
+        } else if(sort.equals("followings")) {
+            User user = userService.findUser(userId);
+            articlePage = articleRepository.findByUser_UserIdIn(
+                    user.getFollowingUsers().stream()
+                            .map(followingUser -> followingUser.getFollowedUser().getUserId())
+                            .collect(Collectors.toList()),
+                    pageRequest);
+        } else {
+            articlePage = articleRepository.findByUser_UserType(User.UserType.valueOf(sort), pageRequest);
+        }
+
+
+        return articlePage;
     }
 
     public void deleteArticle(Long articleId, Long userId) {
@@ -73,6 +95,29 @@ public class ArticleService {
         }, () -> {
             return;
         });
+    }
+
+    private String queryFilter(String query) {
+        switch (query) {
+            case "likes" : query = "likeCnt";
+                break;
+            case "views" :
+            case "all" :
+            case "followings" :
+                break;
+            case "latest" : query = "articleId";
+                break;
+            case "dogs" : query = "DOG";
+                break;
+            case "cats" : query = "CAT";
+                break;
+            case "persons" : query = "PERSON";
+                break;
+            default: throw new BusinessLogicException(ExceptionCode.BAD_QUERY); //case에 맞지않는 쿼리는 전부 예외처리
+
+        }
+
+        return query;
     }
 
 
