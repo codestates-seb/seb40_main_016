@@ -8,6 +8,7 @@ import Avatar from "../../components/Avatar/Avatar";
 
 import MyPageArticles from "./MyPageArticles";
 import MyPageComments from "./MyPageComments";
+import MyPageSnacks from "./MyPageSnacks";
 
 import { ReactComponent as FollowIcon } from "../../assets/img/follow-icon.svg";
 import { ReactComponent as BoneIcon } from "../../assets/img/bone-icon.svg";
@@ -174,7 +175,7 @@ const MyPage = () => {
                 case "간식":
                   return (
                     <>
-                      <p>간식 컴포넌트</p>
+                      <MyPageSnacks />
                     </>
                   );
                 default:
