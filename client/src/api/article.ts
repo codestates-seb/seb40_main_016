@@ -11,3 +11,13 @@ export const registerArticle = async (formData: FormData) => {
 
   return response;
 };
+
+export const updateArticle = async (formData: FormData, articleId: string) => {
+  const response = await axios.patch(`${URL}/articles/${articleId}`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+
+  return response;
+};
