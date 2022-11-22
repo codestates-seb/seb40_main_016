@@ -79,8 +79,9 @@ export const Nickname = styled.p`
 `;
 
 export const Textarea = styled.textarea`
-  width: 95%;
+  width: 93%;
   height: 75%;
+  resize: none;
   border-style: none;
   padding-left: 20px;
   font-size: var(--fs-pc-regular);
