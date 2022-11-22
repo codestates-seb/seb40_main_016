@@ -56,9 +56,6 @@ const SortBtn = styled.button`
     background-color: var(--color-madium-black);
     box-shadow: 0px 0px 5px 0px var(--color-light-black);
     animation: ${Purse} 0.75s cubic-bezier(0.5, 0.5, 0, 1);
-
-    .follow-symbol {
-    }
   }
 
   .all-symbol {
