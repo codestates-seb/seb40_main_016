@@ -47,9 +47,7 @@ public class ArticleDto {
     @Builder
     public static class Patch {
         private Long articleId;
-        @NotBlank
         private String articleImg;
-        @NotBlank
         private String content;
 
         public  void setArticleId(Long articleId) {this.articleId = articleId;}

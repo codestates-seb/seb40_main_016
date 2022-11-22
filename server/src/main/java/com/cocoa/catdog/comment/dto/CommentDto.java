@@ -15,7 +15,6 @@ public class CommentDto {
 
         private Long commentId;
 
-        @NotBlank
         private String content;
 
         public Long addCommentId(Long commentId) {
