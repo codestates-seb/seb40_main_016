@@ -87,24 +87,24 @@ const SortBtn = styled.button`
 `;
 
 interface Props {
-  tab: string;
-  handleTabClick: (arg: string) => void;
+  sort: string;
+  handleSortClick: (arg: string) => void;
 }
 
-const SortTab = ({ tab, handleTabClick }: Props) => {
+const SortTab = ({ handleSortClick, sort }: Props) => {
   return (
     <>
       <Wrapper>
-        <SortBtn className={tab === "all" ? "clicked" : ""} onClick={() => handleTabClick("all")}>
+        <SortBtn className={sort === "all" ? "clicked" : ""} onClick={() => handleSortClick("all")}>
           <AllSymbol className="all-symbol" />
         </SortBtn>
-        <SortBtn className={tab === "dogs" ? "clicked" : ""} onClick={() => handleTabClick("dogs")}>
+        <SortBtn className={sort === "dogs" ? "clicked" : ""} onClick={() => handleSortClick("dogs")}>
           <DogSymbol className="dog-symbol" />
         </SortBtn>
-        <SortBtn className={tab === "cats" ? "clicked" : ""} onClick={() => handleTabClick("cats")}>
+        <SortBtn className={sort === "cats" ? "clicked" : ""} onClick={() => handleSortClick("cats")}>
           <CatSymbol className="cat-symbol" />
         </SortBtn>
-        <SortBtn className={tab === "followings" ? "clicked" : ""} onClick={() => handleTabClick("followings")}>
+        <SortBtn className={sort === "followings" ? "clicked" : ""} onClick={() => handleSortClick("followings")}>
           <img src={FollowSymbol} className="follow-symbol" alt=""></img>
         </SortBtn>
       </Wrapper>

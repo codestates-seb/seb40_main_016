@@ -18,8 +18,8 @@ import { GetMain } from "../../api/api";
 
 const Main = () => {
   const [open, setOpen] = useState<boolean>(false);
-  const [tab, setTab] = useState<string>("all");
-  const [sort, setSort] = useState<string>("latest");
+  const [sort, setSort] = useState<string>("all");
+  const [order, setOrder] = useState<string>("latest");
   const [articles, setArticles] = useState<Articles[]>([]);
   const [page, setPage] = useState<number>(0);
   const [totalPage, setTotalPage] = useState<number>(1);
@@ -31,13 +31,13 @@ const Main = () => {
     setOpen(!open);
   };
 
-  const handleTabClick = (tab: string) => {
-    setTab(tab);
+  const handleSortClick = (sort: string) => {
+    setSort(sort);
     setPage(1);
   };
 
-  const handleSortClick = (sort: "latest" | "likes") => {
-    setSort(sort);
+  const handleOrderClick = (order: "latest" | "likes") => {
+    setOrder(order);
     setPage(1);
   };
 
@@ -66,7 +66,7 @@ const Main = () => {
 
   useEffect(() => {
     if (page !== 0) getArticles();
-  }, [tab, sort]);
+  }, [sort, order]);
 
   const obsHandler = (entries: any) => {
     const target = entries[0];
@@ -79,7 +79,7 @@ const Main = () => {
 
   const getArticles = () => {
     setLoading(true);
-    GetMain(page, tab, sort).then((res: any) => {
+    GetMain(page, sort, order).then((res: any) => {
       if (res.data.pageInfo.page === 1) {
         setArticles(res.data.data);
       } else {
@@ -97,24 +97,24 @@ const Main = () => {
         <InnerContainer>
           <FilterContainer>
             <TabBox>
-              <SortTab handleTabClick={handleTabClick} tab={tab} />
+              <SortTab handleSortClick={handleSortClick} sort={sort} />
             </TabBox>
             <SortBox>
               <Button
-                className={sort === "latest" ? "clicked" : ""}
+                className={order === "latest" ? "clicked" : ""}
                 width="90px"
                 height="50px"
                 fontSize="pc-regular"
-                onClick={() => handleSortClick("latest")}
+                onClick={() => handleOrderClick("latest")}
               >
                 New
               </Button>
               <Button
-                className={sort === "likes" ? "clicked" : ""}
+                className={order === "likes" ? "clicked" : ""}
                 width="90px"
                 height="50px"
                 fontSize="pc-regular"
-                onClick={() => handleSortClick("likes")}
+                onClick={() => handleOrderClick("likes")}
               >
                 Favorite
               </Button>
