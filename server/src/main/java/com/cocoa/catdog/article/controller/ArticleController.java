@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
+import java.io.File;
 import java.security.Principal;
 import java.util.List;
 
@@ -28,14 +29,17 @@ public class ArticleController {
     private final ArticleMapper mapper;
     private final JwtTokenizer jwtTokenizer;
 
+    private final S3Uploader s3Uploader;
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     ArticleDto.Response postArticle(@RequestHeader(name = "Authorization") String token,
-            @Valid @RequestBody ArticleDto.Post postDto,
-                                    @RequestParam("articleImg") List<MultipartFile> images
-                                    ) {
+            @Valid @RequestPart(value = "postDto") ArticleDto.Post postDto,
+                                    @RequestPart(value = "file") List<MultipartFile> files
+                                    ) throws Exception {
         Article article = mapper.postDtoToEntity(postDto);
-        S3Uploader.upload(images, "s3images");
+
+
         return mapper.entityToResponseDto(
                 articleService.saveArticle(article, jwtTokenizer.getUserId(token), images));
     }

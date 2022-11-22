@@ -4,6 +4,7 @@ import com.cocoa.catdog.article.entity.Article;
 import com.cocoa.catdog.article.mapper.ArticleMapper;
 import com.cocoa.catdog.article.repository.ArticleRepository;
 import com.cocoa.catdog.comment.mapper.CommentMapper;
+import com.cocoa.catdog.config.aws.S3Uploader;
 import com.cocoa.catdog.exception.BusinessLogicException;
 import com.cocoa.catdog.exception.ExceptionCode;
 import com.cocoa.catdog.user.entity.User;
@@ -28,13 +29,15 @@ public class ArticleService {
     private final UserService userService;
     private final ArticleMapper articleMapper;
     private final CommentMapper commentMapper;
+    private final S3Uploader s3Uploader;
 
-    public Article saveArticle(Article article, Long userId, List<MultipartFile> images) {
+    public Article saveArticle(Article article, Long userId, List<MultipartFile> files) {
 
         User findUser = userService.findUser(userId);
 
-        for (MultipartFile multipartFile : images) {
-            String url = fileProcessService.upload;
+        for (MultipartFile file : files) {
+            String originalFileName = file.getOriginalFilename();
+            String imgUrl = s3Uploader.uploadFile("article", file);
         }
 
         article.setUser(findUser);
