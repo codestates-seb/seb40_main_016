@@ -4,7 +4,7 @@ import Modal from "../../components/Modal/Modal";
 import PhotoUpload from "../../components/Articles/PhotoUpload/PhotoUpload";
 import WriteArticle from "../../components/Articles/WriteArticle/WriteArticle";
 import { UploadedPhotos } from "../../types/article";
-import { registerArticle, updateArticle, getArticle } from "../../api/article";
+import { RegisterArticle, UpdateArticle, GetDetail } from "../../api/article";
 
 interface ArticleProps {
   isOn: boolean;
@@ -42,11 +42,11 @@ const NewArticle = ({ isOn, isEdit = false, setIsOn }: ArticleProps) => {
     formData.append("content", JSON.stringify(content));
 
     if (isEdit) {
-      updateArticle(formData, articleId).then((res: any) => {
+      UpdateArticle(formData, articleId).then((res: any) => {
         if (res.status(200)) alert("글 수정 완료!");
       });
     } else {
-      registerArticle(formData).then((res: any) => {
+      RegisterArticle(formData).then((res: any) => {
         if (res.status(201)) alert("글 작성 완료!");
       });
     }
@@ -54,7 +54,7 @@ const NewArticle = ({ isOn, isEdit = false, setIsOn }: ArticleProps) => {
 
   useEffect(() => {
     if (isEdit) {
-      getArticle(articleId).then((res: any) => {
+      GetDetail(articleId).then((res: any) => {
         setContent(() => res.data.content);
 
         setUploadedPhotos((photos) => [

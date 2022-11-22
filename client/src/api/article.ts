@@ -2,7 +2,7 @@ import axios from "axios";
 
 const URL = process.env.REACT_APP_URL;
 
-export const registerArticle = async (formData: FormData) => {
+export const RegisterArticle = async (formData: FormData) => {
   const response = await axios.post(`${URL}/articles`, formData, {
     headers: {
       "Content-Type": "multipart/form-data",
@@ -12,7 +12,7 @@ export const registerArticle = async (formData: FormData) => {
   return response;
 };
 
-export const updateArticle = async (formData: FormData, articleId: string) => {
+export const UpdateArticle = async (formData: FormData, articleId: string) => {
   const response = await axios.patch(`${URL}/articles/${articleId}`, formData, {
     headers: {
       "Content-Type": "multipart/form-data",
@@ -20,10 +20,6 @@ export const updateArticle = async (formData: FormData, articleId: string) => {
   });
 
   return response;
-};
-
-export const getArticle = async (articleId: string) => {
-  return await axios.get(`${URL}/articles/${articleId}`);
 };
 
 export const GetDetail = async (articleId: string | number) => {
