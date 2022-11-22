@@ -41,7 +41,7 @@ public class ArticleController {
 
 
         return mapper.entityToResponseDto(
-                articleService.saveArticle(article, jwtTokenizer.getUserId(token), images));
+                articleService.saveArticle(article, jwtTokenizer.getUserId(token), files));
     }
 
     @PatchMapping("/{article-id}")

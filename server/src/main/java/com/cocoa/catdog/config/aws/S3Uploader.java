@@ -35,6 +35,8 @@ public class S3Uploader {
     public String bucket;
     private final AmazonS3 amazonS3;
     private final AmazonS3Client client;
+    private final AmazonS3Component component;
+
 
     public String uploadFile(String category, MultipartFile multipartFile) {
         // 참고:https://velog.io/@penrose_15/
@@ -59,6 +61,10 @@ public class S3Uploader {
         String url = client.getUrl(bucket, fileName).toString();
 
         return url;
+    }
+
+    public String getFileUrl(String fileName) {
+        return amazonS3.getUrl(component.getBucket(), fileName).toString();
     }
 
 
