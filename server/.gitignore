@@ -18,8 +18,8 @@ build/
 bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
-application-aws.yml
-application-credentials.yml
+src/main/resources/application-aws.yml
+src/main/resources/application-credentials.yml
 
 ### IntelliJ IDEA ###
 .idea
