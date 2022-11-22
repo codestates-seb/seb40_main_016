@@ -21,3 +21,7 @@ export const updateArticle = async (formData: FormData, articleId: string) => {
 
   return response;
 };
+
+export const getArticle = async (articleId: string) => {
+  return await axios.get(`${URL}/articles/${articleId}`);
+};

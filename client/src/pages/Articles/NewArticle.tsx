@@ -1,22 +1,25 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import Modal from "../../components/Modal/Modal";
 import PhotoUpload from "../../components/Articles/PhotoUpload/PhotoUpload";
 import WriteArticle from "../../components/Articles/WriteArticle/WriteArticle";
-import { registerArticle } from "../../api/article";
+import { UploadedPhotos } from "../../types/article";
+import { registerArticle, updateArticle, getArticle } from "../../api/article";
 
 interface ArticleProps {
   isOn: boolean;
+  isEdit?: boolean;
   setIsOn: (arg: boolean) => void;
 }
 
-const NewArticle = ({ isOn, setIsOn }: ArticleProps) => {
+const NewArticle = ({ isOn, isEdit = false, setIsOn }: ArticleProps) => {
   const [isPhoto, setIsPhoto] = useState<boolean>(true);
-  const [uploadedPhotos, setUploadedPhotos] = useState<string[]>([]);
+  const [uploadedPhotos, setUploadedPhotos] = useState<UploadedPhotos[]>([]);
   const [previewPhotos, setPreviewPhotos] = useState([]);
   const [currentPhotos, setCurrentPhotos] = useState<string>("");
   const [index, setIndex] = useState<number>(0);
-  const [files, setFiles] = useState<File[]>([]);
   const [content, setContent] = useState<string>("");
+  const { articleId } = useParams();
 
   const handlePhoto = () => {
     setIsPhoto(() => true);
@@ -33,20 +36,40 @@ const NewArticle = ({ isOn, setIsOn }: ArticleProps) => {
   const submitNewArticle = () => {
     const formData = new FormData();
 
-    for (let i = 0; i < files.length; i++) {
-      formData.append("image", files[i]);
+    for (let uploadedPhoto of uploadedPhotos) {
+      if (uploadedPhoto.file) formData.append("image", uploadedPhoto.file);
     }
-
     formData.append("content", JSON.stringify(content));
 
-    registerArticle(formData).then((res: any) => {
-      if (res.status(201)) alert("글 작성 완료!");
-    });
+    if (isEdit) {
+      updateArticle(formData, articleId).then((res: any) => {
+        if (res.status(200)) alert("글 수정 완료!");
+      });
+    } else {
+      registerArticle(formData).then((res: any) => {
+        if (res.status(201)) alert("글 작성 완료!");
+      });
+    }
   };
+
+  useEffect(() => {
+    if (isEdit) {
+      getArticle(articleId).then((res: any) => {
+        setContent(() => res.data.content);
+
+        setUploadedPhotos((photos) => [
+          ...photos,
+          ...res.data.images.map((image: string) => {
+            return { uploadedPhoto: image };
+          }),
+        ]);
+      });
+    }
+  }, []);
 
   return (
     <Modal
-      title="새 게시물 만들기"
+      title={isEdit ? "게시물 수정하기" : "새 게시물 만들기"}
       maxWidth={isPhoto ? "680px" : "1200px"}
       titleBtn={isPhoto ? (uploadedPhotos.length > 0 ? "next" : "none") : "done"}
       bg={true}
@@ -64,11 +87,15 @@ const NewArticle = ({ isOn, setIsOn }: ArticleProps) => {
           setUploadedPhotos={setUploadedPhotos}
           setPreviewPhotos={setPreviewPhotos}
           setCurrentPhotos={setCurrentPhotos}
-          // formData={formData}
-          setFiles={setFiles}
         />
       ) : (
-        <WriteArticle uploadedPhotos={uploadedPhotos} setContent={setContent} index={index} setIndex={setIndex} />
+        <WriteArticle
+          uploadedPhotos={uploadedPhotos}
+          content={content}
+          index={index}
+          setContent={setContent}
+          setIndex={setIndex}
+        />
       )}
     </Modal>
   );

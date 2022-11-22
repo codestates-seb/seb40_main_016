@@ -6,7 +6,7 @@
 설명 : 
   - 글 작성, 수정시 사용되는 글 작성 컴포넌트입니다.
   - 업로드된 파일의 임시주소와 파일 상태를 같이 관리할 수 있도록 수정
-  - 사용 예시: <WriteArticle uploadedPhotos={uploadedPhotos} setContent={setContent} index={index} setIndex={setIndex} />
+  - 사용 예시: <WriteArticle uploadedPhotos={uploadedPhotos} content={content} setContent={setContent} index={index} setIndex={setIndex} />
 */
 
 import Avatar from "../../Avatar/Avatar";
@@ -16,12 +16,13 @@ import { ReactComponent as ArrowCircleIcon } from "../../../assets/img/arrow-cir
 
 interface WriteArticleProps {
   uploadedPhotos: UploadedPhotos[];
+  content: string;
   index: number;
   setIndex: (arg: (arg: number) => number) => void;
   setContent: (arg: () => string) => void;
 }
 
-const WriteArticle = ({ uploadedPhotos, index, setIndex, setContent }: WriteArticleProps) => {
+const WriteArticle = ({ uploadedPhotos, content, index, setIndex, setContent }: WriteArticleProps) => {
   return (
     <InnerWrapper>
       {uploadedPhotos.length > 0 && (
