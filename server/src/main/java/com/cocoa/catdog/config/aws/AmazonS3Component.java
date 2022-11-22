@@ -12,8 +12,8 @@ public class AmazonS3Component {
     private String bucket;
 
 
-    @Value("${cloud.aws.s3.folder.folderName}")
-    private String folderName;
+//    @Value("${cloud.aws.s3.folder.folderName}")
+//    private String folderName;
 
 
 }
