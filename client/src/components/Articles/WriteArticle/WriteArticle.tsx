@@ -12,7 +12,7 @@
 import Avatar from "../../Avatar/Avatar";
 import { UploadedPhotos } from "../../../types/article";
 import { InnerWrapper, ArticleWrapper, SelectedPhoto, Photo, Profile, Nickname, Textarea } from "./style";
-import { ReactComponent as ArrowCircleIcon } from "../../../assets/img/arrow-circle-icon..svg";
+import { ReactComponent as ArrowCircleIcon } from "../../../assets/img/arrow-circle-icon.svg";
 
 interface WriteArticleProps {
   uploadedPhotos: UploadedPhotos[];

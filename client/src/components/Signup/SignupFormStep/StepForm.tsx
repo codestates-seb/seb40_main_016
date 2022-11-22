@@ -1,12 +1,12 @@
 import { useState, ChangeEvent, Dispatch, SetStateAction, useEffect } from "react";
 
-import Input from "../../components/Input/Input";
-import Gender from "../../components/Gender/Gender";
-import CheckBirth from "../../utills/BirthYearCheck";
-import { isUserName, isEmail, isPassword } from "../../utills/Regex";
+import Input from "../../Input/Input";
+import Gender from "../../Gender/Gender";
+import CheckBirth from "../../../utills/BirthYearCheck";
+import { isUserName, isEmail, isPassword } from "../../../utills/Regex";
 import { Wrapper } from "./style";
 
-import { SignupUserInfo } from "../../types/user";
+import { SignupUserInfo } from "../../../types/user";
 
 interface Prop {
   userInfo: SignupUserInfo;

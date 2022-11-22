@@ -1,13 +1,13 @@
 import { Dispatch, SetStateAction } from "react";
 
-import Button from "../../components/Button/Button";
+import Button from "../../Button/Button";
 import styled from "styled-components";
 
-import { ReactComponent as PersonIcon } from "../../assets/img/person-icon.svg";
-import { ReactComponent as CatIcon } from "../../assets/img/cat-icon.svg";
-import { ReactComponent as DogIcon } from "../../assets/img/dog-icon.svg";
+import { ReactComponent as PersonIcon } from "../../../assets/img/person-icon.svg";
+import { ReactComponent as CatIcon } from "../../../assets/img/cat-icon.svg";
+import { ReactComponent as DogIcon } from "../../../assets/img/dog-icon.svg";
 
-import { SignupUserInfo } from "../../types/user";
+import { SignupUserInfo } from "../../../types/user";
 
 export const Wrapper = styled.div`
   display: flex;

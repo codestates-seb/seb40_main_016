@@ -25,3 +25,12 @@ export const updateArticle = async (formData: FormData, articleId: string) => {
 export const getArticle = async (articleId: string) => {
   return await axios.get(`${URL}/articles/${articleId}`);
 };
+
+export const GetDetail = async (articleId: string | number) => {
+  const response = await axios.get(`${URL}/articles/${articleId}`, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  return response;
+};
