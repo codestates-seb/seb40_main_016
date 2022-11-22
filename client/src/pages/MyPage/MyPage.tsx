@@ -7,6 +7,7 @@ import Tab from "../../components/Tab/Tab";
 import Avatar from "../../components/Avatar/Avatar";
 
 import MyPageArticles from "./MyPageArticles";
+import MyPageComments from "./MyPageComments";
 
 import { ReactComponent as FollowIcon } from "../../assets/img/follow-icon.svg";
 import { ReactComponent as BoneIcon } from "../../assets/img/bone-icon.svg";
@@ -38,9 +39,10 @@ const UserInfo = styled.div`
   height: 50px;
   display: flex;
   flex-direction: row;
+  align-items: center;
 `;
 
-const UserName = styled.div`
+const UserName = styled.span`
   width: 30%;
   display: flex;
   align-items: center;
@@ -166,7 +168,7 @@ const MyPage = () => {
                 case "댓글":
                   return (
                     <>
-                      <p>댓글 컴포넌트</p>
+                      <MyPageComments />
                     </>
                   );
                 case "간식":
