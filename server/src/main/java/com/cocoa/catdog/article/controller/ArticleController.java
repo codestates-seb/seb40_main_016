@@ -3,6 +3,7 @@ package com.cocoa.catdog.article.controller;
 
 import com.cocoa.catdog.article.Dto.ArticleDto;
 import com.cocoa.catdog.article.entity.Article;
+import com.cocoa.catdog.article.entity.Report;
 import com.cocoa.catdog.article.mapper.ArticleMapper;
 import com.cocoa.catdog.article.service.ArticleService;
 import com.cocoa.catdog.auth.jwt.JwtTokenizer;
@@ -10,12 +11,14 @@ import com.cocoa.catdog.dto.MultiResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.security.Principal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/articles")
@@ -26,6 +29,9 @@ public class ArticleController {
     private final ArticleMapper mapper;
     private final JwtTokenizer jwtTokenizer;
 
+    /*
+    * 게시물 등록
+    * */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     ArticleDto.Response postArticle(@RequestHeader(name = "Authorization") String token,
@@ -35,6 +41,9 @@ public class ArticleController {
                 articleService.saveArticle(article, jwtTokenizer.getUserId(token)));
     }
 
+    /*
+    * 게시물 수정
+    * */
     @PatchMapping("/{article-id}")
     @ResponseStatus(HttpStatus.OK)
     ArticleDto.Response patchArticle(@PathVariable("article-id") Long articleId,
@@ -47,31 +56,91 @@ public class ArticleController {
                 articleService.updateArticle(article, jwtTokenizer.getUserId(token)));
     }
 
+    /*
+    * 게시물 조회
+    * */
     @GetMapping("/{article-id}")
     @ResponseStatus(HttpStatus.OK)
     ArticleDto.Response getArticle(@PathVariable("article-id") Long articleId,
-                                   @RequestHeader(name = "Authorization", required = false) String token) {
+                                   @RequestHeader(name = "Authorization", required = false, defaultValue = "null") String token) {
+        long userId = token.equals("null") ? 0 : jwtTokenizer.getUserId(token);
         Article foundArticle = articleService.findArticle(articleId);
-        return mapper.entityToResponseDto(foundArticle);
+        ArticleDto.Response response = mapper.entityToResponseDto(foundArticle);
+        response.addGotLiked(articleService.checkLikeArticle(articleId, userId));
+
+        return response;
     }
 
+    /*
+    * 게시물 목록 조회
+    * */
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     MultiResponseDto<ArticleDto.Response> getArticles(@Positive @RequestParam(required = false, defaultValue = "1") int page,
                                                       @RequestParam(required = false, defaultValue = "all") String sort,
                                                       @RequestParam(required = false, defaultValue = "latest") String order,
-                                                      @RequestHeader(name = "Authorization", required = false) String token) { //defaultValue 추가 요
-        Page<Article> pageArticles = articleService.findArticles(page -1, 30, sort, order, jwtTokenizer.getUserId(token));
+                                                      @RequestHeader(name = "Authorization", required = false, defaultValue = "null") String token) {
+        long userId = token.equals("null") ? 0 : jwtTokenizer.getUserId(token);
+        Page<Article> pageArticles = articleService.findArticles(page - 1, 24, sort, order, userId);
         List<Article> articles = pageArticles.getContent();
 
-        return MultiResponseDto.of(mapper.entityListToResponseDtoList(articles), pageArticles);
+        List<ArticleDto.Response> articleResponseDtos = mapper.entityListToResponseDtoList(articles)
+                .stream()
+                .map(dto -> {
+                    dto.addGotLiked(articleService.checkLikeArticle(dto.getArticleId(), userId));
+                    return dto;
+                })
+                .collect(Collectors.toList());
+
+        return MultiResponseDto.of(articleResponseDtos, pageArticles);
     }
 
+    /*
+    * 게시물 삭제
+    * */
     @DeleteMapping("/{article-id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void deleteArticle(@PathVariable(name = "article-id") Long articleId,
                        @RequestHeader(name = "Authorization") String token) {
         articleService.deleteArticle(articleId, jwtTokenizer.getUserId(token));
+    }
+
+    /*
+     * 게시물 좋아요
+     * */
+    @PostMapping("/{article-id}/likes")
+    public ResponseEntity<HttpStatus> likeArticle (@PathVariable("article-id") Long articleId,
+                                       @RequestHeader(name = "Authorization") String token) {
+        Long userId = jwtTokenizer.getUserId(token);
+        articleService.likeArticle(articleId, userId);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    /*
+    * 게시물 좋아요 취소
+    * */
+    @DeleteMapping("/{article-id}/likes")
+    public ResponseEntity<HttpStatus> cancelLikeArticle (@PathVariable("article-id") Long articleId,
+                                                         @RequestHeader(name = "Authorization") String token) {
+        Long userId = jwtTokenizer.getUserId(token);
+        articleService.deleteLikeArticle(articleId, userId);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    /*
+    * 게시물 신고
+    * */
+    @PostMapping("/{article-id}/report")
+    public ResponseEntity<HttpStatus> reportArticle(@PathVariable("article-id") Long articleId,
+                                                    @RequestBody @Valid ArticleDto.Report reportDto,
+                                                    @RequestHeader(name = "Authorization") String token) {
+        Long userId = jwtTokenizer.getUserId(token);
+        Report report = mapper.reportToReportDto(reportDto);
+        articleService.reportArticle(report, articleId, userId);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 

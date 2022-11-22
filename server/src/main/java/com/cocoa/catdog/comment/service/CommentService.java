@@ -50,8 +50,9 @@ public class CommentService {
     * 댓글 수정
     * */
     @Transactional
-    public Comment updateComment (Comment comment, Long commentId) {
+    public Comment updateComment (Comment comment, Long commentId, Long userId) {
         Comment findComment = findComment(commentId);
+        verifiedUser(findComment, userId);
         Optional.ofNullable(comment.getContent())
                 .ifPresent(content -> findComment.changeContent(content));
         System.out.println("asd"+comment.getContent());
@@ -79,12 +80,22 @@ public class CommentService {
     * 댓글 삭제
     * */
     @Transactional
-    public void deleteComment (Long commentId) {
+    public void deleteComment (Long commentId, Long userId) {
         Comment comment = findComment(commentId);
+        verifiedUser(comment, userId);
         comment.getUser().removeComment(comment); //user의 comments에서 comment 삭제
         comment.getArticle().removeComment(comment); //article의 comments에서 comment 삭제
 
         commentRepository.delete(comment);
+    }
+
+    /*
+    * 댓글 작성자 일치 검증
+    * */
+    private void verifiedUser (Comment comment, Long userId) {
+        if(!comment.getUser().getUserId().equals(userId)) {
+            throw new BusinessLogicException(ExceptionCode.USER_UNAUTHORIZED);
+        }
     }
 
     /*

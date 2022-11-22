@@ -2,6 +2,7 @@ package com.cocoa.catdog.article.Dto;
 
 import com.cocoa.catdog.article.entity.Article;
 import com.cocoa.catdog.user.dto.UserDto;
+import com.cocoa.catdog.user.dto.UserSimpleResponseDto;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
@@ -21,8 +22,13 @@ public class ArticleDto {
         private int reportCnt;
         private int YummyCnt;
         private LocalDateTime createdAt;
-        private LocalDateTime updatedAt;
         private Article.ArticleStatus articleStatus;
+        private boolean gotLiked;
+        private UserSimpleResponseDto user;
+
+        public void addGotLiked(boolean gotLiked) {
+            this.gotLiked = gotLiked;
+        }
 
     }
 
@@ -41,12 +47,16 @@ public class ArticleDto {
     @Builder
     public static class Patch {
         private Long articleId;
-        @NotBlank
         private String articleImg;
-        @NotBlank
         private String content;
 
         public  void setArticleId(Long articleId) {this.articleId = articleId;}
+    }
+
+    @Getter
+    public static class Report {
+        @NotBlank
+        private String content;
     }
 
 
