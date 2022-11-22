@@ -117,6 +117,10 @@ public class User extends AuditingEntity {
         comments.remove(comment);
     }
 
+    public void removeArticle (Article article) {
+        articles.remove(article);
+    }
+
     public enum UserStatus {
         USER_ACTIVE("활동중"),
         USER_SLEEP("휴면 상태"),

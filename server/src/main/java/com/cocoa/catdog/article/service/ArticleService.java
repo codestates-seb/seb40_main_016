@@ -8,6 +8,9 @@ import com.cocoa.catdog.article.repository.LikeRepository;
 import com.cocoa.catdog.article.repository.ReportRepository;
 import com.cocoa.catdog.auth.jwt.JwtTokenizer;
 import com.cocoa.catdog.article.entity.Like;
+import com.cocoa.catdog.comment.entity.Comment;
+import com.cocoa.catdog.comment.repository.CommentRepository;
+import com.cocoa.catdog.comment.service.CommentService;
 import com.cocoa.catdog.exception.BusinessLogicException;
 import com.cocoa.catdog.exception.ExceptionCode;
 import com.cocoa.catdog.user.entity.User;
@@ -19,6 +22,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -31,6 +35,7 @@ public class ArticleService {
     private final UserService userService;
     private final LikeRepository likeRepository;
     private final ReportRepository reportRepository;
+    private final CommentRepository commentRepository;
 
     /*
     * 게시물 등록
@@ -62,16 +67,25 @@ public class ArticleService {
     }
 
     /*
+    * 게시물 작성자 일치 검증
+    * */
+    @Transactional(readOnly = true)
+    private void verifiedUser (Article article, Long userId) {
+        if (!article.getUser().getUserId().equals(userId)) {
+            throw new BusinessLogicException(ExceptionCode.USER_UNAUTHORIZED);
+        }
+    }
+
+    /*
     * 게시물 수정
     * */
     public Article updateArticle(Article newArticle, Long userId) {
         Article article = findVerifiedArticle(newArticle.getArticleId());
-
-        if (!article.getUser().getUserId().equals(userId)) {
-            throw new BusinessLogicException(ExceptionCode.USER_UNAUTHORIZED);
-        }
-        article.setArticleImg(newArticle.getArticleImg());
-        article.setContent(newArticle.getContent());
+        verifiedUser(newArticle, userId);
+        Optional.ofNullable(newArticle.getArticleImg())
+                .ifPresent(articleImg -> article.setArticleImg(articleImg));
+        Optional.ofNullable(newArticle.getContent())
+                .ifPresent(content -> article.setContent(content));
 
         return article;
     }
@@ -110,7 +124,23 @@ public class ArticleService {
     * 게시물 삭제
     * */
     public void deleteArticle(Long articleId, Long userId) {
-        Optional<Article> optionalArticle = articleRepository.findById(articleId);
+        Article article = findArticle(articleId);
+        verifiedUser(article, userId);
+        article.getUser().removeArticle(article);
+        List<Comment> comments = article.getComments();
+        for (int i = comments.size() - 1; i >=0 ; i--) {
+            Comment comment = comments.get(i);
+            comment.getUser().removeComment(comment);
+            comment.getArticle().removeComment(comment);
+            commentRepository.delete(comment);
+        }
+
+        articleRepository.delete(article);
+
+
+
+
+        /*Optional<Article> optionalArticle = articleRepository.findById(articleId);
         optionalArticle.ifPresentOrElse(article -> {
             if (!Objects.equals(article.getUser().getUserId(), userId)) {
                 throw new BusinessLogicException(ExceptionCode.USER_UNAUTHORIZED);
@@ -119,7 +149,7 @@ public class ArticleService {
 
         }, () -> {
             return;
-        });
+        });*/
     }
 
     /*

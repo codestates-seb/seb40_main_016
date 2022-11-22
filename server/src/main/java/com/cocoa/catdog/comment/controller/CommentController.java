@@ -52,7 +52,7 @@ public class CommentController {
                                                             @RequestHeader(name = "Authorization") String token) {
         Long userId = jwtTokenizer.getUserId(token);
         Comment comment = commentMapper.patchToComment(patchDto);
-        Comment updatedComment = commentService.updateComment(comment, commentId);
+        Comment updatedComment = commentService.updateComment(comment, commentId, userId);
 
         return new ResponseEntity<>(commentMapper.commentToResponse(updatedComment), HttpStatus.OK);
     }
@@ -61,8 +61,9 @@ public class CommentController {
     * 댓글 삭제
     * */
     @DeleteMapping("/{comment-id}")
-    public ResponseEntity<HttpStatus> deleteComment (@PathVariable("comment-id") Long commentId) {
-        commentService.deleteComment(commentId);
+    public ResponseEntity<HttpStatus> deleteComment (@PathVariable("comment-id") Long commentId,
+                                                     @RequestHeader(name = "Authorization") String token) {
+        commentService.deleteComment(commentId, jwtTokenizer.getUserId(token));
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
