@@ -13,6 +13,7 @@ import { ReactComponent as AllSymbol } from "../../assets/img/all-symbol.svg";
 import { ReactComponent as DogSymbol } from "../../assets/img/dog-symbol.svg";
 import { ReactComponent as CatSymbol } from "../../assets/img/cat-symbol.svg";
 import { ReactComponent as FollowIcon } from "../../assets/img/follow-icon.svg";
+import FollowSymbol from "../../assets/img/follow-symbol.png";
 
 const Bling = () => keyframes`
   0% { transform: scale(1); }
@@ -57,10 +58,9 @@ const SortBtn = styled.button`
     box-shadow: 0px 0px 5px 0px var(--color-light-black);
     animation: ${Purse} 0.75s cubic-bezier(0.5, 0.5, 0, 1);
 
-    .follow-icon {
-      path {
-        fill: white;
-      }
+    .follow-symbol {
+      /* fill: var(--color-white); */
+      filter: invert(100%) sepia(0%) saturate(7500%) hue-rotate(311deg) brightness(101%) contrast(101%);
     }
   }
 
@@ -73,11 +73,12 @@ const SortBtn = styled.button`
   .cat-symbol {
     width: 40px;
   }
-  .follow-icon {
-    width: 30px;
+  .follow-symbol {
+    width: 33px;
   }
 
-  svg {
+  svg,
+  img {
     &:hover {
       cursor: pointer;
       animation: ${Bling} 0.5s infinite;
@@ -104,7 +105,7 @@ const SortTab = ({ tab, handleTabClick }: Props) => {
           <CatSymbol className="cat-symbol" />
         </SortBtn>
         <SortBtn className={tab === "followings" ? "clicked" : ""} onClick={() => handleTabClick("followings")}>
-          <FollowIcon className="follow-icon" />
+          <img src={FollowSymbol} className="follow-symbol" alt=""></img>
         </SortBtn>
       </Wrapper>
     </>
