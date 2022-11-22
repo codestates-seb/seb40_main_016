@@ -4,9 +4,9 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 
-import { ReactComponent as UploadDesc } from "../../assets/img/upload-desc.svg";
-import { ReactComponent as ExchangeDesc } from "../../assets/img/exchange-desc.svg";
-import { ReactComponent as GiveSnackDesc } from "../../assets/img/give-snack-desc.svg";
+import { ReactComponent as UploadDesc } from "../../../assets/img/upload-desc.svg";
+import { ReactComponent as ExchangeDesc } from "../../../assets/img/exchange-desc.svg";
+import { ReactComponent as GiveSnackDesc } from "../../../assets/img/give-snack-desc.svg";
 
 import { Wrapper } from "./style";
 

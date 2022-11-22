@@ -3,12 +3,12 @@ import { useNavigate, Link } from "react-router-dom";
 
 import OuterContainer from "../../components/OuterContainer/OuterConainer";
 import InnerContainer from "../../components/InnerContainer/InnerContainer";
-import StepType from "../../components/SignupTypeStep/StepType";
-import StepForm from "../../components/SignupFormStep/StepForm";
-import StepSuccess from "../../components/SignupSuccessStep/StepSucess";
+import StepType from "../../components/Signup/SignupTypeStep/StepType";
+import StepForm from "../../components/Signup/SignupFormStep/StepForm";
+import StepSuccess from "../../components/Signup/SignupSuccessStep/StepSucess";
 import Button from "../../components/Button/Button";
 import { SignupPage, Conts, Card, Header, StepNum, StepDesc, Footer, PrevStepBtn, Notice } from "./style";
-import { PostSignUp } from "../../api/api";
+import { PostSignUp } from "../../api/user";
 
 import { ReactComponent as Step01Symbol } from "../../assets/img/finger-one-symbol.svg";
 import { ReactComponent as Step02Symbol } from "../../assets/img/finger-two-symbol.svg";

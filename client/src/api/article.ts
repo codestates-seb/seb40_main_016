@@ -11,3 +11,12 @@ export const registerArticle = async (formData: FormData) => {
 
   return response;
 };
+
+export const GetDetail = async (articleId: string | number) => {
+  const response = await axios.get(`${URL}/articles/${articleId}`, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  return response;
+};
