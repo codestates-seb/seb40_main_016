@@ -17,13 +17,11 @@ const NewArticle = ({ isOn, isEdit = false, setIsOn }: ArticleProps) => {
   const [uploadedPhotos, setUploadedPhotos] = useState<UploadedPhotos[]>([]);
   const [previewPhotos, setPreviewPhotos] = useState([]);
   const [currentPhotos, setCurrentPhotos] = useState<string>("");
-  const [index, setIndex] = useState<number>(0);
   const [content, setContent] = useState<string>("");
   const { articleId } = useParams();
 
   const handlePhoto = () => {
     setIsPhoto(() => true);
-    setIndex(() => 0);
   };
 
   const resetPhoto = () => {
@@ -89,13 +87,7 @@ const NewArticle = ({ isOn, isEdit = false, setIsOn }: ArticleProps) => {
           setCurrentPhotos={setCurrentPhotos}
         />
       ) : (
-        <WriteArticle
-          uploadedPhotos={uploadedPhotos}
-          content={content}
-          index={index}
-          setContent={setContent}
-          setIndex={setIndex}
-        />
+        <WriteArticle uploadedPhotos={uploadedPhotos} content={content} setContent={setContent} />
       )}
     </Modal>
   );

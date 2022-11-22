@@ -9,35 +9,41 @@
   - 사용 예시: <WriteArticle uploadedPhotos={uploadedPhotos} content={content} setContent={setContent} index={index} setIndex={setIndex} />
 */
 
+import { useState, useEffect } from "react";
 import Avatar from "../../Avatar/Avatar";
+import DetailSlider from "../../Detail/DetailSlider/DetailSlider";
 import { UploadedPhotos } from "../../../types/article";
-import { InnerWrapper, ArticleWrapper, SelectedPhoto, Photo, Profile, Nickname, Textarea } from "./style";
-import { ReactComponent as ArrowCircleIcon } from "../../../assets/img/arrow-circle-icon.svg";
+import { GetUserInfo } from "../../../api/user";
+import { InnerWrapper, ArticleWrapper, SelectedPhoto, Profile, Nickname, Textarea } from "./style";
 
 interface WriteArticleProps {
   uploadedPhotos: UploadedPhotos[];
   content: string;
-  index: number;
-  setIndex: (arg: (arg: number) => number) => void;
   setContent: (arg: () => string) => void;
 }
 
-const WriteArticle = ({ uploadedPhotos, content, index, setIndex, setContent }: WriteArticleProps) => {
+const WriteArticle = ({ uploadedPhotos, content, setContent }: WriteArticleProps) => {
+  const [userName, setUseName] = useState<string>("");
+  const [userImg, setUserImg] = useState<string>("");
+  /* 로컬스토리지에서 유저 아이디 받아와야함! 임시 아이디 */
+  const userId = 32;
+
+  useEffect(() => {
+    GetUserInfo(userId).then((res: any) => {
+      setUseName(() => res.data.data.userName);
+      setUserImg(() => res.data.data.userImg);
+    });
+  }, []);
+
   return (
     <InnerWrapper>
-      {uploadedPhotos.length > 0 && (
-        <SelectedPhoto>
-          {index > 0 && <ArrowCircleIcon className="prev" onClick={() => setIndex((index) => index - 1)} />}
-          <Photo src={uploadedPhotos[index].uploadedPhoto} alt="photo" />
-          {index < uploadedPhotos.length - 1 && (
-            <ArrowCircleIcon className="next" onClick={() => setIndex((index) => index + 1)} />
-          )}
-        </SelectedPhoto>
-      )}
+      <SelectedPhoto>
+        {uploadedPhotos.length > 0 && <DetailSlider photos={uploadedPhotos.map((photo) => photo.uploadedPhoto)} />}
+      </SelectedPhoto>
       <ArticleWrapper>
         <Profile>
-          <Avatar width="50px" height="50px" />
-          <Nickname>잭슨</Nickname>
+          <Avatar width="50px" height="50px" bgUrl={userImg} />
+          <Nickname>{userName}</Nickname>
         </Profile>
         <Textarea
           placeholder="글 입력"

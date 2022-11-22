@@ -13,43 +13,21 @@ export const SelectedPhoto = styled.div`
   position: relative;
   width: 50%;
 
-  .prev,
-  .next {
-    position: absolute;
-    top: 50%;
-    width: 40px;
-    height: 40px;
-    opacity: 0.8;
-    margin: 0 10px;
-    cursor: pointer;
-  }
-
-  .prev {
-    transform: rotate(180deg);
-  }
-
-  .next {
-    right: 0;
+  div:first-child {
+    height: 100%;
   }
 
   @media screen and (max-width: 736px) {
     width: 30%;
     height: 25%;
 
-    .prev,
-    .next {
+    img {
+      border-radius: 20px;
+    }
+
+    .swiper-pagination {
       display: none;
     }
-  }
-`;
-
-export const Photo = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-
-  @media screen and (max-width: 736px) {
-    border-radius: 20px;
   }
 `;
 
