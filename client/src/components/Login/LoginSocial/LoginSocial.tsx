@@ -1,7 +1,7 @@
 import { Wrapper, Title, GroupSocialBtn, SocialBtn } from "./style";
-import { ReactComponent as GoogleIcon } from "../../assets/img/google-icon.svg";
-import { ReactComponent as NaverIcon } from "../../assets/img/naver-icon.svg";
-import { ReactComponent as GithubIcon } from "../../assets/img/github-icon.svg";
+import { ReactComponent as GoogleIcon } from "../../../assets/img/google-icon.svg";
+import { ReactComponent as NaverIcon } from "../../../assets/img/naver-icon.svg";
+import { ReactComponent as GithubIcon } from "../../../assets/img/github-icon.svg";
 
 const LoginSocial = () => {
   return (

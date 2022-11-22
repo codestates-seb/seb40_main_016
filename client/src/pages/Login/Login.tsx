@@ -3,12 +3,12 @@ import { Link } from "react-router-dom";
 
 import OuterContainer from "../../components/OuterContainer/OuterConainer";
 import InnerContainer from "../../components/InnerContainer/InnerContainer";
-import LoginSlider from "../../components/LoginSlider/LoginSlider";
-import LoginForm from "../../components/LoginForm/LoginForm";
-import LoginSocial from "../../components/LoginSocial/LoginSocial";
+import LoginSlider from "../../components/Login/LoginSlider/LoginSlider";
+import LoginForm from "../../components/Login/LoginForm/LoginForm";
+import LoginSocial from "../../components/Login/LoginSocial/LoginSocial";
 import Button from "../../components/Button/Button";
 import { LoginPage, Conts, AreaSlider, AreaForm, FormCard, ForgotIdPw, Footer } from "./style";
-import { PostLogin } from "../../api/api";
+import { PostLogin } from "../../api/user";
 
 import { LoginInfo } from "../../types/user";
 

@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction, useState, useEffect } from "react";
 
 import Avatar from "../../Avatar/Avatar";
 import DisplayCreatedAt from "../../../utills/DisplayCreatedAt";
-import { GetUserInfo } from "../../../api/api";
+import { GetUserInfo } from "../../../api/user";
 
 import { Wrapper, Info, AuthorName, TimeStamp, Conts } from "./style";
 

@@ -6,7 +6,7 @@ import DetailArticle from "../../components/Detail/DetailArticle/DetailArticle";
 import ArticleLikeAndSnack from "../../components/Detail/ArticleLikeAndSnack/ArticleLikeAndSnack";
 import Comments from "../../components/Detail/Comments/Comments";
 import CommentAdd from "../../components/Detail/CommentAdd/CommentAdd";
-import { GetDetail } from "../../api/api";
+import { GetDetail } from "../../api/article";
 
 import { DetailViewer, AreaSlider, ArticleAndComments } from "./style";
 

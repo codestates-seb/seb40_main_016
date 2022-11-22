@@ -1,8 +1,8 @@
 import { Dispatch, SetStateAction, ChangeEvent } from "react";
-import Input from "../Input/Input";
+import Input from "../../Input/Input";
 
 import { Wrapper } from "./style";
-import { LoginInfo } from "../../types/user";
+import { LoginInfo } from "../../../types/user";
 
 interface Prop {
   loginInfo: LoginInfo;
