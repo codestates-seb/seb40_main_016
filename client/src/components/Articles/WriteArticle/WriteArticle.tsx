@@ -11,7 +11,7 @@
 import { useState } from "react";
 import Avatar from "../../Avatar/Avatar";
 import { InnerWrapper, ArticleWrapper, SelectedPhoto, Photo, Profile, Nickname, Textarea } from "./style";
-import { ReactComponent as ArrowCircleIcon } from "../../../assets/img/arrow-circle-icon..svg";
+import { ReactComponent as ArrowCircleIcon } from "../../../assets/img/arrow-circle-icon.svg";
 
 interface WriteArticleProps {
   uploadedPhotos: string[];
