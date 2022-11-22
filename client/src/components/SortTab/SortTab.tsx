@@ -12,7 +12,7 @@ import styled, { keyframes } from "styled-components";
 import { ReactComponent as AllSymbol } from "../../assets/img/all-symbol.svg";
 import { ReactComponent as DogSymbol } from "../../assets/img/dog-symbol.svg";
 import { ReactComponent as CatSymbol } from "../../assets/img/cat-symbol.svg";
-import { ReactComponent as FollowIcon } from "../../assets/img/follow-icon.svg";
+import { ReactComponent as FollowSymbol } from "../../assets/img/subscribe-icon-ver01.svg";
 
 const Bling = () => keyframes`
   0% { transform: scale(1); }
@@ -56,12 +56,6 @@ const SortBtn = styled.button`
     background-color: var(--color-madium-black);
     box-shadow: 0px 0px 5px 0px var(--color-light-black);
     animation: ${Purse} 0.75s cubic-bezier(0.5, 0.5, 0, 1);
-
-    .follow-icon {
-      path {
-        fill: white;
-      }
-    }
   }
 
   .all-symbol {
@@ -73,8 +67,8 @@ const SortBtn = styled.button`
   .cat-symbol {
     width: 40px;
   }
-  .follow-icon {
-    width: 30px;
+  .follow-symbol {
+    width: 25px;
   }
 
   svg {
@@ -86,25 +80,25 @@ const SortBtn = styled.button`
 `;
 
 interface Props {
-  tab: string;
-  handleTabClick: (arg: string) => void;
+  sort: string;
+  handleSortClick: (arg: string) => void;
 }
 
-const SortTab = ({ tab, handleTabClick }: Props) => {
+const SortTab = ({ handleSortClick, sort }: Props) => {
   return (
     <>
       <Wrapper>
-        <SortBtn className={tab === "all" ? "clicked" : ""} onClick={() => handleTabClick("all")}>
+        <SortBtn className={sort === "all" ? "clicked" : ""} onClick={() => handleSortClick("all")}>
           <AllSymbol className="all-symbol" />
         </SortBtn>
-        <SortBtn className={tab === "dog" ? "clicked" : ""} onClick={() => handleTabClick("dog")}>
+        <SortBtn className={sort === "dogs" ? "clicked" : ""} onClick={() => handleSortClick("dogs")}>
           <DogSymbol className="dog-symbol" />
         </SortBtn>
-        <SortBtn className={tab === "cat" ? "clicked" : ""} onClick={() => handleTabClick("cat")}>
+        <SortBtn className={sort === "cats" ? "clicked" : ""} onClick={() => handleSortClick("cats")}>
           <CatSymbol className="cat-symbol" />
         </SortBtn>
-        <SortBtn className={tab === "follow" ? "clicked" : ""} onClick={() => handleTabClick("follow")}>
-          <FollowIcon className="follow-icon" />
+        <SortBtn className={sort === "followings" ? "clicked" : ""} onClick={() => handleSortClick("followings")}>
+          <FollowSymbol className="follow-symbol" />
         </SortBtn>
       </Wrapper>
     </>
