@@ -1,3 +1,4 @@
+/*
 package com.cocoa.catdog.config;
 
 import org.springframework.core.Ordered;
@@ -42,3 +43,4 @@ public class CorsFilter implements Filter {
         //not needed
     }
 }
+*/
