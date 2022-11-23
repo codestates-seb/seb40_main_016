@@ -1,3 +1,4 @@
+import { useRecoilValue } from "recoil";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Modal from "../../components/Modal/Modal";
@@ -5,6 +6,7 @@ import PhotoUpload from "../../components/Articles/PhotoUpload/PhotoUpload";
 import WriteArticle from "../../components/Articles/WriteArticle/WriteArticle";
 import { UploadedPhotos } from "../../types/article";
 import { RegisterArticle, UpdateArticle, GetDetail } from "../../api/article";
+import accessTokenState from "../../_state/accessTokenState";
 
 interface ArticleProps {
   isOn: boolean;
@@ -13,6 +15,7 @@ interface ArticleProps {
 }
 
 const NewArticle = ({ isOn, isEdit = false, setIsOn }: ArticleProps) => {
+  const token = useRecoilValue(accessTokenState);
   const [isPhoto, setIsPhoto] = useState<boolean>(true);
   const [uploadedPhotos, setUploadedPhotos] = useState<UploadedPhotos[]>([]);
   const [previewPhotos, setPreviewPhotos] = useState([]);
@@ -52,7 +55,7 @@ const NewArticle = ({ isOn, isEdit = false, setIsOn }: ArticleProps) => {
 
   useEffect(() => {
     if (isEdit) {
-      GetDetail(articleId).then((res: any) => {
+      GetDetail(articleId, token).then((res: any) => {
         setContent(() => res.data.content);
 
         setUploadedPhotos((photos) => [

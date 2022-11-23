@@ -22,10 +22,38 @@ export const UpdateArticle = async (formData: FormData, articleId: string) => {
   return response;
 };
 
-export const GetDetail = async (articleId: string | number) => {
-  const response = await axios.get(`${URL}/articles/${articleId}`, {
+export const GetDetail = async (articleId: string | number, token: string | null) => {
+  if (token) {
+    const response = await axios.get(`${URL}/articles/${articleId}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${token}`,
+      },
+    });
+    return response;
+  } else {
+    const response = await axios.get(`${URL}/articles/${articleId}`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return response;
+  }
+};
+
+export const PostArticleLike = async (articleId: number | null, token: string) => {
+  const response = await axios.post(`${URL}/articles/${articleId}/likes`, null, {
     headers: {
-      "Content-Type": "application/json",
+      Authorization: `${token}`,
+    },
+  });
+  return response;
+};
+
+export const DeleteArticleLike = async (articleId: number | null, token: string) => {
+  const response = await axios.delete(`${URL}/articles/${articleId}/likes`, {
+    headers: {
+      Authorization: `${token}`,
     },
   });
   return response;
