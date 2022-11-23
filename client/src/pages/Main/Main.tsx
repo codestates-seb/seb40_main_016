@@ -1,5 +1,6 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, Dispatch, SetStateAction } from "react";
 import "react-loading-skeleton/dist/skeleton.css";
+import { useRecoilValue } from "recoil";
 
 import OuterContainer from "../../components/OuterContainer/OuterConainer";
 import InnerContainer from "../../components/InnerContainer/InnerContainer";
@@ -16,7 +17,12 @@ import { ReactComponent as EyeWIcon } from "../../assets/img/eye-w-icon..svg";
 
 import { GetMain } from "../../api/api";
 
-const Main = () => {
+interface Prop {
+  detailHandler: () => void;
+  setArticleId: Dispatch<SetStateAction<number>>;
+}
+
+const Main = ({ detailHandler, setArticleId }: Prop) => {
   const [open, setOpen] = useState<boolean>(false);
   const [sort, setSort] = useState<string>("all");
   const [order, setOrder] = useState<string>("latest");
@@ -39,6 +45,11 @@ const Main = () => {
   const handleOrderClick = (order: "latest" | "likes") => {
     setOrder(order);
     setPage(1);
+  };
+
+  const handleImgBoxClick = (articleId: number) => {
+    setArticleId(articleId);
+    detailHandler();
   };
 
   interface Articles {
@@ -123,7 +134,12 @@ const Main = () => {
           <ImgContainer>
             {articles &&
               articles.map((article: Articles) => (
-                <ImgBox key={article.articleId}>
+                <ImgBox
+                  key={article.articleId}
+                  onClick={() => {
+                    handleImgBoxClick(article.articleId);
+                  }}
+                >
                   <Dim>
                     <InfoBox className="info">
                       <Info>
