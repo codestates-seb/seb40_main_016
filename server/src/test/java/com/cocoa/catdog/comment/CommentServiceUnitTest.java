@@ -178,8 +178,7 @@ public class CommentServiceUnitTest {
         Long userId = 1L;
 
         given(commentRepository.findById(Mockito.anyLong())).willReturn(Optional.ofNullable(testComment));
-        CommentReport commentReport = new CommentReport();
-        commentReport.addContent("신고 내용");
+        CommentReport commentReport = CommentReport.builder().content("신고 내용").build();
 
         //when
         commentService.reportComment(commentReport, commentId, userId);

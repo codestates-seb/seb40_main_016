@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDate;
+
 @Builder
 @Getter
 public class UserBirthDto {
@@ -15,7 +17,7 @@ public class UserBirthDto {
 
     private String userType;
     private String userGender;
-    private String userBirth;
+    private LocalDate userBirth;
 
     @JsonIgnore
     private Wallet wallet;

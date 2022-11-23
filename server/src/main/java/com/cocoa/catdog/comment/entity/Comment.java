@@ -96,6 +96,10 @@ public class Comment extends AuditingEntity {
         }
     }
 
+    public void removeCommentLike(CommentLike commentLike) {
+        commentLikes.remove(commentLike);
+    }
+
     //==댓글 상태==//
     public enum CommentStatus {
 
