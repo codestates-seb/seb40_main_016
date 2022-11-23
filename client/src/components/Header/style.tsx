@@ -1,6 +1,6 @@
 import styled, { keyframes } from "styled-components";
 
-export const Header = styled.div`
+export const HeaderBox = styled.div`
   position: fixed;
   width: 100%;
   background-color: var(--color-white);
@@ -14,20 +14,11 @@ export const Header = styled.div`
   }
 `;
 
-const FadeOut = (from: string, to: string) => keyframes`
-  from {
-    opacity: ${from};
-  }
-  to {
-    opacity: ${to};
-  }
-`;
-
 export const LogoBox = styled.div`
   position: relative;
 
   @media screen and (max-width: 736px) {
-    width: 100px;
+    width: 80px;
   }
 
   .logo {
@@ -55,10 +46,11 @@ export const LogoBox = styled.div`
 
 export const SearchBox = styled.form`
   margin: 0px 50px 0px;
-  width: 80%;
+  width: 60%;
   border: 2px solid var(--color-gray);
   position: relative;
   border-radius: 10px;
+  overflow: hidden;
 
   .search-icon {
     position: absolute;
@@ -70,7 +62,7 @@ export const SearchBox = styled.form`
 `;
 
 export const SearchInput = styled.input`
-  width: 60%;
+  width: 100%;
   margin-left: 45px;
   height: 35px;
   border: none;
@@ -92,54 +84,25 @@ export const MenuBox = styled.div`
   width: 20%;
 
   .menu-icon {
+    display: none;
     position: absolute;
-    top: 0px;
+    top: -20px;
     right: 0px;
     cursor: pointer;
-    display: none;
 
     @media screen and (max-width: 736px) {
-      display: visible;
+      display: block;
     }
   }
-`;
 
-const Small = (from: string, to: string, fontSmall: string, fontXSmall: string) => keyframes`
-  from {
-    width: ${from};
-    height: ${from};
-    font-size: ${fontSmall};
-  }
-  to {
-    width: ${to};
-    height: ${to};
-    font-size: ${fontXSmall};
+  .user-img {
+    width: 60px;
+    margin-right: 10px;
   }
 `;
 
-export const LoginBeforeBtn = styled.button`
-  margin: 0px 20px 0px 0px;
-  width: 40px;
-  height: 40px;
-  border-radius: 100%;
-  background-color: var(--color-white);
-  border: none;
-  flex-shrink: 0;
-  animation: ${FadeOut("0", "1")} 1s ease-in-out forwards;
-
-  @media screen and (max-width: 736px) {
-    animation: ${FadeOut("1", "0")} 0.3s ease-in-out forwards;
-  }
-
-  &:hover {
-    cursor: pointer;
-    transform: scale(1.1, 1.1);
-    transition: all 0.2s;
-  }
-`;
-
-export const LoginAfterBtn = styled.button`
-  margin: 0px 16px 0px 0px;
+export const LoginBoforeBtn = styled.button`
+  margin: 0px 10px 0px 0px;
   width: 60px;
   height: 60px;
   border-radius: 100%;
@@ -148,15 +111,37 @@ export const LoginAfterBtn = styled.button`
   color: var(--color-black);
   border: none;
   flex-shrink: 0;
-  animation: ${Small("45px", "60px", "var(--fs-pc-xsmall)", "var(--fs-pc-small)")} 0.5s ease-in-out forwards;
 
   @media screen and (max-width: 736px) {
-    display: none;
-    animation: ${Small("60px", "45px", "var(--fs-pc-small)", "var(--fs-pc-xsmall)")} 0.5s ease-in-out forwards;
+    width: 45px;
+    height: 45px;
+    font-size: var(--fs-pc-xsmall);
   }
 
   &:hover {
     background-color: var(--color-ivory);
+    cursor: pointer;
+    transform: scale(1.1, 1.1);
+    transition: all 0.2s;
+  }
+`;
+
+export const LoginAfterBtn = styled.button`
+  margin: 0px 20px 0px 0px;
+  width: 40px;
+  height: 40px;
+  border-radius: 100%;
+  background-color: var(--color-white);
+  border: none;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+
+  @media screen and (max-width: 736px) {
+    display: none;
+  }
+
+  &:hover {
     cursor: pointer;
     transform: scale(1.1, 1.1);
     transition: all 0.2s;
