@@ -9,13 +9,16 @@ import ImageCard from "../../components/ImageCard/ImageCard";
 import Button from "../../components/Button/Button";
 import ImageSkeleton from "../../components/Skeleton/ImageSkeleton";
 
+import isLoginState from "../../_state/isLoginState";
+import accessTokenState from "../../_state/accessTokenState";
+
 import { FilterContainer, TabBox, SortBox, ImgContainer, ImgBox, Dim, InfoBox, Info } from "./style";
 
 import { ReactComponent as HeartWIcon } from "../../assets/img/heart-w-icon.svg";
 import { ReactComponent as BoneWIcon } from "../../assets/img/bone-w-icon.svg";
 import { ReactComponent as EyeWIcon } from "../../assets/img/eye-w-icon..svg";
 
-import { GetMain } from "../../api/api";
+import { GetMain } from "../../api/article";
 
 interface Prop {
   detailHandler: () => void;
@@ -32,6 +35,9 @@ const Main = ({ detailHandler, setArticleId }: Prop) => {
   const [loading, setLoading] = useState<boolean>(false);
   const obsRef = useRef(null);
   const preventRef = useRef(true);
+
+  const isLogin = useRecoilValue(isLoginState);
+  const token = useRecoilValue(accessTokenState);
 
   const handleOpen = () => {
     setOpen(!open);
@@ -90,16 +96,29 @@ const Main = ({ detailHandler, setArticleId }: Prop) => {
 
   const getArticles = () => {
     setLoading(true);
-    GetMain(page, sort, order).then((res: any) => {
-      if (res.data.pageInfo.page === 1) {
-        setArticles(res.data.data);
-      } else {
-        setArticles(articles.concat(res.data.data));
-      }
-      preventRef.current = true;
-      setTotalPage(res.data.pageInfo.totalPages);
-      setLoading(false);
-    });
+    if (isLogin) {
+      GetMain(page, sort, order, token).then((res: any) => {
+        if (res.data.pageInfo.page === 1) {
+          setArticles(res.data.data);
+        } else {
+          setArticles(articles.concat(res.data.data));
+        }
+        preventRef.current = true;
+        setTotalPage(res.data.pageInfo.totalPages);
+        setLoading(false);
+      });
+    } else {
+      GetMain(page, sort, order, null).then((res: any) => {
+        if (res.data.pageInfo.page === 1) {
+          setArticles(res.data.data);
+        } else {
+          setArticles(articles.concat(res.data.data));
+        }
+        preventRef.current = true;
+        setTotalPage(res.data.pageInfo.totalPages);
+        setLoading(false);
+      });
+    }
   };
 
   return (

@@ -75,9 +75,8 @@ const Item = styled.li`
     margin: 0px 16px;
   }
 
-  .user-img {
+  .user-icon {
     margin: 0px 10px;
-    width: 35px;
   }
 `;
 
@@ -113,7 +112,7 @@ const MenuList = ({ handleMenuOn, handleLogout }: Prop) => {
           </StyledLink>
           <StyledLink to="/mypage">
             <Item>
-              <Avatar className="user-img" bgUrl={userInfo.userImg} width="35px" height="35px" />
+              <Avatar className="user-icon" bgUrl={userInfo.userImg} width="35px" height="35px" />
               마이페이지
             </Item>
           </StyledLink>

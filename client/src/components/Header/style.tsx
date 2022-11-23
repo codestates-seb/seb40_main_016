@@ -45,7 +45,7 @@ export const LogoBox = styled.div`
 `;
 
 export const SearchBox = styled.form`
-  margin: 0px 50px 0px;
+  margin: 0px 40px 0px 50px;
   width: 60%;
   border: 2px solid var(--color-gray);
   position: relative;
