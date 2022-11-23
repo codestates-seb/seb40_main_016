@@ -13,7 +13,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
-import { useRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 
 import Avatar from "../Avatar/Avatar";
 
@@ -21,7 +21,6 @@ import userInfoState from "../../_state/userInfoState";
 
 import { ReactComponent as AddIcon } from "../../assets/img/add-icon.svg";
 import { ReactComponent as ShopIcon } from "../../assets/img/shop-icon.svg";
-import { ReactComponent as MyIcon } from "../../assets/img/my-icon.svg";
 import { ReactComponent as LogoutIcon } from "../../assets/img/logout-icon.svg";
 
 interface Prop {
@@ -97,7 +96,7 @@ const Backdrop = styled.div`
 `;
 
 const MenuList = ({ handleMenuOn, handleLogout }: Prop) => {
-  const [userInfo, setUserInfo] = useRecoilState(userInfoState);
+  const userInfo = useRecoilValue(userInfoState);
 
   return (
     <>

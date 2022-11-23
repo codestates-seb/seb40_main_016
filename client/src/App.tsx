@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useRecoilValue } from "recoil";
 
 import ScrollToTop from "./utills/ScrollToTop";
 import Header from "./components/Header/Header";
