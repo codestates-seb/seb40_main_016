@@ -1,4 +1,7 @@
+import { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+
 import ScrollToTop from "./utills/ScrollToTop";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
@@ -8,13 +11,19 @@ import Login from "./pages/Login/Login";
 import Mypage from "./pages/MyPage/MyPage";
 import NotFound from "./pages/NotFound/NotFound";
 import NewArticle from "./pages/Articles/NewArticle";
-import { useState } from "react";
+import Detail from "./pages/Detail/Detail";
 
 function App() {
   const [isOn, setIsOn] = useState<boolean>(false);
+  const [isDetailOn, setIsDetailOn] = useState<boolean>(false);
+  const [articleId, setArticleId] = useState<number>(null);
 
   const popupHandler = () => {
     setIsOn(!isOn);
+  };
+
+  const detailHandler = () => {
+    setIsDetailOn(!isDetailOn);
   };
 
   return (
@@ -23,13 +32,14 @@ function App() {
         <ScrollToTop />
         <Header popupHandler={popupHandler} />
         <Routes>
-          <Route index path="/" element={<Main />} />
+          <Route index path="/" element={<Main detailHandler={detailHandler} setArticleId={setArticleId} />} />
           <Route index path="/signup" element={<Signup />} />
           <Route index path="/login" element={<Login />} />
           <Route index path="/mypage" element={<Mypage />} />
           <Route index path="*" element={<NotFound />} />
         </Routes>
         <NewArticle isOn={isOn} setIsOn={setIsOn} />
+        <Detail articleId={articleId} isDetailOn={isDetailOn} detailHandler={detailHandler} />
       </BrowserRouter>
       <Footer />
     </>
