@@ -11,15 +11,22 @@
 */
 
 import React from "react";
+import { Link } from "react-router-dom";
+import styled, { keyframes } from "styled-components";
+import { useRecoilState } from "recoil";
+
+import Avatar from "../Avatar/Avatar";
+
+import userInfoState from "../../_state/userInfoState";
+
 import { ReactComponent as AddIcon } from "../../assets/img/add-icon.svg";
 import { ReactComponent as ShopIcon } from "../../assets/img/shop-icon.svg";
 import { ReactComponent as MyIcon } from "../../assets/img/my-icon.svg";
 import { ReactComponent as LogoutIcon } from "../../assets/img/logout-icon.svg";
-import styled, { keyframes } from "styled-components";
-import { Link } from "react-router-dom";
 
 interface Prop {
   handleMenuOn: () => void;
+  handleLogout: () => void;
 }
 
 const MenuPop = (from: string, to: string) => keyframes`
@@ -33,7 +40,7 @@ const MenuPop = (from: string, to: string) => keyframes`
 
 const MenuBox = styled.div`
   position: absolute;
-  top: 58px;
+  top: 40px;
   right: 0px;
   width: 150px;
   background-color: var(--color-white);
@@ -62,10 +69,16 @@ const Item = styled.li`
   border-bottom: 1px solid var(--color-gray);
   display: flex;
   align-items: center;
+  cursor: pointer;
 
   svg {
     width: 25px;
     margin: 0px 16px;
+  }
+
+  .user-img {
+    margin: 0px 10px;
+    width: 35px;
   }
 `;
 
@@ -83,7 +96,9 @@ const Backdrop = styled.div`
   z-index: 2;
 `;
 
-const MenuList = ({ handleMenuOn }: Prop) => {
+const MenuList = ({ handleMenuOn, handleLogout }: Prop) => {
+  const [userInfo, setUserInfo] = useRecoilState(userInfoState);
+
   return (
     <>
       <MenuBox>
@@ -99,11 +114,11 @@ const MenuList = ({ handleMenuOn }: Prop) => {
           </StyledLink>
           <StyledLink to="/mypage">
             <Item>
-              <MyIcon />
+              <Avatar className="user-img" bgUrl={userInfo.userImg} width="35px" height="35px" />
               마이페이지
             </Item>
           </StyledLink>
-          <Item className="logout">
+          <Item className="logout" onClick={() => handleLogout()}>
             <LogoutIcon />
             Logout
           </Item>

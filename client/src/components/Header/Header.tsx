@@ -13,14 +13,19 @@
   - 부자연스러운 애니메이션 삭제
 */
 
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useRecoilState, useSetRecoilState } from "recoil";
 
 import InnerContainer from "../InnerContainer/InnerContainer";
 import MenuList from "./MenuList";
+import LogoutPopup from "./LogoutPopup";
+import Avatar from "../Avatar/Avatar";
 
 import accessTokenState from "../../_state/accessTokenState";
+import refreshTokenState from "../../_state/refreshTokenState";
+import isLoginState from "../../_state/isLoginState";
+import userInfoState from "../../_state/userInfoState";
 
 import { ReactComponent as Logo } from "../../assets/img/logo.svg";
 import { ReactComponent as SearchIcon } from "../../assets/img/search-icon.svg";
@@ -31,32 +36,44 @@ import { ReactComponent as LogoutIcon } from "../../assets/img/logout-icon.svg";
 import { ReactComponent as MansaeCat } from "../../assets/img/mansae-cat.svg";
 import { ReactComponent as MenuIcon } from "../../assets/img/menu-icon.svg";
 
-import isLoginState from "../../_state/isLoginState";
-
-import { Header, LogoBox, SearchBox, SearchInput, MenuBox, LoginBeforeBtn, LoginAfterBtn } from "./style";
+import { HeaderBox, LogoBox, SearchBox, SearchInput, MenuBox, LoginBoforeBtn, LoginAfterBtn } from "./style";
 
 interface HeaderProps {
   popupHandler: () => void;
 }
 
-const HeaderAfter = ({ popupHandler }: HeaderProps) => {
-  const [isOn, setIsOn] = useState<boolean>(false);
+const Header = ({ popupHandler }: HeaderProps) => {
+  const [menuList, setMenuList] = useState<boolean>(false);
   const [logoutModal, setLogoutModal] = useState<boolean>(false);
   const [isLogin, setIsLogin] = useRecoilState(isLoginState);
-  const [token, setToken] = useRecoilState(accessTokenState);
+  const setAccessToken = useSetRecoilState(accessTokenState);
+  const setRefreshToken = useSetRecoilState(refreshTokenState);
+  const [userInfo, setUserInfo] = useRecoilState(userInfoState);
+  const navigate = useNavigate();
 
   const handleMenuOn = () => {
-    setIsOn(!isOn);
+    setMenuList(!menuList);
   };
 
   const handleLogout = () => {
-    setToken(null);
-    setLogoutModal(!logoutModal);
+    setLogoutModal(true);
+    setAccessToken(null);
+    setRefreshToken(null);
     setIsLogin(false);
+    setUserInfo({
+      userName: "",
+      userImg: "",
+      userType: "",
+    });
+    navigate("/");
   };
 
+  useEffect(() => {
+    console.log(userInfo);
+  }, []);
+
   return (
-    <Header>
+    <HeaderBox>
       <InnerContainer className="inner">
         <LogoBox>
           <Link to="/">
@@ -72,40 +89,41 @@ const HeaderAfter = ({ popupHandler }: HeaderProps) => {
         </SearchBox>
         {isLogin ? (
           <MenuBox>
-            <LoginBeforeBtn>
+            <LoginAfterBtn>
               <AddIcon onClick={popupHandler} />
-            </LoginBeforeBtn>
+            </LoginAfterBtn>
             <Link to="/shop">
-              <LoginBeforeBtn>
+              <LoginAfterBtn>
                 <ShopIcon />
-              </LoginBeforeBtn>
+              </LoginAfterBtn>
             </Link>
             <Link to="/mypage">
-              <LoginBeforeBtn>
-                <MyIcon />
-              </LoginBeforeBtn>
+              <LoginAfterBtn className="user-img">
+                <Avatar width="40px" height="40px" bgUrl={userInfo.userImg} />
+              </LoginAfterBtn>
             </Link>
-            <LoginBeforeBtn>
-              <LogoutIcon onClick={handleLogout} />
-            </LoginBeforeBtn>
-            <LoginBeforeBtn className="menu-icon" onClick={handleMenuOn}>
+            <LoginAfterBtn onClick={handleLogout}>
+              <LogoutIcon />
+            </LoginAfterBtn>
+            <LoginAfterBtn className="menu-icon" onClick={handleMenuOn}>
               <MenuIcon />
-            </LoginBeforeBtn>
-            {isOn ? <MenuList handleMenuOn={handleMenuOn}></MenuList> : ""}
+            </LoginAfterBtn>
+            {menuList ? <MenuList handleMenuOn={handleMenuOn} handleLogout={handleLogout} /> : ""}
           </MenuBox>
         ) : (
           <MenuBox>
             <Link to="/login">
-              <LoginAfterBtn>Login</LoginAfterBtn>
+              <LoginBoforeBtn>Login</LoginBoforeBtn>
             </Link>
             <Link to="/signup">
-              <LoginAfterBtn>Signup</LoginAfterBtn>
+              <LoginBoforeBtn>Signup</LoginBoforeBtn>
             </Link>
           </MenuBox>
         )}
+        <LogoutPopup isOn={logoutModal} setIsOn={setLogoutModal} />
       </InnerContainer>
-    </Header>
+    </HeaderBox>
   );
 };
 
-export default HeaderAfter;
+export default Header;
