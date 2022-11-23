@@ -9,6 +9,7 @@ import com.cocoa.catdog.exception.BusinessLogicException;
 import com.cocoa.catdog.exception.ExceptionCode;
 import com.cocoa.catdog.user.entity.User;
 import com.cocoa.catdog.user.service.UserService;
+import com.cocoa.catdog.wallet.entity.Wallet;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -35,10 +37,20 @@ public class ArticleService {
 
         User findUser = userService.findUser(userId);
 
+//        findUser.setArticles();
+
+
+        List<String> imgUrls = new ArrayList<>();
+
         for (MultipartFile file : files) {
             String originalFileName = file.getOriginalFilename();
             String imgUrl = s3Uploader.uploadFile("article", file);
+            imgUrls.add(imgUrl);
+
+
         }
+
+
 
         article.setUser(findUser);
         findUser.getArticles().add(article);

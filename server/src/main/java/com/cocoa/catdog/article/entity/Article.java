@@ -28,7 +28,6 @@ public class Article extends AuditingEntity {
     @Column(length = 200)
     private String content;
 
-
     private int likeCnt;
 
     private int views;
@@ -55,6 +54,11 @@ public class Article extends AuditingEntity {
 
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
     private List<GiveTake> giveTakes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
+    private List<ArticleImage> articleImage = new ArrayList<>();
+
+
     @Builder
     public Article (Long articleId, String articleImg, String content) {
         this.articleId = articleId;

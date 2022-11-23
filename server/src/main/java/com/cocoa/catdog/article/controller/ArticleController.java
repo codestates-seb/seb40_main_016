@@ -31,13 +31,28 @@ public class ArticleController {
 
     private final S3Uploader s3Uploader;
 
-    @PostMapping
+//    @PostMapping
+//    @ResponseStatus(HttpStatus.CREATED)
+//    ArticleDto.Response postArticle(@RequestHeader(name = "Authorization") String token,
+//            @Valid @RequestPart(value = "postDto") ArticleDto.Post postDto,
+//                                    @RequestPart(value = "file") List<MultipartFile> files
+//                                    ) throws Exception {
+//        Article article = mapper.postDtoToEntity(postDto);
+//
+//
+//
+//        return mapper.entityToResponseDto(
+//                articleService.saveArticle(article, jwtTokenizer.getUserId(token), files));
+//    }
+
+    @PostMapping(consumes = {"multipart/form-data"})
     @ResponseStatus(HttpStatus.CREATED)
     ArticleDto.Response postArticle(@RequestHeader(name = "Authorization") String token,
-            @Valid @RequestPart(value = "postDto") ArticleDto.Post postDto,
+                                    @Valid @RequestPart(value = "postDto") ArticleDto.Post postDto,
                                     @RequestPart(value = "file") List<MultipartFile> files
-                                    ) throws Exception {
+    ) throws Exception {
         Article article = mapper.postDtoToEntity(postDto);
+
 
 
         return mapper.entityToResponseDto(

@@ -4,6 +4,7 @@ package com.cocoa.catdog.config.aws;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.cocoa.catdog.config.CommonUtils;
@@ -63,8 +64,43 @@ public class S3Uploader {
         return url;
     }
 
+
     public String getFileUrl(String fileName) {
         return amazonS3.getUrl(component.getBucket(), fileName).toString();
+    }
+
+    public String uploadLocal(String filePath) throws RuntimeException {
+        File targetFile = new File(filePath);
+
+        String uploadImageUrl = putS3(targetFile, targetFile.getName());
+
+        removeOriginalFile(targetFile);
+
+        return uploadImageUrl;
+
+    }
+
+    private String putS3(File uploadFile, String fileName) throws RuntimeException {
+        client.putObject(new PutObjectRequest(bucket, fileName, uploadFile)
+                .withCannedAcl(CannedAccessControlList.PublicRead));
+
+        return client.getUrl(bucket, fileName).toString();
+
+    }
+
+    private void removeOriginalFile(File targetFile) {
+        if (targetFile.exists() && targetFile.delete()) {
+            log.info("File delete Success");
+            return;
+        }
+        log.info("fail to remove");
+    }
+
+    public void removeS3File(String fileName) {
+        final DeleteObjectRequest deleteObjectRequest =
+                new DeleteObjectRequest(bucket, fileName);
+        client.deleteObject(deleteObjectRequest);
+
     }
 
 
