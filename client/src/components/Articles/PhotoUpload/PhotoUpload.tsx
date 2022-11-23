@@ -1,10 +1,11 @@
 /*
 담당 : 김윤희
 생성 : 2022.11.17
-수정 : 2022.11.21
+수정 : 2022.11.22
 소개 : 이미지 업로드 컴포넌트
 설명 : 
   - 글 작성, 수정시 사용되는 이미지 업로드 컴포넌트입니다.
+  - 업로드된 파일의 임시주소와 파일 상태를 같이 관리할 수 있도록 수정
   - 사용 예시: 
     <PhotoUpload
       uploadedPhotos={uploadedPhotos}
@@ -13,13 +14,13 @@
       setUploadedPhotos={setUploadedPhotos}
       setPreviewPhotos={setPreviewPhotos}
       setCurrentPhotos={setCurrentPhotos}
-      setFiles={setFiles}
     />
 */
 
 import React, { useRef, useState, useEffect } from "react";
 import imageCompression from "browser-image-compression";
 import PhotoPreview from "../PhotoPreview/PhotoPreview";
+import { UploadedPhotos } from "../../../types/article";
 import { PhotoWrapper, CurrentPhoto, PhotoChoiceWrapper, PhotoListWrapper, PhotoList, UploadButton } from "./style";
 import { ReactComponent as EmptyPhoto } from "../../../assets/img/empty-photo-icon.svg";
 import { ReactComponent as AddPhoto } from "../../../assets/img/add-photo-icon.svg";
@@ -27,13 +28,12 @@ import { ReactComponent as AddIcon } from "../../../assets/img/add-icon.svg";
 import { FileFormatCheck, FileSizeCheck } from "../../../utills/FileValidCheck";
 
 interface PhotoUploadProps {
-  uploadedPhotos: string[];
+  uploadedPhotos: UploadedPhotos[];
   previewPhotos: any[];
   currentPhotos: string;
-  setUploadedPhotos: (arg: (arg: string[]) => string[]) => void;
+  setUploadedPhotos: (arg: (arg: UploadedPhotos[]) => UploadedPhotos[]) => void;
   setPreviewPhotos: (arg: () => any[]) => void;
   setCurrentPhotos: (arg: () => string) => void;
-  setFiles: (arg: (arg: File[]) => File[]) => void;
 }
 
 const PhotoUpload = ({
@@ -43,7 +43,6 @@ const PhotoUpload = ({
   setUploadedPhotos,
   setPreviewPhotos,
   setCurrentPhotos,
-  setFiles,
 }: PhotoUploadProps) => {
   const [isAddPhoto, setIsAddPhoto] = useState<boolean>(false);
   const uploadBoxRef = useRef<HTMLLabelElement>(null);
@@ -64,6 +63,10 @@ const PhotoUpload = ({
 
   const compresseAndUploadFile = async (files: FileList | null) => {
     if (!files) return;
+    if (files.length + uploadedPhotos.length > 3) {
+      alert("이미지는 최대 3장까지 업로드할 수 있습니다.");
+      return;
+    }
 
     const options = {
       maxSizeMB: 0.2,
@@ -76,15 +79,15 @@ const PhotoUpload = ({
       const reader = new FileReader();
       const compressedFile = await imageCompression(files[i], options);
 
-      reader.readAsDataURL(compressedFile);
       reader.onloadend = () => {
         const result = reader.result as string;
-        if (result) setUploadedPhotos((state) => [...state, result].slice(0, 3));
 
         const blob = createBlob(result);
         const file = new File([blob], files[i].name, { type: files[i].type });
-        setFiles((files) => [...files, file]);
+        if (result) setUploadedPhotos((state) => [...state, { uploadedPhoto: result, file: file }].slice(0, 3));
       };
+
+      reader.readAsDataURL(compressedFile);
     }
   };
 
@@ -107,16 +110,23 @@ const PhotoUpload = ({
 
   const createPhotoPreview = uploadedPhotos.map((photo, index) => {
     const isDeleteImage = (element: any) => {
-      return element === photo;
+      return element.uploadedPhoto === photo.uploadedPhoto;
     };
 
     const deletePhoto = () => {
       uploadedPhotos.splice(uploadedPhotos.findIndex(isDeleteImage), 1);
-      setUploadedPhotos((state) => [...state]);
+      setUploadedPhotos((photos) => [...photos]);
       if (uploadedPhotos.length === 0) setIsAddPhoto((isAddPhoto) => !isAddPhoto);
     };
 
-    return <PhotoPreview photoUrl={photo} deletePhoto={deletePhoto} key={index} setCurrentPhotos={setCurrentPhotos} />;
+    return (
+      <PhotoPreview
+        photoUrl={photo.uploadedPhoto}
+        deletePhoto={deletePhoto}
+        key={index}
+        setCurrentPhotos={setCurrentPhotos}
+      />
+    );
   });
 
   useEffect(() => {
@@ -128,7 +138,7 @@ const PhotoUpload = ({
     input.addEventListener("change", changeHandler);
 
     const imageJSXs = createPhotoPreview;
-    setCurrentPhotos(() => uploadedPhotos[uploadedPhotos.length - 1]);
+    setCurrentPhotos(() => uploadedPhotos.length > 0 && uploadedPhotos[uploadedPhotos.length - 1].uploadedPhoto);
     setPreviewPhotos(() => imageJSXs);
 
     return () => {
@@ -149,7 +159,7 @@ const PhotoUpload = ({
         <input type="file" multiple accept="image/*" id="file" ref={inputRef} hidden />
       </PhotoChoiceWrapper>
 
-      {isAddPhoto && uploadedPhotos.length > 0 && (
+      {isAddPhoto && (
         <PhotoListWrapper>
           <PhotoList>{previewPhotos}</PhotoList>
           {previewPhotos.length < 3 && (
