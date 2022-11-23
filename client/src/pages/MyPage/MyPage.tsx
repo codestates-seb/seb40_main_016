@@ -1,14 +1,14 @@
-import { useState } from "react";
-import styled from "styled-components";
+import { useEffect, useState } from "react";
 
 import OuterContainer from "../../components/OuterContainer/OuterConainer";
 import InnerContainer from "../../components/InnerContainer/InnerContainer";
 import Tab from "../../components/Tab/Tab";
 import Avatar from "../../components/Avatar/Avatar";
-
 import MyPageArticles from "./MyPageArticles";
 import MyPageComments from "./MyPageComments";
 import MyPageSnacks from "./MyPageSnacks";
+
+import { GetUserInfo } from "../../api/user";
 
 import { ReactComponent as FollowIcon } from "../../assets/img/follow-icon.svg";
 import { ReactComponent as BoneIcon } from "../../assets/img/bone-icon.svg";
@@ -28,6 +28,13 @@ import {
 
 const MyPage = () => {
   const [nowTab, setNowTab] = useState<string>("게시물");
+  // const [userInfo, setUserInfo] = useState<>()
+
+  useEffect(() => {
+    GetUserInfo(23).then((res: any) => {
+      console.log(res.data);
+    });
+  }, []);
 
   return (
     <>
