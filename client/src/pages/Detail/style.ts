@@ -13,6 +13,7 @@ export const AreaSlider = styled.div`
   position: relative;
   width: 100%;
   aspect-ratio: 1;
+  flex-shrink: 0;
 
   @media screen and (min-width: 736px) {
     width: 56.8vw;
