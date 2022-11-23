@@ -159,7 +159,7 @@ const PhotoUpload = ({
         <input type="file" multiple accept="image/*" id="file" ref={inputRef} hidden />
       </PhotoChoiceWrapper>
 
-      {isAddPhoto && uploadedPhotos.length > 0 && (
+      {isAddPhoto && (
         <PhotoListWrapper>
           <PhotoList>{previewPhotos}</PhotoList>
           {previewPhotos.length < 3 && (
