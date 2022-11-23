@@ -2,8 +2,18 @@ import axios from "axios";
 
 const URL = process.env.REACT_APP_URL;
 
-export const registerArticle = async (formData: FormData) => {
+export const RegisterArticle = async (formData: FormData) => {
   const response = await axios.post(`${URL}/articles`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+
+  return response;
+};
+
+export const UpdateArticle = async (formData: FormData, articleId: string) => {
+  const response = await axios.patch(`${URL}/articles/${articleId}`, formData, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
