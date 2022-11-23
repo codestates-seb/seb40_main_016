@@ -16,6 +16,10 @@ spring:
           auth: true
           starttls:
             enable: true
+  profiles:
+    include:
+      - aws
+      - credentials
 
 mail:
   address:

@@ -7,15 +7,18 @@ import com.cocoa.catdog.article.entity.Report;
 import com.cocoa.catdog.article.mapper.ArticleMapper;
 import com.cocoa.catdog.article.service.ArticleService;
 import com.cocoa.catdog.auth.jwt.JwtTokenizer;
+import com.cocoa.catdog.config.aws.S3Uploader;
 import com.cocoa.catdog.dto.MultiResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
+import java.io.File;
 import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,6 +32,10 @@ public class ArticleController {
     private final ArticleMapper mapper;
     private final JwtTokenizer jwtTokenizer;
 
+
+    private final S3Uploader s3Uploader;
+
+
     /*
     * 게시물 등록
     * */
@@ -36,9 +43,13 @@ public class ArticleController {
     @ResponseStatus(HttpStatus.CREATED)
     ArticleDto.Response postArticle(@RequestHeader(name = "Authorization") String token,
                                     @Valid @RequestBody ArticleDto.Post postDto) {
+
         Article article = mapper.postDtoToEntity(postDto);
+
+
+
         return mapper.entityToResponseDto(
-                articleService.saveArticle(article, jwtTokenizer.getUserId(token)));
+                articleService.saveArticle(article, jwtTokenizer.getUserId(token), files));
     }
 
     /*
