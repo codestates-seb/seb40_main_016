@@ -14,7 +14,7 @@ import { ReactComponent as HeartWIcon } from "../../assets/img/heart-w-icon.svg"
 import { ReactComponent as BoneWIcon } from "../../assets/img/bone-w-icon.svg";
 import { ReactComponent as EyeWIcon } from "../../assets/img/eye-w-icon..svg";
 
-import { GetMain } from "../../api/api";
+import { GetMain } from "../../api/article";
 
 const Main = () => {
   const [open, setOpen] = useState<boolean>(false);

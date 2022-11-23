@@ -20,3 +20,12 @@ export const GetDetail = async (articleId: string | number) => {
   });
   return response;
 };
+
+export const GetMain = async (page: number, sort: string, order: string) => {
+  const response = await axios.get(`${URL}/articles?page=${page}&sort=${sort}&order=${order}`, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  return response;
+};

@@ -29,3 +29,12 @@ export const GetUserInfo = async (userId: string | number) => {
   });
   return response;
 };
+
+export const GetMyPage = async (userId: number) => {
+  const response = await axios.get(`${URL}/user/${userId}`, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  return response;
+};
