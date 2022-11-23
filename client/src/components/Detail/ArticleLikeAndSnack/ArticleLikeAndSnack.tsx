@@ -1,26 +1,41 @@
+import { useEffect, useState } from "react";
 import ReactionBtn from "../ReactionBtn/ReactionBtn";
 import ShortenNumber from "../../../utills/ShortenNumber";
+import { PostArticleLike, DeleteArticleLike } from "../../../api/article";
+
+import { useRecoilValue, useRecoilState } from "recoil";
+import accessTokenState from "../../../_state/accessTokenState";
 
 import { Wrapper, GroupBtn, GroupCounter, Counter } from "./style";
-import { useState } from "react";
 
 interface Prop {
-  likeCnt?: number;
+  articleId: number | null;
+  likeCnt: number;
   yummyCnt?: number;
   authorType: "PERSON" | "CAT" | "DOG";
+  gotLiked: boolean;
 }
 
-const ArticleLikeAndSnack = ({ likeCnt = 0, yummyCnt = 0, authorType }: Prop) => {
+const ArticleLikeAndSnack = ({ articleId = 5, likeCnt, yummyCnt = 0, authorType, gotLiked }: Prop) => {
   const [currentLike, setCurrentLike] = useState<number>(likeCnt);
   const [likeChange, setLikeChange] = useState<number>(1);
+  const token = useRecoilValue(accessTokenState);
 
   const onLike = () => {
-    console.log("좋아요");
-    setCurrentLike((current) => current + 1);
+    PostArticleLike(articleId, token)
+      .then((res) => {
+        setCurrentLike((current) => current + 1);
+      })
+      .catch((err) => alert("좋아요에 실패했습니다.😿"));
+    // setCurrentLike((current) => current + 1);
   };
   const offLike = () => {
-    console.log("좋아요끄기");
-    setCurrentLike((current) => current - 1);
+    DeleteArticleLike(articleId, token)
+      .then((res) => {
+        setCurrentLike((current) => current + 1);
+      })
+      .catch((err) => alert("좋아요 취소에 실패했습니다.😿"));
+    // setCurrentLike((current) => current - 1);
   };
 
   const onSnack = () => {
@@ -38,7 +53,7 @@ const ArticleLikeAndSnack = ({ likeCnt = 0, yummyCnt = 0, authorType }: Prop) =>
             btnId="articleLike"
             btnType="like"
             userType={authorType}
-            defaultStatus={false}
+            defaultStatus={gotLiked}
             onActive={onLike}
             onInactive={offLike}
           />
@@ -52,7 +67,7 @@ const ArticleLikeAndSnack = ({ likeCnt = 0, yummyCnt = 0, authorType }: Prop) =>
           />
         </GroupBtn>
         <GroupCounter>
-          <Counter>좋아요 {ShortenNumber(currentLike)}</Counter>
+          <Counter>좋아요 {ShortenNumber(likeCnt)}</Counter>
           {authorType !== "PERSON" ? <Counter>간식 {ShortenNumber(yummyCnt)}</Counter> : ""}
         </GroupCounter>
       </Wrapper>
