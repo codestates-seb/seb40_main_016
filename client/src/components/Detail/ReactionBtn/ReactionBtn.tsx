@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 
 import SnackGiver from "../SnackGiver/SnackGive";
 
@@ -18,7 +18,7 @@ interface Prop {
   className?: string;
   btnType: "like" | "snack" | "subscribe";
   userType?: "PERSON" | "CAT" | "DOG";
-  defaultStatus?: boolean;
+  defaultStatus: boolean;
   onActive?: () => void;
   onInactive?: () => void;
 }
@@ -28,12 +28,17 @@ const ReactionBtn = ({
   className = "",
   btnType,
   userType,
-  defaultStatus = false,
+  defaultStatus,
   onActive = () => {},
   onInactive = () => {},
 }: Prop) => {
+  const [checked, setChecked] = useState<boolean>(defaultStatus);
   const [isSnackGiver, setIsSnackGiver] = useState<boolean>(false);
+
+  const inputRef = useRef<HTMLInputElement>(null);
+
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setChecked(!checked);
     if (e.target.checked) {
       if (btnType === "snack") {
         setIsSnackGiver(true);
@@ -47,10 +52,14 @@ const ReactionBtn = ({
     }
   };
 
+  useEffect(() => {
+    setChecked(defaultStatus);
+  }, [defaultStatus]);
+
   return (
     <>
       <Wrapper className={className}>
-        <HiddenInput id={btnId} type="checkbox" onChange={onChange} />
+        <HiddenInput ref={inputRef} id={btnId} type="checkbox" onChange={onChange} checked={checked} />
         <Btn htmlFor={btnId}>
           <Icon>
             {(() => {

@@ -1,5 +1,12 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import jwt from "jwt-decode";
+
+import { useSetRecoilState } from "recoil";
+import isLoginState from "../../_state/isLoginState";
+import accessTokenState from "../../_state/accessTokenState";
+import refreshTokenState from "../../_state/refreshTokenState";
+import userInfoState from "../../_state/userInfoState";
 
 import OuterContainer from "../../components/OuterContainer/OuterConainer";
 import InnerContainer from "../../components/InnerContainer/InnerContainer";
@@ -8,17 +15,22 @@ import LoginForm from "../../components/Login/LoginForm/LoginForm";
 import LoginSocial from "../../components/Login/LoginSocial/LoginSocial";
 import Button from "../../components/Button/Button";
 import { LoginPage, Conts, AreaSlider, AreaForm, FormCard, ForgotIdPw, Footer } from "./style";
-import { PostLogin } from "../../api/user";
+import { PostLogin, GetUserInfo } from "../../api/user";
 
 import { LoginInfo } from "../../types/user";
 
 const Login = () => {
+  const setIsLogin = useSetRecoilState(isLoginState);
+  const setAccessToken = useSetRecoilState(accessTokenState);
+  const setRefreshToken = useSetRecoilState(refreshTokenState);
+  const setUserInfo = useSetRecoilState(userInfoState);
   const [loginInfo, setLoginInfo] = useState<LoginInfo>({
     email: "",
     password: "",
   });
   const [hasNoEmptyRequired, setHasNoEmptyRequired] = useState<boolean>(false); //빈 인풋 있는지
-  const [token, setToken] = useState<string>();
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (loginInfo.email !== "" && loginInfo.password !== "") {
@@ -32,25 +44,36 @@ const Login = () => {
     e.preventDefault();
     PostLogin(loginInfo)
       .then((res: any) => {
-        if (res.status === 200) {
-          console.log(`res.headers.authorization : ${res.headers.authorization}`); //접근안되는 에러 발생중
-          console.log("로그인 성공");
-          if (res.headers.authorization) {
-            localStorage.setItem("accessToken", res.headers.authorization);
-            localStorage.setItem("refreshToken", res.headers.refresh);
-          }
+        if (res.status === 200 && res.headers.authorization) {
+          setAccessToken(res.headers.authorization);
+          setRefreshToken(res.headers.refresh);
+          return res.headers.authorization;
         }
       })
+      .then((token) => {
+        const info: any = jwt(token.split(" ")[1]);
+        GetUserInfo(info.userId)
+          .then((res) => {
+            const data = res.data.data;
+            setUserInfo({
+              userName: data.userName,
+              userImg: data.userImg,
+              userType: data.userType,
+            });
+            setIsLogin(true);
+            navigate("/");
+          })
+          .catch((e) => {
+            alert("로그인에 실패하셨습니다! 다시 시도해주세요! 😿");
+          });
+      })
       .catch((e) => {
-        if (e.response.status === 500) {
-          console.log(e);
-        }
+        alert("로그인에 실패하셨습니다! 다시 시도해주세요! 😿");
+        // if (e.response.status === 500) {
+        //   console.log(e);
+        // }
       });
   };
-
-  useEffect(() => {
-    console.log(token);
-  }, [token]);
 
   return (
     <>

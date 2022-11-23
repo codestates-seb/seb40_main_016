@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useRecoilValue } from "recoil";
 
 import Modal from "../../components/Modal/Modal";
 import DetailSlider from "../../components/Detail/DetailSlider/DetailSlider";
@@ -7,6 +8,9 @@ import ArticleLikeAndSnack from "../../components/Detail/ArticleLikeAndSnack/Art
 import Comments from "../../components/Detail/Comments/Comments";
 import CommentAdd from "../../components/Detail/CommentAdd/CommentAdd";
 import { GetDetail } from "../../api/article";
+
+import accessTokenState from "../../_state/accessTokenState";
+import userInfoState from "../../_state/userInfoState";
 
 import { DetailViewer, AreaSlider, ArticleAndComments } from "./style";
 
@@ -23,18 +27,30 @@ interface DetailData {
   yummyCnt: number;
 }
 
-const Detail = ({ articleId = "5" }) => {
+const Detail = ({ articleId = 1 }) => {
+  const token = useRecoilValue(accessTokenState);
+  const userInfo = useRecoilValue(userInfoState);
   const [data, setData] = useState<DetailData>();
   const [authorType, setAauthorType] = useState<"PERSON" | "CAT" | "DOG">("PERSON");
   const [authorNickname, setAuthorNickname] = useState<string>("");
+  const [authorId, setAuthorId] = useState<number | null>(null);
+  const [likeCnt, setLikeCnt] = useState<number>(0);
+  const [gotLiked, setGotLiked] = useState<boolean>(false);
+
   useEffect(() => {
-    GetDetail(articleId)
+    GetDetail(articleId, token)
       .then((res) => {
         setData(res.data);
-        console.log(res.data);
+        setAuthorId(res.data.user.userId);
+        setGotLiked(res.data.gotLiked);
+        setLikeCnt(res.data.likeCnt);
       })
       .catch((e) => alert("게시글을 불러오는 데에 실패했습니다😿"));
   }, [articleId]);
+
+  useEffect(() => {
+    // console.log(userInfoState);
+  }, []);
 
   return (
     <>
@@ -59,13 +75,19 @@ const Detail = ({ articleId = "5" }) => {
           </AreaSlider>
           <ArticleAndComments>
             <DetailArticle
-              userId={15}
+              userId={authorId}
               createdAt={data?.createdAt}
               content={data?.content}
               setAuthorType={setAauthorType}
               setAuthorNickname={setAuthorNickname}
             />
-            <ArticleLikeAndSnack likeCnt={data?.likeCnt} yummyCnt={data?.yummyCnt} authorType={authorType} />
+            <ArticleLikeAndSnack
+              articleId={articleId}
+              likeCnt={likeCnt}
+              yummyCnt={data?.yummyCnt}
+              authorType={authorType}
+              gotLiked={gotLiked}
+            />
             <Comments />
             <CommentAdd />
           </ArticleAndComments>
