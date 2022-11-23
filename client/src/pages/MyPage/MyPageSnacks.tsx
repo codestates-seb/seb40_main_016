@@ -22,8 +22,8 @@ const SnackBox = styled.div`
 
 const SnackImg = styled.div`
   margin-right: 40px;
-  width: 278px;
-  height: 278px;
+  width: 120px;
+  height: 120px;
   overflow: hidden;
   border-radius: 20px;
 `;
