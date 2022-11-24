@@ -1,0 +1,18 @@
+cloud:
+  aws:
+    credentials:
+      accessKey: AKIA6H5UOE3MPKYYANAE
+      secretKey: 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
+    s3:
+      bucket: catdogbucket
+      folder:
+        [ folderName ]: [ folderName/ ]
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+spring:
+  servlet:
+  multipart:
+    max-file-size: 10MB
+    max-request-size: 30MB
