@@ -13,7 +13,7 @@
   - 부자연스러운 애니메이션 삭제
 */
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useRecoilState, useSetRecoilState } from "recoil";
 
@@ -31,7 +31,6 @@ import { ReactComponent as Logo } from "../../assets/img/logo.svg";
 import { ReactComponent as SearchIcon } from "../../assets/img/search-icon.svg";
 import { ReactComponent as AddIcon } from "../../assets/img/add-icon.svg";
 import { ReactComponent as ShopIcon } from "../../assets/img/shop-icon.svg";
-import { ReactComponent as MyIcon } from "../../assets/img/my-icon.svg";
 import { ReactComponent as LogoutIcon } from "../../assets/img/logout-icon.svg";
 import { ReactComponent as MansaeCat } from "../../assets/img/mansae-cat.svg";
 import { ReactComponent as MenuIcon } from "../../assets/img/menu-icon.svg";
@@ -67,10 +66,6 @@ const Header = ({ popupHandler }: HeaderProps) => {
     });
     navigate("/");
   };
-
-  useEffect(() => {
-    console.log(userInfo);
-  }, []);
 
   return (
     <HeaderBox>

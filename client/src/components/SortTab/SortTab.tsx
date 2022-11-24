@@ -11,6 +11,7 @@
 
 import styled, { keyframes } from "styled-components";
 import { useRecoilValue } from "recoil";
+import { useNavigate } from "react-router-dom";
 
 import isLoginState from "../../_state/isLoginState";
 
@@ -18,6 +19,7 @@ import { ReactComponent as AllSymbol } from "../../assets/img/all-symbol.svg";
 import { ReactComponent as DogSymbol } from "../../assets/img/dog-symbol.svg";
 import { ReactComponent as CatSymbol } from "../../assets/img/cat-symbol.svg";
 import { ReactComponent as FollowSymbol } from "../../assets/img/subscribe-icon-ver01.svg";
+import { useEffect } from "react";
 
 const Bling = () => keyframes`
   0% { transform: scale(1); }
@@ -91,6 +93,16 @@ interface Props {
 
 const SortTab = ({ handleSortClick, sort }: Props) => {
   const isLogin = useRecoilValue(isLoginState);
+
+  useEffect(() => {
+    handleLogoutFollowing();
+  }, [isLogin]);
+
+  const handleLogoutFollowing = () => {
+    if (sort === "followings" && !isLogin) {
+      handleSortClick("all");
+    }
+  };
 
   return (
     <>
