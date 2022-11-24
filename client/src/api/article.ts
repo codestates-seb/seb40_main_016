@@ -43,6 +43,17 @@ export const GetDetail = async (articleId: string | number, token: string | null
   }
 };
 
+export const DeleteArticle = async (articleId: number, token: string | null) => {
+  if (token) {
+    const response = await axios.delete(`${URL}/articles/${articleId}`, {
+      headers: {
+        Authorization: `${token}`,
+      },
+    });
+    return response;
+  }
+};
+
 export const PostArticleLike = async (articleId: number | null, token: string) => {
   const response = await axios.post(`${URL}/articles/${articleId}/likes`, null, {
     headers: {
@@ -61,8 +72,12 @@ export const DeleteArticleLike = async (articleId: number | null, token: string)
   return response;
 };
 
-export const GetMain = async (page: number, sort: string, order: string, token: string | null) => {
-  const response = await axios.get(`${URL}/articles?page=${page}&sort=${sort}&order=${order}`, {
+export const PostArticleReport = async (articleId: string | number, content: string, token: string | null) => {
+  const body = JSON.stringify({
+    content: `${content}`,
+  });
+
+  const response = await axios.post(`${URL}/articles/${articleId}/report`, body, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `${token}`,
