@@ -11,7 +11,7 @@ interface Prop {
 }
 
 const DetailSlider = ({ photos }: Prop) => {
-  const [isSingle, setIsSingle] = useState<boolean>(photos.length === 1);
+  const [isSingle, setIsSingle] = useState<boolean>();
   const [swiperSetting, setSwiperSetting] = useState<any>(null);
 
   const navigationPrevRef = useRef<HTMLDivElement>(null);
@@ -38,6 +38,11 @@ const DetailSlider = ({ photos }: Prop) => {
       setSwiperSetting(settings);
     }
   }, [swiperSetting]);
+
+  useEffect(() => {
+    if (photos.length === 1) setIsSingle(true);
+    else if (photos.length > 1) setIsSingle(false);
+  }, [photos]);
 
   return (
     <>

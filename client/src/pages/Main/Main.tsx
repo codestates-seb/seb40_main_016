@@ -1,5 +1,6 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, Dispatch, SetStateAction } from "react";
 import "react-loading-skeleton/dist/skeleton.css";
+import { useRecoilValue } from "recoil";
 
 import OuterContainer from "../../components/OuterContainer/OuterConainer";
 import InnerContainer from "../../components/InnerContainer/InnerContainer";
@@ -7,6 +8,9 @@ import SortTab from "../../components/SortTab/SortTab";
 import ImageCard from "../../components/ImageCard/ImageCard";
 import Button from "../../components/Button/Button";
 import ImageSkeleton from "../../components/Skeleton/ImageSkeleton";
+
+import isLoginState from "../../_state/isLoginState";
+import accessTokenState from "../../_state/accessTokenState";
 
 import { FilterContainer, TabBox, SortBox, ImgContainer, ImgBox, Dim, InfoBox, Info } from "./style";
 
@@ -16,7 +20,12 @@ import { ReactComponent as EyeWIcon } from "../../assets/img/eye-w-icon..svg";
 
 import { GetMain } from "../../api/article";
 
-const Main = () => {
+interface Prop {
+  detailHandler: () => void;
+  setArticleId: Dispatch<SetStateAction<number>>;
+}
+
+const Main = ({ detailHandler, setArticleId }: Prop) => {
   const [open, setOpen] = useState<boolean>(false);
   const [sort, setSort] = useState<string>("all");
   const [order, setOrder] = useState<string>("latest");
@@ -26,6 +35,9 @@ const Main = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const obsRef = useRef(null);
   const preventRef = useRef(true);
+
+  const isLogin = useRecoilValue(isLoginState);
+  const token = useRecoilValue(accessTokenState);
 
   const handleOpen = () => {
     setOpen(!open);
@@ -39,6 +51,11 @@ const Main = () => {
   const handleOrderClick = (order: "latest" | "likes") => {
     setOrder(order);
     setPage(1);
+  };
+
+  const handleImgBoxClick = (articleId: number) => {
+    setArticleId(articleId);
+    detailHandler();
   };
 
   interface Articles {
@@ -79,16 +96,29 @@ const Main = () => {
 
   const getArticles = () => {
     setLoading(true);
-    GetMain(page, sort, order).then((res: any) => {
-      if (res.data.pageInfo.page === 1) {
-        setArticles(res.data.data);
-      } else {
-        setArticles(articles.concat(res.data.data));
-      }
-      preventRef.current = true;
-      setTotalPage(res.data.pageInfo.totalPages);
-      setLoading(false);
-    });
+    if (isLogin) {
+      GetMain(page, sort, order, token).then((res: any) => {
+        if (res.data.pageInfo.page === 1) {
+          setArticles(res.data.data);
+        } else {
+          setArticles(articles.concat(res.data.data));
+        }
+        preventRef.current = true;
+        setTotalPage(res.data.pageInfo.totalPages);
+        setLoading(false);
+      });
+    } else {
+      GetMain(page, sort, order, null).then((res: any) => {
+        if (res.data.pageInfo.page === 1) {
+          setArticles(res.data.data);
+        } else {
+          setArticles(articles.concat(res.data.data));
+        }
+        preventRef.current = true;
+        setTotalPage(res.data.pageInfo.totalPages);
+        setLoading(false);
+      });
+    }
   };
 
   return (
@@ -123,7 +153,12 @@ const Main = () => {
           <ImgContainer>
             {articles &&
               articles.map((article: Articles) => (
-                <ImgBox key={article.articleId}>
+                <ImgBox
+                  key={article.articleId}
+                  onClick={() => {
+                    handleImgBoxClick(article.articleId);
+                  }}
+                >
                   <Dim>
                     <InfoBox className="info">
                       <Info>
