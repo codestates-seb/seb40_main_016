@@ -37,5 +37,8 @@ public interface ArticleMapper {
 
     List<ArticleDto.Response> entityListToResponseDtoList(List<Article> articles);
 
+    ArticleDto.ProfileResponse entityToProfileResponseDto(Article article);
+    List<ArticleDto.ProfileResponse> entityToProfileResponseDtoList(List<Article> articles);
+
     Report reportToReportDto(ArticleDto.Report report);
 }

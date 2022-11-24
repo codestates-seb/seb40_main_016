@@ -72,8 +72,15 @@ public class CommentService {
     /*
     * 댓글리스트 조회 (to page)
     * */
-    public Page<Comment> findComments(int page, int size) {
-        return commentRepository.findAll(PageRequest.of(page, size, Sort.by("commentId").descending()));
+    public Page<Comment> findComments(int page, int size, Long articleId) {
+        return commentRepository.findByArticle_ArticleId(articleId, PageRequest.of(page, size, Sort.by("commentId").descending()));
+    }
+
+    /*
+    * 마이페이지 댓글 조회
+    * */
+    public Page<Comment> findMyComments(int page, int size, Long userId) {
+        return commentRepository.findByUser_UserId(userId, PageRequest.of(page, size, Sort.by("commentId").descending()));
     }
 
     /*

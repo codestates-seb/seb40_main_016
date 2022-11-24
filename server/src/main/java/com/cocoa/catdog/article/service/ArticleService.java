@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @Transactional
@@ -106,8 +107,8 @@ public class ArticleService {
     @Transactional(readOnly = true)
     public Page<Article> findArticles(int page, int size, String sort, String order, long userId) {
         //쿼리 정리
-        sort = queryFilter(sort);
-        order = queryFilter(order);
+        sort = queryFilter(sort, "sort");
+        order = queryFilter(order, "order");
 
         PageRequest pageRequest = PageRequest.of(page, size,
                 Sort.by(order).descending().and(Sort.by("articleId").descending()));
@@ -127,6 +128,41 @@ public class ArticleService {
             articlePage = articleRepository.findByUser_UserType(User.UserType.valueOf(sort), pageRequest);
         }
 
+
+        return articlePage;
+    }
+
+    /*
+    * 마이페이지 게시물 조회
+    * */
+    @Transactional(readOnly = true)
+    public Page<Article> findProfileArticles(int page, int size, String tab, Long userId) {
+        tab = queryFilter(tab, "tab");
+
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by("articleId").descending());
+        Page<Article> articlePage;
+        if(tab.equals("post")) {
+            articlePage = articleRepository.findByUser_UserId(userId, pageRequest);
+        } else if(tab.equals("give")) {
+            List<Long> articleIdList = userService.findUser(userId).getWallet().getGives().stream()
+                    .map(giveTake -> giveTake.getArticle().getArticleId())
+                    .collect(Collectors.toList());
+            articlePage = articleRepository.findByArticleIdIn(articleIdList, pageRequest);
+        } else {
+            User user = userService.findUser(userId);
+            if(user.getUserType() == User.UserType.PERSON) {
+                throw new BusinessLogicException(ExceptionCode.BAD_REQUEST);
+            }
+            //yummyCnt가 아닌 거래내역을 기준으로 했을시
+//            List<Long> articleIdList = user.getWallet().getTakes().stream()
+//                    .map(giveTake -> giveTake.getArticle().getArticleId())
+//                    .collect(Collectors.toList());
+//            articlePage = articleRepository.findByArticleIdIn(articleIdList,
+//                    PageRequest.of(page, size, Sort.by("yummyCnt").descending()
+//                            .and(Sort.by("articleId").descending())));
+            articlePage = articleRepository.findAll(PageRequest.of(page, size, Sort.by("yummyCnt").descending()
+                            .and(Sort.by("articleId").descending())));
+        }
 
         return articlePage;
     }
@@ -166,28 +202,51 @@ public class ArticleService {
     /*
     * 쿼리파라미터 필터
     * */
-    private String queryFilter(String query) {
-        switch (query) {
-            //order
-            case "latest" : query = "articleId";
+    private String queryFilter(String query, String type) {
+        switch (type) {
+            case "sort":
+                switch (query) {
+                    case "latest":
+                        query = "articleId";
+                        break;
+                    case "likes":
+                        query = "likeCnt";
+                        break;
+                    case "views":
+                        break;
+                    default:
+                        throw new BusinessLogicException(ExceptionCode.BAD_QUERY); //case 에 맞지않는 쿼리는 전부 예외처리
+                }
                 break;
-            case "likes" : query = "likeCnt";
+            case "order":
+                switch (query) {
+                    case "all":
+                    case "followings":
+                        break;
+                    case "dogs":
+                        query = "DOG";
+                        break;
+                    case "cats":
+                        query = "CAT";
+                        break;
+                    case "persons":
+                        query = "PERSON";
+                        break;
+                    default:
+                        throw new BusinessLogicException(ExceptionCode.BAD_QUERY); //case 에 맞지않는 쿼리는 전부 예외처리
+                }
                 break;
-            case "views" :
-                break;
+            case "tab":
+                switch (query) {
+                    case "post":
+                    case "give":
+                    case "take":
+                        break;
+                    default:
+                        throw new BusinessLogicException(ExceptionCode.BAD_QUERY); //case 에 맞지않는 쿼리는 전부 예외처리
 
-            //sort
-            case "all" :
-            case "followings" :
+                }
                 break;
-            case "dogs" : query = "DOG";
-                break;
-            case "cats" : query = "CAT";
-                break;
-            case "persons" : query = "PERSON";
-                break;
-            default: throw new BusinessLogicException(ExceptionCode.BAD_QUERY); //case 에 맞지않는 쿼리는 전부 예외처리
-
         }
 
         return query;

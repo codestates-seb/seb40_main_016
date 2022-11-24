@@ -25,6 +25,8 @@ public enum ExceptionCode {
 
     BAD_QUERY(404, "Bad query"),
 
+    BAD_REQUEST(404, "Bad request"),
+
     NOT_EXIST_ARTICLE_LIKE(404, "Not exist article like"),
 
     EXIST_ARTICLE_LIKE(404, "Exist article like"),
