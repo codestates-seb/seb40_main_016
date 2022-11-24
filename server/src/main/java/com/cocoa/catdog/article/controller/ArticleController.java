@@ -7,7 +7,9 @@ import com.cocoa.catdog.article.entity.Report;
 import com.cocoa.catdog.article.mapper.ArticleMapper;
 import com.cocoa.catdog.article.service.ArticleService;
 import com.cocoa.catdog.auth.jwt.JwtTokenizer;
-import com.cocoa.catdog.dto.MultiResponseDto;
+import com.cocoa.catdog.exception.BusinessLogicException;
+import com.cocoa.catdog.exception.ExceptionCode;
+import com.cocoa.catdog.response.MultiResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -92,7 +94,7 @@ public class ArticleController {
                 })
                 .collect(Collectors.toList());
 
-        return MultiResponseDto.of(articleResponseDtos, pageArticles);
+        return new MultiResponseDto<>(articleResponseDtos, pageArticles);
     }
 
     /*
@@ -144,7 +146,7 @@ public class ArticleController {
     }
 
     //마이페이지에서 게시물 조회
-    @GetMapping("my-page")
+    @GetMapping("/my-page")
     public ResponseEntity getMyArticles(@RequestHeader(name = "Authorization") String token,
                                         @RequestParam(required = false, defaultValue = "post") String tab,
                                         @RequestParam(required = false, defaultValue = "1") int page) {
@@ -152,7 +154,23 @@ public class ArticleController {
         List<Article> articles = pageArticles.getContent();
 
         return new ResponseEntity<>(
-                new com.cocoa.catdog.response.MultiResponseDto<>(mapper.entityToProfileResponseDtoList(articles), pageArticles), HttpStatus.OK);
+                new MultiResponseDto<>(mapper.entityToProfileResponseDtoList(articles), pageArticles), HttpStatus.OK);
+
+    }
+
+    //프로필에서 게시물 조회
+    @GetMapping("/profile/{user-id}")
+    public ResponseEntity getArticlesOfUser(@RequestParam(required = false, defaultValue = "post") String tab,
+                                            @RequestParam(required = false, defaultValue = "1") int page,
+                                            @PathVariable("user-id") Long userId) {
+        if(tab.equals("give")) {
+            throw new BusinessLogicException(ExceptionCode.BAD_REQUEST);
+        }
+        Page<Article> pageArticles = articleService.findProfileArticles(page, 24, tab, userId);
+        List<Article> articles = pageArticles.getContent();
+
+        return new ResponseEntity<>(
+                new MultiResponseDto<>(mapper.entityToProfileResponseDtoList(articles), pageArticles), HttpStatus.OK);
 
     }
 
