@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
@@ -32,13 +33,17 @@ public class ArticleController {
     /*
     * 게시물 등록
     * */
-    @PostMapping
+    @PostMapping(consumes = {"multipart/form-data"})
     @ResponseStatus(HttpStatus.CREATED)
     ArticleDto.Response postArticle(@RequestHeader(name = "Authorization") String token,
-                                    @Valid @RequestBody ArticleDto.Post postDto) {
+                                    @Valid @RequestPart(value = "postDto") ArticleDto.Post postDto,
+                                    @RequestPart(value = "file") List<MultipartFile> files
+    ) throws Exception {
         Article article = mapper.postDtoToEntity(postDto);
+
+
         return mapper.entityToResponseDto(
-                articleService.saveArticle(article, jwtTokenizer.getUserId(token)));
+                articleService.saveArticle(article, jwtTokenizer.getUserId(token), files));
     }
 
     /*
