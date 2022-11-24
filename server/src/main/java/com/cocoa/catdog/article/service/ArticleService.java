@@ -11,6 +11,7 @@ import com.cocoa.catdog.article.entity.Like;
 import com.cocoa.catdog.comment.entity.Comment;
 import com.cocoa.catdog.comment.repository.CommentRepository;
 import com.cocoa.catdog.comment.service.CommentService;
+import com.cocoa.catdog.config.aws.S3Uploader;
 import com.cocoa.catdog.exception.BusinessLogicException;
 import com.cocoa.catdog.exception.ExceptionCode;
 import com.cocoa.catdog.user.entity.User;
@@ -21,7 +22,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -37,13 +40,22 @@ public class ArticleService {
     private final LikeRepository likeRepository;
     private final ReportRepository reportRepository;
     private final CommentRepository commentRepository;
+    private final S3Uploader s3Uploader;
 
     /*
     * 게시물 등록
     * */
-    public Article saveArticle(Article article, Long userId) {
+    public Article saveArticle(Article article, Long userId, List<MultipartFile> files) {
 
         User findUser = userService.findUser(userId);
+
+        List<String> imgUrls = new ArrayList<>();
+
+        for (MultipartFile file : files) {
+            String originalFileName = file.getOriginalFilename();
+            String imgUrl = s3Uploader.uploadFile("article", file);
+            imgUrls.add(imgUrl);
+        }
 
         article.setUser(findUser);
         findUser.getArticles().add(article);

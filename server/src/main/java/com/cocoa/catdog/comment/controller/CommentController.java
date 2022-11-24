@@ -76,7 +76,7 @@ public class CommentController {
                                        @RequestParam(required = false, defaultValue = "1") int page,
                                        @RequestHeader(name = "Authorization", required = false, defaultValue = "null") String token) {
         long userId = token.equals("null") ? 0 : jwtTokenizer.getUserId(token);
-        Page<Comment> pageComments = commentService.findComments(page - 1, 10);
+        Page<Comment> pageComments = commentService.findComments(page - 1, 10, articleId);
         List<Comment> comments = pageComments.getContent();
 
         List<CommentResponseDto.Normal> commentResponseDtos =
