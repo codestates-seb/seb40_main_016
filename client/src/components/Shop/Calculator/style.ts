@@ -24,7 +24,12 @@ export const CalcTitle = styled.div<{ diff: number }>`
   }
 
   svg {
-    width: 30px;
+    max-width: 30px;
+  }
+
+  @media screen and (max-width: 736px) {
+    padding: 20px;
+    font-size: var(--fs-pc-small);
   }
 `;
 
@@ -41,7 +46,7 @@ export const CalcMain = styled.div<{ diff: number }>`
   `}
 
   svg {
-    width: 40px;
+    max-width: 5%;
   }
 
   &:last-child {

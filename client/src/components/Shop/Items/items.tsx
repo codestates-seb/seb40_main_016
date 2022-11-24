@@ -7,6 +7,10 @@ const Wrapper = styled.ul`
   grid-template-columns: repeat(5, 1fr);
   grid-gap: 40px;
   margin: 100px 0;
+
+  @media screen and (max-width: 736px) {
+    grid-template-columns: repeat(1, 1fr);
+  }
 `;
 
 const Items = ({ items, setTotalCost, setSelectedItems }: ItemsProps) => {
