@@ -19,7 +19,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/wallet")
+@RequestMapping("/order")
 @RequiredArgsConstructor
 @Validated
 public class OrderController {
@@ -37,9 +37,20 @@ public class OrderController {
         return new ResponseEntity<>(orderMapper.orderToResponse(createdOrder), HttpStatus.CREATED);
     }
 
-    @GetMapping
-    public ResponseEntity<MultiResponseDto<OrderResponseDto>> getOrders() {
-        Page<Order> orderPage = orderService.findOrders(0, 10);
+    @GetMapping("/my-page")
+    public ResponseEntity<MultiResponseDto<OrderResponseDto>> getMyOrders(@RequestHeader(name = "Authorization") String token,
+                                                                        @RequestParam(required = false, defaultValue = "1") int page) {
+        Page<Order> orderPage = orderService.findProfileOrders(page - 1, 10, jwtTokenizer.getUserId(token));
+        List<Order> orders = orderPage.getContent();
+
+        return new ResponseEntity<>(
+                new MultiResponseDto<>(orderMapper.ordersToResponses(orders), orderPage), HttpStatus.OK);
+    }
+
+    @GetMapping("/profile/{user-id}")
+    public ResponseEntity<MultiResponseDto<OrderResponseDto>> getOrdersOfUser(@PathVariable("user-id") Long userId,
+                                                                        @RequestParam(required = false, defaultValue = "1") int page) {
+        Page<Order> orderPage = orderService.findProfileOrders(page - 1, 10, userId);
         List<Order> orders = orderPage.getContent();
 
         return new ResponseEntity<>(

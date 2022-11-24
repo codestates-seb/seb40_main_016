@@ -33,7 +33,7 @@ public class CommentController {
     * 댓글 등록
     * */
     @PostMapping("/{article-id}")
-    public ResponseEntity<CommentResponseDto> postComment (@RequestBody @Valid CommentDto.Post postDto,
+    public ResponseEntity<CommentResponseDto.Normal> postComment (@RequestBody @Valid CommentDto.Post postDto,
                                                            @PathVariable("article-id") Long articleId,
                                                            @RequestHeader(name = "Authorization") String token) {
         Long userId = jwtTokenizer.getUserId(token);
@@ -47,7 +47,7 @@ public class CommentController {
     * 댓글 수정
     * */
     @PatchMapping("/{comment-id}")
-    public ResponseEntity<CommentResponseDto> patchComment (@RequestBody @Valid CommentDto.Patch patchDto,
+    public ResponseEntity<CommentResponseDto.Normal> patchComment (@RequestBody @Valid CommentDto.Patch patchDto,
                                                             @PathVariable("comment-id") Long commentId,
                                                             @RequestHeader(name = "Authorization") String token) {
         Long userId = jwtTokenizer.getUserId(token);
@@ -79,7 +79,7 @@ public class CommentController {
         Page<Comment> pageComments = commentService.findComments(page - 1, 10, articleId);
         List<Comment> comments = pageComments.getContent();
 
-        List<CommentResponseDto> commentResponseDtos =
+        List<CommentResponseDto.Normal> commentResponseDtos =
                 commentMapper.commentsToResponses(comments)
                 .stream()
                 .map(dto -> {
@@ -130,6 +130,19 @@ public class CommentController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    /*
+    * 마이페이지에서 댓글 조회
+    * */
+    @GetMapping("/my-page")
+    public ResponseEntity getMyComments (@RequestHeader(name = "Authorization") String token,
+                                         @RequestParam(required = false, defaultValue = "1") int page) {
+        Page<Comment> pageComments = commentService.findMyComments(page - 1, 24, jwtTokenizer.getUserId(token));
+        List<Comment> comments = pageComments.getContent();
+
+        return new ResponseEntity<>(
+                new MultiResponseDto<>(commentMapper.commentsToProfileResponses(comments), pageComments),HttpStatus.OK);
+
+    }
 
 
 }

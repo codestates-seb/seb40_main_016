@@ -15,8 +15,8 @@ public interface CommentMapper {
     Comment postToComment(CommentDto.Post post);
     Comment patchToComment(CommentDto.Patch patch);
     CommentReport reportToCommentReport(CommentDto.Report report);
-    default CommentResponseDto commentToResponse(Comment comment) {
-        return CommentResponseDto.builder()
+    default CommentResponseDto.Normal commentToResponse(Comment comment) {
+        return CommentResponseDto.Normal.builder()
                 .commentId(comment.getCommentId())
                 .content(comment.getContent())
                 .likeCnt(comment.getLikeCnt())
@@ -32,5 +32,8 @@ public interface CommentMapper {
                                 .build()
                 ).build();
     }
-    List<CommentResponseDto> commentsToResponses(List<Comment> comments);
+    List<CommentResponseDto.Normal> commentsToResponses(List<Comment> comments);
+    CommentResponseDto.Profile commentToProfileResponse(Comment comment);
+    List<CommentResponseDto.Profile> commentsToProfileResponses(List<Comment> comments);
+
 }
