@@ -3,7 +3,10 @@ package com.cocoa.catdog.article.service;
 import com.cocoa.catdog.article.entity.Article;
 import com.cocoa.catdog.article.mapper.ArticleMapper;
 import com.cocoa.catdog.article.repository.ArticleRepository;
+import com.cocoa.catdog.article.repository.LikeRepository;
+import com.cocoa.catdog.article.repository.ReportRepository;
 import com.cocoa.catdog.comment.mapper.CommentMapper;
+import com.cocoa.catdog.comment.repository.CommentRepository;
 import com.cocoa.catdog.config.aws.S3Uploader;
 import com.cocoa.catdog.exception.BusinessLogicException;
 import com.cocoa.catdog.exception.ExceptionCode;
@@ -29,16 +32,14 @@ import java.util.Optional;
 public class ArticleService {
     private final ArticleRepository articleRepository;
     private final UserService userService;
-    private final ArticleMapper articleMapper;
-    private final CommentMapper commentMapper;
+    private final LikeRepository likeRepository;
+    private final ReportRepository reportRepository;
+    private final CommentRepository commentRepository;
     private final S3Uploader s3Uploader;
 
     public Article saveArticle(Article article, Long userId, List<MultipartFile> files) {
 
         User findUser = userService.findUser(userId);
-
-//        findUser.setArticles();
-
 
         List<String> imgUrls = new ArrayList<>();
 
@@ -46,11 +47,7 @@ public class ArticleService {
             String originalFileName = file.getOriginalFilename();
             String imgUrl = s3Uploader.uploadFile("article", file);
             imgUrls.add(imgUrl);
-
-
         }
-
-
 
         article.setUser(findUser);
         findUser.getArticles().add(article);

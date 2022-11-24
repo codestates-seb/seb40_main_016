@@ -68,6 +68,11 @@ public class UserService {
         return userRepository.findByUserName(username);
     }
 
+    //유저 email로 찾기
+    public User findUserByEmail(String email) {
+        return findVerifiedUserByEmail(email);
+    }
+
     //전체 유저 조회
     public Page<User> findUsers(int page, int size) {
         return userRepository.findAll(PageRequest.of(page,size, Sort.by("userId").descending()));
@@ -94,6 +99,13 @@ public class UserService {
         User findUser = optionalUser.orElseThrow(()-> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
         return findUser;
 
+    }
+
+    //유저 있는지 확인 by Email
+    private User findVerifiedUserByEmail(String email) {
+        Optional<User> optionalUser = userRepository.findByEmail(email);
+        //유저정보가 없으면 예외 발생
+        return optionalUser.orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
     }
 
     //가입된 이메일인지 확인
