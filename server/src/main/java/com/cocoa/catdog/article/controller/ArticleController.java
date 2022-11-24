@@ -19,7 +19,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
-import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,7 +38,7 @@ public class ArticleController {
     @ResponseStatus(HttpStatus.CREATED)
     ArticleDto.Response postArticle(@RequestHeader(name = "Authorization") String token,
                                     @Valid @RequestPart(value = "postDto") ArticleDto.Post postDto,
-                                    @RequestPart(value = "file") List<MultipartFile> files
+                                    @RequestPart(required = false, value = "file") List<MultipartFile> files
     ) throws Exception {
         Article article = mapper.postDtoToEntity(postDto);
 
@@ -183,7 +182,18 @@ public class ArticleController {
 
 
 
+    @GetMapping("/search")
+    @ResponseStatus(HttpStatus.OK)
+    MultiResponseDto<ArticleDto.Response>
+    searchArticles(@RequestParam(name = "q") String keyword,
+                   @RequestParam(required = false) String option,
+                   @RequestParam(required = false, defaultValue = "1") Integer page) {
+            Page<Article> pageArticles = articleService.searchArticles(keyword, page - 1, 24);
 
+            List<ArticleDto.Response> responseDtos =
+                    mapper.entityListToResponseDtoList(pageArticles.getContent()
+                            .stream().collect(Collectors.toList()));
+            return MultiResponseDto.of(responseDtos, pageArticles);
 
-
+    }
 }
