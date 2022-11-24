@@ -70,12 +70,12 @@ public class UserController {
 
     }
     //특정회원 조회
-    @GetMapping("/user/{user-id}")
+    @GetMapping("/user/profile/{user-id}")
     public ResponseEntity getUser(@PathVariable("user-id") long userId) {
         User user = userService.findUser(userId);
 
         return new ResponseEntity<>(
-                new SingleResponseDto<>(mapper.userToUserResponseDto(user)), HttpStatus.OK);
+                new SingleResponseDto<>(mapper.userToUserProfileResponseDto(user)), HttpStatus.OK);
     }//response수정 요
 
     //회원 삭제
@@ -88,7 +88,7 @@ public class UserController {
 
 
     //마이페이지에서 정보 조회
-    @GetMapping("/user/profile")
+    @GetMapping("/user/my-page")
     @ResponseStatus(HttpStatus.OK)
     public UserResponseDto getProfile(@RequestHeader(name = "Authorization") String token) {
         return mapper.userToUserResponseDto(userService.findUser(jwtTokenizer.getUserId(token)));
