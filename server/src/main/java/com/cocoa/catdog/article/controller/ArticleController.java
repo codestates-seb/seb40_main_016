@@ -189,11 +189,11 @@ public class ArticleController {
                    @RequestParam(required = false) String option,
                    @RequestParam(required = false, defaultValue = "1") Integer page) {
             Page<Article> pageArticles = articleService.searchArticles(keyword, page - 1, 24);
-
+              List<Article> articles = pageArticles.getContent();
             List<ArticleDto.Response> responseDtos =
-                    mapper.entityListToResponseDtoList(pageArticles.getContent()
+                    mapper.entityListToResponseDtoList(articles
                             .stream().collect(Collectors.toList()));
-            return MultiResponseDto.of(responseDtos, pageArticles);
+            return new MultiResponseDto<>(responseDtos, pageArticles);
 
     }
 }
