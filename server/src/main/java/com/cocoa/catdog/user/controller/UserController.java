@@ -1,6 +1,10 @@
 package com.cocoa.catdog.user.controller;
 
+import com.cocoa.catdog.article.entity.Article;
+import com.cocoa.catdog.article.mapper.ArticleMapper;
+import com.cocoa.catdog.article.service.ArticleService;
 import com.cocoa.catdog.auth.jwt.JwtTokenizer;
+import com.cocoa.catdog.comment.service.CommentService;
 import com.cocoa.catdog.response.MultiResponseDto;
 import com.cocoa.catdog.response.SingleResponseDto;
 import com.cocoa.catdog.user.dto.UserPatchDto;
@@ -30,6 +34,9 @@ public class UserController {
     private final UserService userService;
     private final UserMapper mapper;
     private final JwtTokenizer jwtTokenizer;
+    private final ArticleService articleService;
+    private final CommentService commentService;
+    private final ArticleMapper articleMapper;
 
     //회원가입
     @PostMapping("/user")
@@ -69,7 +76,7 @@ public class UserController {
 
         return new ResponseEntity<>(
                 new SingleResponseDto<>(mapper.userToUserResponseDto(user)), HttpStatus.OK);
-    }
+    }//response수정 요
 
     //회원 삭제
     @DeleteMapping("/{user-id}")
@@ -79,11 +86,14 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+
+    //마이페이지에서 정보 조회
     @GetMapping("/user/profile")
     @ResponseStatus(HttpStatus.OK)
     public UserResponseDto getProfile(@RequestHeader(name = "Authorization") String token) {
         return mapper.userToUserResponseDto(userService.findUser(jwtTokenizer.getUserId(token)));
     }
+
     //전체회원 조회
     @GetMapping("/user/birth")
     public ResponseEntity getBirthUsers(@Positive @RequestParam int page,

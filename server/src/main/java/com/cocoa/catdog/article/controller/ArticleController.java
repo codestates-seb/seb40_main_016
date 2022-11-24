@@ -143,6 +143,22 @@ public class ArticleController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    //마이페이지에서 게시물 조회
+    @GetMapping("my-page")
+    public ResponseEntity getMyArticles(@RequestHeader(name = "Authorization") String token,
+                                        @RequestParam(required = false, defaultValue = "post") String tab,
+                                        @RequestParam(required = false, defaultValue = "1") int page) {
+        Page<Article> pageArticles = articleService.findProfileArticles(page, 24, tab, jwtTokenizer.getUserId(token));
+        List<Article> articles = pageArticles.getContent();
+
+        return new ResponseEntity<>(
+                new com.cocoa.catdog.response.MultiResponseDto<>(mapper.entityToProfileResponseDtoList(articles), pageArticles), HttpStatus.OK);
+
+    }
+
+
+
+
 
 
 
