@@ -2,19 +2,17 @@ package com.cocoa.catdog.article.service;
 
 import com.cocoa.catdog.article.entity.Article;
 import com.cocoa.catdog.article.entity.Report;
-import com.cocoa.catdog.article.mapper.ArticleMapper;
 import com.cocoa.catdog.article.repository.ArticleRepository;
 import com.cocoa.catdog.article.repository.LikeRepository;
 import com.cocoa.catdog.article.repository.ReportRepository;
-import com.cocoa.catdog.auth.jwt.JwtTokenizer;
 import com.cocoa.catdog.article.entity.Like;
 import com.cocoa.catdog.comment.entity.Comment;
 import com.cocoa.catdog.comment.repository.CommentRepository;
-import com.cocoa.catdog.comment.service.CommentService;
 import com.cocoa.catdog.config.aws.S3Uploader;
 import com.cocoa.catdog.exception.BusinessLogicException;
 import com.cocoa.catdog.exception.ExceptionCode;
 import com.cocoa.catdog.user.entity.User;
+import com.cocoa.catdog.user.repository.UserRepository;
 import com.cocoa.catdog.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -26,7 +24,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -35,6 +32,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ArticleService {
     private final ArticleRepository articleRepository;
+    private final UserRepository userRepository;
     private final UserService userService;
     private final LikeRepository likeRepository;
     private final ReportRepository reportRepository;
@@ -111,7 +109,8 @@ public class ArticleService {
         sort = queryFilter(sort);
         order = queryFilter(order);
 
-        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(order).descending().and(Sort.by("articleId").descending()));
+        PageRequest pageRequest = PageRequest.of(page, size,
+                Sort.by(order).descending().and(Sort.by("articleId").descending()));
         Page<Article> articlePage;
 
         //글목록을 쿼리별로 조회
@@ -317,6 +316,10 @@ public class ArticleService {
         }
     }
 
+    public Page<Article> searchArticles(String keyword, int page, int size) {
+        return articleRepository.findAllByContentContaining(keyword,
+                    PageRequest.of(page, size, Sort.by("articleId").descending()));
 
+        }
 
 }
