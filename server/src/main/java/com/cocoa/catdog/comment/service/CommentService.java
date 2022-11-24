@@ -77,6 +77,13 @@ public class CommentService {
     }
 
     /*
+    * 마이페이지 댓글 조회
+    * */
+    public Page<Comment> findMyComments(int page, int size, Long userId) {
+        return commentRepository.findByUser_UserId(userId, PageRequest.of(page, size, Sort.by("commentId").descending()));
+    }
+
+    /*
     * 댓글 삭제
     * */
     @Transactional
