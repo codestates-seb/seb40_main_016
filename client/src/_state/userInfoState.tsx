@@ -5,6 +5,7 @@ const { persistAtom } = recoilPersist();
 const userInfoState = atom({
   key: "userInfoState",
   default: {
+    userId: "",
     userName: "",
     userImg: "",
     userType: "",

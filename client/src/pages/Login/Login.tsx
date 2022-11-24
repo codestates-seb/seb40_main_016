@@ -56,6 +56,7 @@ const Login = () => {
           .then((res) => {
             const data = res.data.data;
             setUserInfo({
+              userId: data.userId,
               userName: data.userName,
               userImg: data.userImg,
               userType: data.userType,
