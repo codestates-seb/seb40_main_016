@@ -30,10 +30,9 @@ const Item = ({ itemId, itemImg, itemName, price, stock, setTotalCost, setSelect
             <span>가격 : {price}알</span>
             <input
               type="number"
-              defaultValue={1}
+              defaultValue={stock > 0 ? 1 : 0}
               max={stock}
-              min={1}
-              step={1}
+              min={0}
               onChange={(e) => setQuantity(() => +e.target.value)}
               disabled={isChecked ? true : false}
             />
