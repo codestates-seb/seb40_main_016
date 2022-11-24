@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const Wrapper = styled.div`
-  width: 100%;
+  max-width: 100%;
   background-color: var(--color-faded-sky);
   padding: 30px 50px;
   border-radius: 20px;
