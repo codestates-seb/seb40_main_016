@@ -148,7 +148,14 @@ public class ArticleController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @GetMapping("/search")
+    @ResponseStatus(HttpStatus.OK)
+    MultiResponseDto<ArticleDto.Response>
+    searchArticles(@RequestParam(name = "q") String keyWord,
+                   @RequestParam(required = false, defaultValue = "1") Integer page,
+                   @RequestParam(required = false, defaultValue = "15") Integer size) {
 
+    }
 
 
 

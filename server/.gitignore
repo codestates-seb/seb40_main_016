@@ -6,7 +6,6 @@ data/
 !**/src/main/**/build/
 !**/src/test/**/build/
 src/main/resources/application-aws.yml
-src/main/resources/application-credentials.yml
 
 ### STS ###
 .apt_generated
@@ -41,4 +40,3 @@ out/
 
 ### AWS related ###
 src/main/resources/application-aws.yml
-src/main/resources/application-credentials.yml
