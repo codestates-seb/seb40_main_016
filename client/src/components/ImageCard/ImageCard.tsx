@@ -27,7 +27,7 @@ import styled from "styled-components";
 interface ImageCardProps {
   className?: string;
   imgUrl: string;
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 const Wrapper = styled.div`
