@@ -1,8 +1,6 @@
 import styled from "styled-components";
 
-export const Wrapper = styled.div`
-  /* 나중에 삭제 */
-`;
+export const Wrapper = styled.div``;
 
 export const ShopWrapper = styled.div`
   .submitBtn {
