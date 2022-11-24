@@ -43,11 +43,11 @@ const NewArticle = ({ isOn, isEdit = false, setIsOn }: ArticleProps) => {
     formData.append("content", JSON.stringify(content));
 
     if (isEdit) {
-      UpdateArticle(formData, articleId).then((res: any) => {
+      UpdateArticle(formData, articleId, token).then((res: any) => {
         if (res.status(200)) alert("글 수정 완료!");
       });
     } else {
-      RegisterArticle(formData).then((res: any) => {
+      RegisterArticle(formData, token).then((res: any) => {
         if (res.status(201)) alert("글 작성 완료!");
       });
     }
