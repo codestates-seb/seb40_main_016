@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 @Slf4j
 public class GlobalExceptionAdvice {
-/*
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -66,9 +65,7 @@ public class GlobalExceptionAdvice {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse handleException(Exception e) {
         log.error("error : ", e);
-//        return ErrorResponse.of(HttpStatus.INTERNAL_SERVER_ERROR);
         return ErrorResponse.of(HttpStatus.INTERNAL_SERVER_ERROR, e.toString());
     }
-*/
 
 }

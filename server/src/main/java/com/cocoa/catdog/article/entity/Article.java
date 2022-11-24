@@ -28,6 +28,7 @@ public class Article extends AuditingEntity {
     @Column(length = 200)
     private String content;
 
+
     private int likeCnt;
 
     private int views;
@@ -55,10 +56,7 @@ public class Article extends AuditingEntity {
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
     private List<GiveTake> giveTakes = new ArrayList<>();
 
-    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
-    private List<ArticleImage> articleImage = new ArrayList<>();
-
-
+    //==생성자==//
     @Builder
     public Article (Long articleId, String articleImg, String content) {
         this.articleId = articleId;
@@ -66,6 +64,31 @@ public class Article extends AuditingEntity {
         this.content = content;
     }
 
+    public void IncreaseViews() {
+        this.views++;
+    }
+    //==수정 메서드==//
+    public void changeContent (String content) {
+        if(content != null) {
+            this.content = content;
+        }
+    }
+
+    public void changeLikeCnt(int likeCnt) {
+        this.likeCnt = likeCnt;
+    }
+    public void changeReportCnt(int reportCnt) {
+        this.reportCnt = reportCnt;
+    }
+
+
+    //==연관관계 메서드==//
+    public void addUser(User user) {
+        if(this.user == null) {
+            this.user = user;
+            user.addArticle(this);
+        }
+    }
     public void addComment (Comment comment) {
         if(!comments.contains(comment)) {
             comments.add(comment);
@@ -78,6 +101,23 @@ public class Article extends AuditingEntity {
         comments.remove(comment);
     }
 
+    public void addLike(Like like) {
+        if(!likes.contains(like)) {
+            likes.add(like);
+            like.addArticle(this);
+        }
+    }
+
+    public void addReport(Report report) {
+        if(!reports.contains(report)) {
+            reports.add(report);
+            report.addArticle(this);
+        }
+    }
+
+    public void removeLike(Like like) {
+        likes.remove(like);
+    }
 
     public enum ArticleStatus {
 

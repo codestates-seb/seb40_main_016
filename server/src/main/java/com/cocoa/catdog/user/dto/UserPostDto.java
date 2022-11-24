@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -29,7 +30,7 @@ public class UserPostDto {
     private String userType;
     private String userGender;
     private String userImg;
-    private String userBirth;
+    private LocalDate userBirth;
 
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;

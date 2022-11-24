@@ -24,7 +24,7 @@ public class JwtTokenizer {
 
     private UsersDetailsService usersDetailsService;
     @Getter
-    @Value("${jwt.key.secret}")
+    @Value("${jwt.secret-key}")
     private String secretKey;
 
     @Getter
