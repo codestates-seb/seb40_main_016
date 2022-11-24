@@ -19,8 +19,8 @@ interface Prop {
   btnType: "like" | "snack" | "subscribe";
   userType?: "PERSON" | "CAT" | "DOG";
   defaultStatus: boolean;
-  onActive?: () => void;
-  onInactive?: () => void;
+  onActive?: (arg?: any) => void;
+  onInactive?: (arg?: any) => void;
 }
 
 const ReactionBtn = ({
@@ -56,9 +56,21 @@ const ReactionBtn = ({
     setChecked(defaultStatus);
   }, [defaultStatus]);
 
+  useEffect(() => {
+    if (btnType === "snack") {
+      window.addEventListener("click", (e: { target: any }) => {
+        const target = e.target;
+        if (!target.closest(`#${btnId}-wrapper`)) {
+          setChecked(false);
+          setIsSnackGiver(false);
+        }
+      });
+    }
+  }, []);
+
   return (
     <>
-      <Wrapper className={className}>
+      <Wrapper className={className} id={`${btnId}-wrapper`}>
         <HiddenInput ref={inputRef} id={btnId} type="checkbox" onChange={onChange} checked={checked} />
         <Btn htmlFor={btnId}>
           <Icon>
