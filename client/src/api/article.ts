@@ -60,3 +60,13 @@ export const DeleteArticleLike = async (articleId: number | null, token: string)
   });
   return response;
 };
+
+export const GetMain = async (page: number, sort: string, order: string, token: string | null) => {
+  const response = await axios.get(`${URL}/articles?page=${page}&sort=${sort}&order=${order}`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `${token}`,
+    },
+  });
+  return response;
+};
