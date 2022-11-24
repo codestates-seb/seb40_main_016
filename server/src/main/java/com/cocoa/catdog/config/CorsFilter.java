@@ -1,4 +1,4 @@
-/*
+/*   시큐리티에 Cors 세팅으로 불필요
 package com.cocoa.catdog.config;
 
 import org.springframework.core.Ordered;

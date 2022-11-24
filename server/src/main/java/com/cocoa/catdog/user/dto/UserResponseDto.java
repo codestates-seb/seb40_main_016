@@ -28,6 +28,7 @@ public class UserResponseDto {
     private LocalDate userBirth;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private List<String> roles;   // 유저 권한 표시 추가
 
     @JsonIgnore
     private List<Follow> followingUsers;

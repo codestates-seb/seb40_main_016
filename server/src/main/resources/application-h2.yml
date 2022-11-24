@@ -8,10 +8,35 @@ spring:
     driver-class-name: org.h2.Driver
     username: sa
     password:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: ${GOOGLE_OAUTH_CLIENT_ID}
+            clientSecret: ${GOOGLE_OAUTH_SECRET}
+            scope:
+              - email
+              - profile
   jpa:
     hibernate:
       ddl-auto: update
     properties:
       hibernate:
-      show_sql: true
-      format_sql: true
+        highlight_sql: true
+        show_sql: false
+        format_sql: true
+jwt:
+  key:
+    secret: ${JWT_SECRET_KEY}
+  access-token-expiration-minutes: 600
+  refresh-token-expiration-minutes: 420
+mail:
+  address:
+    admin: admin@gmail.com
+logging:
+  level:
+    org:
+      springframework:
+        orm:
+          jpa: INFO

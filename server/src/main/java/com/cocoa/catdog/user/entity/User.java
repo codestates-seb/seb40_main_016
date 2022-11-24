@@ -18,8 +18,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
-
+// @AllArgsConstructor
 @Table(name = "USERS")
 public class User extends AuditingEntity {
 
@@ -33,7 +32,8 @@ public class User extends AuditingEntity {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false, length = 100)
+    //@Column(nullable = false, length = 100)
+    @Column(length = 100)
     private String userName;
 
 
@@ -136,12 +136,17 @@ public class User extends AuditingEntity {
         }
     }
 
-    public User(String userName, String email, String password) {
+/*    public User(String userName, String email, String password) {
         this.userName = userName;
         this.email = email;
         this.password = password;
-    }
+    }*/
 
+    public User(String email, String password, String userName) {
+        this.email = email;
+        this.password = password;
+        this.userName = userName;
+    }
 }
 
 
