@@ -17,7 +17,7 @@ export const AreaSlider = styled.div`
 
   @media screen and (min-width: 736px) {
     width: 56.8vw;
-    max-width: 630px;
+    max-width: 548px;
   }
 `;
 
@@ -27,10 +27,17 @@ export const ArticleAndComments = styled.div`
   box-sizing: border-box;
   width: 100%;
   max-height: 630px;
+  max-height: 548px;
   overflow: auto;
   box-sizing: border-box;
 
   &::-webkit-scrollbar {
     display: none;
+  }
+`;
+
+export const ExtraModalWraaper = styled.div`
+  .extra-feature-modal {
+    min-height: unset;
   }
 `;
