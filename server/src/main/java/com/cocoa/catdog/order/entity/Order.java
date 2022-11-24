@@ -5,6 +5,7 @@ import com.cocoa.catdog.audit.AuditingEntity;
 import com.cocoa.catdog.user.entity.User;
 import com.cocoa.catdog.wallet.entity.Wallet;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
@@ -26,7 +27,6 @@ public class Order extends AuditingEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "WALLET_ID")
-    @JsonBackReference
     private Wallet wallet;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)

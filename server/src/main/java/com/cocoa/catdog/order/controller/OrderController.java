@@ -40,7 +40,7 @@ public class OrderController {
     @GetMapping("/my-page")
     public ResponseEntity<MultiResponseDto<OrderResponseDto>> getMyOrders(@RequestHeader(name = "Authorization") String token,
                                                                         @RequestParam(required = false, defaultValue = "1") int page) {
-        Page<Order> orderPage = orderService.findProfileOrders(page, 10, jwtTokenizer.getUserId(token));
+        Page<Order> orderPage = orderService.findProfileOrders(page - 1, 10, jwtTokenizer.getUserId(token));
         List<Order> orders = orderPage.getContent();
 
         return new ResponseEntity<>(
@@ -48,9 +48,9 @@ public class OrderController {
     }
 
     @GetMapping("/profile/{user-id}")
-    public ResponseEntity<MultiResponseDto<OrderResponseDto>> getOrdersOfUser(@PathVariable("{user-id}") Long userId,
+    public ResponseEntity<MultiResponseDto<OrderResponseDto>> getOrdersOfUser(@PathVariable("user-id") Long userId,
                                                                         @RequestParam(required = false, defaultValue = "1") int page) {
-        Page<Order> orderPage = orderService.findProfileOrders(page, 10, userId);
+        Page<Order> orderPage = orderService.findProfileOrders(page - 1, 10, userId);
         List<Order> orders = orderPage.getContent();
 
         return new ResponseEntity<>(

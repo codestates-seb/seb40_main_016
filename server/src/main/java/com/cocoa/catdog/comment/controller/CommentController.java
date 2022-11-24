@@ -136,7 +136,7 @@ public class CommentController {
     @GetMapping("/my-page")
     public ResponseEntity getMyComments (@RequestHeader(name = "Authorization") String token,
                                          @RequestParam(required = false, defaultValue = "1") int page) {
-        Page<Comment> pageComments = commentService.findMyComments(page, 24, jwtTokenizer.getUserId(token));
+        Page<Comment> pageComments = commentService.findMyComments(page - 1, 24, jwtTokenizer.getUserId(token));
         List<Comment> comments = pageComments.getContent();
 
         return new ResponseEntity<>(

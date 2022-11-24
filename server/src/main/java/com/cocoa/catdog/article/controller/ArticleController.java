@@ -150,7 +150,7 @@ public class ArticleController {
     public ResponseEntity getMyArticles(@RequestHeader(name = "Authorization") String token,
                                         @RequestParam(required = false, defaultValue = "post") String tab,
                                         @RequestParam(required = false, defaultValue = "1") int page) {
-        Page<Article> pageArticles = articleService.findProfileArticles(page, 24, tab, jwtTokenizer.getUserId(token));
+        Page<Article> pageArticles = articleService.findProfileArticles(page - 1, 24, tab, jwtTokenizer.getUserId(token));
         List<Article> articles = pageArticles.getContent();
 
         return new ResponseEntity<>(
@@ -166,7 +166,7 @@ public class ArticleController {
         if(tab.equals("give")) {
             throw new BusinessLogicException(ExceptionCode.BAD_REQUEST);
         }
-        Page<Article> pageArticles = articleService.findProfileArticles(page, 24, tab, userId);
+        Page<Article> pageArticles = articleService.findProfileArticles(page - 1, 24, tab, userId);
         List<Article> articles = pageArticles.getContent();
 
         return new ResponseEntity<>(

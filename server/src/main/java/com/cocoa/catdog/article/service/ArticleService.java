@@ -122,7 +122,7 @@ public class ArticleService {
     }
 
     /*
-    * 프로필 게시물 조회
+    * 마이페이지 게시물 조회
     * */
     @Transactional(readOnly = true)
     public Page<Article> findProfileArticles(int page, int size, String tab, Long userId) {
@@ -136,17 +136,20 @@ public class ArticleService {
             List<Long> articleIdList = userService.findUser(userId).getWallet().getGives().stream()
                     .map(giveTake -> giveTake.getArticle().getArticleId())
                     .collect(Collectors.toList());
-            articlePage = articleRepository.findByIdIn(articleIdList, pageRequest);
+            articlePage = articleRepository.findByArticleIdIn(articleIdList, pageRequest);
         } else {
             User user = userService.findUser(userId);
             if(user.getUserType() == User.UserType.PERSON) {
                 throw new BusinessLogicException(ExceptionCode.BAD_REQUEST);
             }
-            List<Long> articleIdList = user.getWallet().getTakes().stream()
-                    .map(giveTake -> giveTake.getArticle().getArticleId())
-                    .collect(Collectors.toList());
-            articlePage = articleRepository.findByIdIn(articleIdList,
-                    PageRequest.of(page, size, Sort.by("yummyCnt").descending()
+            //yummyCnt가 아닌 거래내역을 기준으로 했을시
+//            List<Long> articleIdList = user.getWallet().getTakes().stream()
+//                    .map(giveTake -> giveTake.getArticle().getArticleId())
+//                    .collect(Collectors.toList());
+//            articlePage = articleRepository.findByArticleIdIn(articleIdList,
+//                    PageRequest.of(page, size, Sort.by("yummyCnt").descending()
+//                            .and(Sort.by("articleId").descending())));
+            articlePage = articleRepository.findAll(PageRequest.of(page, size, Sort.by("yummyCnt").descending()
                             .and(Sort.by("articleId").descending())));
         }
 

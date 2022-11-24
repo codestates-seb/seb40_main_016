@@ -19,6 +19,7 @@ public class UserProfileResponseDto {
     private String userGender;
     private LocalDate userBirth;
     private LocalDateTime createdAt;
+    private Long followerCnt;
 
 
 }
