@@ -24,7 +24,7 @@ const Item = ({ itemId, itemImg, itemName, price, stock, setTotalCost, setSelect
     <Wrapper>
       <ItemWrapper>
         <ImageCard imgUrl={itemImg} className="itemImg" />
-        <ItemInfo>
+        <ItemInfo isChecked={isChecked} stock={stock}>
           <p>{itemName}</p>
           <Price>
             <span>가격 : {price}알</span>
