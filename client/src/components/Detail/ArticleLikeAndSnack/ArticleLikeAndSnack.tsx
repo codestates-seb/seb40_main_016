@@ -4,9 +4,10 @@ import ShortenNumber from "../../../utills/ShortenNumber";
 import { PostArticleLike, DeleteArticleLike } from "../../../api/article";
 import { GetIsSubscribe, PostSubscribe, DeleteSubscribe } from "../../../api/subscribe";
 
-import { useRecoilValue, useRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import accessTokenState from "../../../_state/accessTokenState";
 import userInfoState from "../../../_state/userInfoState";
+import isLoginState from "../../../_state/isLoginState";
 
 import { Wrapper, GroupBtn, GroupCounter, Counter } from "./style";
 
@@ -26,6 +27,7 @@ const ArticleLikeAndSnack = ({ authorId, articleId = 5, likeCnt, yummyCnt = 0, a
   const [canSubscribe, setCanSubscribe] = useState<boolean>(false);
   const token = useRecoilValue(accessTokenState);
   const myinfo = useRecoilValue(userInfoState);
+  const isLogin = useRecoilValue(isLoginState);
 
   const checkCanSubscribe = () => {
     if (myinfo.userId === authorId) {
@@ -48,8 +50,8 @@ const ArticleLikeAndSnack = ({ authorId, articleId = 5, likeCnt, yummyCnt = 0, a
   };
 
   useEffect(() => {
-    if (myinfo && authorId) {
-      checkCanSubscribe();
+    checkCanSubscribe();
+    if (myinfo.userId && authorId) {
       checkAlreadySubscribe();
     }
   }, [authorId]);
@@ -80,6 +82,10 @@ const ArticleLikeAndSnack = ({ authorId, articleId = 5, likeCnt, yummyCnt = 0, a
     console.log("간식주기 끄기");
   };
 
+  const alertNeedLogin = () => {
+    alert("로그인이 필요한 기능입니다.");
+  };
+
   const onSubscribe = () => {
     PostSubscribe(myinfo.userId, authorId, token)
       .then((res) => {
@@ -106,6 +112,7 @@ const ArticleLikeAndSnack = ({ authorId, articleId = 5, likeCnt, yummyCnt = 0, a
             defaultStatus={gotLiked}
             onActive={onLike}
             onInactive={offLike}
+            disabled={!isLogin}
           />
           <ReactionBtn
             className="snack"
@@ -115,6 +122,7 @@ const ArticleLikeAndSnack = ({ authorId, articleId = 5, likeCnt, yummyCnt = 0, a
             defaultStatus={isSnackPopOn}
             onActive={onSnack}
             onInactive={offSnack}
+            disabled={!isLogin}
           />
         </GroupBtn>
         <GroupCounter>
@@ -130,6 +138,7 @@ const ArticleLikeAndSnack = ({ authorId, articleId = 5, likeCnt, yummyCnt = 0, a
             defaultStatus={isSubscribing}
             onActive={onSubscribe}
             onInactive={offSubscribe}
+            disabled={!isLogin}
           />
         ) : null}
       </Wrapper>

@@ -21,6 +21,7 @@ interface Prop {
   defaultStatus: boolean;
   onActive?: (arg?: any) => void;
   onInactive?: (arg?: any) => void;
+  disabled?: boolean;
 }
 
 const ReactionBtn = ({
@@ -31,6 +32,7 @@ const ReactionBtn = ({
   defaultStatus,
   onActive = () => {},
   onInactive = () => {},
+  disabled = false,
 }: Prop) => {
   const [checked, setChecked] = useState<boolean>(defaultStatus);
   const [isSnackGiver, setIsSnackGiver] = useState<boolean>(false);
@@ -49,6 +51,12 @@ const ReactionBtn = ({
         setIsSnackGiver(false);
       }
       onInactive();
+    }
+  };
+
+  const onDisabledClick = (e: React.MouseEvent) => {
+    if (inputRef.current.disabled) {
+      alert("로그인이 필요합니다.😆");
     }
   };
 
@@ -71,8 +79,15 @@ const ReactionBtn = ({
   return (
     <>
       <Wrapper className={className} id={`${btnId}-wrapper`}>
-        <HiddenInput ref={inputRef} id={btnId} type="checkbox" onChange={onChange} checked={checked} />
-        <Btn htmlFor={btnId}>
+        <HiddenInput
+          ref={inputRef}
+          id={btnId}
+          type="checkbox"
+          onChange={onChange}
+          checked={checked}
+          disabled={disabled}
+        />
+        <Btn htmlFor={btnId} onClick={onDisabledClick}>
           <Icon>
             {(() => {
               switch (btnType) {
