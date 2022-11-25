@@ -16,10 +16,10 @@ spring:
           auth: true
           starttls:
             enable: true
-  profiles:
-    include:
-      - aws
-      - credentials
+  servlet:
+  multipart:
+    max-file-size: 10MB
+    max-request-size: 30MB
 
 mail:
   address:
@@ -29,3 +29,16 @@ jwt:
     secret: ${JWT_SECRET_KEY}
   access-token-expiration-minutes: 1000000
   refresh-token-expiration-minutes: 420
+cloud:
+  aws:
+    credentials:
+      accessKey: ${s3_access_key}
+      secretKey: ${s3_secret_key}
+    s3:
+      bucket: catdogbucket
+      folder:
+        [ folderName ]: [ folderName/ ]
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
