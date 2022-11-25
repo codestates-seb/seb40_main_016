@@ -15,7 +15,7 @@ const Wrapper = styled.ul`
   }
 `;
 
-const Items = ({ items, setTotalCost, setSelectedItems }: ItemsProps) => {
+const Items = ({ items, isSubmit, setTotalCost, setSelectedItems }: ItemsProps) => {
   return (
     <Wrapper>
       {items &&
@@ -28,6 +28,7 @@ const Items = ({ items, setTotalCost, setSelectedItems }: ItemsProps) => {
               itemName={item.itemName}
               price={item.price}
               stock={item.stock}
+              isSubmit={isSubmit}
               setTotalCost={setTotalCost}
               setSelectedItems={setSelectedItems}
             />

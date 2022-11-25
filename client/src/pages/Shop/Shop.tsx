@@ -22,6 +22,7 @@ const Shop = () => {
   const [totalCost, setTotalCost] = useState<number>(0);
   const [selectedItems, setSelectedItems] = useState<OrderItemsProps[]>([]);
   const [isHover, setIsHover] = useState<boolean>(false);
+  const [isSubmit, setIsSubmit] = useState<boolean>(false);
 
   useEffect(() => {
     GetItems(token).then((res) => {
@@ -39,8 +40,13 @@ const Shop = () => {
     OrderItems(selectedItems, token).then(() => {
       alert("교환 성공!");
 
-      setTotalCost(() => 0);
-      setSelectedItems(() => []);
+      GetItems(token).then((res) => {
+        setItems(() => [...res.items]);
+        setYummy(() => res.wallet.yummy);
+        setTotalCost(() => 0);
+        setSelectedItems(() => []);
+        setIsSubmit(() => true);
+      });
     });
   };
   return (
@@ -49,7 +55,7 @@ const Shop = () => {
         <InnerContainer>
           <ShopWrapper>
             <ShopInfo />
-            <Items items={items} setTotalCost={setTotalCost} setSelectedItems={setSelectedItems} />
+            <Items items={items} isSubmit={isSubmit} setTotalCost={setTotalCost} setSelectedItems={setSelectedItems} />
             <Calculator yummy={yummy} totalCost={totalCost} />
             <CatPopUpWrapper isHover={isHover}>
               <CatPopUp>

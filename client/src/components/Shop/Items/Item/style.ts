@@ -11,6 +11,10 @@ export const Wrapper = styled.li`
     flex-direction: row;
     align-items: center;
   }
+
+  .soldOut {
+    color: var(--color-red);
+  }
 `;
 
 export const ItemWrapper = styled.div`
@@ -31,12 +35,12 @@ export const ItemWrapper = styled.div`
   }
 `;
 
-export const ItemInfo = styled.div<{ isChecked: boolean; stock: number }>`
+export const ItemInfo = styled.div<{ isChecked: boolean; isSubmit: boolean; stock: number }>`
   margin-top: 20px;
   margin-left: 10px;
 
-  ${({ isChecked, stock }) => css`
-    color: ${(isChecked || stock <= 0) && "var(--color-gray)"};
+  ${({ isChecked, isSubmit, stock }) => css`
+    color: ${((isChecked && !isSubmit) || stock <= 0) && "var(--color-gray)"};
   `}
 
   p {

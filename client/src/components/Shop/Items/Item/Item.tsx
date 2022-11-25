@@ -6,7 +6,7 @@ import Checkbox from "../../../Checkbox/Checkbox";
 import { Wrapper, ItemWrapper, ItemInfo, Price } from "./style";
 import { ItemProps } from "../../../../types/shop";
 
-const Item = ({ itemId, itemImg, itemName, price, stock, setTotalCost, setSelectedItems }: ItemProps) => {
+const Item = ({ itemId, itemImg, itemName, price, stock, isSubmit, setTotalCost, setSelectedItems }: ItemProps) => {
   const [isChecked, setIsChecked] = useState<boolean>(false);
   const [quantity, setQuantity] = useState<number>(1);
 
@@ -24,9 +24,9 @@ const Item = ({ itemId, itemImg, itemName, price, stock, setTotalCost, setSelect
 
   return (
     <Wrapper>
+      <ImageCard imgUrl={itemImg} className="itemImg" />
       <ItemWrapper>
-        <ImageCard imgUrl={itemImg} className="itemImg" />
-        <ItemInfo isChecked={isChecked} stock={stock}>
+        <ItemInfo isChecked={isChecked} isSubmit={isSubmit} stock={stock}>
           <p>{itemName}</p>
           <Price>
             <span>가격 : {price}알</span>
@@ -34,14 +34,18 @@ const Item = ({ itemId, itemImg, itemName, price, stock, setTotalCost, setSelect
               type="number"
               defaultValue={stock > 0 ? 1 : 0}
               max={stock}
-              min={0}
+              min={1}
               onChange={(e) => setQuantity(() => +e.target.value)}
-              disabled={isChecked ? true : false}
+              disabled={(isChecked && !isSubmit) || stock <= 0 ? true : false}
             />
           </Price>
         </ItemInfo>
       </ItemWrapper>
-      <Checkbox isChecked={isChecked} onClickCheck={onClickCheck} />
+      {stock > 0 ? (
+        <Checkbox isChecked={isSubmit ? false : isChecked} onClickCheck={onClickCheck} />
+      ) : (
+        <p className="soldOut">품절 되었습니다.</p>
+      )}
     </Wrapper>
   );
 };
