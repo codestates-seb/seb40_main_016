@@ -27,7 +27,6 @@ import {
   UserInfo,
   UserName,
   UserBtn,
-  FollowBtn,
   YummyBtn,
   SettingWalletBtn,
   UserDesc,
@@ -74,7 +73,6 @@ const MyPage = () => {
     GetMyProfile(token).then((res: any) => {
       setUserInfo(res.data);
       setUserWallet(res.data.wallet);
-      console.log(res.data);
     });
     handleUserType();
   }, []);

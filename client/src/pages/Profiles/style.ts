@@ -52,6 +52,7 @@ export const FollowBtn = styled.div`
   border-radius: 30px;
   border: 1px solid var(--color-green);
   background-color: var(--color-green);
+  cursor: pointer;
 
   svg {
     width: 25px;

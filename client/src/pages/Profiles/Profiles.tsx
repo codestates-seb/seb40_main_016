@@ -66,13 +66,11 @@ const Profiles = () => {
 
   useEffect(() => {
     GetIsSubscribe(myInfo.userId, profileUserId).then((res: any) => {
-      console.log("구독 여부", res.data);
       if (res.data === "ok") {
         setOnFollow(true);
       } else {
         setOnFollow(false);
       }
-      console.log("구독 반영", onFollow);
     });
   }, []);
 
@@ -94,7 +92,6 @@ const Profiles = () => {
     }
   };
 
-  console.log(useParams().id);
   return (
     <>
       <MyAccountPage>
