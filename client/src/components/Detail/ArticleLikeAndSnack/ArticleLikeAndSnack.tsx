@@ -4,9 +4,10 @@ import ShortenNumber from "../../../utills/ShortenNumber";
 import { PostArticleLike, DeleteArticleLike } from "../../../api/article";
 import { GetIsSubscribe, PostSubscribe, DeleteSubscribe } from "../../../api/subscribe";
 
-import { useRecoilValue, useRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import accessTokenState from "../../../_state/accessTokenState";
 import userInfoState from "../../../_state/userInfoState";
+import isLoginState from "../../../_state/isLoginState";
 
 import { Wrapper, GroupBtn, GroupCounter, Counter } from "./style";
 
@@ -23,23 +24,41 @@ const ArticleLikeAndSnack = ({ authorId, articleId = 5, likeCnt, yummyCnt = 0, a
   const [currentLike, setCurrentLike] = useState<number>();
   const [isSnackPopOn, setIsSnackPopOn] = useState<boolean>(false);
   const [isSubscribing, setIsSubscribing] = useState<boolean>(false);
+  const [canSubscribe, setCanSubscribe] = useState<boolean>(false);
   const token = useRecoilValue(accessTokenState);
   const myinfo = useRecoilValue(userInfoState);
+  const isLogin = useRecoilValue(isLoginState);
+
+  const checkCanSubscribe = () => {
+    if (myinfo.userId === authorId) {
+      setCanSubscribe(false);
+    } else {
+      setCanSubscribe(true);
+    }
+  };
+
+  const checkAlreadySubscribe = () => {
+    GetIsSubscribe(myinfo.userId, authorId)
+      .then((res) => {
+        if (res.data === "ok") {
+          setIsSubscribing(true);
+        } else {
+          setIsSubscribing(false);
+        }
+      })
+      .catch((e) => alert("구독 여부 확인에 실패했습니다.😿"));
+  };
+
+  useEffect(() => {
+    checkCanSubscribe();
+    if (myinfo.userId && authorId) {
+      checkAlreadySubscribe();
+    }
+  }, [authorId]);
 
   useEffect(() => {
     setCurrentLike(likeCnt);
-    if (myinfo && authorId) {
-      GetIsSubscribe(myinfo.userId, authorId)
-        .then((res) => {
-          if (res.data === "ok") {
-            setIsSubscribing(true);
-          } else {
-            setIsSubscribing(false);
-          }
-        })
-        .catch((e) => alert("구독 여부 확인에 실패했습니다.😿"));
-    }
-  }, [articleId, likeCnt, authorId]);
+  }, [likeCnt]);
 
   const onLike = () => {
     PostArticleLike(articleId, token)
@@ -61,6 +80,10 @@ const ArticleLikeAndSnack = ({ authorId, articleId = 5, likeCnt, yummyCnt = 0, a
   };
   const offSnack = () => {
     console.log("간식주기 끄기");
+  };
+
+  const alertNeedLogin = () => {
+    alert("로그인이 필요한 기능입니다.");
   };
 
   const onSubscribe = () => {
@@ -89,6 +112,7 @@ const ArticleLikeAndSnack = ({ authorId, articleId = 5, likeCnt, yummyCnt = 0, a
             defaultStatus={gotLiked}
             onActive={onLike}
             onInactive={offLike}
+            disabled={!isLogin}
           />
           <ReactionBtn
             className="snack"
@@ -98,21 +122,25 @@ const ArticleLikeAndSnack = ({ authorId, articleId = 5, likeCnt, yummyCnt = 0, a
             defaultStatus={isSnackPopOn}
             onActive={onSnack}
             onInactive={offSnack}
+            disabled={!isLogin}
           />
         </GroupBtn>
         <GroupCounter>
           <Counter>좋아요 {ShortenNumber(currentLike)}</Counter>
           {authorType !== "PERSON" ? <Counter>간식 {ShortenNumber(yummyCnt)}</Counter> : ""}
         </GroupCounter>
-        <ReactionBtn
-          className="subscribe"
-          btnId="subscribe"
-          btnType="subscribe"
-          userType={authorType}
-          defaultStatus={isSubscribing}
-          onActive={onSubscribe}
-          onInactive={offSubscribe}
-        />
+        {canSubscribe ? (
+          <ReactionBtn
+            className="subscribe"
+            btnId="subscribe"
+            btnType="subscribe"
+            userType={authorType}
+            defaultStatus={isSubscribing}
+            onActive={onSubscribe}
+            onInactive={offSubscribe}
+            disabled={!isLogin}
+          />
+        ) : null}
       </Wrapper>
     </>
   );

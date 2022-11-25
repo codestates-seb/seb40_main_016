@@ -7,6 +7,7 @@ import { PostCommentLike, DeleteCommentLike } from "../../../api/comment";
 import { useRecoilValue } from "recoil";
 import accessTokenState from "../../../_state/accessTokenState";
 import userInfoState from "../../../_state/userInfoState";
+import isLoginState from "../../../_state/isLoginState";
 
 import { Wrapper, GroupComment, Comment, Conts, GroupConts, Footer, AreaBtn } from "./style";
 import { ReactComponent as MoreIcon } from "../../../assets/img/more-icon.svg";
@@ -31,6 +32,7 @@ const Comments = ({
 }: Prop) => {
   const token = useRecoilValue(accessTokenState);
   const myInfo = useRecoilValue(userInfoState);
+  const isLogin = useRecoilValue(isLoginState);
 
   const onCommentLike = (item: CommentType) => {
     PostCommentLike(item.commentId, token)
@@ -97,6 +99,7 @@ const Comments = ({
                     onInactive={() => {
                       offCommentLike(item);
                     }}
+                    disabled={!isLogin}
                   />
                 </AreaBtn>
               </Comment>

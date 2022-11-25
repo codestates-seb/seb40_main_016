@@ -5,6 +5,7 @@ import { PostComments, GetComments } from "../../../api/comment";
 
 import { useRecoilValue } from "recoil";
 import accessTokenState from "../../../_state/accessTokenState";
+import isLoginState from "../../../_state/isLoginState";
 
 import { Wrapper, Icon } from "./style";
 
@@ -19,6 +20,7 @@ interface Prop {
 
 const CommentAdd = ({ className = "", articleId, setComments }: Prop) => {
   const token = useRecoilValue(accessTokenState);
+  const isLogin = useRecoilValue(isLoginState);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const [value, setValue] = useState<string>("");
 
@@ -27,20 +29,25 @@ const CommentAdd = ({ className = "", articleId, setComments }: Prop) => {
   };
 
   const onSubmit = () => {
-    PostComments(articleId, `${value}`, token)
-      .then((res) => {
-        if (res.status === 201) {
-          GetComments(articleId, 1, token)
-            .then((res) => {
-              setComments(res.data.data);
-              setValue("");
-            })
-            .catch((e) => {
-              alert("댓글 불러오기에 실패했습니다.😿");
-            });
-        }
-      })
-      .catch((e) => alert("댓글 등록에 실패했습니다.😿"));
+    if (isLogin) {
+      PostComments(articleId, `${value}`, token)
+        .then((res) => {
+          if (res.status === 201) {
+            GetComments(articleId, 1, token)
+              .then((res) => {
+                setComments(res.data.data);
+                setValue("");
+              })
+              .catch((e) => {
+                alert("댓글 불러오기에 실패했습니다.😿");
+              });
+          }
+        })
+        .catch((e) => alert("댓글 등록에 실패했습니다.😿"));
+    } else {
+      alert("로그인이 필요합니다.😆");
+      setValue("");
+    }
   };
 
   useAutosizeTextArea(textAreaRef.current, value);

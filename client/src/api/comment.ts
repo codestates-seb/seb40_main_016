@@ -11,7 +11,7 @@ export const GetComments = async (articleId: number, page: number, token: string
     });
     return response;
   } else {
-    const response = await axios.delete(`${URL}/comments/${articleId}?page=${page}`);
+    const response = await axios.get(`${URL}/comments/${articleId}?page=${page}`);
     return response;
   }
 };
