@@ -60,5 +60,9 @@ public class OrderService {
         return orderRepository.findAll(PageRequest.of(page, size, Sort.by("orderId").descending()));
     }
 
+    public Page<Order> findProfileOrders(int page, int size, Long userId) {
+        return orderRepository.findByWallet_User_UserId(userId, PageRequest.of(page, size, Sort.by("orderId").descending()));
+    }
+
 
 }

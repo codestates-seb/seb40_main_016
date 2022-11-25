@@ -85,17 +85,40 @@ public class User extends AuditingEntity {
         }
     }
 
+    public void addArticle(Article article) {
+        if(!articles.contains(article)) {
+            articles.add(article);
+            article.addUser(this);
+        }
+    }
+
+    public void addLike(Like like) {
+        if(!likes.contains(like)) {
+            likes.add(like);
+            like.addUser(this);
+        }
+    }
+
+    public void addReport(Report report) {
+        if(!reports.contains(report)) {
+            reports.add(report);
+            report.addUser(this);
+        }
+    }
+
     public void addComment(Comment comment) {
         if(!comments.contains(comment)) {
             comments.add(comment);
-        } else {
-            return;
+            comment.addUser(this);
         }
-        comment.addUser(this);
     }
 
     public void removeComment (Comment comment) {
         comments.remove(comment);
+    }
+
+    public void removeArticle (Article article) {
+        articles.remove(article);
     }
 
     public enum UserStatus {

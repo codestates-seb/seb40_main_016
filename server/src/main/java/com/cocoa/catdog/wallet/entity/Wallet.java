@@ -42,13 +42,15 @@ public class Wallet extends AuditingEntity {
     
 
     @OneToMany(mappedBy = "wallet")
-    @JsonManagedReference
+    @JsonIgnore
     private List<Order> orders = new ArrayList<>();
 
     @OneToMany(mappedBy = "giveWlt")
+    @JsonIgnore
     private List<GiveTake> gives = new ArrayList<>();
 
     @OneToMany(mappedBy = "takeWlt")
+    @JsonIgnore
     private List<GiveTake> takes = new ArrayList<>();
 
 

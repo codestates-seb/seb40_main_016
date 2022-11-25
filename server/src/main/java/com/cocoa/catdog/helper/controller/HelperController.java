@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/help")
 @Validated
@@ -23,7 +25,7 @@ public class HelperController {
 
 
     @PostMapping("/pw")
-    public ResponseEntity findPassword (@RequestBody HelperDto.PasswordPost requestBody) {
+    public ResponseEntity findPassword (@RequestBody @Valid HelperDto.PasswordPost requestBody) {
         String email = requestBody.getEmail();
         User user = userService.findUserByEmail(email);
 
