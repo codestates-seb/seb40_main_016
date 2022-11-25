@@ -20,7 +20,16 @@ spring:
   multipart:
     max-file-size: 10MB
     max-request-size: 30MB
-
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: ${GOOGLE_OAUTH_CLIENT_ID}
+            clientSecret: ${GOOGLE_OAUTH_SECRET}
+            scope:
+              - email
+              - profile
 mail:
   address:
     admin: admin@gmail.com
