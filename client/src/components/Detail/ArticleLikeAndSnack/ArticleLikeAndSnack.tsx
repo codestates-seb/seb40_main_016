@@ -23,23 +23,40 @@ const ArticleLikeAndSnack = ({ authorId, articleId = 5, likeCnt, yummyCnt = 0, a
   const [currentLike, setCurrentLike] = useState<number>();
   const [isSnackPopOn, setIsSnackPopOn] = useState<boolean>(false);
   const [isSubscribing, setIsSubscribing] = useState<boolean>(false);
+  const [canSubscribe, setCanSubscribe] = useState<boolean>(false);
   const token = useRecoilValue(accessTokenState);
   const myinfo = useRecoilValue(userInfoState);
 
+  const checkCanSubscribe = () => {
+    if (myinfo.userId === authorId) {
+      setCanSubscribe(false);
+    } else {
+      setCanSubscribe(true);
+    }
+  };
+
+  const checkAlreadySubscribe = () => {
+    GetIsSubscribe(myinfo.userId, authorId)
+      .then((res) => {
+        if (res.data === "ok") {
+          setIsSubscribing(true);
+        } else {
+          setIsSubscribing(false);
+        }
+      })
+      .catch((e) => alert("구독 여부 확인에 실패했습니다.😿"));
+  };
+
+  useEffect(() => {
+    if (myinfo && authorId) {
+      checkCanSubscribe();
+      checkAlreadySubscribe();
+    }
+  }, [authorId]);
+
   useEffect(() => {
     setCurrentLike(likeCnt);
-    if (myinfo && authorId) {
-      GetIsSubscribe(myinfo.userId, authorId)
-        .then((res) => {
-          if (res.data === "ok") {
-            setIsSubscribing(true);
-          } else {
-            setIsSubscribing(false);
-          }
-        })
-        .catch((e) => alert("구독 여부 확인에 실패했습니다.😿"));
-    }
-  }, [articleId, likeCnt, authorId]);
+  }, [likeCnt]);
 
   const onLike = () => {
     PostArticleLike(articleId, token)
@@ -104,15 +121,17 @@ const ArticleLikeAndSnack = ({ authorId, articleId = 5, likeCnt, yummyCnt = 0, a
           <Counter>좋아요 {ShortenNumber(currentLike)}</Counter>
           {authorType !== "PERSON" ? <Counter>간식 {ShortenNumber(yummyCnt)}</Counter> : ""}
         </GroupCounter>
-        <ReactionBtn
-          className="subscribe"
-          btnId="subscribe"
-          btnType="subscribe"
-          userType={authorType}
-          defaultStatus={isSubscribing}
-          onActive={onSubscribe}
-          onInactive={offSubscribe}
-        />
+        {canSubscribe ? (
+          <ReactionBtn
+            className="subscribe"
+            btnId="subscribe"
+            btnType="subscribe"
+            userType={authorType}
+            defaultStatus={isSubscribing}
+            onActive={onSubscribe}
+            onInactive={offSubscribe}
+          />
+        ) : null}
       </Wrapper>
     </>
   );
