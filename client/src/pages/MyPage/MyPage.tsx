@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useRecoilValue } from "recoil";
 
 import OuterContainer from "../../components/OuterContainer/OuterConainer";
 import InnerContainer from "../../components/InnerContainer/InnerContainer";
@@ -8,9 +9,12 @@ import MyPageArticles from "./MyPageArticles";
 import MyPageComments from "./MyPageComments";
 import MyPageSnacks from "./MyPageSnacks";
 
-import { GetUserInfo } from "../../api/user";
+import { GetMyProfile } from "../../api/mypage";
 
-import { ReactComponent as FollowIcon } from "../../assets/img/follow-icon.svg";
+import userInfoState from "../../_state/userInfoState";
+import accessTokenState from "../../_state/accessTokenState";
+
+import { ReactComponent as FishIcon } from "../../assets/img/fish-icon.svg";
 import { ReactComponent as BoneIcon } from "../../assets/img/bone-icon.svg";
 import { ReactComponent as SettingIcon } from "../../assets/img/setting-icon.svg";
 import { ReactComponent as WalletIcon } from "../../assets/img/wallet-icon.svg";
@@ -23,18 +27,65 @@ import {
   UserInfo,
   UserName,
   UserBtn,
+  FollowBtn,
+  YummyBtn,
+  SettingWalletBtn,
   UserDesc,
 } from "./style";
 
+interface UserInfoProps {
+  content: string;
+  email: string;
+  followCnt: number;
+  followerCnt: number;
+  userBirth: string;
+  userId: number;
+  userImg: string;
+  userName: string;
+  userType: string;
+}
+interface UserWalletProps {
+  walletId: number;
+  yummy: number;
+}
+
 const MyPage = () => {
+  const token = useRecoilValue(accessTokenState);
+  const myInfo = useRecoilValue(userInfoState);
   const [nowTab, setNowTab] = useState<string>("게시물");
-  // const [userInfo, setUserInfo] = useState<>()
+  const [onUserType, setOnUserType] = useState<string>("cats");
+  const [userInfo, setUserInfo] = useState<UserInfoProps>({
+    content: "",
+    email: "",
+    followCnt: 0,
+    followerCnt: 0,
+    userBirth: "",
+    userId: 0,
+    userImg: "",
+    userName: "",
+    userType: "",
+  });
+  const [userWallet, setUserWallet] = useState<UserWalletProps>({
+    walletId: 0,
+    yummy: 0,
+  });
 
   useEffect(() => {
-    GetUserInfo(23).then((res: any) => {
+    GetMyProfile(token).then((res: any) => {
+      setUserInfo(res.data);
+      setUserWallet(res.data.wallet);
       console.log(res.data);
     });
+    handleUserType();
   }, []);
+
+  const handleUserType = () => {
+    if (userInfo.userType === "DOG") {
+      setOnUserType("DOG");
+    } else {
+      setOnUserType("CAT");
+    }
+  };
 
   return (
     <>
@@ -43,38 +94,31 @@ const MyPage = () => {
           <InnerContainer>
             <ProfileContainer>
               <ProfileImg>
-                <Avatar
-                  bgUrl="https://user-images.githubusercontent.com/104997140/202975418-e73e747d-ef51-4258-bfce-6e46bcff15bd.png"
-                  width="150px"
-                  height="150px"
-                />
+                <Avatar bgUrl={userInfo.userImg} width="150px" height="150px" />
               </ProfileImg>
               <ProfileInfo>
                 <UserInfo>
-                  <UserName>산호</UserName>
+                  <UserName>{userInfo.userName}</UserName>
                   <UserBtn>
-                    <button>
-                      <FollowIcon />
-                    </button>
-                    <div>
-                      <BoneIcon />
-                      <span>간식 1000알</span>
-                    </div>
-                    <button>
+                    <YummyBtn>
+                      {onUserType === "CAT" ? <FishIcon /> : <BoneIcon />}
+                      <span>간식 {userWallet.yummy}알</span>
+                    </YummyBtn>
+                    <SettingWalletBtn>
                       <SettingIcon />
-                    </button>
-                    <button>
+                    </SettingWalletBtn>
+                    <SettingWalletBtn>
                       <WalletIcon />
-                    </button>
+                    </SettingWalletBtn>
                   </UserBtn>
                 </UserInfo>
                 <UserDesc>
                   <div>
                     <span>게시물 5</span>
-                    <span>팔로우 2</span>
-                    <span>팔로워 2</span>
+                    <span>팔로우 {userInfo.followCnt}</span>
+                    <span>팔로워 {userInfo.followerCnt}</span>
                   </div>
-                  <p>겁 많은 소심 강강쥐예요.</p>
+                  <p>{userInfo.content}</p>
                 </UserDesc>
               </ProfileInfo>
             </ProfileContainer>

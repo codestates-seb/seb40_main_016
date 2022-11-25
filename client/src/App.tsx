@@ -8,6 +8,7 @@ import Main from "./pages/Main/Main";
 import Signup from "./pages/Signup/Signup";
 import Login from "./pages/Login/Login";
 import Mypage from "./pages/MyPage/MyPage";
+import Profiles from "./pages/Profiles/Profiles";
 import NotFound from "./pages/NotFound/NotFound";
 import NewArticle from "./pages/Articles/NewArticle";
 import Detail from "./pages/Detail/Detail";
@@ -36,6 +37,7 @@ function App() {
           <Route index path="/signup" element={<Signup />} />
           <Route index path="/login" element={<Login />} />
           <Route index path="/mypage" element={<Mypage />} />
+          <Route index path="/profiles" element={<Profiles />} />
           <Route index path="/shop" element={<Shop />} />
           <Route index path="*" element={<NotFound />} />
         </Routes>
