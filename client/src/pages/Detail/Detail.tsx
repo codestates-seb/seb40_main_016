@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useRecoilValue } from "recoil";
 
 import Modal from "../../components/Modal/Modal";
@@ -52,6 +52,9 @@ const Detail = ({ articleId, isDetailOn, detailHandler }: Prop) => {
       },
     },
   ]);
+  const [commentTotalPage, setCommentTotalPage] = useState<number>(0);
+  const [commentCurrentPage, setCommentCurrentPage] = useState<number>(1);
+  const [commentLoading, setCommentLoading] = useState<boolean>(false);
 
   // states for extra feature popup
   const [isMorePopupOn, setIsMorePopupOn] = useState<boolean>(false);
@@ -70,7 +73,13 @@ const Detail = ({ articleId, isDetailOn, detailHandler }: Prop) => {
     }
   };
 
+  const scrollToTop = () => {
+    document.querySelector("#scroll-area").scrollTo(0, 0);
+  };
+
   useEffect(() => {
+    scrollToTop();
+
     if (articleId) {
       GetDetail(articleId, token)
         .then((res) => {
@@ -86,13 +95,34 @@ const Detail = ({ articleId, isDetailOn, detailHandler }: Prop) => {
 
       GetComments(articleId, 1, token)
         .then((res) => {
+          setCommentCurrentPage(1);
+          setCommentTotalPage(res.data.pageInfo.totalPages);
           setComments(res.data.data);
+          setCommentLoading(false);
         })
         .catch((e) => {
           alert("댓글 불러오기에 실패했습니다.😿");
         });
     }
   }, [articleId]);
+
+  const onScroll = (e: React.UIEvent<HTMLElement>) => {
+    const endPotintY = document.querySelector("#end-point").getBoundingClientRect();
+    const basePointY = document.querySelector("#base-point").getBoundingClientRect();
+
+    if (!commentLoading && commentCurrentPage !== commentTotalPage && endPotintY.bottom === basePointY.top) {
+      setCommentCurrentPage((prev) => prev + 1);
+      setCommentLoading(true);
+      GetComments(articleId, commentCurrentPage, token)
+        .then((res) => {
+          setComments((prev) => [...prev, ...res.data.data]);
+          setCommentLoading(false);
+        })
+        .catch((e) => {
+          alert("댓글 불러오기에 실패했습니다.😿");
+        });
+    }
+  };
 
   return (
     <>
@@ -113,7 +143,7 @@ const Detail = ({ articleId, isDetailOn, detailHandler }: Prop) => {
           <AreaSlider>
             <DetailSlider photos={articleImg} />
           </AreaSlider>
-          <ArticleAndComments>
+          <ArticleAndComments id="scroll-area" onScroll={onScroll}>
             <DetailArticle
               userId={authorId}
               createdAt={data?.createdAt}
@@ -132,12 +162,12 @@ const Detail = ({ articleId, isDetailOn, detailHandler }: Prop) => {
               gotLiked={gotLiked}
             />
             <Comments
-              articleId={articleId}
               comments={comments}
               setIsMorePopupOn={setIsMorePopupOn}
               setIsMyComment={setIsMyConts}
               setMorePopupType={setContsType}
               setMorePopupId={setContsId}
+              commentLoading={commentLoading}
             />
             <CommentAdd articleId={articleId} setComments={setComments} />
           </ArticleAndComments>

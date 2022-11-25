@@ -54,7 +54,7 @@ const CommentAdd = ({ className = "", articleId, setComments }: Prop) => {
 
   return (
     <>
-      <Wrapper className={className}>
+      <Wrapper id="base-point" className={className}>
         <Icon>
           <ChatIcon></ChatIcon>
         </Icon>
