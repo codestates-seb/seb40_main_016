@@ -1,5 +1,9 @@
 import styled from "styled-components";
 
+export const Wrapper = styled.div`
+  min-height: calc(100% - 63px);
+`;
+
 export const GroupComment = styled.div`
   width: 100%;
   padding: 0 16px;
@@ -32,18 +36,32 @@ export const GroupConts = styled.div`
 `;
 
 export const Footer = styled.footer`
+  display: flex;
+  align-items: center;
+  gap: 6px;
   margin-top: 5px;
   font-size: var(--fs-pc-small);
   color: var(--color-light-black);
 
   strong {
-    margin-left: 10px;
     font-weight: bold;
+  }
+
+  svg {
+    width: 13px;
+    cursor: pointer;
+
+    &:hover {
+      filter: grayscale(1);
+    }
+
+    * {
+      fill: var(--color-light-black);
+    }
   }
 `;
 
 export const AreaBtn = styled.div`
-  padding-top: 4px;
   svg {
     width: 14px;
   }
