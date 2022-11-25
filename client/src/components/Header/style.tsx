@@ -102,7 +102,7 @@ export const MenuBox = styled.div`
 `;
 
 export const LoginBoforeBtn = styled.button`
-  margin: 0px 10px 0px 0px;
+  margin: 0px 30px 0px 0px;
   width: 60px;
   height: 60px;
   border-radius: 100%;
