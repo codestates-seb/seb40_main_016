@@ -34,6 +34,7 @@ const Detail = ({ articleId, isDetailOn, detailHandler }: Prop) => {
   const [likeCnt, setLikeCnt] = useState<number>(0);
   const [gotLiked, setGotLiked] = useState<boolean>(false);
   const [articleImg, setArticleImg] = useState<string[]>([]);
+  const myId = myInfo.userId;
 
   const [comments, setComments] = useState<CommentType[]>([
     {
@@ -119,6 +120,8 @@ const Detail = ({ articleId, isDetailOn, detailHandler }: Prop) => {
               content={data?.content}
               setAuthorType={setAauthorType}
               setAuthorNickname={setAuthorNickname}
+              detailHandler={detailHandler}
+              myId={myId}
             />
             <ArticleLikeAndSnack
               authorId={authorId}
