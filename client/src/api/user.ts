@@ -22,7 +22,7 @@ export const PostLogin = async (body: LoginInfo) => {
 };
 
 export const GetUserInfo = async (userId: string | number) => {
-  const response = await axios.get(`${URL}/user/${userId}`, {
+  const response = await axios.get(`${URL}/user/profile/${userId}`, {
     headers: {
       "Content-Type": "application/json",
     },
