@@ -42,7 +42,6 @@ public class UserController {
     @PostMapping("/user")
     public ResponseEntity postUser(@Valid @RequestBody UserPostDto userPostDto) {
         User user = mapper.userPostDtoToUser(userPostDto);
-        user.setWallet(new Wallet());
         User response = userService.createUser(user);
 
         return new ResponseEntity<>(
@@ -79,15 +78,14 @@ public class UserController {
     }//response수정 요
 
     //회원 삭제
-    @DeleteMapping("/{user-id}")
+    @DeleteMapping("/user/{user-id}")
     public ResponseEntity deleteUser(@PathVariable("user-id") long userId) {
         userService.deleteUser(userId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-
-    //마이페이지에서 정보 조회
+//마이페이지에서 정보 조회
     @GetMapping("/user/my-page")
     @ResponseStatus(HttpStatus.OK)
     public UserResponseDto getProfile(@RequestHeader(name = "Authorization") String token) {

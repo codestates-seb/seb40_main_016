@@ -1,6 +1,8 @@
 package com.cocoa.catdog.user.service;
 
+import com.cocoa.catdog.wallet.entity.Wallet;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,12 +21,18 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
-@RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final CustomAuthorityUtils authorityUtils;
+
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, CustomAuthorityUtils authorityUtils) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.authorityUtils = authorityUtils;
+    }
 
     //회원 가입
     public User createUser(User user) {
@@ -32,6 +40,7 @@ public class UserService {
         //패스워드 암호화
         String encryptedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encryptedPassword);
+        user.setWallet(new Wallet());
         //db에 유저 역할 정보 저장
         List<String> roles = authorityUtils.createRoles(user.getEmail());
         user.setRoles(roles);
@@ -64,7 +73,7 @@ public class UserService {
     }
 
     //유저 이름으로 찾기
-    public User findUserName(String username){
+    public User findUserName(String username) {
         return userRepository.findByUserName(username);
     }
 
@@ -75,15 +84,15 @@ public class UserService {
 
     //전체 유저 조회
     public Page<User> findUsers(int page, int size) {
-        return userRepository.findAll(PageRequest.of(page,size, Sort.by("userId").descending()));
+        return userRepository.findAll(PageRequest.of(page, size, Sort.by("userId").descending()));
     }
 
     //생일 유저 조회
     public Page<User> findBirthUsers(int page, int size) {
         LocalDate today = LocalDate.now();
-        return userRepository.findByUserBirthIs(PageRequest.of(page,size, Sort.by("userId").descending()), today);
-    }
+        return userRepository.findByUserBirthIs(PageRequest.of(page, size, Sort.by("userId").descending()), today);
 
+    }
 
 
     //유저 삭제
@@ -92,11 +101,11 @@ public class UserService {
         userRepository.delete(findUser);
     }
 
-    // 유저 있는지 확인
+    // 유저 있는지 확인 by Id
     private User findVerifiedUser(long userId) {
         Optional<User> optionalUser = userRepository.findById(userId);
         //유저정보가 없으면 예외 발생
-        User findUser = optionalUser.orElseThrow(()-> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
+        User findUser = optionalUser.orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
         return findUser;
 
     }
@@ -109,9 +118,23 @@ public class UserService {
     }
 
     //가입된 이메일인지 확인
-    private void verifyExistsEmail(String email) {
-        Optional<User> user = userRepository.findByEmail(email);
-        if(user.isPresent())
+/*
+    public void verifyExistsEmail(String email) {
+        User user = userRepository.findByEmail(email);
+        if(user != null)
+            log.info("이미 가입된 유저입니다.");
             throw new BusinessLogicException(ExceptionCode.USER_EXISTS);
+
+    }
+*/
+
+    public void verifyExistsEmail(String email) {
+        if (userRepository.existsByEmail(email) == true) {
+            log.info("이미 가입된 유저입니다.");
+            throw new BusinessLogicException(ExceptionCode.USER_EXISTS);
+        } else {
+            log.info("가입되지 않은 유저입니다.");
+        }
     }
 }
+
