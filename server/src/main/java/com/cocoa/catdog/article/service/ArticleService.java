@@ -204,7 +204,7 @@ public class ArticleService {
     * */
     private String queryFilter(String query, String type) {
         switch (type) {
-            case "sort":
+            case "order":
                 switch (query) {
                     case "latest":
                         query = "articleId";
@@ -218,7 +218,7 @@ public class ArticleService {
                         throw new BusinessLogicException(ExceptionCode.BAD_QUERY); //case 에 맞지않는 쿼리는 전부 예외처리
                 }
                 break;
-            case "order":
+            case "sort":
                 switch (query) {
                     case "all":
                     case "followings":
