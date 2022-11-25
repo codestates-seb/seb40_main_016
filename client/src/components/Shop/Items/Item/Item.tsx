@@ -1,6 +1,8 @@
 import { useState } from "react";
+
 import ImageCard from "../../../ImageCard/ImageCard";
 import Checkbox from "../../../Checkbox/Checkbox";
+
 import { Wrapper, ItemWrapper, ItemInfo, Price } from "./style";
 import { ItemProps } from "../../../../types/shop";
 

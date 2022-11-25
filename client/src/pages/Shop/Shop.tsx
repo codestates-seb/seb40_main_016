@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
+
 import accessTokenState from "../../_state/accessTokenState";
 import OuterContainer from "../../components/OuterContainer/OuterConainer";
 import InnerContainer from "../../components/InnerContainer/InnerContainer";
@@ -7,9 +8,11 @@ import ShopInfo from "../../components/Shop/ShopInfo/ShopInfo";
 import Items from "../../components/Shop/Items/items";
 import Calculator from "../../components/Shop/Calculator/Calculator";
 import Button from "../../components/Button/Button";
-import { ReactComponent as MansaeCat } from "../../assets/img/mansae-cat.svg";
-import { Wrapper, ShopWrapper, CatPopUpWrapper, CatPopUp, Triangle, ButtonWrapper } from "./style";
 import { GetItems, OrderItems } from "../../api/shop";
+
+import { ReactComponent as MansaeCat } from "../../assets/img/mansae-cat.svg";
+
+import { Wrapper, ShopWrapper, CatPopUpWrapper, CatPopUp, Triangle, ButtonWrapper } from "./style";
 import { ItemProps, OrderItemsProps } from "../../types/shop";
 
 const Shop = () => {
