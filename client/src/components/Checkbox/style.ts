@@ -1,26 +1,11 @@
 import styled, { css } from "styled-components";
 
-export const SCustomCheckboxWrapper = styled.div`
+export const CheckboxWrapper = styled.div`
   position: relative;
   margin-left: 10px;
 `;
 
-export const SCustomCheckbox = styled.input<{ isChecked: boolean }>`
-  visibility: hidden;
-
-  ${({ isChecked }) =>
-    isChecked
-      ? css`
-          background-color: #66bb6a;
-          border-color: #66bb6a;
-          &:after: {
-            opacity: 1;
-          }
-        `
-      : null}
-`;
-
-export const SCustomLabel = styled.label<{ isChecked: boolean }>`
+export const Label = styled.label<{ isChecked: boolean }>`
   background-color: var(--color-white);
   border: 1px solid var(--color-gray);
   border-radius: 50%;
