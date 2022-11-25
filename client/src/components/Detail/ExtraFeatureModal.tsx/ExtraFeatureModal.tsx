@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 import Modal from "../../Modal/Modal";
@@ -8,6 +8,7 @@ import { GetComments, DeleteComment, PostCommentReport } from "../../../api/comm
 
 import { useRecoilValue } from "recoil";
 import accessTokenState from "../../../_state/accessTokenState";
+import isLoginState from "../../../_state/isLoginState";
 
 import { Wrapper } from "./style";
 import { CommentType } from "../../../types/comment";
@@ -26,6 +27,7 @@ interface Prop {
 const ExtraFeatureModal = ({ className, type, isMy = false, isOn, contsId, setIsOn, setComments, articleId }: Prop) => {
   const navigate = useNavigate();
   const token = useRecoilValue(accessTokenState);
+  const isLogin = useRecoilValue(isLoginState);
 
   const onReport = () => {
     if (type === "article") {
@@ -137,6 +139,7 @@ const ExtraFeatureModal = ({ className, type, isMy = false, isOn, contsId, setIs
             btnHoverColor="dark-ivory"
             textColor="red"
             fontSize="pc-regular"
+            disabled={!isLogin}
           >
             신고
           </Button>
