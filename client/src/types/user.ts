@@ -20,3 +20,11 @@ export interface LoginInfo {
   email: string;
   password: string;
 }
+
+export interface EditProfileInfo {
+  userName: string;
+  userIntro: string;
+  userBirth: string;
+  userGender: "MALE" | "FEMALE";
+  userType: "PERSON" | "CAT" | "DOG" | "";
+}
