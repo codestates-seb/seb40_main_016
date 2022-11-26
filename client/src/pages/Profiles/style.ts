@@ -44,7 +44,7 @@ export const UserBtn = styled.div`
 
 export const FollowBtn = styled.div`
   margin-right: 20px;
-  padding: 0px 40px;
+  padding: 0px 35px;
   height: 40px;
   display: flex;
   align-items: center;
@@ -52,19 +52,13 @@ export const FollowBtn = styled.div`
   border-radius: 30px;
   border: 1px solid var(--color-green);
   background-color: var(--color-green);
+  color: var(--color-white);
+  font-size: var(--fs-pc-small);
   cursor: pointer;
-
-  svg {
-    width: 25px;
-    filter: invert(100%) sepia(86%) saturate(3%) hue-rotate(176deg) brightness(105%) contrast(100%);
-  }
 
   &.follow {
     background-color: var(--color-white);
-    border: 1px solid var(--color-gray);
-    svg {
-      filter: invert(0%) sepia(4%) saturate(0%) hue-rotate(309deg) brightness(100%) contrast(107%);
-    }
+    color: var(--color-green);
   }
 `;
 

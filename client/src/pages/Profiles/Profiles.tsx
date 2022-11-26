@@ -15,7 +15,8 @@ import { GetIsSubscribe, PostSubscribe, DeleteSubscribe } from "../../api/subscr
 import userInfoState from "../../_state/userInfoState";
 import accessTokenState from "../../_state/accessTokenState";
 
-import { ReactComponent as FollowIcon } from "../../assets/img/follow-icon.svg";
+import { ReactComponent as SubIcon } from "../../assets/img/subscribe-simple-icon.svg";
+import { ReactComponent as SubColorIcon } from "../../assets/img/subscribe-simple-color-icon.svg";
 
 import {
   MyAccountPage,
@@ -105,7 +106,7 @@ const Profiles = () => {
                 <UserInfo>
                   <UserName>{userInfo.userName}</UserName>
                   <FollowBtn className={onFollow ? "follow" : ""} onClick={handleFollow}>
-                    <FollowIcon />
+                    {onFollow ? <span>팔로잉</span> : <span>팔로우</span>}
                   </FollowBtn>
                 </UserInfo>
                 <UserDesc>
