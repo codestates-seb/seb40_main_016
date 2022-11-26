@@ -111,12 +111,14 @@ const Detail = ({ articleId, isDetailOn, detailHandler }: Prop) => {
     const basePointY = document.querySelector("#base-point").getBoundingClientRect();
 
     if (!commentLoading && commentCurrentPage !== commentTotalPage && endPotintY.bottom === basePointY.top) {
-      setCommentCurrentPage((prev) => prev + 1);
       setCommentLoading(true);
-      GetComments(articleId, commentCurrentPage, token)
+      GetComments(articleId, commentCurrentPage + 1, token)
         .then((res) => {
           setComments((prev) => [...prev, ...res.data.data]);
           setCommentLoading(false);
+          setCommentCurrentPage((prev) => {
+            return prev + 1;
+          });
         })
         .catch((e) => {
           alert("댓글 불러오기에 실패했습니다.😿");
