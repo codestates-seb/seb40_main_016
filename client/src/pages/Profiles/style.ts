@@ -15,6 +15,13 @@ export const ProfileImg = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  .profile-avatar {
+    @media screen and (max-width: 736px) {
+      width: 110px;
+      height: 110px;
+    }
+  }
 `;
 
 export const ProfileInfo = styled.div`
@@ -34,6 +41,10 @@ export const UserName = styled.span`
   align-items: center;
   font-weight: 700;
   font-size: var(--fs-pc-xlarge);
+
+  @media screen and (max-width: 736px) {
+    font-size: var(--fs-pc-large);
+  }
 `;
 
 export const UserBtn = styled.div`

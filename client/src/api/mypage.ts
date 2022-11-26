@@ -23,3 +23,12 @@ export const GetProfile = async (userId: string | number) => {
   });
   return response;
 };
+
+export const GetUserArticles = async (userId: string | number) => {
+  const response = await axios.get(`${URL}/articles/profile/${userId}`, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  return response;
+};

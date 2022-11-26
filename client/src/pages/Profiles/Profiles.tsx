@@ -6,7 +6,7 @@ import OuterContainer from "../../components/OuterContainer/OuterConainer";
 import InnerContainer from "../../components/InnerContainer/InnerContainer";
 import Tab from "../../components/Tab/Tab";
 import Avatar from "../../components/Avatar/Avatar";
-import MyPageArticles from "../MyPage/MyPageArticles";
+import ProfileArticles from "./ProfileArticles";
 import MyPageSnacks from "../MyPage/MyPageSnacks";
 
 import { GetProfile } from "../../api/mypage";
@@ -14,9 +14,6 @@ import { GetIsSubscribe, PostSubscribe, DeleteSubscribe } from "../../api/subscr
 
 import userInfoState from "../../_state/userInfoState";
 import accessTokenState from "../../_state/accessTokenState";
-
-import { ReactComponent as SubIcon } from "../../assets/img/subscribe-simple-icon.svg";
-import { ReactComponent as SubColorIcon } from "../../assets/img/subscribe-simple-color-icon.svg";
 
 import {
   MyAccountPage,
@@ -100,7 +97,7 @@ const Profiles = () => {
           <InnerContainer>
             <ProfileContainer>
               <ProfileImg>
-                <Avatar bgUrl={userInfo.userImg} width="150px" height="150px" />
+                <Avatar className="profile-avatar" bgUrl={userInfo.userImg} width="150px" height="150px" />
               </ProfileImg>
               <ProfileInfo>
                 <UserInfo>
@@ -127,7 +124,7 @@ const Profiles = () => {
                 case "게시물":
                   return (
                     <>
-                      <MyPageArticles />
+                      <ProfileArticles profileUserId={profileUserId} />
                     </>
                   );
                 case "간식":
