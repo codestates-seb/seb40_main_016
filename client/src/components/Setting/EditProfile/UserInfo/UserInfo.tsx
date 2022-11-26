@@ -1,9 +1,10 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import { ChangeEvent, useState } from "react";
-import styled from "styled-components";
 
 import Input from "../../../Input/Input";
 import Gender from "../../../Gender/Gender";
 
+import { Wrapper, TextareaWrapper, Textarea, ErrorMsgStyle } from "./style";
 import { EditProfileInfo } from "../../../../types/user";
 import CheckBirth from "../../../../utills/BirthYearCheck";
 import { isUserName } from "../../../../utills/Regex";
@@ -14,29 +15,18 @@ interface UserInfoProps {
   setHasNoError: (arg: boolean) => void;
 }
 
-export const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 80%;
-  gap: 15px;
-  margin: 40px 0;
-
-  label {
-    margin-bottom: 10px;
-  }
-`;
-
 const UserInfo = ({ userInfo, setUserInfo, setHasNoError }: UserInfoProps) => {
-  const [userNameErr, setUserNameErr] = useState(false);
-  const [userIntroErr, setUserIntroErr] = useState(false);
-  const [birthErr, setBirthErr] = useState(false);
+  const [userNameErr, setUserNameErr] = useState<boolean>(false);
+  const [userIntroErr, setUserIntroErr] = useState<boolean>(false);
+  const [birthErr, setBirthErr] = useState<boolean>(false);
 
   const onChangeUserName = (e: ChangeEvent<HTMLInputElement>) => {
     setUserNameErr(!isUserName(e.target.value));
     setUserInfo((userInfo) => ({ ...userInfo, userName: e.target.value }));
   };
 
-  const onChangeUserIntro = (e: ChangeEvent<HTMLInputElement>) => {
+  const onChangeUserIntro = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    setUserIntroErr(() => (e.target.value.length >= 150 ? true : false));
     setUserInfo((userInfo) => ({ ...userInfo, userIntro: e.target.value }));
   };
 
@@ -79,16 +69,16 @@ const UserInfo = ({ userInfo, setUserInfo, setHasNoError }: UserInfoProps) => {
         />
       )}
 
-      <Input
-        type="text"
-        value={userInfo.userIntro}
-        placeholder="자기소개를 입력하세요"
-        onChange={onChangeUserIntro}
-        height="100px"
-        label="소개"
-        isError={userIntroErr}
-        errorMsg="자기소개는 150자까지만 입력해 주세요."
-      />
+      <TextareaWrapper>
+        <label>소개</label>
+        <Textarea
+          placeholder="자기소개를 입력하세요"
+          maxLength={150}
+          defaultValue={userInfo.userIntro}
+          onChange={(e) => onChangeUserIntro(e)}
+        />
+        {userIntroErr && <ErrorMsgStyle>자기소개는 150자까지만 입력해 주세요.</ErrorMsgStyle>}
+      </TextareaWrapper>
 
       {userInfo.userType !== "PERSON" ? (
         <>

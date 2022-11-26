@@ -32,6 +32,7 @@ export const AvatarWrapper = styled.div`
     color: var(--color-sky);
     border: none;
     margin-top: 20px;
+    cursor: pointer;
   }
 `;
 
