@@ -39,7 +39,7 @@ interface UserInfoProps {
   userId: number;
   userImg: string;
   userName: string;
-  userType: string;
+  userType: "PERSON" | "CAT" | "DOG";
 }
 
 const Profiles = ({ detailHandler, setArticleId }: Prop) => {
@@ -58,7 +58,7 @@ const Profiles = ({ detailHandler, setArticleId }: Prop) => {
     userId: 0,
     userImg: "",
     userName: "",
-    userType: "",
+    userType: "CAT",
   });
 
   useEffect(() => {
@@ -126,32 +126,61 @@ const Profiles = ({ detailHandler, setArticleId }: Prop) => {
               </ProfileInfo>
             </ProfileContainer>
           </InnerContainer>
-          <Tab tabName="test" tabList={["게시물", "간식"]} barPosition="top" setNowTab={setNowTab}></Tab>
-          <div>
-            {(() => {
-              switch (nowTab) {
-                case "게시물":
-                  return (
-                    <>
-                      <ProfileArticles
-                        profileUserId={profileUserId}
-                        handleArticlesNum={handleArticlesNum}
-                        detailHandler={detailHandler}
-                        setArticleId={setArticleId}
-                      />
-                    </>
-                  );
-                case "간식":
-                  return (
-                    <>
-                      <ProfileSnacks profileUserId={profileUserId} />
-                    </>
-                  );
-                default:
-                  return <></>;
-              }
-            })()}
-          </div>
+          {userInfo.userType !== "PERSON" ? (
+            <>
+              <Tab tabName="test" tabList={["게시물", "간식"]} barPosition="top" setNowTab={setNowTab}></Tab>
+              <div>
+                {(() => {
+                  switch (nowTab) {
+                    case "게시물":
+                      return (
+                        <>
+                          <ProfileArticles
+                            profileUserId={profileUserId}
+                            handleArticlesNum={handleArticlesNum}
+                            detailHandler={detailHandler}
+                            setArticleId={setArticleId}
+                            userType={userInfo.userType}
+                          />
+                        </>
+                      );
+                    case "간식":
+                      return (
+                        <>
+                          <ProfileSnacks profileUserId={profileUserId} />
+                        </>
+                      );
+                    default:
+                      return <></>;
+                  }
+                })()}
+              </div>
+            </>
+          ) : (
+            <>
+              <Tab tabName="test" tabList={["게시물"]} barPosition="top" setNowTab={setNowTab}></Tab>
+              <div>
+                {(() => {
+                  switch (nowTab) {
+                    case "게시물":
+                      return (
+                        <>
+                          <ProfileArticles
+                            profileUserId={profileUserId}
+                            handleArticlesNum={handleArticlesNum}
+                            detailHandler={detailHandler}
+                            setArticleId={setArticleId}
+                            userType={userInfo.userType}
+                          />
+                        </>
+                      );
+                    default:
+                      return <></>;
+                  }
+                })()}
+              </div>
+            </>
+          )}
         </OuterContainer>
       </MyAccountPage>
     </>

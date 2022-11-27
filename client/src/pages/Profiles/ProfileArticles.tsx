@@ -11,6 +11,8 @@ import { ImgContainer, Dim, InfoBox, Info } from "../Main/style";
 
 import { ReactComponent as BoneIcon } from "../../assets/img/bone-icon.svg";
 import { ReactComponent as BoneWIcon } from "../../assets/img/bone-w-icon.svg";
+import { ReactComponent as FishIcon } from "../../assets/img/fish-icon.svg";
+import { ReactComponent as FishWIcon } from "../../assets/img/fish-w-icon.svg";
 import { ReactComponent as CrownIcon } from "../../assets/img/crown-icon.svg";
 
 const MostRecieved = styled.div`
@@ -142,6 +144,7 @@ interface Props {
   handleArticlesNum: (arg: number) => void;
   detailHandler: () => void;
   setArticleId: Dispatch<SetStateAction<number>>;
+  userType: "PERSON" | "CAT" | "DOG";
 }
 
 interface UserArticles {
@@ -155,7 +158,7 @@ interface UserArticles {
   yummyCnt: number;
 }
 
-const ProfileArticles = ({ profileUserId, handleArticlesNum, detailHandler, setArticleId }: Props) => {
+const ProfileArticles = ({ profileUserId, handleArticlesNum, detailHandler, setArticleId, userType }: Props) => {
   const [open, setOpen] = useState<boolean>(false);
   const [userArticles, setUserArticles] = useState<UserArticles[]>([]);
   const [mostReceivedArticles, setMostReceivedArticles] = useState<UserArticles[]>([]);
@@ -202,7 +205,8 @@ const ProfileArticles = ({ profileUserId, handleArticlesNum, detailHandler, setA
                     <Avatar className="avatar" bgUrl={article.articleImg} width="120px" height="120px"></Avatar>
                   </AvatarBox>
                   <div className="avatar-snack">
-                    <BoneIcon /> <span>{article.yummyCnt}알</span>
+                    {userType === "CAT" ? <FishIcon /> : <BoneIcon />}
+                    <span>{article.yummyCnt}알</span>
                   </div>
                 </Article>
               ))}
@@ -220,16 +224,10 @@ const ProfileArticles = ({ profileUserId, handleArticlesNum, detailHandler, setA
                   handleImgBoxClick(article.articleId);
                 }}
               >
-                <Dim>
-                  <InfoBox>
-                    <Info>
-                      <BoneWIcon />
-                      {article.yummyCnt}
-                    </Info>
-                  </InfoBox>
-                </Dim>
+                <Dim />
                 <SnackCount>
-                  <BoneWIcon /> {article.yummyCnt}알
+                  {userType === "CAT" ? <FishWIcon /> : <BoneWIcon />}
+                  {article.yummyCnt}알
                 </SnackCount>
                 <ImageCard className="img-card" imgUrl={article.articleImg} onClick={handleOpen}></ImageCard>
               </ImgBox>
