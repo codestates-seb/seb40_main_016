@@ -41,7 +41,7 @@ interface UserInfoProps {
   userId: number;
   userImg: string;
   userName: string;
-  userType: string;
+  userType: "PERSON" | "CAT" | "DOG";
 }
 interface UserWalletProps {
   walletId: number;
@@ -52,7 +52,6 @@ const MyPage = () => {
   const token = useRecoilValue(accessTokenState);
   const myInfo = useRecoilValue(userInfoState);
   const [nowTab, setNowTab] = useState<string>("게시물");
-  const [onUserType, setOnUserType] = useState<string>("cats");
   const [userInfo, setUserInfo] = useState<UserInfoProps>({
     content: "",
     email: "",
@@ -62,7 +61,7 @@ const MyPage = () => {
     userId: 0,
     userImg: "",
     userName: "",
-    userType: "",
+    userType: "CAT",
   });
   const [userWallet, setUserWallet] = useState<UserWalletProps>({
     walletId: 0,
@@ -74,16 +73,7 @@ const MyPage = () => {
       setUserInfo(res.data);
       setUserWallet(res.data.wallet);
     });
-    handleUserType();
   }, []);
-
-  const handleUserType = () => {
-    if (userInfo.userType === "DOG") {
-      setOnUserType("DOG");
-    } else {
-      setOnUserType("CAT");
-    }
-  };
 
   return (
     <>
@@ -92,23 +82,27 @@ const MyPage = () => {
           <InnerContainer>
             <ProfileContainer>
               <ProfileImg>
-                <Avatar bgUrl={userInfo.userImg} width="150px" height="150px" />
+                <Avatar className="profile-avatar" bgUrl={userInfo.userImg} width="150px" height="150px" />
               </ProfileImg>
               <ProfileInfo>
                 <UserInfo>
-                  <UserName>{userInfo.userName}</UserName>
-                  <UserBtn>
-                    <YummyBtn>
-                      {onUserType === "CAT" ? <FishIcon /> : <BoneIcon />}
-                      <span>간식 {userWallet.yummy}알</span>
-                    </YummyBtn>
-                    <SettingWalletBtn>
-                      <SettingIcon />
-                    </SettingWalletBtn>
-                    <SettingWalletBtn>
-                      <WalletIcon />
-                    </SettingWalletBtn>
-                  </UserBtn>
+                  <div>
+                    <UserName>{userInfo.userName}</UserName>
+                  </div>
+                  <div>
+                    <UserBtn>
+                      <YummyBtn>
+                        {userInfo.userType === "DOG" ? <BoneIcon /> : <FishIcon />}
+                        <span>간식 {userWallet.yummy}알</span>
+                      </YummyBtn>
+                      <SettingWalletBtn>
+                        <SettingIcon />
+                      </SettingWalletBtn>
+                      <SettingWalletBtn>
+                        <WalletIcon />
+                      </SettingWalletBtn>
+                    </UserBtn>
+                  </div>
                 </UserInfo>
                 <UserDesc>
                   <div>
@@ -121,33 +115,61 @@ const MyPage = () => {
               </ProfileInfo>
             </ProfileContainer>
           </InnerContainer>
-          <Tab tabName="test" tabList={["게시물", "댓글", "간식"]} barPosition="top" setNowTab={setNowTab}></Tab>
-          <div>
-            {(() => {
-              switch (nowTab) {
-                case "게시물":
-                  return (
-                    <>
-                      <MyPageArticles />
-                    </>
-                  );
-                case "댓글":
-                  return (
-                    <>
-                      <MyPageComments />
-                    </>
-                  );
-                case "간식":
-                  return (
-                    <>
-                      <MyPageSnacks />
-                    </>
-                  );
-                default:
-                  return <></>;
-              }
-            })()}
-          </div>
+          {userInfo.userType !== "PERSON" ? (
+            <>
+              <Tab tabName="test" tabList={["게시물", "댓글", "간식"]} barPosition="top" setNowTab={setNowTab}></Tab>
+              <div>
+                {(() => {
+                  switch (nowTab) {
+                    case "게시물":
+                      return (
+                        <>
+                          <MyPageArticles />
+                        </>
+                      );
+                    case "댓글":
+                      return (
+                        <>
+                          <MyPageComments />
+                        </>
+                      );
+                    case "간식":
+                      return (
+                        <>
+                          <MyPageSnacks />
+                        </>
+                      );
+                    default:
+                      return <></>;
+                  }
+                })()}
+              </div>
+            </>
+          ) : (
+            <>
+              <Tab tabName="test" tabList={["게시물", "댓글"]} barPosition="top" setNowTab={setNowTab}></Tab>
+              <div>
+                {(() => {
+                  switch (nowTab) {
+                    case "게시물":
+                      return (
+                        <>
+                          <MyPageArticles />
+                        </>
+                      );
+                    case "댓글":
+                      return (
+                        <>
+                          <MyPageComments />
+                        </>
+                      );
+                    default:
+                      return <></>;
+                  }
+                })()}
+              </div>
+            </>
+          )}
         </OuterContainer>
       </MyAccountPage>
     </>

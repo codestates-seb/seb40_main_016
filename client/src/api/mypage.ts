@@ -13,6 +13,15 @@ export const GetMyProfile = async (token: string) => {
   return response;
 };
 
+export const GetMyArticles = async (token: string, post: string) => {
+  const response = await axios.get(`${URL}/articles/my-page?tab=${post}`, {
+    headers: {
+      Authorization: `${token}`,
+    },
+  });
+  return response;
+};
+
 // 프로필
 
 export const GetProfile = async (userId: string | number) => {
