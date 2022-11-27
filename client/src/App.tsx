@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import ScrollToTop from "./utills/ScrollToTop";
@@ -33,6 +33,21 @@ function App() {
   const detailHandler = () => {
     setIsDetailOn(!isDetailOn);
   };
+
+  useEffect(() => {
+    if (isOn || isDetailOn) {
+      document.body.style.cssText = `
+      position: fixed; 
+      top: -${window.scrollY}px;
+      overflow-y: hidden;
+      width: 100%;`;
+      return () => {
+        const scrollY = document.body.style.top;
+        document.body.style.cssText = "";
+        window.scrollTo(0, parseInt(scrollY || "0", 10) * -1);
+      };
+    }
+  }, [isOn, isDetailOn]);
 
   return (
     <>
