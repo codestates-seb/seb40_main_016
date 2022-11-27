@@ -21,6 +21,7 @@ interface Prop {
   setMorePopupType: Dispatch<SetStateAction<"article" | "comment">>;
   setMorePopupId: Dispatch<SetStateAction<number>>;
   commentLoading: boolean;
+  setCommentConts: Dispatch<SetStateAction<string>>;
 }
 
 const Comments = ({
@@ -30,6 +31,7 @@ const Comments = ({
   setMorePopupType,
   setMorePopupId,
   commentLoading,
+  setCommentConts,
 }: Prop) => {
   const token = useRecoilValue(accessTokenState);
   const myInfo = useRecoilValue(userInfoState);
@@ -63,6 +65,10 @@ const Comments = ({
     checkIsMyComment(item.user.userId);
     setMorePopupId(item.commentId);
     setIsMorePopupOn(true);
+
+    if (item.user.userId === myInfo.userId) {
+      setCommentConts(item.content);
+    }
   };
 
   return (

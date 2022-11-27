@@ -8,13 +8,14 @@ import ArticleLikeAndSnack from "../../components/Detail/ArticleLikeAndSnack/Art
 import Comments from "../../components/Detail/Comments/Comments";
 import CommentAdd from "../../components/Detail/CommentAdd/CommentAdd";
 import ExtraFeatureModal from "../../components/Detail/ExtraFeatureModal.tsx/ExtraFeatureModal";
+import CommentEditModal from "../../components/Detail/CommentEditModal/CommentEditModal";
 import { GetDetail } from "../../api/article";
 import { GetComments } from "../../api/comment";
 
 import accessTokenState from "../../_state/accessTokenState";
 import userInfoState from "../../_state/userInfoState";
 
-import { DetailViewer, AreaSlider, ArticleAndComments, ExtraModalWraaper } from "./style";
+import { DetailViewer, AreaSlider, ArticleAndComments, ExtraModalWrapper, CommentEditModalWrapper } from "./style";
 import { DetailData } from "../../types/article";
 import { CommentType } from "../../types/comment";
 
@@ -22,9 +23,10 @@ interface Prop {
   articleId: number;
   isDetailOn: boolean;
   detailHandler: () => void;
+  editPopupHandler: () => void;
 }
 
-const Detail = ({ articleId, isDetailOn, detailHandler }: Prop) => {
+const Detail = ({ articleId, isDetailOn, detailHandler, editPopupHandler }: Prop) => {
   const token = useRecoilValue(accessTokenState);
   const myInfo = useRecoilValue(userInfoState);
   const [data, setData] = useState<DetailData>();
@@ -62,6 +64,10 @@ const Detail = ({ articleId, isDetailOn, detailHandler }: Prop) => {
   const [isMyConts, setIsMyConts] = useState<boolean>();
   const [contsId, setContsId] = useState<number>();
 
+  //state for comment edit popup
+  const [isCommentEditPopupOn, setIsCommentEditPopupOn] = useState<boolean>(false);
+  const [commentConts, setCommentConts] = useState<string>("");
+
   const checkIsMyArticle = () => {
     if (articleId && authorId) {
       if (myInfo.userId === authorId) {
@@ -73,12 +79,8 @@ const Detail = ({ articleId, isDetailOn, detailHandler }: Prop) => {
     }
   };
 
-  const scrollToTop = () => {
-    document.querySelector("#scroll-area").scrollTo(0, 0);
-  };
-
   useEffect(() => {
-    scrollToTop();
+    document.querySelector("#scroll-area").scrollTo(0, 0);
 
     if (articleId) {
       GetDetail(articleId, token)
@@ -126,6 +128,11 @@ const Detail = ({ articleId, isDetailOn, detailHandler }: Prop) => {
     }
   };
 
+  const commentEditPopupHandler = () => {
+    setIsMorePopupOn(false);
+    setIsCommentEditPopupOn(!isCommentEditPopupOn);
+  };
+
   return (
     <>
       <Modal
@@ -170,12 +177,13 @@ const Detail = ({ articleId, isDetailOn, detailHandler }: Prop) => {
               setMorePopupType={setContsType}
               setMorePopupId={setContsId}
               commentLoading={commentLoading}
+              setCommentConts={setCommentConts}
             />
             <CommentAdd articleId={articleId} setComments={setComments} />
           </ArticleAndComments>
         </DetailViewer>
       </Modal>
-      <ExtraModalWraaper>
+      <ExtraModalWrapper>
         <ExtraFeatureModal
           className={"extra-feature-modal"}
           type={contsType}
@@ -185,8 +193,21 @@ const Detail = ({ articleId, isDetailOn, detailHandler }: Prop) => {
           setIsOn={setIsMorePopupOn}
           setComments={setComments}
           articleId={articleId}
+          editPopupHandler={editPopupHandler}
+          detailHandler={detailHandler}
+          commentEditPopupHandler={commentEditPopupHandler}
         />
-      </ExtraModalWraaper>
+      </ExtraModalWrapper>
+      <CommentEditModalWrapper>
+        <CommentEditModal
+          isCommentEditPopupOn={isCommentEditPopupOn}
+          setIsCommentEditPopupOn={setIsCommentEditPopupOn}
+          commentConts={commentConts}
+          articleId={articleId}
+          commentId={contsId}
+          setComments={setComments}
+        />
+      </CommentEditModalWrapper>
     </>
   );
 };
