@@ -17,6 +17,8 @@ import { GetMyArticles } from "../../api/mypage";
 
 import { ReactComponent as BoneIcon } from "../../assets/img/bone-icon.svg";
 import { ReactComponent as BoneWIcon } from "../../assets/img/bone-w-icon.svg";
+import { ReactComponent as FishIcon } from "../../assets/img/fish-icon.svg";
+import { ReactComponent as FishWIcon } from "../../assets/img/fish-w-icon.svg";
 import { ReactComponent as CrownIcon } from "../../assets/img/crown-icon.svg";
 
 const MostRecieved = styled.div`
@@ -317,7 +319,8 @@ const MyPageArticles = ({ handleArticlesNum, detailHandler, setArticleId, userTy
                     <Avatar className="avatar" bgUrl={article.articleImg} width="120px" height="120px"></Avatar>
                   </AvatarBox>
                   <div className="avatar-snack">
-                    <BoneIcon /> <span>{article.yummyCnt}알</span>
+                    {userType === "CAT" ? <FishIcon /> : <BoneIcon />}
+                    <span>{article.yummyCnt}알</span>
                   </div>
                 </Article>
               ))}
@@ -357,7 +360,8 @@ const MyPageArticles = ({ handleArticlesNum, detailHandler, setArticleId, userTy
               >
                 <Dim />
                 <SnackCount>
-                  <BoneWIcon /> {article.yummyCnt}알
+                  {userType === "CAT" ? <FishWIcon /> : <BoneWIcon />}
+                  {article.yummyCnt}알
                 </SnackCount>
                 <ImageCard className="img-card" imgUrl={article.articleImg} onClick={handleOpen}></ImageCard>
               </ImgBox>

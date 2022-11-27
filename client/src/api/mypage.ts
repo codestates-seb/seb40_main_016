@@ -22,6 +22,15 @@ export const GetMyArticles = async (token: string, post: string) => {
   return response;
 };
 
+export const GetMyComments = async (token: string) => {
+  const response = await axios.get(`${URL}/comments/my-page`, {
+    headers: {
+      Authorization: `${token}`,
+    },
+  });
+  return response;
+};
+
 export const GetMySnacks = async (token: string) => {
   const response = await axios.get(`${URL}/order/my-page`, {
     headers: {

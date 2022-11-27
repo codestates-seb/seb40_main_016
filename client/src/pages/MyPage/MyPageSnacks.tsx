@@ -16,7 +16,7 @@ const SnackContainer = styled.div`
   justify-content: flex-start;
 
   @media screen and (max-width: 736px) {
-    margin: 50px 10px;
+    margin: 20px 10px 50px;
   }
 `;
 
