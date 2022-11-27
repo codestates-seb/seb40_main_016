@@ -1,11 +1,12 @@
 /*
 담당 : 김윤희
 생성 : 2022.11.17
-수정 : 2022.11.22
+수정 : 2022.11.27
 소개 : 이미지 업로드 컴포넌트
 설명 : 
   - 글 작성, 수정시 사용되는 이미지 업로드 컴포넌트입니다.
   - 업로드된 파일의 임시주소와 파일 상태를 같이 관리할 수 있도록 수정
+  - 사진 업로드하는 로직 분리
   - 사용 예시: 
     <PhotoUpload
       uploadedPhotos={uploadedPhotos}
@@ -18,14 +19,13 @@
 */
 
 import React, { useRef, useState, useEffect } from "react";
-import imageCompression from "browser-image-compression";
 import PhotoPreview from "../PhotoPreview/PhotoPreview";
 import { UploadedPhotos } from "../../../types/article";
 import { PhotoWrapper, CurrentPhoto, PhotoChoiceWrapper, PhotoListWrapper, PhotoList, UploadButton } from "./style";
 import { ReactComponent as EmptyPhoto } from "../../../assets/img/empty-photo-icon.svg";
 import { ReactComponent as AddPhoto } from "../../../assets/img/add-photo-icon.svg";
 import { ReactComponent as AddIcon } from "../../../assets/img/add-icon.svg";
-import { FileFormatCheck, FileSizeCheck } from "../../../utills/FileValidCheck";
+import { compresseAndUploadFile } from "../../../utills/CompressAndUploadFile";
 
 interface PhotoUploadProps {
   uploadedPhotos: UploadedPhotos[];
@@ -48,59 +48,16 @@ const PhotoUpload = ({
   const uploadBoxRef = useRef<HTMLLabelElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const createBlob = (dataURI: string) => {
-    const byteString = atob(dataURI.split(",")[1]);
-
-    const ab = new ArrayBuffer(byteString.length);
-    const ia = new Uint8Array(ab);
-
-    for (let i = 0; i < byteString.length; i++) {
-      ia[i] = byteString.charCodeAt(i);
-    }
-
-    return new Blob([ia]);
-  };
-
-  const compresseAndUploadFile = async (files: FileList | null) => {
-    if (!files) return;
-    if (files.length + uploadedPhotos.length > 3) {
-      alert("이미지는 최대 3장까지 업로드할 수 있습니다.");
-      return;
-    }
-
-    const options = {
-      maxSizeMB: 0.2,
-      maxWidthOrHeight: 1920,
-    };
-
-    for (let i = 0; i < files.length; i++) {
-      if (!FileFormatCheck || !FileSizeCheck) continue;
-
-      const reader = new FileReader();
-      const compressedFile = await imageCompression(files[i], options);
-
-      reader.onloadend = () => {
-        const result = reader.result as string;
-
-        const blob = createBlob(result);
-        const file = new File([blob], files[i].name, { type: files[i].type });
-        if (result) setUploadedPhotos((state) => [...state, { uploadedPhoto: result, file: file }].slice(0, 3));
-      };
-
-      reader.readAsDataURL(compressedFile);
-    }
-  };
-
   const changeHandler = (e: React.ChangeEvent<HTMLInputElement> | any) => {
     const files = e.target.files;
-    compresseAndUploadFile(files);
+    compresseAndUploadFile(files, uploadedPhotos, setUploadedPhotos);
   };
 
   const dropHandler = (e: DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
     const files = (e.dataTransfer as DataTransfer).files;
-    compresseAndUploadFile(files);
+    compresseAndUploadFile(files, uploadedPhotos, setUploadedPhotos);
   };
 
   const dragOverHandler = (e: DragEvent) => {
