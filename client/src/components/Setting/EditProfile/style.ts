@@ -51,12 +51,12 @@ export const AvatarWrapper = styled.div`
 `;
 
 export const ButtonWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  width: 90%;
   padding: 40px 0;
 
   @media screen and (max-width: 736px) {
+    display: flex;
+    justify-content: center;
+    width: 90%;
     padding-bottom: 0;
   }
 

@@ -1,8 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { useRecoilValue } from "recoil";
-import accessTokenState from "../../../_state/accessTokenState";
-import userInfoState from "../../../_state/userInfoState";
 
 import UserInfo from "./UserInfo/UserInfo";
 import Button from "../../Button/Button";
@@ -11,14 +7,11 @@ import { Wrapper, UserInfoWrapper, AvatarWrapper, ButtonWrapper } from "./style"
 import { compresseAndUploadFile } from "../../../utills/CompressAndUploadFile";
 import { EditProfileInfo } from "../../../types/user";
 import { UploadedPhotos } from "../../../types/article";
+import { SettingProps } from "../../../types/setting";
 import { PatchProfile } from "../../../api/setting";
 import { GetUserInfo } from "../../../api/user";
 
-const EditProfile = () => {
-  const navigate = useNavigate();
-  const token = useRecoilValue(accessTokenState);
-  const { userId } = useRecoilValue(userInfoState);
-
+const EditProfile = ({ userId, token, moveMypage }: SettingProps) => {
   const [userInfo, setUserInfo] = useState<EditProfileInfo>({
     userName: "",
     content: "",
@@ -42,7 +35,7 @@ const EditProfile = () => {
 
     const formData = new FormData();
 
-    if (uploadedAvatar[0].uploadedPhoto) formData.append("userImg", uploadedAvatar[0].file);
+    if (uploadedAvatar[0]) formData.append("userImg", uploadedAvatar[0].file);
 
     let body: EditProfileInfo = {
       userName: userInfo.userName,
@@ -60,7 +53,7 @@ const EditProfile = () => {
       .then((res: any) => {
         if (res.status === 200) {
           alert("프로필 수정 성공!");
-          navigate(`/profiles/${userId}`);
+          moveMypage();
         }
       })
       .catch((e) => {
@@ -107,7 +100,7 @@ const EditProfile = () => {
           isShadow={true}
           textColor="red"
           onClick={() => {
-            if (confirm("변경사항이 저장되지 않습니다. 취소하시겠습니까?")) navigate(`/profiles/${userId}`);
+            if (confirm("변경사항이 저장되지 않습니다. 취소하시겠습니까?")) moveMypage();
           }}
         >
           취소
