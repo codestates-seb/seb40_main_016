@@ -29,3 +29,17 @@ export const GetUserInfo = async (userId: string | number) => {
   });
   return response;
 };
+
+export const PostHelpPw = async (email: string) => {
+  const body = JSON.stringify({
+    email: `${email}`,
+  });
+
+  const response = await axios.post(`${URL}/help/pw`, body, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  return response;
+};
