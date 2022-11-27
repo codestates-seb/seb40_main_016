@@ -1,13 +1,15 @@
-import { useEffect, useState, Dispatch, SetStateAction } from "react";
+import { useEffect, useState, useRef, Dispatch, SetStateAction } from "react";
 import styled from "styled-components";
+import "react-loading-skeleton/dist/skeleton.css";
 
 import InnerContainer from "../../components/InnerContainer/InnerContainer";
 import ImageCard from "../../components/ImageCard/ImageCard";
 import Avatar from "../../components/Avatar/Avatar";
+import ImageSkeleton from "../../components/Skeleton/ImageSkeleton";
 
 import { GetUserArticles } from "../../api/mypage";
 
-import { ImgContainer, Dim, InfoBox, Info } from "../Main/style";
+import { ImgContainer, Dim } from "../Main/style";
 
 import { ReactComponent as BoneIcon } from "../../assets/img/bone-icon.svg";
 import { ReactComponent as BoneWIcon } from "../../assets/img/bone-w-icon.svg";
@@ -162,28 +164,62 @@ const ProfileArticles = ({ profileUserId, handleArticlesNum, detailHandler, setA
   const [open, setOpen] = useState<boolean>(false);
   const [userArticles, setUserArticles] = useState<UserArticles[]>([]);
   const [mostReceivedArticles, setMostReceivedArticles] = useState<UserArticles[]>([]);
+  const [page, setPage] = useState<number>(0);
+  const [totalPage, setTotalPage] = useState<number>(1);
+  const [loading, setLoading] = useState<boolean>(false);
+  const obsRef = useRef(null);
+  const preventRef = useRef(true);
 
   const handleOpen = () => {
     setOpen(!open);
   };
 
   useEffect(() => {
-    GetUserArticles(profileUserId).then((res) => {
+    if (page !== 0 && page <= totalPage) getUserArticles();
+  }, [page]);
+
+  const handleImgBoxClick = (articleId: number) => {
+    setArticleId(articleId);
+    detailHandler();
+  };
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(obsHandler);
+    if (obsRef.current) observer.observe(obsRef.current);
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  const obsHandler = (entries: any) => {
+    const target = entries[0];
+
+    if (target.isIntersecting && preventRef.current) {
+      preventRef.current = false;
+      setPage((prev) => prev + 1);
+    }
+  };
+
+  const getUserArticles = () => {
+    setLoading(true);
+    GetUserArticles(profileUserId).then((res: any) => {
       const data = res.data.data;
 
       const mostReceived = data.slice(0, 5).sort((a: any, b: any) => {
         return b.yummyCnt - a.yummyCnt;
       });
 
-      setUserArticles(data);
+      if (res.data.pageInfo.page === 1) {
+        setUserArticles(data);
+      } else {
+        setUserArticles(userArticles.concat(data));
+      }
+      preventRef.current = true;
       setMostReceivedArticles(mostReceived);
       handleArticlesNum(data.length);
+      setTotalPage(res.data.pageInfo.totalPages);
+      setLoading(false);
     });
-  }, []);
-
-  const handleImgBoxClick = (articleId: number) => {
-    setArticleId(articleId);
-    detailHandler();
   };
 
   return (
@@ -232,6 +268,18 @@ const ProfileArticles = ({ profileUserId, handleArticlesNum, detailHandler, setA
                 <ImageCard className="img-card" imgUrl={article.articleImg} onClick={handleOpen}></ImageCard>
               </ImgBox>
             ))}
+            {loading ? (
+              Array(8)
+                .fill(0)
+                .map((_, i) => (
+                  <ImgBox key={i}>
+                    <ImageSkeleton />
+                  </ImgBox>
+                ))
+            ) : (
+              <></>
+            )}
+            <div ref={obsRef} />
           </ImgContainer>
         </MainContainer>
       </InnerContainer>
