@@ -62,7 +62,10 @@ const Login = () => {
               userType: data.userType,
             });
             setIsLogin(true);
+          })
+          .then(() => {
             navigate("/");
+            navigate(0);
           })
           .catch((e) => {
             alert("로그인에 실패하셨습니다! 다시 시도해주세요! 😿");
