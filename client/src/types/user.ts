@@ -23,8 +23,8 @@ export interface LoginInfo {
 
 export interface EditProfileInfo {
   userName: string;
-  userIntro: string;
-  userBirth: string;
-  userGender: "MALE" | "FEMALE";
+  content?: string;
+  userImg?: string;
+  userBirth?: string;
   userType: "PERSON" | "CAT" | "DOG" | "";
 }

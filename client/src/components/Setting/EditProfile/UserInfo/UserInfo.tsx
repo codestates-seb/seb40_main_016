@@ -1,8 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useState, useEffect } from "react";
 
 import Input from "../../../Input/Input";
-import Gender from "../../../Gender/Gender";
 
 import { Wrapper, TextareaWrapper, Textarea, ErrorMsgStyle } from "./style";
 import { EditProfileInfo } from "../../../../types/user";
@@ -17,7 +16,7 @@ interface UserInfoProps {
 
 const UserInfo = ({ userInfo, setUserInfo, setHasNoError }: UserInfoProps) => {
   const [userNameErr, setUserNameErr] = useState<boolean>(false);
-  const [userIntroErr, setUserIntroErr] = useState<boolean>(false);
+  const [contentErr, setContentErr] = useState<boolean>(false);
   const [birthErr, setBirthErr] = useState<boolean>(false);
 
   const onChangeUserName = (e: ChangeEvent<HTMLInputElement>) => {
@@ -25,23 +24,23 @@ const UserInfo = ({ userInfo, setUserInfo, setHasNoError }: UserInfoProps) => {
     setUserInfo((userInfo) => ({ ...userInfo, userName: e.target.value }));
   };
 
-  const onChangeUserIntro = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    setUserIntroErr(() => (e.target.value.length >= 150 ? true : false));
-    setUserInfo((userInfo) => ({ ...userInfo, userIntro: e.target.value }));
-  };
-
-  const onClickMale = () => {
-    setUserInfo((userInfo) => ({ ...userInfo, userGender: "MALE" }));
-  };
-
-  const onClickFemale = () => {
-    setUserInfo((userInfo) => ({ ...userInfo, userGender: "FEMALE" }));
+  const onChangeContent = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    setContentErr(() => (e.target.value.length >= 150 ? true : false));
+    setUserInfo((userInfo) => ({ ...userInfo, contentErr: e.target.value }));
   };
 
   const onChangeBirth = (e: ChangeEvent<HTMLInputElement>) => {
     setBirthErr(!CheckBirth(e.target.value));
     setUserInfo((userInfo) => ({ ...userInfo, userBirth: e.target.value }));
   };
+
+  useEffect(() => {
+    if (!userNameErr && !contentErr && !birthErr) {
+      setHasNoError(true);
+    } else {
+      setHasNoError(false);
+    }
+  }, [userNameErr, contentErr, birthErr]);
 
   return (
     <Wrapper>
@@ -70,32 +69,27 @@ const UserInfo = ({ userInfo, setUserInfo, setHasNoError }: UserInfoProps) => {
       )}
 
       <TextareaWrapper>
-        <label>소개</label>
+        <label>소개 (선택)</label>
         <Textarea
           placeholder="자기소개를 입력하세요"
           maxLength={150}
-          defaultValue={userInfo.userIntro}
-          onChange={(e) => onChangeUserIntro(e)}
+          defaultValue={userInfo.content}
+          onChange={(e) => onChangeContent(e)}
         />
-        {userIntroErr && <ErrorMsgStyle>자기소개는 150자까지만 입력해 주세요.</ErrorMsgStyle>}
+        {contentErr && <ErrorMsgStyle>자기소개는 150자까지만 입력해 주세요.</ErrorMsgStyle>}
       </TextareaWrapper>
 
-      {userInfo.userType !== "PERSON" ? (
-        <>
-          <Gender height="50px" onClickMale={onClickMale} onClickFemale={onClickFemale} defaultValue="MALE" />
-          <Input
-            type="date"
-            value={userInfo.userBirth}
-            placeholder="생일을 입력하세요"
-            onChange={onChangeBirth}
-            height="50px"
-            label="생년월일 (선택)"
-            isError={birthErr}
-            errorMsg="연도를 정확히 입력해 주세요."
-          />
-        </>
-      ) : (
-        ""
+      {userInfo.userType !== "PERSON" && (
+        <Input
+          type="date"
+          value={userInfo.userBirth}
+          placeholder="생일을 입력하세요"
+          onChange={onChangeBirth}
+          height="50px"
+          label="생년월일 (선택)"
+          isError={birthErr}
+          errorMsg="연도를 정확히 입력해 주세요."
+        />
       )}
     </Wrapper>
   );

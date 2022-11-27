@@ -1,10 +1,16 @@
 import styled from "styled-components";
 
 export const Wrapper = styled.div`
+  position: absolute;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
-  padding: 50px 100px;
+  width: 100%;
+  height: 90%;
+  padding: 0 100px;
+
+  box-sizing: border-box;
 `;
 
 export const UserInfoWrapper = styled.div`
@@ -27,18 +33,17 @@ export const AvatarWrapper = styled.div`
     object-fit: cover;
   }
 
-  button {
-    background-color: var(--color-white);
+  label {
     color: var(--color-sky);
-    border: none;
     margin-top: 20px;
+    text-align: center;
     cursor: pointer;
   }
 `;
 
 export const ButtonWrapper = styled.div`
   display: flex;
-  padding: 50px;
+  padding: 40px 0;
 
   button:first-child {
     margin-right: 20px;

@@ -1,38 +1,115 @@
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import accessTokenState from "../../../_state/accessTokenState";
+import userInfoState from "../../../_state/userInfoState";
 
 import UserInfo from "./UserInfo/UserInfo";
 import Button from "../../Button/Button";
 
 import { Wrapper, UserInfoWrapper, AvatarWrapper, ButtonWrapper } from "./style";
+import { compresseAndUploadFile } from "../../../utills/CompressAndUploadFile";
 import { EditProfileInfo } from "../../../types/user";
+import { UploadedPhotos } from "../../../types/article";
+import { PatchProfile } from "../../../api/setting";
+import { GetUserInfo } from "../../../api/user";
 
 const EditProfile = () => {
+  const navigate = useNavigate();
+  const token = useRecoilValue(accessTokenState);
+  const { userId } = useRecoilValue(userInfoState);
+
   const [userInfo, setUserInfo] = useState<EditProfileInfo>({
     userName: "",
-    userIntro: "",
+    content: "",
+    userImg: "",
     userBirth: "",
-    userGender: "MALE",
     userType: "",
   });
+  const [uploadedAvatar, setUploadedAvater] = useState<UploadedPhotos[]>([]);
   const [hasNoError, setHasNoError] = useState<boolean>(false);
+
+  const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files;
+    compresseAndUploadFile(file, uploadedAvatar, setUploadedAvater, true);
+  };
+
+  const submitProfile = () => {
+    if (userInfo.userName.length <= 0) {
+      alert(userInfo.userType === "PERSON" ? "닉네임을 입력해주세요." : "이름을 입력해주세요.");
+      return;
+    }
+
+    const formData = new FormData();
+
+    if (uploadedAvatar[0].uploadedPhoto) formData.append("userImg", uploadedAvatar[0].file);
+
+    let body: EditProfileInfo = {
+      userName: userInfo.userName,
+      content: userInfo.content,
+      userType: "",
+    };
+
+    if (userInfo.userType !== "PERSON") {
+      body.userBirth = userInfo.userBirth;
+    }
+
+    formData.append("userInfo", JSON.stringify(body));
+
+    PatchProfile(userId, formData, token)
+      .then((res: any) => {
+        if (res.status === 200) {
+          alert("프로필 수정 성공!");
+          navigate(`/profiles/${userId}`);
+        }
+      })
+      .catch((e) => {
+        if (e.response.status === 500) {
+          alert("프로필 수정 실패!");
+        }
+      });
+  };
+
+  useEffect(() => {
+    GetUserInfo(userId)
+      .then((res) => res.data.data)
+      .then((res) => {
+        setUserInfo({
+          userName: res.userName,
+          content: res.content,
+          userImg: res.userImg ? res.userImg : "./assets/default-avatar-bg.png",
+          userBirth: res.userBirth,
+          userType: res.userType,
+        });
+      });
+  }, []);
 
   return (
     <Wrapper>
       <UserInfoWrapper>
         <AvatarWrapper>
           <img
-            src="https://user-images.githubusercontent.com/104997140/202474784-96d87ed2-2bff-4400-8c18-7045af22dbd6.jpg"
+            src={uploadedAvatar.length > 0 ? uploadedAvatar[0].uploadedPhoto : userInfo.userImg}
             alt="프로필 이미지"
           />
-          <button>프로필 사진 바꾸기</button>
+          <label htmlFor="avatar">프로필 사진 바꾸기</label>
+          <input type="file" id="avatar" accept="image/*" onChange={changeHandler} hidden />
         </AvatarWrapper>
         <UserInfo userInfo={userInfo} setUserInfo={setUserInfo} setHasNoError={setHasNoError} />
       </UserInfoWrapper>
       <ButtonWrapper>
-        <Button width="200px" height="60px" isShadow={true} onClick={() => console.log("완료!")}>
+        <Button width="200px" height="60px" isShadow={true} onClick={submitProfile} disabled={!hasNoError}>
           완료
         </Button>
-        <Button width="200px" height="60px" isShadow={true} textColor="red" onClick={() => console.log("취소!")}>
+        <Button
+          width="200px"
+          height="60px"
+          isShadow={true}
+          textColor="red"
+          onClick={() => {
+            if (confirm("변경사항이 저장되지 않습니다. 취소하시겠습니까?")) navigate(`/profiles/${userId}`);
+          }}
+        >
           취소
         </Button>
       </ButtonWrapper>

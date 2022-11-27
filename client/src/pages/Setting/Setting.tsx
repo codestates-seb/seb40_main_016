@@ -21,20 +21,18 @@ const Setting = () => {
               barPosition="bottom"
               setNowTab={setNowTab}
             />
-            <div>
-              {(() => {
-                switch (nowTab) {
-                  case "프로필 편집":
-                    return <EditProfile />;
-                  case "비밀번호 변경":
-                    return;
-                  case "회원탈퇴":
-                    return;
-                  default:
-                    return "";
-                }
-              })()}
-            </div>
+            {(() => {
+              switch (nowTab) {
+                case "프로필 편집":
+                  return <EditProfile />;
+                case "비밀번호 변경":
+                  return;
+                case "회원탈퇴":
+                  return;
+                default:
+                  return "";
+              }
+            })()}
           </SettingWrapper>
         </InnerContainer>
       </OuterContainer>
