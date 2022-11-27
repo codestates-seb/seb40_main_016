@@ -24,6 +24,16 @@ interface Prop {
   detailHandler: () => void;
   setArticleId: Dispatch<SetStateAction<number>>;
 }
+interface Articles {
+  articleId: number;
+  articleImg: string;
+  content: string;
+  likeCnt: number;
+  views: number;
+  reportCnt: number;
+  articleStatus: string;
+  yummyCnt: number;
+}
 
 const Main = ({ detailHandler, setArticleId }: Prop) => {
   const [open, setOpen] = useState<boolean>(false);
@@ -57,17 +67,6 @@ const Main = ({ detailHandler, setArticleId }: Prop) => {
     setArticleId(articleId);
     detailHandler();
   };
-
-  interface Articles {
-    articleId: number;
-    articleImg: string;
-    content: string;
-    likeCnt: number;
-    views: number;
-    reportCnt: number;
-    articleStatus: string;
-    yummyCnt: number;
-  }
 
   useEffect(() => {
     const observer = new IntersectionObserver(obsHandler);

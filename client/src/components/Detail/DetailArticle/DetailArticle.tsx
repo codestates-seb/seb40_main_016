@@ -1,17 +1,19 @@
 import { Dispatch, SetStateAction, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 import Avatar from "../../Avatar/Avatar";
 import DisplayCreatedAt from "../../../utills/DisplayCreatedAt";
 import { GetUserInfo } from "../../../api/user";
 
 import { Wrapper, Info, AuthorName, TimeStamp, Conts } from "./style";
-
 interface Prop {
   userId: number | null;
   createdAt?: string;
   content?: string;
   setAuthorType?: Dispatch<SetStateAction<"PERSON" | "CAT" | "DOG">>;
   setAuthorNickname: Dispatch<SetStateAction<string>>;
+  detailHandler: () => void;
+  myId: number;
 }
 
 const DetailArticle = ({
@@ -20,9 +22,12 @@ const DetailArticle = ({
   content,
   setAuthorType = () => {},
   setAuthorNickname,
+  detailHandler,
+  myId,
 }: Prop) => {
   const [userName, setUserName] = useState<string>();
   const [avatarUrl, setAvatarUrl] = useState<string>();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (userId) {
@@ -41,12 +46,21 @@ const DetailArticle = ({
     DisplayCreatedAt("");
   }, []);
 
+  const handleOnProfilePage = () => {
+    if (userId === myId) {
+      navigate("/mypage");
+    } else {
+      navigate(`/profiles/${userId}`);
+    }
+    detailHandler();
+  };
+
   return (
     <>
       <Wrapper>
         <Info>
           <Avatar className="avatar" width="40px" height="40px" bgUrl={avatarUrl} />
-          <AuthorName>{userName}</AuthorName>
+          <AuthorName onClick={handleOnProfilePage}>{userName}</AuthorName>
           <TimeStamp>{DisplayCreatedAt(createdAt)}</TimeStamp>
         </Info>
         <Conts>{content}</Conts>

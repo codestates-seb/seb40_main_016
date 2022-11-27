@@ -21,6 +21,7 @@ export const AuthorName = styled.p`
   display: inline-block;
   font-size: var(--fs-pc-large);
   font-weight: bold;
+  cursor: pointer;
 `;
 
 export const TimeStamp = styled.small`
