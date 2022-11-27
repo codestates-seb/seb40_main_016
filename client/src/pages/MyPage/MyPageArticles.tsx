@@ -1,11 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, Dispatch, SetStateAction } from "react";
 import styled from "styled-components";
 import { useRecoilValue } from "recoil";
+import "react-loading-skeleton/dist/skeleton.css";
 
 import InnerContainer from "../../components/InnerContainer/InnerContainer";
 import ImageCard from "../../components/ImageCard/ImageCard";
 import Button from "../../components/Button/Button";
 import Avatar from "../../components/Avatar/Avatar";
+import ImageSkeleton from "../../components/Skeleton/ImageSkeleton";
 
 import { ImgContainer, Dim } from "../Main/style";
 
@@ -211,6 +213,12 @@ const SnackCount = styled.div`
   }
 `;
 
+interface Props {
+  handleArticlesNum: (arg: number) => void;
+  detailHandler: () => void;
+  setArticleId: Dispatch<SetStateAction<number>>;
+  userType: "PERSON" | "CAT" | "DOG";
+}
 interface MyArticles {
   articleId: number;
   articleImg: string;
@@ -222,31 +230,72 @@ interface MyArticles {
   yummyCnt: number;
 }
 
-const MyPageArticles = () => {
+const MyPageArticles = ({ handleArticlesNum, detailHandler, setArticleId, userType }: Props) => {
   const token = useRecoilValue(accessTokenState);
   const [open, setOpen] = useState<boolean>(false);
   const [myArticles, setMyArticles] = useState<MyArticles[]>([]);
   const [mostReceivedArticles, setMostReceivedArticles] = useState<MyArticles[]>([]);
   const [tab, setTab] = useState<string>("post");
+  const [page, setPage] = useState<number>(0);
+  const [totalPage, setTotalPage] = useState<number>(1);
+  const [loading, setLoading] = useState<boolean>(false);
+  const obsRef = useRef(null);
+  const preventRef = useRef(true);
 
   const handleOpen = () => {
     setOpen(!open);
   };
 
+  const handleImgBoxClick = (articleId: number) => {
+    setArticleId(articleId);
+    detailHandler();
+  };
+
+  const handleTabClick = (tab: "post" | "give" | "take") => {
+    setTab(tab);
+  };
+
   useEffect(() => {
+    if (page !== 0 && page <= totalPage) getMyArticles();
+  }, [page, tab]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(obsHandler);
+    if (obsRef.current) observer.observe(obsRef.current);
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  const obsHandler = (entries: any) => {
+    const target = entries[0];
+
+    if (target.isIntersecting && preventRef.current) {
+      preventRef.current = false;
+      setPage((prev) => prev + 1);
+    }
+  };
+
+  const getMyArticles = () => {
+    setLoading(true);
     GetMyArticles(token, tab).then((res: any) => {
       const data = res.data.data;
 
       const mostReceived = data.slice(0, 5).sort((a: any, b: any) => {
         return b.yummyCnt - a.yummyCnt;
       });
-      setMostReceivedArticles(mostReceived);
-      setMyArticles(res.data.data);
-    });
-  }, [tab]);
 
-  const handleTabClick = (tab: "post" | "give" | "take") => {
-    setTab(tab);
+      if (res.data.pageInfo.page === 1) {
+        setMyArticles(data);
+      } else {
+        setMyArticles(myArticles.concat(data));
+      }
+      preventRef.current = true;
+      setMostReceivedArticles(mostReceived);
+      handleArticlesNum(data.length);
+      setTotalPage(res.data.pageInfo.totalPages);
+      setLoading(false);
+    });
   };
 
   return (
@@ -258,7 +307,12 @@ const MyPageArticles = () => {
             <CrownIcon className="crown-icon" />
             <ArticleList>
               {mostReceivedArticles.map((article: MyArticles) => (
-                <Article key={article.articleId}>
+                <Article
+                  key={article.articleId}
+                  onClick={() => {
+                    handleImgBoxClick(article.articleId);
+                  }}
+                >
                   <AvatarBox>
                     <Avatar className="avatar" bgUrl={article.articleImg} width="120px" height="120px"></Avatar>
                   </AvatarBox>
@@ -295,7 +349,12 @@ const MyPageArticles = () => {
           </FilterBtnBox>
           <ImgContainer>
             {myArticles.map((article: MyArticles) => (
-              <ImgBox key={article.articleId}>
+              <ImgBox
+                key={article.articleId}
+                onClick={() => {
+                  handleImgBoxClick(article.articleId);
+                }}
+              >
                 <Dim />
                 <SnackCount>
                   <BoneWIcon /> {article.yummyCnt}알
@@ -303,6 +362,18 @@ const MyPageArticles = () => {
                 <ImageCard className="img-card" imgUrl={article.articleImg} onClick={handleOpen}></ImageCard>
               </ImgBox>
             ))}
+            {loading ? (
+              Array(8)
+                .fill(0)
+                .map((_, i) => (
+                  <ImgBox key={i}>
+                    <ImageSkeleton />
+                  </ImgBox>
+                ))
+            ) : (
+              <></>
+            )}
+            <div ref={obsRef} />
           </ImgContainer>
         </MainContainer>
       </InnerContainer>

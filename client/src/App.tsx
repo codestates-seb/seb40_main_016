@@ -36,7 +36,7 @@ function App() {
           <Route index path="/" element={<Main detailHandler={detailHandler} setArticleId={setArticleId} />} />
           <Route index path="/signup" element={<Signup />} />
           <Route index path="/login" element={<Login />} />
-          <Route index path="/mypage" element={<Mypage />} />
+          <Route index path="/mypage" element={<Mypage detailHandler={detailHandler} setArticleId={setArticleId} />} />
           <Route
             index
             path="/profiles/:id"

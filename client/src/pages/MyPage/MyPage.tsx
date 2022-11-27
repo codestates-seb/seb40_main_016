@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, Dispatch, SetStateAction } from "react";
 import { useRecoilValue } from "recoil";
 
 import OuterContainer from "../../components/OuterContainer/OuterConainer";
@@ -32,6 +32,10 @@ import {
   UserDesc,
 } from "./style";
 
+interface Prop {
+  detailHandler: () => void;
+  setArticleId: Dispatch<SetStateAction<number>>;
+}
 interface UserInfoProps {
   content: string;
   email: string;
@@ -48,10 +52,11 @@ interface UserWalletProps {
   yummy: number;
 }
 
-const MyPage = () => {
+const MyPage = ({ detailHandler, setArticleId }: Prop) => {
   const token = useRecoilValue(accessTokenState);
   const myInfo = useRecoilValue(userInfoState);
   const [nowTab, setNowTab] = useState<string>("게시물");
+  const [userArticlesNum, setUserArticlesNum] = useState<number>(0);
   const [userInfo, setUserInfo] = useState<UserInfoProps>({
     content: "",
     email: "",
@@ -74,6 +79,10 @@ const MyPage = () => {
       setUserWallet(res.data.wallet);
     });
   }, []);
+
+  const handleArticlesNum = (articles: number) => {
+    setUserArticlesNum(articles);
+  };
 
   return (
     <>
@@ -106,7 +115,7 @@ const MyPage = () => {
                 </UserInfo>
                 <UserDesc>
                   <div>
-                    <span>게시물 5</span>
+                    <span>게시물 {userArticlesNum}</span>
                     <span>팔로우 {userInfo.followCnt}</span>
                     <span>팔로워 {userInfo.followerCnt}</span>
                   </div>
@@ -124,7 +133,12 @@ const MyPage = () => {
                     case "게시물":
                       return (
                         <>
-                          <MyPageArticles />
+                          <MyPageArticles
+                            handleArticlesNum={handleArticlesNum}
+                            detailHandler={detailHandler}
+                            setArticleId={setArticleId}
+                            userType={userInfo.userType}
+                          />
                         </>
                       );
                     case "댓글":
@@ -154,7 +168,12 @@ const MyPage = () => {
                     case "게시물":
                       return (
                         <>
-                          <MyPageArticles />
+                          <MyPageArticles
+                            handleArticlesNum={handleArticlesNum}
+                            detailHandler={detailHandler}
+                            setArticleId={setArticleId}
+                            userType={userInfo.userType}
+                          />
                         </>
                       );
                     case "댓글":
