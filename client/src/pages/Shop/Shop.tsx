@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
+
 import accessTokenState from "../../_state/accessTokenState";
 import OuterContainer from "../../components/OuterContainer/OuterConainer";
 import InnerContainer from "../../components/InnerContainer/InnerContainer";
@@ -7,8 +8,11 @@ import ShopInfo from "../../components/Shop/ShopInfo/ShopInfo";
 import Items from "../../components/Shop/Items/items";
 import Calculator from "../../components/Shop/Calculator/Calculator";
 import Button from "../../components/Button/Button";
-import { Wrapper, ShopWrapper, ButtonWrapper } from "./style";
 import { GetItems, OrderItems } from "../../api/shop";
+
+import { ReactComponent as MansaeCat } from "../../assets/img/mansae-cat.svg";
+
+import { Wrapper, ShopWrapper, CatPopUpWrapper, CatPopUp, Triangle, ButtonWrapper } from "./style";
 import { ItemProps, OrderItemsProps } from "../../types/shop";
 
 const Shop = () => {
@@ -17,6 +21,7 @@ const Shop = () => {
   const [yummy, setYummy] = useState<number>(0);
   const [totalCost, setTotalCost] = useState<number>(0);
   const [selectedItems, setSelectedItems] = useState<OrderItemsProps[]>([]);
+  const [isHover, setIsHover] = useState<boolean>(false);
 
   useEffect(() => {
     GetItems(token).then((res) => {
@@ -26,11 +31,16 @@ const Shop = () => {
   }, []);
 
   const orderItems = () => {
+    if (selectedItems.length <= 0) {
+      alert("선택한 물품이 없습니다!");
+      return;
+    }
+
     OrderItems(selectedItems, token).then(() => {
       alert("교환 성공!");
+      window.location.reload();
     });
   };
-
   return (
     <Wrapper>
       <OuterContainer>
@@ -39,7 +49,13 @@ const Shop = () => {
             <ShopInfo />
             <Items items={items} setTotalCost={setTotalCost} setSelectedItems={setSelectedItems} />
             <Calculator yummy={yummy} totalCost={totalCost} />
-            <ButtonWrapper>
+            <CatPopUpWrapper isHover={isHover}>
+              <CatPopUp>
+                <MansaeCat />
+              </CatPopUp>
+              <Triangle />
+            </CatPopUpWrapper>
+            <ButtonWrapper onMouseOver={() => setIsHover(() => true)} onMouseLeave={() => setIsHover(() => false)}>
               <Button
                 className="submitBtn"
                 width="220px"

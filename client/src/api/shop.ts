@@ -12,7 +12,7 @@ export const GetItems = async (token: string) => {
 };
 
 export const OrderItems = async (body: OrderItemsProps[], token: string) => {
-  const response = await axios.post(`${URL}/wallet`, JSON.stringify({ orderItems: body }), {
+  const response = await axios.post(`${URL}/order`, JSON.stringify({ orderItems: body }), {
     headers: {
       "Content-Type": "application/json",
       Authorization: `${token}`,
