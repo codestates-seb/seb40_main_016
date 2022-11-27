@@ -50,7 +50,6 @@ const UserInfo = ({ userInfo, setUserInfo, setHasNoError }: UserInfoProps) => {
           value={userInfo.userName}
           placeholder="닉네임을 입력하세요"
           onChange={onChangeUserName}
-          height="50px"
           label="닉네임"
           isError={userNameErr}
           errorMsg="한글, 영문, 숫자 조합 2-10자리로 입력해 주세요."
@@ -61,7 +60,6 @@ const UserInfo = ({ userInfo, setUserInfo, setHasNoError }: UserInfoProps) => {
           value={userInfo.userName}
           placeholder="초코, 행운이"
           onChange={onChangeUserName}
-          height="50px"
           label="이름"
           isError={userNameErr}
           errorMsg="한글, 영문, 숫자 조합 2-10자리로 입력해 주세요."
@@ -85,7 +83,6 @@ const UserInfo = ({ userInfo, setUserInfo, setHasNoError }: UserInfoProps) => {
           value={userInfo.userBirth}
           placeholder="생일을 입력하세요"
           onChange={onChangeBirth}
-          height="50px"
           label="생년월일 (선택)"
           isError={birthErr}
           errorMsg="연도를 정확히 입력해 주세요."
