@@ -5,7 +5,6 @@ import InnerContainer from "../../components/InnerContainer/InnerContainer";
 import ImageCard from "../../components/ImageCard/ImageCard";
 
 import { GetUserSnacks } from "../../api/mypage";
-import { GetItems } from "../../api/shop";
 
 const SnackContainer = styled.div`
   margin: 50px 150px;
@@ -134,7 +133,6 @@ const ProfileSnacks = ({ profileUserId }: Props) => {
   useEffect(() => {
     GetUserSnacks(profileUserId).then((res: any) => {
       setSnackList(res.data.data);
-      console.log(res.data.data.createdAt);
     });
   }, []);
 

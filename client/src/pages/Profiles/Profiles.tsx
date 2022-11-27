@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, Dispatch, SetStateAction } from "react";
 import { useRecoilValue } from "recoil";
 import { useParams } from "react-router-dom";
 
@@ -26,6 +26,10 @@ import {
   UserDesc,
 } from "./style";
 
+interface Prop {
+  detailHandler: () => void;
+  setArticleId: Dispatch<SetStateAction<number>>;
+}
 interface UserInfoProps {
   content: string;
   email: string;
@@ -38,7 +42,8 @@ interface UserInfoProps {
   userType: string;
 }
 
-const Profiles = () => {
+const Profiles = ({ detailHandler, setArticleId }: Prop) => {
+  const [userArticlesNum, setUserArticlesNum] = useState<number>(0);
   const profileUserId = parseInt(useParams().id);
   const myInfo = useRecoilValue(userInfoState);
   const token = useRecoilValue(accessTokenState);
@@ -90,6 +95,10 @@ const Profiles = () => {
     }
   };
 
+  const handleArticlesNum = (articles: number) => {
+    setUserArticlesNum(articles);
+  };
+
   return (
     <>
       <MyAccountPage>
@@ -108,7 +117,7 @@ const Profiles = () => {
                 </UserInfo>
                 <UserDesc>
                   <div>
-                    <span>게시물 5</span>
+                    <span>게시물 {userArticlesNum}</span>
                     <span>팔로우 {userInfo.followCnt}</span>
                     <span>팔로워 {userInfo.followerCnt}</span>
                   </div>
@@ -124,7 +133,12 @@ const Profiles = () => {
                 case "게시물":
                   return (
                     <>
-                      <ProfileArticles profileUserId={profileUserId} />
+                      <ProfileArticles
+                        profileUserId={profileUserId}
+                        handleArticlesNum={handleArticlesNum}
+                        detailHandler={detailHandler}
+                        setArticleId={setArticleId}
+                      />
                     </>
                   );
                 case "간식":

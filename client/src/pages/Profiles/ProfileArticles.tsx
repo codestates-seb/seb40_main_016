@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, Dispatch, SetStateAction } from "react";
 import styled from "styled-components";
 
 import InnerContainer from "../../components/InnerContainer/InnerContainer";
@@ -139,6 +139,9 @@ const SnackCount = styled.div`
 
 interface Props {
   profileUserId: number;
+  handleArticlesNum: (arg: number) => void;
+  detailHandler: () => void;
+  setArticleId: Dispatch<SetStateAction<number>>;
 }
 
 interface UserArticles {
@@ -152,7 +155,7 @@ interface UserArticles {
   yummyCnt: number;
 }
 
-const ProfileArticles = (profileUserId: Props) => {
+const ProfileArticles = ({ profileUserId, handleArticlesNum, detailHandler, setArticleId }: Props) => {
   const [open, setOpen] = useState<boolean>(false);
   const [userArticles, setUserArticles] = useState<UserArticles[]>([]);
   const [mostReceivedArticles, setMostReceivedArticles] = useState<UserArticles[]>([]);
@@ -162,7 +165,7 @@ const ProfileArticles = (profileUserId: Props) => {
   };
 
   useEffect(() => {
-    GetUserArticles(profileUserId.profileUserId).then((res) => {
+    GetUserArticles(profileUserId).then((res) => {
       const data = res.data.data;
 
       const mostReceived = data.slice(0, 5).sort((a: any, b: any) => {
@@ -171,8 +174,14 @@ const ProfileArticles = (profileUserId: Props) => {
 
       setUserArticles(data);
       setMostReceivedArticles(mostReceived);
+      handleArticlesNum(data.length);
     });
   }, []);
+
+  const handleImgBoxClick = (articleId: number) => {
+    setArticleId(articleId);
+    detailHandler();
+  };
 
   return (
     <>
@@ -183,7 +192,12 @@ const ProfileArticles = (profileUserId: Props) => {
             <CrownIcon className="crown-icon" />
             <ArticleList>
               {mostReceivedArticles.map((article: UserArticles) => (
-                <Article key={article.articleId}>
+                <Article
+                  key={article.articleId}
+                  onClick={() => {
+                    handleImgBoxClick(article.articleId);
+                  }}
+                >
                   <AvatarBox>
                     <Avatar className="avatar" bgUrl={article.articleImg} width="120px" height="120px"></Avatar>
                   </AvatarBox>
@@ -200,7 +214,12 @@ const ProfileArticles = (profileUserId: Props) => {
         <MainContainer>
           <ImgContainer>
             {userArticles.map((article: UserArticles) => (
-              <ImgBox key={article.articleId}>
+              <ImgBox
+                key={article.articleId}
+                onClick={() => {
+                  handleImgBoxClick(article.articleId);
+                }}
+              >
                 <Dim>
                   <InfoBox>
                     <Info>

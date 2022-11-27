@@ -37,7 +37,11 @@ function App() {
           <Route index path="/signup" element={<Signup />} />
           <Route index path="/login" element={<Login />} />
           <Route index path="/mypage" element={<Mypage />} />
-          <Route index path="/profiles/:id" element={<Profiles />} />
+          <Route
+            index
+            path="/profiles/:id"
+            element={<Profiles detailHandler={detailHandler} setArticleId={setArticleId} />}
+          />
           <Route index path="/shop" element={<Shop />} />
           <Route index path="*" element={<NotFound />} />
         </Routes>
