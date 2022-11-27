@@ -1,7 +1,9 @@
 import CalcContent from "./CalcContent";
+
 import { ReactComponent as FishIcon } from "../../../assets/img/fish-w-icon.svg";
 import { ReactComponent as EqualIcon } from "../../../assets/img/equal-icon.svg";
 import { ReactComponent as MinusIcon } from "../../../assets/img/minus-icon.svg";
+
 import { Wrapper, CalcTitle, CalcMain } from "./style";
 
 interface CalculatorProps {

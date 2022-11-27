@@ -1,6 +1,8 @@
 import { useState } from "react";
+
 import ImageCard from "../../../ImageCard/ImageCard";
 import Checkbox from "../../../Checkbox/Checkbox";
+
 import { Wrapper, ItemWrapper, ItemInfo, Price } from "./style";
 import { ItemProps } from "../../../../types/shop";
 
@@ -22,25 +24,28 @@ const Item = ({ itemId, itemImg, itemName, price, stock, setTotalCost, setSelect
 
   return (
     <Wrapper>
+      <ImageCard imgUrl={itemImg} className="itemImg" />
       <ItemWrapper>
-        <ImageCard imgUrl={itemImg} className="itemImg" />
-        <ItemInfo>
+        <ItemInfo isChecked={isChecked} stock={stock}>
           <p>{itemName}</p>
           <Price>
             <span>가격 : {price}알</span>
             <input
               type="number"
-              defaultValue={1}
+              defaultValue={stock > 0 ? 1 : 0}
               max={stock}
               min={1}
-              step={1}
               onChange={(e) => setQuantity(() => +e.target.value)}
-              disabled={isChecked ? true : false}
+              disabled={isChecked || stock <= 0 ? true : false}
             />
           </Price>
         </ItemInfo>
       </ItemWrapper>
-      <Checkbox isChecked={isChecked} onClickCheck={onClickCheck} />
+      {stock > 0 ? (
+        <Checkbox isChecked={isChecked} onClickCheck={onClickCheck} />
+      ) : (
+        <p className="soldOut">품절 되었습니다.</p>
+      )}
     </Wrapper>
   );
 };
