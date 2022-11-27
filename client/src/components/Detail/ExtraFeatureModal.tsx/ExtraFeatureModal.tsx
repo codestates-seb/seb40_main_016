@@ -20,7 +20,7 @@ interface Prop {
   isOn: boolean;
   contsId: number; //current activated articleId or commentId
   setIsOn: Dispatch<SetStateAction<boolean>>;
-  setComments: Dispatch<SetStateAction<CommentType[]>>;
+  resetComments: () => void;
   articleId: number; //articleId for refresh comment list;
   editPopupHandler: () => void;
   detailHandler: () => void;
@@ -34,7 +34,7 @@ const ExtraFeatureModal = ({
   isOn,
   contsId,
   setIsOn,
-  setComments,
+  resetComments,
   articleId,
   editPopupHandler,
   detailHandler,
@@ -101,14 +101,7 @@ const ExtraFeatureModal = ({
           if (res.status === 204) {
             setIsOn(false);
             document.querySelector("#scroll-area").scrollTo(0, 0);
-
-            GetComments(articleId, 1, token)
-              .then((res) => {
-                setComments(res.data.data);
-              })
-              .catch((e) => {
-                alert("댓글 불러오기에 실패했습니다.😿");
-              });
+            resetComments();
           }
         })
         .catch((err) => alert("댓글 삭제에 실패하였습니다.😿"));

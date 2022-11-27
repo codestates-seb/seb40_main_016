@@ -22,6 +22,7 @@ interface Prop {
   setMorePopupId: Dispatch<SetStateAction<number>>;
   commentLoading: boolean;
   setCommentConts: Dispatch<SetStateAction<string>>;
+  resetComments: () => void;
 }
 
 const Comments = ({
@@ -32,6 +33,7 @@ const Comments = ({
   setMorePopupId,
   commentLoading,
   setCommentConts,
+  resetComments,
 }: Prop) => {
   const token = useRecoilValue(accessTokenState);
   const myInfo = useRecoilValue(userInfoState);
@@ -40,7 +42,7 @@ const Comments = ({
   const onCommentLike = (item: CommentType) => {
     PostCommentLike(item.commentId, token)
       .then((res) => {
-        return res;
+        resetComments();
       })
       .catch((e) => {
         alert("댓글 좋아요에 실패했습니다.😿");
@@ -49,7 +51,7 @@ const Comments = ({
   const offCommentLike = (item: CommentType) => {
     DeleteCommentLike(item.commentId, token)
       .then((res) => {
-        return res;
+        resetComments();
       })
       .catch((e) => {
         alert("댓글 좋아요 취소에 실패했습니다.😿");

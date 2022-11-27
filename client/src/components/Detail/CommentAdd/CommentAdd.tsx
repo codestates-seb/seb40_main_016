@@ -15,10 +15,10 @@ import { CommentType } from "../../../types/comment";
 interface Prop {
   className?: string;
   articleId: number;
-  setComments: Dispatch<SetStateAction<CommentType[]>>;
+  resetComments: () => void;
 }
 
-const CommentAdd = ({ className = "", articleId, setComments }: Prop) => {
+const CommentAdd = ({ className = "", articleId, resetComments }: Prop) => {
   const token = useRecoilValue(accessTokenState);
   const isLogin = useRecoilValue(isLoginState);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
@@ -33,14 +33,9 @@ const CommentAdd = ({ className = "", articleId, setComments }: Prop) => {
       PostComments(articleId, `${value}`, token)
         .then((res) => {
           if (res.status === 201) {
-            GetComments(articleId, 1, token)
-              .then((res) => {
-                setComments(res.data.data);
-                setValue("");
-              })
-              .catch((e) => {
-                alert("댓글 불러오기에 실패했습니다.😿");
-              });
+            document.querySelector("#scroll-area").scrollTo(0, 0);
+            resetComments();
+            setValue("");
           }
         })
         .catch((e) => alert("댓글 등록에 실패했습니다.😿"));

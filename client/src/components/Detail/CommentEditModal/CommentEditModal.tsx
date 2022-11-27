@@ -17,7 +17,7 @@ interface Prop {
   commentConts: string;
   articleId: number;
   commentId: number;
-  setComments: Dispatch<SetStateAction<CommentType[]>>;
+  resetComments: () => void;
 }
 
 const CommentEditModal = ({
@@ -26,7 +26,7 @@ const CommentEditModal = ({
   commentConts,
   articleId,
   commentId,
-  setComments,
+  resetComments,
 }: Prop) => {
   const token = useRecoilValue(accessTokenState);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
@@ -43,13 +43,7 @@ const CommentEditModal = ({
         setIsCommentEditPopupOn(false);
         document.querySelector("#scroll-area").scrollTo(0, 0);
 
-        GetComments(articleId, 1, token)
-          .then((res) => {
-            setComments(res.data.data);
-          })
-          .catch((e) => {
-            alert("댓글 불러오기에 실패했습니다.😿");
-          });
+        resetComments();
       })
       .catch((e) => alert("댓글 수정에 실패했습니다.😿"));
   };

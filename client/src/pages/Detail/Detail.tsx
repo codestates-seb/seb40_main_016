@@ -79,6 +79,19 @@ const Detail = ({ articleId, isDetailOn, detailHandler, editPopupHandler }: Prop
     }
   };
 
+  const resetComments = () => {
+    GetComments(articleId, 1, token)
+      .then((res) => {
+        setCommentCurrentPage(1);
+        setCommentTotalPage(res.data.pageInfo.totalPages);
+        setComments(res.data.data);
+        setCommentLoading(false);
+      })
+      .catch((e) => {
+        alert("댓글 불러오기에 실패했습니다.😿");
+      });
+  };
+
   useEffect(() => {
     document.querySelector("#scroll-area").scrollTo(0, 0);
 
@@ -95,16 +108,7 @@ const Detail = ({ articleId, isDetailOn, detailHandler, editPopupHandler }: Prop
         })
         .catch((e) => alert("게시글을 불러오는 데에 실패했습니다😿"));
 
-      GetComments(articleId, 1, token)
-        .then((res) => {
-          setCommentCurrentPage(1);
-          setCommentTotalPage(res.data.pageInfo.totalPages);
-          setComments(res.data.data);
-          setCommentLoading(false);
-        })
-        .catch((e) => {
-          alert("댓글 불러오기에 실패했습니다.😿");
-        });
+      resetComments();
     }
   }, [articleId]);
 
@@ -178,8 +182,9 @@ const Detail = ({ articleId, isDetailOn, detailHandler, editPopupHandler }: Prop
               setMorePopupId={setContsId}
               commentLoading={commentLoading}
               setCommentConts={setCommentConts}
+              resetComments={resetComments}
             />
-            <CommentAdd articleId={articleId} setComments={setComments} />
+            <CommentAdd articleId={articleId} resetComments={resetComments} />
           </ArticleAndComments>
         </DetailViewer>
       </Modal>
@@ -191,7 +196,7 @@ const Detail = ({ articleId, isDetailOn, detailHandler, editPopupHandler }: Prop
           isOn={isMorePopupOn}
           contsId={contsId}
           setIsOn={setIsMorePopupOn}
-          setComments={setComments}
+          resetComments={resetComments}
           articleId={articleId}
           editPopupHandler={editPopupHandler}
           detailHandler={detailHandler}
@@ -205,7 +210,7 @@ const Detail = ({ articleId, isDetailOn, detailHandler, editPopupHandler }: Prop
           commentConts={commentConts}
           articleId={articleId}
           commentId={contsId}
-          setComments={setComments}
+          resetComments={resetComments}
         />
       </CommentEditModalWrapper>
     </>
