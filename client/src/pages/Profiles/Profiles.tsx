@@ -7,7 +7,7 @@ import InnerContainer from "../../components/InnerContainer/InnerContainer";
 import Tab from "../../components/Tab/Tab";
 import Avatar from "../../components/Avatar/Avatar";
 import ProfileArticles from "./ProfileArticles";
-import MyPageSnacks from "../MyPage/MyPageSnacks";
+import ProfileSnacks from "./ProfileSnacks";
 
 import { GetProfile } from "../../api/mypage";
 import { GetIsSubscribe, PostSubscribe, DeleteSubscribe } from "../../api/subscribe";
@@ -130,7 +130,7 @@ const Profiles = () => {
                 case "간식":
                   return (
                     <>
-                      <MyPageSnacks />
+                      <ProfileSnacks profileUserId={profileUserId} />
                     </>
                   );
                 default:
