@@ -4,8 +4,13 @@ export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   width: 80%;
-  gap: 15px;
+  gap: 30px;
   margin: 40px 0;
+
+  @media screen and (max-width: 736px) {
+    width: 100%;
+    margin: 0;
+  }
 
   label {
     margin-bottom: 10px;

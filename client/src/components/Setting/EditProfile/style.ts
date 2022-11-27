@@ -1,22 +1,20 @@
 import styled from "styled-components";
 
 export const Wrapper = styled.div`
-  position: absolute;
+  width: 80%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  width: 100%;
-  height: 90%;
-  padding: 0 100px;
-
-  box-sizing: border-box;
 `;
 
 export const UserInfoWrapper = styled.div`
   display: flex;
   justify-content: center;
   width: 90%;
+
+  @media screen and (max-width: 736px) {
+    flex-direction: column;
+  }
 `;
 
 export const AvatarWrapper = styled.div`
@@ -24,6 +22,12 @@ export const AvatarWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
+
+  @media screen and (max-width: 736px) {
+    margin-right: 0;
+    margin-bottom: 30px;
+  }
 
   img {
     display: block;
@@ -31,6 +35,11 @@ export const AvatarWrapper = styled.div`
     height: 200px;
     border-radius: 150px;
     object-fit: cover;
+
+    @media screen and (max-width: 736px) {
+      width: 150px;
+      height: 150px;
+    }
   }
 
   label {
@@ -43,9 +52,21 @@ export const AvatarWrapper = styled.div`
 
 export const ButtonWrapper = styled.div`
   display: flex;
+  justify-content: center;
+  width: 90%;
   padding: 40px 0;
 
-  button:first-child {
-    margin-right: 20px;
+  @media screen and (max-width: 736px) {
+    padding-bottom: 0;
+  }
+
+  button {
+    @media screen and (max-width: 736px) {
+      width: 100%;
+    }
+
+    &:first-child {
+      margin-right: 20px;
+    }
   }
 `;
