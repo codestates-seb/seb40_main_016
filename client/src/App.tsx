@@ -14,6 +14,7 @@ import NewArticle from "./pages/Articles/NewArticle";
 import Detail from "./pages/Detail/Detail";
 import Shop from "./pages/Shop/Shop";
 import Setting from "./pages/Setting/Setting";
+import Social from "./pages/Social/Social";
 
 function App() {
   const [isOn, setIsOn] = useState<boolean>(false);
@@ -59,6 +60,7 @@ function App() {
           <Route index path="/" element={<Main detailHandler={detailHandler} setArticleId={setArticleId} />} />
           <Route index path="/signup" element={<Signup />} />
           <Route index path="/login" element={<Login />} />
+          <Route index path="/social" element={<Social />} />
           <Route index path="/mypage" element={<Mypage detailHandler={detailHandler} setArticleId={setArticleId} />} />
           <Route
             index
