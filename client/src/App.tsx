@@ -13,6 +13,7 @@ import NotFound from "./pages/NotFound/NotFound";
 import NewArticle from "./pages/Articles/NewArticle";
 import Detail from "./pages/Detail/Detail";
 import Shop from "./pages/Shop/Shop";
+import Setting from "./pages/Setting/Setting";
 
 function App() {
   const [isOn, setIsOn] = useState<boolean>(false);
@@ -65,6 +66,7 @@ function App() {
             element={<Profiles detailHandler={detailHandler} setArticleId={setArticleId} />}
           />
           <Route index path="/shop" element={<Shop />} />
+          <Route index path="/setting" element={<Setting />} />
           <Route index path="*" element={<NotFound />} />
         </Routes>
         <NewArticle isOn={isOn} setIsOn={setIsOn} isEdit={isEdit} articleId={articleId} />
