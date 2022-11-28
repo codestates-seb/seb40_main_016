@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
+import { useNavigate } from "react-router-dom";
 
 import OuterContainer from "../../components/OuterContainer/OuterConainer";
 import InnerContainer from "../../components/InnerContainer/InnerContainer";
@@ -49,6 +50,7 @@ interface UserWalletProps {
 }
 
 const MyPage = () => {
+  const navigate = useNavigate();
   const token = useRecoilValue(accessTokenState);
   const myInfo = useRecoilValue(userInfoState);
   const [nowTab, setNowTab] = useState<string>("게시물");
@@ -102,7 +104,7 @@ const MyPage = () => {
                       {onUserType === "CAT" ? <FishIcon /> : <BoneIcon />}
                       <span>간식 {userWallet.yummy}알</span>
                     </YummyBtn>
-                    <SettingWalletBtn>
+                    <SettingWalletBtn onClick={() => navigate("/setting")}>
                       <SettingIcon />
                     </SettingWalletBtn>
                     <SettingWalletBtn>
