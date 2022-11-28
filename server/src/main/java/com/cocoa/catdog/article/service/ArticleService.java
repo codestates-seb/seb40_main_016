@@ -1,7 +1,12 @@
 package com.cocoa.catdog.article.service;
 
+import com.amazonaws.util.CollectionUtils;
+import com.cocoa.catdog.article.Dto.ArticleImgDto;
 import com.cocoa.catdog.article.entity.Article;
+import com.cocoa.catdog.article.entity.ArticleImg;
 import com.cocoa.catdog.article.entity.Report;
+import com.cocoa.catdog.article.mapper.ArticleImgMapper;
+import com.cocoa.catdog.article.repository.ArticleImgRepository;
 import com.cocoa.catdog.article.repository.ArticleRepository;
 import com.cocoa.catdog.article.repository.LikeRepository;
 import com.cocoa.catdog.article.repository.ReportRepository;
@@ -35,14 +40,16 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 public class ArticleService {
     private final ArticleRepository articleRepository;
+    private final ArticleImgRepository articleImgRepository;
+    private final UserRepository userRepository;
     private final UserService userService;
     private final LikeRepository likeRepository;
     private final ReportRepository reportRepository;
     private final CommentRepository commentRepository;
     private final S3Uploader s3Uploader;
     private final SseEmitterService sseEmitterService;
-
     private final ApplicationEventPublisher eventPublisher;
+    private final ArticleImgMapper mapper;
 
 
     /*
@@ -52,15 +59,33 @@ public class ArticleService {
 
         User findUser = userService.findUser(userId);
 
-        List<String> imgUrls = new ArrayList<>();
+        Long articleId = article.getArticleId();
+        if (!CollectionUtils.isNullOrEmpty(files)) {
+            ArticleImgDto.Post articleImgDto;
+            ArticleImg articleImg;
+            for (MultipartFile file : files) {
+                String originalFileName = file.getOriginalFilename();
 
-        for (MultipartFile file : files) {
-            String originalFileName = file.getOriginalFilename();
-            String imgUrl = s3Uploader.uploadFile("article", file);
-            imgUrls.add(imgUrl);
+                String imgUrl = s3Uploader.uploadFile("articleImages/", file);
+
+                articleImgDto = ArticleImgDto.Post.builder()
+                        .imgUrl(imgUrl)
+                        .article(article)
+                        .build();
+
+                articleImg = new ArticleImg(
+                        articleImgDto.getImgUrl()
+                );
+                articleImg.setArticle(article);
+
+                article.getArticleImg().add(articleImg);
+                articleImgRepository.save(articleImg);
+            }
         }
 
+
         article.setUser(findUser);
+
         findUser.getArticles().add(article);
         return articleRepository.save(article);
     }

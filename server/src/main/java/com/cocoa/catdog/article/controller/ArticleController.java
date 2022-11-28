@@ -42,7 +42,6 @@ public class ArticleController {
     ) throws Exception {
         Article article = mapper.postDtoToEntity(postDto);
 
-
         return mapper.entityToResponseDto(
                 articleService.saveArticle(article, jwtTokenizer.getUserId(token), files));
     }
@@ -72,6 +71,8 @@ public class ArticleController {
         return mapper.entityToResponseDto(
                 articleService.updateArticle(article, jwtTokenizer.getUserId(token)));
     }
+
+
 
     /*
     * 게시물 조회

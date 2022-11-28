@@ -1,7 +1,7 @@
 package com.cocoa.catdog.article.Dto;
 
 import com.cocoa.catdog.article.entity.Article;
-import com.cocoa.catdog.user.dto.UserDto;
+import com.cocoa.catdog.article.entity.ArticleImg;
 import com.cocoa.catdog.user.dto.UserSimpleResponseDto;
 import lombok.*;
 
@@ -15,7 +15,6 @@ public class ArticleDto {
     @Builder
     public static class Response {
         private Long articleId;
-        private String articleImg;
         private String content;
         private int likeCnt;
         private int views;
@@ -25,6 +24,8 @@ public class ArticleDto {
         private Article.ArticleStatus articleStatus;
         private boolean gotLiked;
         private UserSimpleResponseDto user;
+
+        private ArticleImgDto articleImg;
 
         public void addGotLiked(boolean gotLiked) {
             this.gotLiked = gotLiked;
@@ -36,7 +37,7 @@ public class ArticleDto {
     @Builder
     public static class ProfileResponse {
         private Long articleId;
-        private String articleImg;
+        private List<ArticleImg> articleImgList;
         private String content;
         private int likeCnt;
         private int views;
@@ -52,16 +53,14 @@ public class ArticleDto {
     @Builder
     public static class Post {
         @NotBlank
-        private String articleImg;
-        @NotBlank
         private String content;
     }
+
 
     @Getter
     @Builder
     public static class Patch {
         private Long articleId;
-        private String articleImg;
         private String content;
 
         public  void setArticleId(Long articleId) {this.articleId = articleId;}
