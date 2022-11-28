@@ -11,3 +11,5 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create
+s3:
+  articleDir: assets/testImages/

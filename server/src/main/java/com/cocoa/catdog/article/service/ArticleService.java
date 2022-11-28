@@ -21,6 +21,7 @@ import com.cocoa.catdog.user.entity.User;
 import com.cocoa.catdog.user.repository.UserRepository;
 import com.cocoa.catdog.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -51,7 +52,8 @@ public class ArticleService {
     private final ApplicationEventPublisher eventPublisher;
     private final ArticleImgMapper mapper;
 
-
+    @Value("${s3.articleDir}")
+    private String articleDir;
     /*
     * 게시물 등록
     * */
@@ -66,7 +68,7 @@ public class ArticleService {
             for (MultipartFile file : files) {
                 String originalFileName = file.getOriginalFilename();
 
-                String imgUrl = s3Uploader.uploadFile("articleImages/", file);
+                String imgUrl = s3Uploader.uploadFile(articleDir, file);
 
                 articleImgDto = ArticleImgDto.Post.builder()
                         .imgUrl(imgUrl)

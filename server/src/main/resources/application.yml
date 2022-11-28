@@ -46,7 +46,6 @@ cloud:
     s3:
       bucket: catdogbucket
       folder:
-        [ folderName ]: [ folderName/ ]
     region:
       static: ap-northeast-2
     stack:
