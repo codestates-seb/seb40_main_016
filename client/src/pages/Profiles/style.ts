@@ -73,41 +73,6 @@ export const FollowBtn = styled.div`
   }
 `;
 
-export const YummyBtn = styled.div`
-  margin-right: 20px;
-  padding: 0px 20px;
-  height: 40px;
-  max-width: 160px;
-  min-width: 90px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: var(--fs-pc-small);
-  border: 1px solid var(--color-gray);
-  border-radius: 30px;
-
-  svg {
-    margin-right: 10px;
-    width: 20px;
-  }
-`;
-
-export const SettingWalletBtn = styled.div`
-  margin-right: 10px;
-  width: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 40px;
-  border: none;
-  background-color: transparent;
-  font-size: var(--fs-pc-small);
-
-  svg {
-    width: 25px;
-  }
-`;
-
 export const UserDesc = styled.div`
   div {
     margin-top: 20px;

@@ -1,21 +1,29 @@
-import { useState } from "react";
+import { useEffect, useState, useRef, Dispatch, SetStateAction } from "react";
 import styled from "styled-components";
+import { useRecoilValue } from "recoil";
+import "react-loading-skeleton/dist/skeleton.css";
 
 import InnerContainer from "../../components/InnerContainer/InnerContainer";
 import ImageCard from "../../components/ImageCard/ImageCard";
 import Button from "../../components/Button/Button";
 import Avatar from "../../components/Avatar/Avatar";
+import ImageSkeleton from "../../components/Skeleton/ImageSkeleton";
 
-import { ImgContainer, Dim, InfoBox, Info } from "../Main/style";
+import { ImgContainer, Dim } from "../Main/style";
+
+import accessTokenState from "../../_state/accessTokenState";
+
+import { GetMyArticles } from "../../api/mypage";
 
 import { ReactComponent as BoneIcon } from "../../assets/img/bone-icon.svg";
 import { ReactComponent as BoneWIcon } from "../../assets/img/bone-w-icon.svg";
+import { ReactComponent as FishIcon } from "../../assets/img/fish-icon.svg";
+import { ReactComponent as FishWIcon } from "../../assets/img/fish-w-icon.svg";
 import { ReactComponent as CrownIcon } from "../../assets/img/crown-icon.svg";
 
 const MostRecieved = styled.div`
-  padding: 20px 0px;
+  padding: 10px 0px;
   margin: 30px 0px;
-  height: 250px;
   background-color: #f6f6f6;
 
   p {
@@ -29,14 +37,26 @@ const MostRecievedArticles = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  overflow: scroll;
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
 
   .avatar {
     margin: 0px 10px;
   }
 
   .crown-icon {
-    margin: 5px 70px 10px;
-    width: 30px;
+    margin: 5px 55px 10px;
+    width: 23px;
+  }
+
+  @media screen and (max-width: 736px) {
+    .crown-icon {
+      margin: 5px 43px 10px;
+      width: 18px;
+    }
   }
 `;
 
@@ -67,49 +87,83 @@ const Article = styled.div`
   }
 
   .avatar-snack {
-    margin-top: 20px;
+    margin-top: 8px;
+  }
+
+  @media screen and (max-width: 736px) {
+    div {
+      svg {
+        width: 13px;
+      }
+    }
+    span {
+      font-size: 13px;
+    }
   }
 `;
 
 const AvatarBox = styled.div`
+  width: 125px;
+  height: 125px;
+  border: 2px solid var(--color-gray);
   position: relative;
+  border-radius: 50%;
+  box-shadow: 0px 3px 10px 0px var(--color-gray);
+  cursor: pointer;
 
   .avatar {
-    box-shadow: 0px 3px 8px 0px var(--color-light-black);
+    margin: 0px;
   }
-`;
 
-const AvatarDim = styled.div`
-  position: absolute;
-  width: 89%;
-  height: 100%;
-  border-radius: 50%;
-  opacity: 0;
+  @media screen and (max-width: 736px) {
+    width: 95px;
+    height: 95px;
 
-  &:hover {
-    background-color: #0c0d0e50;
-    cursor: pointer;
-    opacity: 1;
+    .avatar {
+      width: 90px;
+      height: 90px;
+    }
   }
 `;
 
 const MainContainer = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: flex-end;
 
   .img-box {
     position: relative;
   }
 `;
 
-const FilterBtn = styled.div`
+const FilterBtnBox = styled.div`
+  margin: 0px 0px 30px;
+  width: 210px;
+  height: 51px;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-between;
 
-  .button {
-    margin: 20px 0px 30px 10px;
-    height: 50px;
+  @media screen and (max-width: 736px) {
+    width: 170px;
+  }
+
+  button {
+    box-shadow: 0px 2px 5px 0px var(--color-gray);
+
+    &.clicked {
+      background-color: var(--color-madium-black);
+      color: var(--color-white);
+
+      &:hover {
+        background-color: var(--color-madium-black);
+      }
+    }
+    @media screen and (max-width: 736px) {
+      width: 80px;
+      height: 40px;
+      font-size: var(--fs-pc-xsmall);
+    }
   }
 `;
 
@@ -147,83 +201,187 @@ const SnackCount = styled.div`
     width: 15px;
     color: var(--color-white);
   }
+
+  @media screen and (max-width: 736px) {
+    padding: 0px 12px;
+    bottom: 5px;
+    left: 5px;
+    height: 30px;
+    font-size: var(--fs-pc-xsmall);
+
+    svg {
+      width: 12px;
+    }
+  }
 `;
 
-const MyPageArticles = () => {
+interface Props {
+  handleArticlesNum: (arg: number) => void;
+  detailHandler: () => void;
+  setArticleId: Dispatch<SetStateAction<number>>;
+  userType: "PERSON" | "CAT" | "DOG";
+}
+interface MyArticles {
+  articleId: number;
+  articleImg: string;
+  content: string;
+  createdAt: string;
+  likeCnt: number;
+  reportCnt: number;
+  views: number;
+  yummyCnt: number;
+}
+
+const MyPageArticles = ({ handleArticlesNum, detailHandler, setArticleId, userType }: Props) => {
+  const token = useRecoilValue(accessTokenState);
   const [open, setOpen] = useState<boolean>(false);
+  const [myArticles, setMyArticles] = useState<MyArticles[]>([]);
+  const [mostReceivedArticles, setMostReceivedArticles] = useState<MyArticles[]>([]);
+  const [tab, setTab] = useState<string>("post");
+  const [page, setPage] = useState<number>(0);
+  const [totalPage, setTotalPage] = useState<number>(1);
+  const [loading, setLoading] = useState<boolean>(false);
+  const obsRef = useRef(null);
+  const preventRef = useRef(true);
 
   const handleOpen = () => {
     setOpen(!open);
   };
+
+  const handleImgBoxClick = (articleId: number) => {
+    setArticleId(articleId);
+    detailHandler();
+  };
+
+  const handleTabClick = (tab: "post" | "give" | "take") => {
+    setTab(tab);
+  };
+
+  useEffect(() => {
+    if (page !== 0 && page <= totalPage) getMyArticles();
+  }, [page]);
+
+  useEffect(() => {
+    if (page !== 0) getMyArticles();
+  }, [tab]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(obsHandler);
+    if (obsRef.current) observer.observe(obsRef.current);
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  const obsHandler = (entries: any) => {
+    const target = entries[0];
+
+    if (target.isIntersecting && preventRef.current) {
+      preventRef.current = false;
+      setPage((prev) => prev + 1);
+    }
+  };
+
+  const getMyArticles = () => {
+    setLoading(true);
+    GetMyArticles(token, tab).then((res: any) => {
+      const data = res.data.data;
+
+      const mostReceived = data.slice(0, 5).sort((a: any, b: any) => {
+        return b.yummyCnt - a.yummyCnt;
+      });
+
+      if (res.data.pageInfo.page === 1) {
+        setMyArticles(data);
+      } else {
+        setMyArticles(myArticles.concat(data));
+      }
+      preventRef.current = true;
+      setMostReceivedArticles(mostReceived);
+      handleArticlesNum(data.length);
+      setTotalPage(res.data.pageInfo.totalPages);
+      setLoading(false);
+    });
+  };
+
   return (
     <>
       <MostRecieved>
         <InnerContainer>
-          <p>가장 간식을 많이 받은 글</p>
+          <p>가장 간식을 많이 받은 글 Best 5 👍</p>
           <MostRecievedArticles>
             <CrownIcon className="crown-icon" />
             <ArticleList>
-              <Article>
-                <AvatarBox>
-                  <AvatarDim />
-                  <Avatar
-                    className="avatar"
-                    bgUrl="https://user-images.githubusercontent.com/104997140/202488690-7bdea11c-b1c5-40d4-a5c4-158fdf088cf8.jpeg"
-                    width="150px"
-                    height="150px"
-                  ></Avatar>
-                </AvatarBox>
-                <div className="avatar-snack">
-                  <BoneIcon /> <span>500알</span>
-                </div>
-              </Article>
-              <Article>
-                <AvatarBox>
-                  <AvatarDim />
-                  <Avatar
-                    className="avatar"
-                    bgUrl="https://user-images.githubusercontent.com/104997140/202488690-7bdea11c-b1c5-40d4-a5c4-158fdf088cf8.jpeg"
-                    width="150px"
-                    height="150px"
-                  ></Avatar>
-                </AvatarBox>
-                <div className="avatar-snack">
-                  <BoneIcon /> <span>500알</span>
-                </div>
-              </Article>
+              {mostReceivedArticles.map((article: MyArticles) => (
+                <Article
+                  key={article.articleId}
+                  onClick={() => {
+                    handleImgBoxClick(article.articleId);
+                  }}
+                >
+                  <AvatarBox>
+                    <Avatar className="avatar" bgUrl={article.articleImg} width="120px" height="120px"></Avatar>
+                  </AvatarBox>
+                  <div className="avatar-snack">
+                    {userType === "CAT" ? <FishIcon /> : <BoneIcon />}
+                    <span>{article.yummyCnt}알</span>
+                  </div>
+                </Article>
+              ))}
             </ArticleList>
           </MostRecievedArticles>
         </InnerContainer>
       </MostRecieved>
       <InnerContainer>
         <MainContainer>
-          <FilterBtn>
-            <Button className="button" width="100px" height="50px" fontSize="var(--fs-pc-small)" onClick={handleOpen}>
-              간식을 준 글
-            </Button>
-            <Button className="button" width="100px" height="50px" fontSize="var(--fs-pc-small)" onClick={handleOpen}>
+          <FilterBtnBox>
+            <Button
+              className={tab === "post" ? "clicked" : ""}
+              width="100px"
+              height="50px"
+              fontSize="var(--fs-pc-small)"
+              onClick={() => handleTabClick("post")}
+            >
               내가 올린 글
             </Button>
-          </FilterBtn>
+            <Button
+              className={tab === "give" ? "clicked" : ""}
+              width="100px"
+              height="50px"
+              fontSize="var(--fs-pc-small)"
+              onClick={() => handleTabClick("give")}
+            >
+              간식을 준 글
+            </Button>
+          </FilterBtnBox>
           <ImgContainer>
-            <ImgBox>
-              <Dim>
-                <InfoBox>
-                  <Info>
-                    <BoneWIcon />
-                    article.yummyCnt
-                  </Info>
-                </InfoBox>
-              </Dim>
-              <SnackCount>
-                <BoneWIcon /> 10알
-              </SnackCount>
-              <ImageCard
-                className="img-card"
-                imgUrl="https://user-images.githubusercontent.com/104997140/202489483-93eaaf70-db42-4b68-a2a6-c04c1dd02e59.jpeg"
-                onClick={handleOpen}
-              ></ImageCard>
-            </ImgBox>
+            {myArticles.map((article: MyArticles) => (
+              <ImgBox
+                key={article.articleId}
+                onClick={() => {
+                  handleImgBoxClick(article.articleId);
+                }}
+              >
+                <Dim />
+                <SnackCount>
+                  {userType === "CAT" ? <FishWIcon /> : <BoneWIcon />}
+                  {article.yummyCnt}알
+                </SnackCount>
+                <ImageCard className="img-card" imgUrl={article.articleImg} onClick={handleOpen}></ImageCard>
+              </ImgBox>
+            ))}
+            {loading ? (
+              Array(8)
+                .fill(0)
+                .map((_, i) => (
+                  <ImgBox key={i}>
+                    <ImageSkeleton />
+                  </ImgBox>
+                ))
+            ) : (
+              <></>
+            )}
+            <div ref={obsRef} />
           </ImgContainer>
         </MainContainer>
       </InnerContainer>

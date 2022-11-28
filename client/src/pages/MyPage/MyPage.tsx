@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, Dispatch, SetStateAction } from "react";
 import { useRecoilValue } from "recoil";
 import { useNavigate } from "react-router-dom";
 
@@ -33,6 +33,10 @@ import {
   UserDesc,
 } from "./style";
 
+interface Prop {
+  detailHandler: () => void;
+  setArticleId: Dispatch<SetStateAction<number>>;
+}
 interface UserInfoProps {
   content: string;
   email: string;
@@ -42,19 +46,20 @@ interface UserInfoProps {
   userId: number;
   userImg: string;
   userName: string;
-  userType: string;
+  userType: "PERSON" | "CAT" | "DOG";
 }
 interface UserWalletProps {
   walletId: number;
   yummy: number;
 }
 
-const MyPage = () => {
+const MyPage = ({ detailHandler, setArticleId }: Prop) => {
   const navigate = useNavigate();
   const token = useRecoilValue(accessTokenState);
-  const myInfo = useRecoilValue(userInfoState);
   const [nowTab, setNowTab] = useState<string>("게시물");
-  const [onUserType, setOnUserType] = useState<string>("cats");
+  const [userArticlesNum, setUserArticlesNum] = useState<number>(0);
+  const [openFollowModal, setOpenFollowModal] = useState<boolean>(false);
+  const [openFollowerModal, setOpenFollowerModal] = useState<boolean>(false);
   const [userInfo, setUserInfo] = useState<UserInfoProps>({
     content: "",
     email: "",
@@ -64,7 +69,7 @@ const MyPage = () => {
     userId: 0,
     userImg: "",
     userName: "",
-    userType: "",
+    userType: "CAT",
   });
   const [userWallet, setUserWallet] = useState<UserWalletProps>({
     walletId: 0,
@@ -76,16 +81,15 @@ const MyPage = () => {
       setUserInfo(res.data);
       setUserWallet(res.data.wallet);
     });
-    handleUserType();
   }, []);
 
-  const handleUserType = () => {
-    if (userInfo.userType === "DOG") {
-      setOnUserType("DOG");
-    } else {
-      setOnUserType("CAT");
-    }
+  const handleArticlesNum = (articles: number) => {
+    setUserArticlesNum(articles);
   };
+
+  // const handleFollowModal = () => {
+
+  // }
 
   return (
     <>
@@ -94,14 +98,14 @@ const MyPage = () => {
           <InnerContainer>
             <ProfileContainer>
               <ProfileImg>
-                <Avatar bgUrl={userInfo.userImg} width="150px" height="150px" />
+                <Avatar className="profile-avatar" bgUrl={userInfo.userImg} width="150px" height="150px" />
               </ProfileImg>
               <ProfileInfo>
                 <UserInfo>
                   <UserName>{userInfo.userName}</UserName>
                   <UserBtn>
                     <YummyBtn>
-                      {onUserType === "CAT" ? <FishIcon /> : <BoneIcon />}
+                      {userInfo.userType === "CAT" ? <FishIcon /> : <BoneIcon />}
                       <span>간식 {userWallet.yummy}알</span>
                     </YummyBtn>
                     <SettingWalletBtn onClick={() => navigate("/setting")}>
@@ -114,7 +118,7 @@ const MyPage = () => {
                 </UserInfo>
                 <UserDesc>
                   <div>
-                    <span>게시물 5</span>
+                    <span>게시물 {userArticlesNum}</span>
                     <span>팔로우 {userInfo.followCnt}</span>
                     <span>팔로워 {userInfo.followerCnt}</span>
                   </div>
@@ -123,33 +127,71 @@ const MyPage = () => {
               </ProfileInfo>
             </ProfileContainer>
           </InnerContainer>
-          <Tab tabName="test" tabList={["게시물", "댓글", "간식"]} barPosition="top" setNowTab={setNowTab}></Tab>
-          <div>
-            {(() => {
-              switch (nowTab) {
-                case "게시물":
-                  return (
-                    <>
-                      <MyPageArticles />
-                    </>
-                  );
-                case "댓글":
-                  return (
-                    <>
-                      <MyPageComments />
-                    </>
-                  );
-                case "간식":
-                  return (
-                    <>
-                      <MyPageSnacks />
-                    </>
-                  );
-                default:
-                  return <></>;
-              }
-            })()}
-          </div>
+          {userInfo.userType !== "PERSON" ? (
+            <>
+              <Tab tabName="test" tabList={["게시물", "댓글", "간식"]} barPosition="top" setNowTab={setNowTab}></Tab>
+              <div>
+                {(() => {
+                  switch (nowTab) {
+                    case "게시물":
+                      return (
+                        <>
+                          <MyPageArticles
+                            handleArticlesNum={handleArticlesNum}
+                            detailHandler={detailHandler}
+                            setArticleId={setArticleId}
+                            userType={userInfo.userType}
+                          />
+                        </>
+                      );
+                    case "댓글":
+                      return (
+                        <>
+                          <MyPageComments />
+                        </>
+                      );
+                    case "간식":
+                      return (
+                        <>
+                          <MyPageSnacks />
+                        </>
+                      );
+                    default:
+                      return <></>;
+                  }
+                })()}
+              </div>
+            </>
+          ) : (
+            <>
+              <Tab tabName="test" tabList={["게시물", "댓글"]} barPosition="top" setNowTab={setNowTab}></Tab>
+              <div>
+                {(() => {
+                  switch (nowTab) {
+                    case "게시물":
+                      return (
+                        <>
+                          <MyPageArticles
+                            handleArticlesNum={handleArticlesNum}
+                            detailHandler={detailHandler}
+                            setArticleId={setArticleId}
+                            userType={userInfo.userType}
+                          />
+                        </>
+                      );
+                    case "댓글":
+                      return (
+                        <>
+                          <MyPageComments />
+                        </>
+                      );
+                    default:
+                      return <></>;
+                  }
+                })()}
+              </div>
+            </>
+          )}
         </OuterContainer>
       </MyAccountPage>
     </>
