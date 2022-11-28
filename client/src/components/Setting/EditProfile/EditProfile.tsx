@@ -8,8 +8,7 @@ import { compresseAndUploadFile } from "../../../utills/CompressAndUploadFile";
 import { EditProfileInfo } from "../../../types/user";
 import { UploadedPhotos } from "../../../types/article";
 import { SettingProps } from "../../../types/setting";
-import { PatchProfile } from "../../../api/setting";
-import { GetUserInfo } from "../../../api/user";
+import { GetUserInfo, PatchProfile } from "../../../api/user";
 
 const EditProfile = ({ userId, token, moveMypage }: SettingProps) => {
   const [userInfo, setUserInfo] = useState<EditProfileInfo>({
