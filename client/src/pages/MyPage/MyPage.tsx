@@ -1,5 +1,6 @@
 import { useEffect, useState, Dispatch, SetStateAction } from "react";
 import { useRecoilValue } from "recoil";
+import { useNavigate } from "react-router-dom";
 
 import OuterContainer from "../../components/OuterContainer/OuterConainer";
 import InnerContainer from "../../components/InnerContainer/InnerContainer";
@@ -52,7 +53,8 @@ interface UserWalletProps {
   yummy: number;
 }
 
-const MyPage = ({ detailHandler, setArticleId }: Prop) => {
+const MyPage = () => {
+  const navigate = useNavigate();
   const token = useRecoilValue(accessTokenState);
   const myInfo = useRecoilValue(userInfoState);
   const [nowTab, setNowTab] = useState<string>("게시물");
@@ -95,23 +97,19 @@ const MyPage = ({ detailHandler, setArticleId }: Prop) => {
               </ProfileImg>
               <ProfileInfo>
                 <UserInfo>
-                  <div>
-                    <UserName>{userInfo.userName}</UserName>
-                  </div>
-                  <div>
-                    <UserBtn>
-                      <YummyBtn>
-                        {userInfo.userType === "DOG" ? <BoneIcon /> : <FishIcon />}
-                        <span>간식 {userWallet.yummy}알</span>
-                      </YummyBtn>
-                      <SettingWalletBtn>
-                        <SettingIcon />
-                      </SettingWalletBtn>
-                      <SettingWalletBtn>
-                        <WalletIcon />
-                      </SettingWalletBtn>
-                    </UserBtn>
-                  </div>
+                  <UserName>{userInfo.userName}</UserName>
+                  <UserBtn>
+                    <YummyBtn>
+                      {onUserType === "CAT" ? <FishIcon /> : <BoneIcon />}
+                      <span>간식 {userWallet.yummy}알</span>
+                    </YummyBtn>
+                    <SettingWalletBtn onClick={() => navigate("/setting")}>
+                      <SettingIcon />
+                    </SettingWalletBtn>
+                    <SettingWalletBtn>
+                      <WalletIcon />
+                    </SettingWalletBtn>
+                  </UserBtn>
                 </UserInfo>
                 <UserDesc>
                   <div>
