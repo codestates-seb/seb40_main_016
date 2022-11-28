@@ -46,7 +46,7 @@ const ButtonWrapper = styled.div`
   }
 `;
 
-const ChangePassword = ({ userId, token, moveMypage }: SettingProps) => {
+const ChangePassword = ({ userId, token, movePage }: SettingProps) => {
   const [password, setPassword] = useState({
     currentPassword: "",
     newPassword: "",
@@ -59,17 +59,17 @@ const ChangePassword = ({ userId, token, moveMypage }: SettingProps) => {
   });
   const [hasNoError, setHasNoError] = useState<boolean>(true);
 
-  const onChangeCurPassword = (e: ChangeEvent<HTMLInputElement>) => {
+  const changeCurPassword = (e: ChangeEvent<HTMLInputElement>) => {
     setPassword({ ...password, currentPassword: e.target.value });
   };
 
   // 서버에 요청보내서 현재 비밀번호가 맞는지 체크해야함
-  const onChangeNewPassword = (e: ChangeEvent<HTMLInputElement>) => {
+  const changeNewPassword = (e: ChangeEvent<HTMLInputElement>) => {
     setPasswordErr(() => ({ ...passwordErr, newPassword: !isPassword(e.target.value) }));
     setPassword({ ...password, newPassword: e.target.value });
   };
 
-  const onChangeCheckPassword = (e: ChangeEvent<HTMLInputElement>) => {
+  const changeCheckPassword = (e: ChangeEvent<HTMLInputElement>) => {
     setPasswordErr(() => ({ ...passwordErr, checkPassword: password.newPassword !== e.target.value }));
     setPassword({ ...password, checkPassword: e.target.value });
   };
@@ -95,7 +95,7 @@ const ChangePassword = ({ userId, token, moveMypage }: SettingProps) => {
         <Input
           type="password"
           placeholder="이전 비밀번호를 입력하세요"
-          onChange={onChangeCurPassword}
+          onChange={changeCurPassword}
           label="이전 비밀번호"
           isError={passwordErr.currentPassword}
           errorMsg="현재 비밀번호와 일치하게 입력해 주세요."
@@ -103,7 +103,7 @@ const ChangePassword = ({ userId, token, moveMypage }: SettingProps) => {
         <Input
           type="password"
           placeholder="새 비밀번호를 입력하세요"
-          onChange={onChangeNewPassword}
+          onChange={changeNewPassword}
           label="새 비밀번호"
           isError={passwordErr.newPassword}
           errorMsg="영문, 숫자 조합 8-10자리로 입력해 주세요."
@@ -111,7 +111,7 @@ const ChangePassword = ({ userId, token, moveMypage }: SettingProps) => {
         <Input
           type="password"
           placeholder="새 비밀번호를 입력하세요"
-          onChange={onChangeCheckPassword}
+          onChange={changeCheckPassword}
           label="새 비밀번호 확인"
           isError={passwordErr.checkPassword}
           errorMsg="새로운 비밀번호와 일치하게 입력해 주세요."
@@ -133,7 +133,7 @@ const ChangePassword = ({ userId, token, moveMypage }: SettingProps) => {
           isShadow={true}
           textColor="red"
           onClick={() => {
-            if (confirm("변경사항이 저장되지 않습니다. 취소하시겠습니까?")) moveMypage();
+            if (confirm("변경사항이 저장되지 않습니다. 취소하시겠습니까?")) movePage();
           }}
         >
           취소

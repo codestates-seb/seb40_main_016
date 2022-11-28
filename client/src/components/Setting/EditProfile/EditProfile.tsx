@@ -10,7 +10,7 @@ import { UploadedPhotos } from "../../../types/article";
 import { SettingProps } from "../../../types/setting";
 import { GetUserInfo, PatchProfile } from "../../../api/user";
 
-const EditProfile = ({ userId, token, moveMypage }: SettingProps) => {
+const EditProfile = ({ userId, token, movePage }: SettingProps) => {
   const [userInfo, setUserInfo] = useState<EditProfileInfo>({
     userName: "",
     content: "",
@@ -51,13 +51,13 @@ const EditProfile = ({ userId, token, moveMypage }: SettingProps) => {
     PatchProfile(userId, formData, token)
       .then((res: any) => {
         if (res.status === 200) {
-          alert("프로필 수정 성공!");
-          moveMypage();
+          alert("프로필 수정 성공😺");
+          movePage();
         }
       })
       .catch((e) => {
         if (e.response.status === 500) {
-          alert("프로필 수정 실패!");
+          alert("프로필 수정 실패😿");
         }
       });
   };
@@ -99,7 +99,7 @@ const EditProfile = ({ userId, token, moveMypage }: SettingProps) => {
           isShadow={true}
           textColor="red"
           onClick={() => {
-            if (confirm("변경사항이 저장되지 않습니다. 취소하시겠습니까?")) moveMypage();
+            if (confirm("변경사항이 저장되지 않습니다. 취소하시겠습니까?")) movePage();
           }}
         >
           취소
