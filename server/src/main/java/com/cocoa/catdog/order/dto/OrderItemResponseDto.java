@@ -7,6 +7,8 @@ import lombok.Getter;
 @Getter
 public class OrderItemResponseDto {
     private Long itemId;
+    private String itemName;
+    private String itemImg;
     private int orderPrice;
     private int quantity;
 }
