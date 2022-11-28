@@ -64,3 +64,7 @@ export const DeleteUser = async (userId: number, token: string) => {
 
   return response;
 };
+
+export const LoginGoogle = () => {
+  location.href = `${URL}/oauth2/authorization/google`;
+};
