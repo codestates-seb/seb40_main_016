@@ -9,6 +9,7 @@ import InnerContainer from "../../components/InnerContainer/InnerContainer";
 import Tab from "../../components/Tab/Tab";
 import EditProfile from "../../components/Setting/EditProfile/EditProfile";
 import ChangePassword from "../../components/Setting/ChangePassword/ChangePassword";
+import DeleteAccount from "../../components/Setting/DeleteAccount/DeleteAccount";
 
 import { Wrapper, SettingWrapper } from "./style";
 
@@ -38,11 +39,11 @@ const Setting = () => {
               {(() => {
                 switch (nowTab) {
                   case "프로필 편집":
-                    return <EditProfile userId={userId} token={token} moveMypage={moveMypage} />;
+                    return <EditProfile userId={userId} token={token} movePage={moveMypage} />;
                   case "비밀번호 변경":
-                    return <ChangePassword userId={userId} token={token} moveMypage={moveMypage} />;
+                    return <ChangePassword userId={userId} token={token} movePage={moveMypage} />;
                   case "회원탈퇴":
-                    return;
+                    return <DeleteAccount userId={userId} token={token} movePage={() => navigate("/")} />;
                   default:
                     return "";
                 }

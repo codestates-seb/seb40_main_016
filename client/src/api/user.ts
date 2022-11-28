@@ -54,3 +54,13 @@ export const PatchProfile = async (userId: number, formData: FormData, token: st
 
   return response;
 };
+
+export const DeleteUser = async (userId: number, token: string) => {
+  const response = await axios.delete(`${URL}/user/${userId}`, {
+    headers: {
+      Authorization: `${token}`,
+    },
+  });
+
+  return response;
+};
