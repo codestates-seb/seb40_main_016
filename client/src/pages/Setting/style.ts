@@ -1,8 +1,8 @@
 import styled from "styled-components";
 
 export const Wrapper = styled.div`
-  height: 100vh;
   background-color: var(--color-ivory);
+  padding-bottom: 100px;
 `;
 
 export const SettingWrapper = styled.div`
