@@ -36,8 +36,10 @@ export const ArticleAndComments = styled.div`
   }
 `;
 
-export const ExtraModalWraaper = styled.div`
+export const ExtraModalWrapper = styled.div`
   .extra-feature-modal {
     min-height: unset;
   }
 `;
+
+export const CommentEditModalWrapper = styled.div``;

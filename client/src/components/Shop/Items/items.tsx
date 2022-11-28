@@ -1,5 +1,7 @@
 import styled from "styled-components";
+
 import Item from "./Item/Item";
+
 import { ItemsProps } from "../../../types/shop";
 
 const Wrapper = styled.ul`

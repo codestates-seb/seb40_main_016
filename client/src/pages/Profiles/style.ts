@@ -15,6 +15,13 @@ export const ProfileImg = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  .profile-avatar {
+    @media screen and (max-width: 736px) {
+      width: 110px;
+      height: 110px;
+    }
+  }
 `;
 
 export const ProfileInfo = styled.div`
@@ -34,12 +41,36 @@ export const UserName = styled.span`
   align-items: center;
   font-weight: 700;
   font-size: var(--fs-pc-xlarge);
+
+  @media screen and (max-width: 736px) {
+    font-size: var(--fs-pc-large);
+  }
 `;
 
 export const UserBtn = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+`;
+
+export const FollowBtn = styled.div`
+  margin-right: 20px;
+  padding: 0px 35px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 30px;
+  border: 1px solid var(--color-green);
+  background-color: var(--color-green);
+  color: var(--color-white);
+  font-size: var(--fs-pc-small);
+  cursor: pointer;
+
+  &.follow {
+    background-color: var(--color-white);
+    color: var(--color-green);
+  }
 `;
 
 export const YummyBtn = styled.div`
@@ -71,7 +102,6 @@ export const SettingWalletBtn = styled.div`
   border: none;
   background-color: transparent;
   font-size: var(--fs-pc-small);
-  cursor: pointer;
 
   svg {
     width: 25px;

@@ -1,7 +1,8 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 import Avatar from "../../Avatar/Avatar";
 import ReactionBtn from "../ReactionBtn/ReactionBtn";
 import DisplayCreatedAt from "../../../utills/DisplayCreatedAt";
+import Loading from "../../Loading/Loading";
 import { PostCommentLike, DeleteCommentLike } from "../../../api/comment";
 
 import { useRecoilValue } from "recoil";
@@ -9,26 +10,30 @@ import accessTokenState from "../../../_state/accessTokenState";
 import userInfoState from "../../../_state/userInfoState";
 import isLoginState from "../../../_state/isLoginState";
 
-import { Wrapper, GroupComment, Comment, Conts, GroupConts, Footer, AreaBtn } from "./style";
+import { Wrapper, GroupComment, Comment, Conts, GroupConts, Footer, AreaBtn, NoComments, EndPoint } from "./style";
 import { ReactComponent as MoreIcon } from "../../../assets/img/more-icon.svg";
 import { CommentType } from "../../../types/comment";
 
 interface Prop {
-  articleId: number;
   comments: CommentType[];
   setIsMorePopupOn: Dispatch<SetStateAction<boolean>>;
   setIsMyComment: Dispatch<SetStateAction<boolean>>;
   setMorePopupType: Dispatch<SetStateAction<"article" | "comment">>;
   setMorePopupId: Dispatch<SetStateAction<number>>;
+  commentLoading: boolean;
+  setCommentConts: Dispatch<SetStateAction<string>>;
+  resetComments: () => void;
 }
 
 const Comments = ({
-  articleId,
   comments,
   setIsMorePopupOn,
   setIsMyComment,
   setMorePopupType,
   setMorePopupId,
+  commentLoading,
+  setCommentConts,
+  resetComments,
 }: Prop) => {
   const token = useRecoilValue(accessTokenState);
   const myInfo = useRecoilValue(userInfoState);
@@ -37,7 +42,7 @@ const Comments = ({
   const onCommentLike = (item: CommentType) => {
     PostCommentLike(item.commentId, token)
       .then((res) => {
-        return res;
+        resetComments();
       })
       .catch((e) => {
         alert("댓글 좋아요에 실패했습니다.😿");
@@ -46,7 +51,7 @@ const Comments = ({
   const offCommentLike = (item: CommentType) => {
     DeleteCommentLike(item.commentId, token)
       .then((res) => {
-        return res;
+        resetComments();
       })
       .catch((e) => {
         alert("댓글 좋아요 취소에 실패했습니다.😿");
@@ -62,50 +67,66 @@ const Comments = ({
     checkIsMyComment(item.user.userId);
     setMorePopupId(item.commentId);
     setIsMorePopupOn(true);
+
+    if (item.user.userId === myInfo.userId) {
+      setCommentConts(item.content);
+    }
   };
 
   return (
     <>
       <Wrapper>
-        {comments.map((item, idx) => {
-          return (
-            <GroupComment key={idx}>
-              <Comment>
-                <Avatar className="comment-avatar" width="22px" height="22px" bgUrl={item.user.userImg} />
-                <Conts>
-                  <GroupConts>
-                    <span>{item.user.userName}</span>
-                    {item.content}
-                  </GroupConts>
-                  <Footer>
-                    <span>{DisplayCreatedAt(item.createdAt)}</span>
-                    <strong>좋아요 {item.likeCnt}개</strong>
-                    <MoreIcon
-                      onClick={() => {
-                        onMoreClick(item);
+        {comments.length === 0 ? (
+          <NoComments>
+            <img src="./assets/no-comments-clipart.png" alt="" />
+            <small>
+              아직 댓글이 없습니다.
+              <br />첫 댓글을 남겨보세요!
+            </small>
+          </NoComments>
+        ) : (
+          comments.map((item, idx) => {
+            return (
+              <GroupComment key={idx}>
+                <Comment>
+                  <Avatar className="comment-avatar" width="22px" height="22px" bgUrl={item.user.userImg} />
+                  <Conts>
+                    <GroupConts>
+                      <span>{item.user.userName}</span>
+                      {item.content}
+                    </GroupConts>
+                    <Footer>
+                      <span>{DisplayCreatedAt(item.createdAt)}</span>
+                      <strong>좋아요 {item.likeCnt}개</strong>
+                      <MoreIcon
+                        onClick={() => {
+                          onMoreClick(item);
+                        }}
+                      ></MoreIcon>
+                    </Footer>
+                  </Conts>
+                  <AreaBtn>
+                    <ReactionBtn
+                      btnId={`comment-like${item.commentId}`}
+                      btnType="like"
+                      userType="CAT"
+                      defaultStatus={item.gotLiked}
+                      onActive={() => {
+                        onCommentLike(item);
                       }}
-                    ></MoreIcon>
-                  </Footer>
-                </Conts>
-                <AreaBtn>
-                  <ReactionBtn
-                    btnId={`comment-like${item.commentId}`}
-                    btnType="like"
-                    userType="CAT"
-                    defaultStatus={item.gotLiked}
-                    onActive={() => {
-                      onCommentLike(item);
-                    }}
-                    onInactive={() => {
-                      offCommentLike(item);
-                    }}
-                    disabled={!isLogin}
-                  />
-                </AreaBtn>
-              </Comment>
-            </GroupComment>
-          );
-        })}
+                      onInactive={() => {
+                        offCommentLike(item);
+                      }}
+                      disabled={!isLogin}
+                    />
+                  </AreaBtn>
+                </Comment>
+              </GroupComment>
+            );
+          })
+        )}
+        {commentLoading ? <Loading /> : null}
+        <EndPoint id="end-point" />
       </Wrapper>
     </>
   );

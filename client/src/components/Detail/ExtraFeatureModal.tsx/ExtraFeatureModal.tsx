@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useEffect, useRef } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { useNavigate } from "react-router-dom";
 
 import Modal from "../../Modal/Modal";
@@ -20,11 +20,26 @@ interface Prop {
   isOn: boolean;
   contsId: number; //current activated articleId or commentId
   setIsOn: Dispatch<SetStateAction<boolean>>;
-  setComments: Dispatch<SetStateAction<CommentType[]>>;
-  articleId: number; //articleId for refresh comment list
+  resetComments: () => void;
+  articleId: number; //articleId for refresh comment list;
+  editPopupHandler: () => void;
+  detailHandler: () => void;
+  commentEditPopupHandler: () => void;
 }
 
-const ExtraFeatureModal = ({ className, type, isMy = false, isOn, contsId, setIsOn, setComments, articleId }: Prop) => {
+const ExtraFeatureModal = ({
+  className,
+  type,
+  isMy = false,
+  isOn,
+  contsId,
+  setIsOn,
+  resetComments,
+  articleId,
+  editPopupHandler,
+  detailHandler,
+  commentEditPopupHandler,
+}: Prop) => {
   const navigate = useNavigate();
   const token = useRecoilValue(accessTokenState);
   const isLogin = useRecoilValue(isLoginState);
@@ -63,9 +78,11 @@ const ExtraFeatureModal = ({ className, type, isMy = false, isOn, contsId, setIs
 
   const onEdit = () => {
     if (type === "article") {
-      console.log("글 수정");
+      setIsOn(false);
+      detailHandler();
+      editPopupHandler();
     } else if (type === "comment") {
-      console.log("댓글 수정");
+      commentEditPopupHandler();
     }
   };
 
@@ -83,14 +100,8 @@ const ExtraFeatureModal = ({ className, type, isMy = false, isOn, contsId, setIs
         .then((res) => {
           if (res.status === 204) {
             setIsOn(false);
-
-            GetComments(articleId, 1, token)
-              .then((res) => {
-                setComments(res.data.data);
-              })
-              .catch((e) => {
-                alert("댓글 불러오기에 실패했습니다.😿");
-              });
+            document.querySelector("#scroll-area").scrollTo(0, 0);
+            resetComments();
           }
         })
         .catch((err) => alert("댓글 삭제에 실패하였습니다.😿"));
@@ -99,7 +110,7 @@ const ExtraFeatureModal = ({ className, type, isMy = false, isOn, contsId, setIs
 
   return (
     <>
-      <Modal className={className} maxWidth="300px" isOn={isOn} setIsOn={setIsOn}>
+      <Modal className={className} maxWidth="300px" bg={true} isOn={isOn} setIsOn={setIsOn}>
         <Wrapper>
           {isMy ? (
             <>
