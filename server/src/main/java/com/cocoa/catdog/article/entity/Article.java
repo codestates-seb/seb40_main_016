@@ -4,6 +4,8 @@ import com.cocoa.catdog.audit.AuditingEntity;
 import com.cocoa.catdog.comment.entity.Comment;
 import com.cocoa.catdog.user.entity.User;
 import com.cocoa.catdog.wallet.entity.GiveTake;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -21,9 +23,6 @@ public class Article extends AuditingEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long articleId;
-
-    @Column(nullable = false)
-    private String articleImg;
 
     @Column(length = 200)
     private String content;
@@ -56,11 +55,19 @@ public class Article extends AuditingEntity {
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
     private List<GiveTake> giveTakes = new ArrayList<>();
 
+    @JsonIgnoreProperties({"articles"})
+    @JsonManagedReference
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
+    private List<ArticleImg> articleImg = new ArrayList<>();
+
+//    public List<String> getImages(Long articleId) {
+//
+//    }
+
     //==생성자==//
     @Builder
-    public Article (Long articleId, String articleImg, String content) {
+    public Article (Long articleId, String content) {
         this.articleId = articleId;
-        this.articleImg = articleImg;
         this.content = content;
     }
 

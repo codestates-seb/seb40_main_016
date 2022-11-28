@@ -7,6 +7,8 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.cocoa.catdog.article.Dto.ArticleImgDto;
+import com.cocoa.catdog.article.entity.ArticleImg;
 import com.cocoa.catdog.config.CommonUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,12 +35,13 @@ public class S3Uploader {
     private final AmazonS3Component component;
 
 
-    public String uploadFile(String category, MultipartFile multipartFile) {
+    public String uploadFile(String dirName, MultipartFile multipartFile) {
         // 참고:https://velog.io/@penrose_15/
         validateFileExists(multipartFile);
 
-        String fileName = CommonUtils.buildFileName(multipartFile.getOriginalFilename());
+        String name = CommonUtils.buildFileName(multipartFile.getOriginalFilename());
 
+        String fileName = dirName + name;
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setCacheControl(multipartFile.getContentType());
 
@@ -55,9 +58,18 @@ public class S3Uploader {
         }
         String url = client.getUrl(bucket, fileName).toString();
 
+
+
         return url;
     }
 
+    ArticleImgDto.Post articleImgDto = ArticleImgDto.Post.builder()
+            .imgUrl("Efe")
+            .build();
+
+    ArticleImg articleImg = new ArticleImg(
+            articleImgDto.getImgUrl()
+    );
 
     public String getFileUrl(String fileName) {
         return amazonS3.getUrl(component.getBucket(), fileName).toString();
@@ -99,13 +111,13 @@ public class S3Uploader {
 
 
 
-//    private void removeNewFile(File targetFile) {
-//        if (targetFile.delete()) {
-//            log.info("File delete success");
-//            return;
-//        }
-//        log.info("File delete fail");
-//    }
+    private void removeNewFile(File targetFile) {
+        if (targetFile.delete()) {
+            log.info("File delete success");
+            return;
+        }
+        log.info("File delete fail");
+    }
 
 
     private void validateFileExists(MultipartFile multipartFile) {

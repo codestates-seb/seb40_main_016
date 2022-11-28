@@ -9,7 +9,7 @@ public class CommonUtils {
         String fileName = originalFileName.substring(0, fileExtensionIndex);
         String now = String.valueOf(System.currentTimeMillis());
 
-        return fileName + "_" + now + fileExtension;
+        return fileName + fileExtension;
 
     }
 
