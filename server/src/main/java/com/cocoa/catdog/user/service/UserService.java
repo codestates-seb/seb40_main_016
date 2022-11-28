@@ -34,20 +34,47 @@ public class UserService {
         this.authorityUtils = authorityUtils;
     }
 
-    //회원 가입
+    //일반 회원 가입
     public User createUser(User user) {
         verifyExistsEmail(user.getEmail());
         //패스워드 암호화
         String encryptedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encryptedPassword);
         user.setWallet(new Wallet());
+        user.setNeedSocialSet(false);
         //db에 유저 역할 정보 저장
         List<String> roles = authorityUtils.createRoles(user.getEmail());
         user.setRoles(roles);
         return userRepository.save(user);
     }
 
-    //유저 정보 수정 (이메일은 고유값으로 변경 불가, 비밀번호, 이름, 소개 변경 가능)
+    //소셜 로그인 회원 가입
+    public User oauthCreateUser(User user) {
+
+        if(verifyExistsEmail(user.getEmail())) {
+            log.info("이미 가입된 유저입니다.");
+            return user;
+        }
+        else {
+            String encryptedPassword = passwordEncoder.encode(user.getPassword());
+            user.setPassword(encryptedPassword);
+            user.setWallet(new Wallet());
+            //db에 유저 역할 정보 저장
+            List<String> roles = authorityUtils.createRoles(user.getEmail());
+            user.setRoles(roles);
+            user.setNeedSocialSet(true);
+            return userRepository.save(user);
+        }
+    }
+
+
+    public boolean passwordCheck(long userId, String password) {
+        User findUser = userRepository.findByUserId(userId);
+        if (passwordEncoder.matches(password, findUser.getPassword())) {
+            return true;
+        } else { return false; }
+    }
+    //유저 정보 수정 (이메일은 고유값으로 변경 불가, 비밀번호, 이름, 소개 변경 가능) todo 필수 아닌 추가 정보 수정 가능하도록
     public User updateUser(User user) {
         User findUser = findVerifiedUser(user.getUserId());
 
@@ -63,6 +90,10 @@ public class UserService {
                 .ifPresent(userImg -> findUser.setUserImg(userImg));
         Optional.ofNullable(user.getUserType())
                 .ifPresent(userType -> findUser.setUserType(userType));
+        Optional.ofNullable(user.getUserStatus())
+                .ifPresent(userStatus -> findUser.setUserStatus(userStatus));
+        Optional.ofNullable(user.getNeedSocialSet())
+                .ifPresent(needSocialSet -> findUser.setNeedSocialSet(needSocialSet));
 
         return userRepository.save(findUser);
     }
@@ -128,13 +159,19 @@ public class UserService {
     }
 */
 
-    public void verifyExistsEmail(String email) {
+/*    public void verifyExistsEmail(String email) {
         if (userRepository.existsByEmail(email) == true) {
             log.info("이미 가입된 유저입니다.");
-            throw new BusinessLogicException(ExceptionCode.USER_EXISTS);
         } else {
             log.info("가입되지 않은 유저입니다.");
         }
     }
+}*/
+
+    public boolean verifyExistsEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
+
 }
 

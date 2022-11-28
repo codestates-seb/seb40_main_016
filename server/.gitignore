@@ -40,3 +40,4 @@ out/
 
 ### AWS related ###
 src/main/resources/application-aws.yml
+!/data/

@@ -15,9 +15,25 @@ spring:
           google:
             clientId: ${GOOGLE_OAUTH_CLIENT_ID}
             clientSecret: ${GOOGLE_OAUTH_SECRET}
+            redirect-uri: http://localhost:8080/login/oauth2/code/google
             scope:
               - email
               - profile
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: sanguk821@gmail.com
+    password: pxroizhqydkvcctp
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+  servlet:
+  multipart:
+    max-file-size: 10MB
+    max-request-size: 30MB
   jpa:
     hibernate:
       ddl-auto: update
@@ -40,3 +56,16 @@ logging:
       springframework:
         orm:
           jpa: INFO
+cloud:
+  aws:
+    credentials:
+      accessKey: ${s3_access_key}
+      secretKey: ${s3_secret_key}
+    s3:
+      bucket: catdogbucket
+      folder:
+        [ folderName ]: [ folderName/ ]
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false

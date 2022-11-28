@@ -23,6 +23,9 @@ public class UserPatchDto {
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
+    private Boolean needSocialSet;
+    private String userStatus;
+
     public void setUserId(long userId){
         this.userId = userId;
     }

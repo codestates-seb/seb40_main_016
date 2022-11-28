@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping
@@ -47,6 +48,19 @@ public class UserController {
         return new ResponseEntity<>(
                 new SingleResponseDto<>(mapper.userToUserResponseDto(response)), HttpStatus.CREATED);
     }
+
+    //소셜 회원 필수 정보 입력
+    @PostMapping("/user/setinfo")
+    public ResponseEntity checkPassword(@RequestHeader(name = "Authorization") String token, @RequestBody UserPatchDto userPatchDto) {
+        userPatchDto.setUserId(jwtTokenizer.getUserId(token));
+        userPatchDto.setNeedSocialSet(false);
+        User user = mapper.userPatchDtoToUser(userPatchDto);
+        User response = userService.updateUser(user);
+        return new ResponseEntity<>(
+                new SingleResponseDto<>(mapper.userToUserResponseDto(response)), HttpStatus.OK);
+    }
+
+
     //회원정보 수정
     @PatchMapping("/user/{user-id}")
     public ResponseEntity patchUser(@PathVariable("user-id") long userId, @Valid @RequestBody UserPatchDto userPatchDto) {
@@ -90,6 +104,17 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public UserResponseDto getProfile(@RequestHeader(name = "Authorization") String token) {
         return mapper.userToUserResponseDto(userService.findUser(jwtTokenizer.getUserId(token)));
+    }
+
+    //패스워드 확인
+    @PostMapping("/user/passcheck")
+    public ResponseEntity checkPassword(@RequestHeader(name = "Authorization") String token, @RequestBody Map<String, String> passwordMap) {
+        if (userService.passwordCheck(jwtTokenizer.getUserId(token), passwordMap.get("password"))) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
     }
 
     //전체회원 조회
