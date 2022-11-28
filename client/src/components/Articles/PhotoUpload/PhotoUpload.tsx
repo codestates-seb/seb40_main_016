@@ -19,13 +19,16 @@
 */
 
 import React, { useRef, useState, useEffect } from "react";
+
 import PhotoPreview from "../PhotoPreview/PhotoPreview";
-import { UploadedPhotos } from "../../../types/article";
-import { PhotoWrapper, CurrentPhoto, PhotoChoiceWrapper, PhotoListWrapper, PhotoList, UploadButton } from "./style";
+
 import { ReactComponent as EmptyPhoto } from "../../../assets/img/empty-photo-icon.svg";
 import { ReactComponent as AddPhoto } from "../../../assets/img/add-photo-icon.svg";
 import { ReactComponent as AddIcon } from "../../../assets/img/add-icon.svg";
 import { compresseAndUploadFile } from "../../../utills/CompressAndUploadFile";
+
+import { PhotoWrapper, CurrentPhoto, PhotoChoiceWrapper, PhotoListWrapper, PhotoList, UploadButton } from "./style";
+import { UploadedPhotos } from "../../../types/article";
 
 interface PhotoUploadProps {
   uploadedPhotos: UploadedPhotos[];

@@ -11,8 +11,10 @@
 */
 
 import { useRecoilValue } from "recoil";
+
 import Avatar from "../../Avatar/Avatar";
 import DetailSlider from "../../Detail/DetailSlider/DetailSlider";
+
 import { UploadedPhotos } from "../../../types/article";
 import { InnerWrapper, ArticleWrapper, SelectedPhoto, Profile, Nickname, Textarea } from "./style";
 import userInfoState from "../../../_state/userInfoState";

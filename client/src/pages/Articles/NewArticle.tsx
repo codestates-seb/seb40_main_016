@@ -1,8 +1,10 @@
 import { useRecoilValue } from "recoil";
 import { useEffect, useState } from "react";
+
 import Modal from "../../components/Modal/Modal";
 import PhotoUpload from "../../components/Articles/PhotoUpload/PhotoUpload";
 import WriteArticle from "../../components/Articles/WriteArticle/WriteArticle";
+
 import { UploadedPhotos } from "../../types/article";
 import { RegisterArticle, UpdateArticle, GetDetail } from "../../api/article";
 import accessTokenState from "../../_state/accessTokenState";
