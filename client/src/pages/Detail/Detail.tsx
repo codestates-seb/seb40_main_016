@@ -116,15 +116,13 @@ const Detail = ({ articleId, isDetailOn, detailHandler, editPopupHandler }: Prop
     const endPotintY = document.querySelector("#end-point").getBoundingClientRect();
     const basePointY = document.querySelector("#base-point").getBoundingClientRect();
 
-    if (!commentLoading && commentCurrentPage !== commentTotalPage && endPotintY.bottom === basePointY.top) {
+    if (!commentLoading && commentCurrentPage !== commentTotalPage && endPotintY.bottom < basePointY.top + 10) {
       setCommentLoading(true);
       GetComments(articleId, commentCurrentPage + 1, token)
         .then((res) => {
           setComments((prev) => [...prev, ...res.data.data]);
           setCommentLoading(false);
-          setCommentCurrentPage((prev) => {
-            return prev + 1;
-          });
+          setCommentCurrentPage(commentCurrentPage + 1);
         })
         .catch((e) => {
           alert("댓글 불러오기에 실패했습니다.😿");

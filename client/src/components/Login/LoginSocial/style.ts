@@ -61,4 +61,11 @@ export const SocialBtn = styled.button<{ sort: "google" | "naver" | "github" }>`
   > svg {
     height: ${(props) => (props.sort === "github" ? "25px" : "20px")};
   }
+
+  &.prepare {
+    opacity: 0.4;
+    &:hover {
+      background-color: ${(props) => handleColorType(props.sort)};
+    }
+  }
 `;

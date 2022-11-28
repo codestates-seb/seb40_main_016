@@ -68,7 +68,7 @@ const Header = ({ popupHandler }: HeaderProps) => {
   };
 
   return (
-    <HeaderBox>
+    <HeaderBox id="header">
       <InnerContainer className="inner">
         <LogoBox>
           <Link to="/">
