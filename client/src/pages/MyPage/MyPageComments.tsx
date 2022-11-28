@@ -23,7 +23,6 @@ const CommentContainer = styled.div`
 
 const CommentBox = styled.div`
   margin: 10px 0px;
-  width: 100%;
   display: flex;
 `;
 
@@ -48,15 +47,25 @@ const CommentImg = styled.div`
 `;
 
 const CommentContent = styled.div`
+  width: 80%;
   display: flex;
   flex-direction: column;
   justify-content: center;
+
+  @media screen and (max-width: 736px) {
+    width: 70%;
+  }
 `;
 
 const Content = styled.span`
   margin-bottom: 40px;
-  max-width: 189px;
-
+  white-space: normal;
+  word-wrap: break-word;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   @media screen and (max-width: 736px) {
     margin-bottom: 20px;
     font-size: var(--fs-pc-small);

@@ -259,7 +259,11 @@ const MyPageArticles = ({ handleArticlesNum, detailHandler, setArticleId, userTy
 
   useEffect(() => {
     if (page !== 0 && page <= totalPage) getMyArticles();
-  }, [page, tab]);
+  }, [page]);
+
+  useEffect(() => {
+    if (page !== 0) getMyArticles();
+  }, [tab]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(obsHandler);

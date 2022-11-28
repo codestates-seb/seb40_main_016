@@ -53,12 +53,13 @@ interface UserWalletProps {
   yummy: number;
 }
 
-const MyPage = () => {
+const MyPage = ({ detailHandler, setArticleId }: Prop) => {
   const navigate = useNavigate();
   const token = useRecoilValue(accessTokenState);
-  const myInfo = useRecoilValue(userInfoState);
   const [nowTab, setNowTab] = useState<string>("게시물");
   const [userArticlesNum, setUserArticlesNum] = useState<number>(0);
+  const [openFollowModal, setOpenFollowModal] = useState<boolean>(false);
+  const [openFollowerModal, setOpenFollowerModal] = useState<boolean>(false);
   const [userInfo, setUserInfo] = useState<UserInfoProps>({
     content: "",
     email: "",
@@ -86,6 +87,10 @@ const MyPage = () => {
     setUserArticlesNum(articles);
   };
 
+  // const handleFollowModal = () => {
+
+  // }
+
   return (
     <>
       <MyAccountPage>
@@ -100,7 +105,7 @@ const MyPage = () => {
                   <UserName>{userInfo.userName}</UserName>
                   <UserBtn>
                     <YummyBtn>
-                      {onUserType === "CAT" ? <FishIcon /> : <BoneIcon />}
+                      {userInfo.userType === "CAT" ? <FishIcon /> : <BoneIcon />}
                       <span>간식 {userWallet.yummy}알</span>
                     </YummyBtn>
                     <SettingWalletBtn onClick={() => navigate("/setting")}>
