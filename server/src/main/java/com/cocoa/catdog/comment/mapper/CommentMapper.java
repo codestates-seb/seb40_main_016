@@ -33,7 +33,18 @@ public interface CommentMapper {
                 ).build();
     }
     List<CommentResponseDto.Normal> commentsToResponses(List<Comment> comments);
-    CommentResponseDto.Profile commentToProfileResponse(Comment comment);
+    default CommentResponseDto.Profile commentToProfileResponse(Comment comment) {
+        return CommentResponseDto.Profile.builder()
+                .commentId(comment.getCommentId())
+                .content(comment.getContent())
+                .likeCnt(comment.getLikeCnt())
+                .reportCnt(comment.getReportCnt())
+                .articleId(comment.getArticle().getArticleId())
+                .articleImg(comment.getArticle().getArticleImg())
+                .createdAt(comment.getCreatedAt())
+                .commentStatus(comment.getCommentStatus())
+                .build();
+    }
     List<CommentResponseDto.Profile> commentsToProfileResponses(List<Comment> comments);
 
 }

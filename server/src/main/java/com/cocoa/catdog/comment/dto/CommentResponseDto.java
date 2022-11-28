@@ -34,6 +34,8 @@ public class CommentResponseDto {
         private String content;
         private int likeCnt;
         private int reportCnt;
+        private Long articleId;
+        private String articleImg;
         private LocalDateTime createdAt;
         private Comment.CommentStatus commentStatus;
     }

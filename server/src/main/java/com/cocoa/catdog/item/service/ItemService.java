@@ -38,4 +38,10 @@ public class ItemService {
     public Page<Item> findItems(int page, int size) {
         return itemRepository.findAll(PageRequest.of(page, size, Sort.by("itemId").descending()));
     }
+
+    @Transactional
+    public void deleteItem(Long itemId) {
+        Item item = findItem(itemId);
+        itemRepository.deleteById(item.getItemId());
+    }
 }

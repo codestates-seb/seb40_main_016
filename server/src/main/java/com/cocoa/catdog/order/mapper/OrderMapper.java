@@ -32,6 +32,8 @@ public interface OrderMapper {
     default OrderItemResponseDto orderItemToResponse(OrderItem orderItem) {
         return OrderItemResponseDto.builder()
                 .itemId(orderItem.getItem().getItemId())
+                .itemName(orderItem.getItem().getItemName())
+                .itemImg(orderItem.getItem().getItemImg())
                 .orderPrice(orderItem.getOrderPrice())
                 .quantity(orderItem.getQuantity())
                 .build();

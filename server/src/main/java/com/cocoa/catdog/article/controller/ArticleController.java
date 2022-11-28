@@ -46,6 +46,17 @@ public class ArticleController {
                 articleService.saveArticle(article, jwtTokenizer.getUserId(token), files));
     }
 
+    //테스트
+    @PostMapping("/test")
+    @ResponseStatus(HttpStatus.CREATED)
+    ArticleDto.Response postArticleTest(@RequestHeader(name = "Authorization") String token,
+                                    @Valid @RequestBody ArticleDto.Post postDto) {
+        Article article = mapper.postDtoToEntity(postDto);
+
+        return mapper.entityToResponseDto(
+                articleService.saveArticleTest(article, jwtTokenizer.getUserId(token)));
+    }
+
     /*
     * 게시물 수정
     * */

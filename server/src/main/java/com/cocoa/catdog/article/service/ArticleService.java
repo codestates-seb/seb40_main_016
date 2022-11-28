@@ -16,10 +16,12 @@ import com.cocoa.catdog.comment.repository.CommentRepository;
 import com.cocoa.catdog.config.aws.S3Uploader;
 import com.cocoa.catdog.exception.BusinessLogicException;
 import com.cocoa.catdog.exception.ExceptionCode;
+import com.cocoa.catdog.message.SseEmitterService;
 import com.cocoa.catdog.user.entity.User;
 import com.cocoa.catdog.user.repository.UserRepository;
 import com.cocoa.catdog.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -45,7 +47,10 @@ public class ArticleService {
     private final ReportRepository reportRepository;
     private final CommentRepository commentRepository;
     private final S3Uploader s3Uploader;
+    private final SseEmitterService sseEmitterService;
+    private final ApplicationEventPublisher eventPublisher;
     private final ArticleImgMapper mapper;
+
 
     /*
     * 게시물 등록
@@ -83,6 +88,15 @@ public class ArticleService {
 
         findUser.getArticles().add(article);
         return articleRepository.save(article);
+    }
+
+    //테스트
+    public Article saveArticleTest (Article article, Long userId) {
+        User findUser = userService.findUser(userId);
+        article.addUser(findUser);
+
+        eventPublisher.publishEvent(findUser);
+        return  articleRepository.save(article);
     }
 
     /*
