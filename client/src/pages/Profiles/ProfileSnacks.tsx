@@ -13,13 +13,18 @@ const SnackContainer = styled.div`
   justify-content: flex-start;
 
   @media screen and (max-width: 736px) {
-    margin: 50px 10px;
+    margin: 20px 10px 50px;
   }
 `;
 
 const SnackTitle = styled.div`
   margin-bottom: 30px;
   font-size: var(--fs-pc-large);
+
+  @media screen and (max-width: 736px) {
+    margin-bottom: 15px;
+    font-size: var(--fs-pc-regular);
+  }
 `;
 
 const SnackBox = styled.div`
@@ -62,6 +67,7 @@ const SnackName = styled.div`
   margin-bottom: 40px;
 
   @media screen and (max-width: 736px) {
+    font-size: 15px;
     margin-bottom: 15px;
   }
 `;

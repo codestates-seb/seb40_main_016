@@ -21,7 +21,6 @@ const MostRecieved = styled.div`
   padding: 10px 0px;
   margin: 30px 0px;
   background-color: #f6f6f6;
-  overflow: scroll;
 
   p {
     margin-left: 10px;
@@ -34,6 +33,11 @@ const MostRecievedArticles = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  overflow: scroll;
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
 
   .avatar {
     margin: 0px 10px;
@@ -42,6 +46,13 @@ const MostRecievedArticles = styled.div`
   .crown-icon {
     margin: 5px 55px 10px;
     width: 23px;
+  }
+
+  @media screen and (max-width: 736px) {
+    .crown-icon {
+      margin: 5px 43px 10px;
+      width: 18px;
+    }
   }
 `;
 
@@ -74,6 +85,17 @@ const Article = styled.div`
   .avatar-snack {
     margin-top: 8px;
   }
+
+  @media screen and (max-width: 736px) {
+    div {
+      svg {
+        width: 13px;
+      }
+    }
+    span {
+      font-size: 13px;
+    }
+  }
 `;
 
 const AvatarBox = styled.div`
@@ -88,10 +110,20 @@ const AvatarBox = styled.div`
   .avatar {
     margin: 0px;
   }
+
+  @media screen and (max-width: 736px) {
+    width: 95px;
+    height: 95px;
+
+    .avatar {
+      width: 90px;
+      height: 90px;
+    }
+  }
 `;
 
 const MainContainer = styled.div`
-  padding: 50px 0px;
+  padding: 30px 0px 0px;
   display: flex;
   flex-direction: column;
 
@@ -136,8 +168,15 @@ const SnackCount = styled.div`
   }
 
   @media screen and (max-width: 736px) {
+    padding: 0px 12px;
     bottom: 5px;
     left: 5px;
+    height: 30px;
+    font-size: var(--fs-pc-xsmall);
+
+    svg {
+      width: 12px;
+    }
   }
 `;
 
