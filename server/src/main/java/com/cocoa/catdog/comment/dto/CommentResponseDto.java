@@ -1,5 +1,6 @@
 package com.cocoa.catdog.comment.dto;
 
+import com.cocoa.catdog.article.Dto.ArticleImgDto;
 import com.cocoa.catdog.comment.entity.Comment;
 import com.cocoa.catdog.user.dto.UserSimpleResponseDto;
 import lombok.Builder;
@@ -35,7 +36,7 @@ public class CommentResponseDto {
         private int likeCnt;
         private int reportCnt;
         private Long articleId;
-        private String articleImg;
+        private ArticleImgDto.Response articleImg;
         private LocalDateTime createdAt;
         private Comment.CommentStatus commentStatus;
     }
