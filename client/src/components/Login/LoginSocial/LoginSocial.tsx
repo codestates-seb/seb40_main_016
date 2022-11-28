@@ -12,10 +12,22 @@ const LoginSocial = () => {
           <SocialBtn sort="google">
             <GoogleIcon />
           </SocialBtn>
-          <SocialBtn sort="naver">
+          <SocialBtn
+            className="prepare"
+            sort="naver"
+            onClick={() => {
+              alert("준비중입니다 🔨");
+            }}
+          >
             <NaverIcon />
           </SocialBtn>
-          <SocialBtn sort="github">
+          <SocialBtn
+            className="prepare"
+            sort="github"
+            onClick={() => {
+              alert("준비중입니다 🔨");
+            }}
+          >
             <GithubIcon />
           </SocialBtn>
         </GroupSocialBtn>
