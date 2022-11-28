@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom";
+
 import styled from "styled-components";
 
 import Modal from "../Modal/Modal";
@@ -43,12 +45,20 @@ interface Prop {
 }
 
 const LogoutPopup = ({ isOn, setIsOn }: Prop) => {
+  const navigate = useNavigate();
+
   return (
     <LogoutMessage>
       <Modal className="modal" isOn={isOn} setIsOn={setIsOn}>
         <ContentBox>
           <Content>로그아웃 되었습니다.</Content>
-          <Button className="button" onClick={() => setIsOn(false)}>
+          <Button
+            className="button"
+            onClick={() => {
+              setIsOn(false);
+              navigate(0);
+            }}
+          >
             확인
           </Button>
         </ContentBox>

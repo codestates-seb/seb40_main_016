@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import ScrollToTop from "./utills/ScrollToTop";
@@ -16,10 +16,17 @@ import Shop from "./pages/Shop/Shop";
 
 function App() {
   const [isOn, setIsOn] = useState<boolean>(false);
+  const [isEdit, setIsEdit] = useState<boolean>(false);
   const [isDetailOn, setIsDetailOn] = useState<boolean>(false);
   const [articleId, setArticleId] = useState<number>(null);
 
-  const popupHandler = () => {
+  const createPopupHandler = () => {
+    setIsEdit(false);
+    setIsOn(!isOn);
+  };
+
+  const editPopupHandler = () => {
+    setIsEdit(true);
     setIsOn(!isOn);
   };
 
@@ -27,11 +34,26 @@ function App() {
     setIsDetailOn(!isDetailOn);
   };
 
+  useEffect(() => {
+    if (isOn || isDetailOn) {
+      document.body.style.cssText = `
+      position: fixed; 
+      top: -${window.scrollY}px;
+      overflow-y: hidden;
+      width: 100%;`;
+      return () => {
+        const scrollY = document.body.style.top;
+        document.body.style.cssText = "";
+        window.scrollTo(0, parseInt(scrollY || "0", 10) * -1);
+      };
+    }
+  }, [isOn, isDetailOn]);
+
   return (
     <>
       <BrowserRouter>
         <ScrollToTop />
-        <Header popupHandler={popupHandler} />
+        <Header popupHandler={createPopupHandler} />
         <Routes>
           <Route index path="/" element={<Main detailHandler={detailHandler} setArticleId={setArticleId} />} />
           <Route index path="/signup" element={<Signup />} />
@@ -45,8 +67,13 @@ function App() {
           <Route index path="/shop" element={<Shop />} />
           <Route index path="*" element={<NotFound />} />
         </Routes>
-        <NewArticle isOn={isOn} setIsOn={setIsOn} />
-        <Detail articleId={articleId} isDetailOn={isDetailOn} detailHandler={detailHandler} />
+        <NewArticle isOn={isOn} setIsOn={setIsOn} isEdit={isEdit} articleId={articleId} />
+        <Detail
+          articleId={articleId}
+          isDetailOn={isDetailOn}
+          detailHandler={detailHandler}
+          editPopupHandler={editPopupHandler}
+        />
       </BrowserRouter>
       <Footer />
     </>

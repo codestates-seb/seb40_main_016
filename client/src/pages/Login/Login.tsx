@@ -14,6 +14,7 @@ import LoginSlider from "../../components/Login/LoginSlider/LoginSlider";
 import LoginForm from "../../components/Login/LoginForm/LoginForm";
 import LoginSocial from "../../components/Login/LoginSocial/LoginSocial";
 import Button from "../../components/Button/Button";
+import FindPassword from "../../components/Login/FindPassword/FindPassword";
 import { LoginPage, Conts, AreaSlider, AreaForm, FormCard, ForgotIdPw, Footer } from "./style";
 import { PostLogin, GetUserInfo } from "../../api/user";
 
@@ -29,6 +30,7 @@ const Login = () => {
     password: "",
   });
   const [hasNoEmptyRequired, setHasNoEmptyRequired] = useState<boolean>(false); //빈 인풋 있는지
+  const [isFindPwOn, setIsFindPwOn] = useState<boolean>(false);
 
   const navigate = useNavigate();
 
@@ -39,6 +41,21 @@ const Login = () => {
       setHasNoEmptyRequired(false);
     }
   }, [loginInfo]);
+
+  useEffect(() => {
+    if (isFindPwOn) {
+      document.body.style.cssText = `
+      position: fixed; 
+      top: -${window.scrollY}px;
+      overflow-y: hidden;
+      width: 100%;`;
+      return () => {
+        const scrollY = document.body.style.top;
+        document.body.style.cssText = "";
+        window.scrollTo(0, parseInt(scrollY || "0", 10) * -1);
+      };
+    }
+  }, [isFindPwOn]);
 
   const onSubmitClick = (e: any) => {
     e.preventDefault();
@@ -55,14 +72,17 @@ const Login = () => {
         GetUserInfo(info.userId)
           .then((res) => {
             const data = res.data.data;
+            setIsLogin(true);
             setUserInfo({
               userId: data.userId,
               userName: data.userName,
               userImg: data.userImg,
               userType: data.userType,
             });
-            setIsLogin(true);
+          })
+          .then(() => {
             navigate("/");
+            navigate(0);
           })
           .catch((e) => {
             alert("로그인에 실패하셨습니다! 다시 시도해주세요! 😿");
@@ -103,8 +123,12 @@ const Login = () => {
                       로그인
                     </Button>
                     <LoginSocial />
-                    <ForgotIdPw>
-                      <span>아이디/비밀번호 찾기</span>
+                    <ForgotIdPw
+                      onClick={() => {
+                        setIsFindPwOn(true);
+                      }}
+                    >
+                      <span>비밀번호 찾기</span>
                     </ForgotIdPw>
                   </form>
                 </FormCard>
@@ -117,6 +141,7 @@ const Login = () => {
           </InnerContainer>
         </OuterContainer>
       </LoginPage>
+      <FindPassword isOn={isFindPwOn} setIsOn={setIsFindPwOn} />
     </>
   );
 };

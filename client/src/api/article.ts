@@ -13,7 +13,7 @@ export const RegisterArticle = async (formData: FormData, token: string) => {
   return response;
 };
 
-export const UpdateArticle = async (formData: FormData, articleId: string, token: string) => {
+export const UpdateArticle = async (formData: FormData, articleId: number, token: string) => {
   const response = await axios.patch(`${URL}/articles/${articleId}`, formData, {
     headers: {
       "Content-Type": "multipart/form-data",

@@ -1,6 +1,5 @@
 import { useRecoilValue } from "recoil";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import Modal from "../../components/Modal/Modal";
 import PhotoUpload from "../../components/Articles/PhotoUpload/PhotoUpload";
 import WriteArticle from "../../components/Articles/WriteArticle/WriteArticle";
@@ -12,16 +11,16 @@ interface ArticleProps {
   isOn: boolean;
   isEdit?: boolean;
   setIsOn: (arg: boolean) => void;
+  articleId: number;
 }
 
-const NewArticle = ({ isOn, isEdit = false, setIsOn }: ArticleProps) => {
+const NewArticle = ({ isOn, isEdit = false, setIsOn, articleId }: ArticleProps) => {
   const token = useRecoilValue(accessTokenState);
   const [isPhoto, setIsPhoto] = useState<boolean>(true);
   const [uploadedPhotos, setUploadedPhotos] = useState<UploadedPhotos[]>([]);
   const [previewPhotos, setPreviewPhotos] = useState([]);
   const [currentPhotos, setCurrentPhotos] = useState<string>("");
   const [content, setContent] = useState<string>("");
-  const { articleId } = useParams();
 
   const handlePhoto = () => {
     setIsPhoto(() => true);
@@ -58,15 +57,16 @@ const NewArticle = ({ isOn, isEdit = false, setIsOn }: ArticleProps) => {
       GetDetail(articleId, token).then((res: any) => {
         setContent(() => res.data.content);
 
-        setUploadedPhotos((photos) => [
-          ...photos,
-          ...res.data.images.map((image: string) => {
-            return { uploadedPhoto: image };
-          }),
-        ]);
+        //현재 articleId에 해당하는 이미지 배열로 들어오지 않아 오류남
+        // setUploadedPhotos((photos) => [
+        //   ...photos,
+        //   ...res.data.images.map((image: string) => {
+        //     return { uploadedPhoto: image };
+        //   }),
+        // ]);
       });
     }
-  }, []);
+  }, [articleId, isEdit]);
 
   return (
     <Modal
