@@ -20,7 +20,7 @@ public class Wallet extends AuditingEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long walletId;
 
-    private int yummy = 1000000;
+    private int yummy = 1000;
 
     @OneToOne
     @JsonIgnore
