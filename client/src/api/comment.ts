@@ -51,6 +51,21 @@ export const PostCommentLike = async (commentId: number, token: string) => {
   return response;
 };
 
+export const UpdataComment = async (commentId: number, content: string, token: string) => {
+  const body = JSON.stringify({
+    content: `${content}`,
+  });
+
+  const response = await axios.patch(`${URL}/comments/${commentId}`, body, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `${token}`,
+    },
+  });
+
+  return response;
+};
+
 export const DeleteCommentLike = async (commentId: number, token: string) => {
   const response = await axios.delete(`${URL}/comments/${commentId}/likes`, {
     headers: {
