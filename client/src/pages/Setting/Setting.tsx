@@ -21,7 +21,7 @@ const Setting = () => {
   const [nowTab, setNowTab] = useState<string>("프로필 편집");
 
   const moveMypage = () => {
-    navigate(`/profiles/${userId}`);
+    navigate("/mypage");
   };
 
   return (
