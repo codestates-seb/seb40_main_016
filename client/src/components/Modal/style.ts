@@ -78,17 +78,6 @@ export const PopupHeader = styled.div<PopupHeaderProp>`
   text-align: center;
   font-size: 20px;
 
-  .prevBtn {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 20px;
-    height: 20px;
-    padding: 13px 10px;
-    cursor: pointer;
-    transform: rotate(180deg);
-  }
-
   > svg {
     position: absolute;
     right: 0;
@@ -104,17 +93,30 @@ export const PopupHeader = styled.div<PopupHeaderProp>`
         fill: var(--color-light-black);
       }
     }
+  }
+`;
 
-    &.orange {
-      path {
-        fill: var(--color-orange);
-      }
+export const PrevNextBtn = styled.button`
+  position: absolute;
+  top: 0;
+  background-color: var(--color-white);
+  padding: 8px 13px;
+  border: none;
+  font-size: var(--fs-pc-regular);
+  font-weight: 600;
+  color: var(--color-orange);
+  cursor: pointer;
 
-      &:hover {
-        path {
-          filter: brightness(1.5);
-        }
-      }
-    }
+  &.next,
+  &.done {
+    right: 0;
+  }
+
+  &.prev {
+    left: 0;
+  }
+
+  &:hover {
+    opacity: 0.7;
   }
 `;
