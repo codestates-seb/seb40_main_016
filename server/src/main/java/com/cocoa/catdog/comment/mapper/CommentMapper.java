@@ -40,7 +40,6 @@ public interface CommentMapper {
                 .likeCnt(comment.getLikeCnt())
                 .reportCnt(comment.getReportCnt())
                 .articleId(comment.getArticle().getArticleId())
-                .articleImg(comment.getArticle().getArticleImg())
                 .createdAt(comment.getCreatedAt())
                 .commentStatus(comment.getCommentStatus())
                 .build();
