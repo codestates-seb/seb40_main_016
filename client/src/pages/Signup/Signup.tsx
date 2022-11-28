@@ -17,6 +17,11 @@ import { ReactComponent as ArrowIcon } from "../../assets/img/arrow-icon.svg";
 
 import { SignupUserInfo } from "../../types/user";
 
+interface Check {
+  requiredField: string[];
+  userInfo: SignupUserInfo;
+}
+
 const Signup = () => {
   const navigate = useNavigate();
 
@@ -33,10 +38,6 @@ const Signup = () => {
   const [hasNoEmptyRequired, setHasNoEmptyRequired] = useState<boolean>(false); //빈 인풋 있는지
   const [alreadyExistError, setAlreadyExistError] = useState<boolean>(false);
 
-  interface Check {
-    requiredField: string[];
-    userInfo: SignupUserInfo;
-  }
   const checkAllWritten = ({ requiredField, userInfo }: Check) => {
     const EmptyArr: string[] = requiredField.filter((el) => {
       return userInfo[el].length === 0;
