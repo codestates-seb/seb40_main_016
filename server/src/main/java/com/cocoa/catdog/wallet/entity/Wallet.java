@@ -39,6 +39,10 @@ public class Wallet extends AuditingEntity {
     public void minusYummy(int yummy) {
         this.yummy -= yummy;
     }
+
+    public void plusYummy(int yummy) {
+        this.yummy += yummy;
+    }
     
 
     @OneToMany(mappedBy = "wallet")
@@ -59,6 +63,20 @@ public class Wallet extends AuditingEntity {
         if(!orders.contains(order)) {
             orders.add(order);
             order.addWallet(this);
+        }
+    }
+
+    public void addGive (GiveTake giveTake) {
+        if(!gives.contains(giveTake)) {
+            gives.add(giveTake);
+            giveTake.addGiveWlt(this);
+        }
+    }
+
+    public void addTake (GiveTake giveTake) {
+        if(!takes.contains(giveTake)) {
+            takes.add(giveTake);
+            giveTake.addGiveWlt(this);
         }
     }
 

@@ -81,6 +81,9 @@ public class Article extends AuditingEntity {
         this.reportCnt = reportCnt;
     }
 
+    public void changeYummyCnt(int yummyCnt) {
+        this.yummyCnt = yummyCnt;
+    }
 
     //==연관관계 메서드==//
     public void addUser(User user) {
@@ -117,6 +120,13 @@ public class Article extends AuditingEntity {
 
     public void removeLike(Like like) {
         likes.remove(like);
+    }
+
+    public void addGiveTake(GiveTake giveTake) {
+        if(!giveTakes.contains(giveTake)) {
+            giveTakes.add(giveTake);
+            giveTake.addArticle(this);
+        }
     }
 
     public enum ArticleStatus {
