@@ -1,7 +1,9 @@
 package com.cocoa.catdog.article.mapper;
 
 import com.cocoa.catdog.article.Dto.ArticleDto;
+import com.cocoa.catdog.article.Dto.ArticleImgDto;
 import com.cocoa.catdog.article.entity.Article;
+import com.cocoa.catdog.article.entity.ArticleImg;
 import com.cocoa.catdog.article.entity.Report;
 import com.cocoa.catdog.user.dto.UserSimpleResponseDto;
 import org.mapstruct.Mapper;
@@ -17,7 +19,6 @@ public interface ArticleMapper {
     default ArticleDto.Response entityToResponseDto(Article article) {
         return ArticleDto.Response.builder()
                 .articleId(article.getArticleId())
-                .articleImg(article.getArticleImg())
                 .content(article.getContent())
                 .likeCnt(article.getLikeCnt())
                 .views(article.getViews())
@@ -25,6 +26,11 @@ public interface ArticleMapper {
                 .YummyCnt(article.getYummyCnt())
                 .createdAt(article.getCreatedAt())
                 .articleStatus(article.getArticleStatus())
+                .articleImg(
+                        ArticleImgDto.Response.builder()
+                                .images(article.getArticleImg())
+                                .build()
+                )
                 .user(
                         UserSimpleResponseDto.builder()
                                 .userId(article.getUser().getUserId())
