@@ -34,7 +34,7 @@ public class OrderItem extends AuditingEntity {
     @JsonBackReference
     private Order order;
 
-    @ManyToOne(fetch = FetchType.EAGER)  // Response로 불러오기 실패 -> (LAZY -> EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)  // Response로 불러오기 실패 -> (LAZY -> EAGER)
     @JoinColumn(name = "ITEM_ID")
     private Item item;
 

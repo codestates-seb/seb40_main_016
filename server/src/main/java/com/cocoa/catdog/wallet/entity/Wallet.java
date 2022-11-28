@@ -20,7 +20,7 @@ public class Wallet extends AuditingEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long walletId;
 
-    private int yummy = 1000000;
+    private int yummy = 1000;
 
     @OneToOne
     @JsonIgnore
@@ -38,6 +38,10 @@ public class Wallet extends AuditingEntity {
 
     public void minusYummy(int yummy) {
         this.yummy -= yummy;
+    }
+
+    public void plusYummy(int yummy) {
+        this.yummy += yummy;
     }
     
 
@@ -59,6 +63,20 @@ public class Wallet extends AuditingEntity {
         if(!orders.contains(order)) {
             orders.add(order);
             order.addWallet(this);
+        }
+    }
+
+    public void addGive (GiveTake giveTake) {
+        if(!gives.contains(giveTake)) {
+            gives.add(giveTake);
+            giveTake.addGiveWlt(this);
+        }
+    }
+
+    public void addTake (GiveTake giveTake) {
+        if(!takes.contains(giveTake)) {
+            takes.add(giveTake);
+            giveTake.addGiveWlt(this);
         }
     }
 

@@ -50,4 +50,10 @@ public class ItemController {
         return new ResponseEntity<>(
                 new ItemResponseDto.Multi<>(itemMapper.itemsToResponses(items), itemPage, walletMapper.walletToResponse(wallet)), HttpStatus.OK);
     }
+
+    @DeleteMapping("{item-id}")
+    public ResponseEntity deleteItem (@PathVariable("item-id") Long itemId) {
+        itemService.deleteItem(itemId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }

@@ -75,7 +75,7 @@ public class UserController {
 
         return new ResponseEntity<>(
                 new SingleResponseDto<>(mapper.userToUserProfileResponseDto(user)), HttpStatus.OK);
-    }//response수정 요
+    }
 
     //회원 삭제
     @DeleteMapping("/user/{user-id}")
@@ -85,7 +85,7 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-//마이페이지에서 정보 조회
+    //마이페이지에서 정보 조회
     @GetMapping("/user/my-page")
     @ResponseStatus(HttpStatus.OK)
     public UserResponseDto getProfile(@RequestHeader(name = "Authorization") String token) {
