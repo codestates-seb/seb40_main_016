@@ -37,7 +37,7 @@ public class ArticleDto {
     @Builder
     public static class ProfileResponse {
         private Long articleId;
-        private List<ArticleImg> articleImgList;
+        private ArticleImgDto articleImg;
         private String content;
         private int likeCnt;
         private int views;

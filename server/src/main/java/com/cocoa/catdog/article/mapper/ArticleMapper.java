@@ -43,7 +43,23 @@ public interface ArticleMapper {
 
     List<ArticleDto.Response> entityListToResponseDtoList(List<Article> articles);
 
-    ArticleDto.ProfileResponse entityToProfileResponseDto(Article article);
+    default ArticleDto.ProfileResponse entityToProfileResponseDto(Article article) {
+        return ArticleDto.ProfileResponse.builder()
+                .articleId(article.getArticleId())
+                .articleImg(
+                        ArticleImgDto.Response.builder()
+                                .images(article.getArticleImg())
+                                .build()
+                )
+                .content(article.getContent())
+                .likeCnt(article.getLikeCnt())
+                .views(article.getViews())
+                .reportCnt(article.getReportCnt())
+                .YummyCnt(article.getYummyCnt())
+                .createdAt(article.getCreatedAt())
+                .articleStatus(article.getArticleStatus())
+                .build();
+    }
     List<ArticleDto.ProfileResponse> entityToProfileResponseDtoList(List<Article> articles);
 
     Report reportToReportDto(ArticleDto.Report report);

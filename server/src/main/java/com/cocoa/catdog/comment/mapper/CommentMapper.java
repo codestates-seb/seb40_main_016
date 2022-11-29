@@ -1,5 +1,6 @@
 package com.cocoa.catdog.comment.mapper;
 
+import com.cocoa.catdog.article.Dto.ArticleImgDto;
 import com.cocoa.catdog.comment.dto.CommentDto;
 import com.cocoa.catdog.comment.dto.CommentResponseDto;
 import com.cocoa.catdog.comment.entity.Comment;
@@ -40,6 +41,11 @@ public interface CommentMapper {
                 .likeCnt(comment.getLikeCnt())
                 .reportCnt(comment.getReportCnt())
                 .articleId(comment.getArticle().getArticleId())
+                .articleImg(
+                        ArticleImgDto.Response.builder()
+                                .images(comment.getArticle().getArticleImg())
+                                .build()
+                )
                 .createdAt(comment.getCreatedAt())
                 .commentStatus(comment.getCommentStatus())
                 .build();
