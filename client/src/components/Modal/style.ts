@@ -40,11 +40,11 @@ interface PopupProp {
 export const Popup = styled.div<PopupProp>`
   position: absolute;
   left: 50%;
-  top: 50%;
+  top: calc(50% + 20px);
   transform: translate(-50%, -50%);
 
   min-height: 200px;
-  max-height: 90vh;
+  max-height: 85vh;
   overflow: auto;
   width: calc(100% - 16px * 2);
   max-width: ${(props) => props.maxWidth};
