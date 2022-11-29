@@ -95,3 +95,17 @@ export const GetMain = async (page: number, sort: string, order: string, token: 
   });
   return response;
 };
+
+export const PostSnack = async (snackNum: number, articleId: number, token: string | null) => {
+  const body = JSON.stringify({
+    giveYummy: `${snackNum}`,
+  });
+
+  const response = await axios.post(`${URL}/give/${articleId}`, body, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `${token}`,
+    },
+  });
+  return response;
+};

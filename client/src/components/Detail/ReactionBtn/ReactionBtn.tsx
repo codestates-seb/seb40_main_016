@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 
-import SnackGiver from "../SnackGiver/SnackGive";
+import SnackGiver from "../SnackGiver/SnackGiver";
 
 import { Wrapper, HiddenInput, Btn, Icon } from "./style";
 
@@ -22,6 +22,8 @@ interface Prop {
   onActive?: (arg?: any) => void;
   onInactive?: (arg?: any) => void;
   disabled?: boolean;
+  articleId?: number;
+  updateSnack?: (arg: number) => void;
 }
 
 const ReactionBtn = ({
@@ -33,6 +35,8 @@ const ReactionBtn = ({
   onActive = () => {},
   onInactive = () => {},
   disabled = false,
+  articleId,
+  updateSnack,
 }: Prop) => {
   const [checked, setChecked] = useState<boolean>(defaultStatus);
   const [isSnackGiver, setIsSnackGiver] = useState<boolean>(false);
@@ -135,7 +139,17 @@ const ReactionBtn = ({
             })()}
           </Icon>
         </Btn>
-        {btnType === "snack" ? <SnackGiver className={isSnackGiver ? "active" : ""} /> : <></>}
+        {btnType === "snack" ? (
+          <SnackGiver
+            className={isSnackGiver ? "active" : ""}
+            articleId={articleId}
+            setIsSnackGiver={setIsSnackGiver}
+            updateSnack={updateSnack}
+            setChecked={setChecked}
+          />
+        ) : (
+          <></>
+        )}
       </Wrapper>
     </>
   );
