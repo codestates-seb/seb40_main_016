@@ -15,6 +15,7 @@ import Detail from "./pages/Detail/Detail";
 import Shop from "./pages/Shop/Shop";
 import Setting from "./pages/Setting/Setting";
 import Social from "./pages/Social/Social";
+import Introduce from "./pages/Introduce/Introduce";
 
 function App() {
   const [isOn, setIsOn] = useState<boolean>(false);
@@ -69,6 +70,7 @@ function App() {
           />
           <Route index path="/shop" element={<Shop />} />
           <Route index path="/setting" element={<Setting />} />
+          <Route index path="/introduce" element={<Introduce />} />
           <Route index path="*" element={<NotFound />} />
         </Routes>
         <NewArticle isOn={isOn} setIsOn={setIsOn} isEdit={isEdit} articleId={articleId} />

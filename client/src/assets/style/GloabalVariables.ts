@@ -13,6 +13,7 @@ const variables = css`
   --color-red: #d20000;
   --color-blue: #445cb4;
   --color-sky: #63bff3;
+  --color-medium-sky: #c2f2ff;
   --color-faded-sky: #eefaff;
   --color-green: #5ab3b1;
   --color-dark-green: #4e9692;
