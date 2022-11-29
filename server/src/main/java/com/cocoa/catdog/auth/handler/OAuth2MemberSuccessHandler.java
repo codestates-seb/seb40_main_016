@@ -5,11 +5,7 @@ import com.cocoa.catdog.auth.jwt.JwtTokenizer;
 import com.cocoa.catdog.user.entity.User;
 import com.cocoa.catdog.user.service.UserService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.util.LinkedMultiValueMap;
@@ -30,7 +26,6 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
     private final UserService userService;
 
 
-    // (2)
     public OAuth2MemberSuccessHandler(JwtTokenizer jwtTokenizer,
                                       CustomAuthorityUtils authorityUtils,
                                       UserService userService) {
@@ -46,35 +41,52 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
 
         log.info("구글 로그인 완료");
 
-        // 이메일로 신규 회원 등록
-        User savedUser = saveMember(email);
+        // 이메일로 가입된 유저인지 확인
+        if(userService.verifyExistsEmail(email)) {
+            log.info("이미 가입된 유저입니다.");
+            if(userService.checkNeedSocialSet(email)) {
+                log.info("기본 정보 설정이 필요합니다.");
+                // 가입되어있으나 기본 정보 설정이 필요한 유저 페이지로 이동
+                response.sendRedirect("http://givemesnack.me/social");
+            }
+            else {        // 가입되어 있고 기본 정보 설정이 필요하지 않은 경우
+                // 이메일로 찾은 유저 정보로 토큰 헤더에 입력
+                setTokenToHeader(response, userService.findUserByEmail(email));
 
+                // 설정된 헤더를 가지고 홈으로 이동
+                response.sendRedirect("http://givemesnack.me/");
+            }
+        }
+        // 소셜로 신규 가입 하는 경우
+        else {
+
+            // 신규 유저 정보 저정
+            User savedUser = saveMember(email);
+
+            // 토큰 발행
+            setTokenToHeader(response, savedUser);
+
+            // 정보 추가 입력 페이지로 이동
+            response.sendRedirect("http://givemesnack.me/social");
+
+        }
+    }
+
+    // 유저 정보로 토튼 생성 후 리스폰스용 헤더에 입력
+    private HttpServletResponse setTokenToHeader (HttpServletResponse response, User user) {
         // 토큰 생성
-        String accessToken = delegateAccessToken(savedUser);
-        String refreshToken = delegateRefreshToken(email);
+        String accessToken = delegateAccessToken(user);
+        String refreshToken = delegateRefreshToken(user.getEmail());
 
-        // 헤더에 토큰 쓰기
+        // 토큰 헤더에 입력
         response.setHeader("Authorization", "Bearer " + accessToken);
         response.setHeader("Refresh", refreshToken);
 
-        // 리다이렉트 - #todo 패스워드가 111이면 정보 수정, 아니면 홈으로
-        if (savedUser.getNeedSocialSet())
-        {
-            log.info("기본 정보 설정이 필요합니다.");
-            response.sendRedirect("/modify");
-        }
-        else {
-            response.sendRedirect("/index");
-        }
-
-/*
-        String successUri ="http://localhost:8080/modify";
-        getRedirectStrategy().sendRedirect(request, response, successUri);
-*/
-
-//      redirect(request, response, email, authorities);
+        return response;
     }
 
+
+    // 신규 소셜 유저 저장
     private User saveMember(String email) {
         List<String> authorities = List.of("USER");
         User user = new User(email, "1111", "google");
@@ -98,7 +110,6 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
 
         return accessToken;
     }
-
 
 
     private String delegateRefreshToken(String username) {
@@ -140,4 +151,12 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
     }
 */
 
-}
+            /*
+        String successUri ="http://localhost:8080/modify";
+        getRedirectStrategy().sendRedirect(request, response, successUri);
+*/
+
+//      redirect(request, response, email, authorities);
+
+
+        }
