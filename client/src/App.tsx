@@ -73,7 +73,7 @@ function App() {
           <Route index path="/introduce" element={<Introduce />} />
           <Route index path="*" element={<NotFound />} />
         </Routes>
-        <NewArticle isOn={isOn} setIsOn={setIsOn} isEdit={isEdit} articleId={articleId} />
+        <NewArticle isOn={isOn} setIsOn={setIsOn} isEdit={isEdit} setIsEdit={setIsEdit} articleId={articleId} />
         <Detail
           articleId={articleId}
           isDetailOn={isDetailOn}

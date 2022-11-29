@@ -14,16 +14,18 @@ interface ArticleProps {
   isOn: boolean;
   isEdit?: boolean;
   setIsOn: (arg: boolean) => void;
+  setIsEdit: (arg: boolean) => void;
   articleId: number;
 }
 
-const NewArticle = ({ isOn, isEdit = false, setIsOn, articleId }: ArticleProps) => {
+const NewArticle = ({ isOn, isEdit = false, setIsOn, setIsEdit, articleId }: ArticleProps) => {
   const token = useRecoilValue(accessTokenState);
   const location = useLocation();
   const [isPhoto, setIsPhoto] = useState<boolean>(true);
   const [uploadedPhotos, setUploadedPhotos] = useState<UploadedPhotos[]>([]);
   const [previewPhotos, setPreviewPhotos] = useState([]);
   const [currentPhotos, setCurrentPhotos] = useState<string>("");
+  const [isAddPhoto, setIsAddPhoto] = useState<boolean>(false);
   const [content, setContent] = useState<string>("");
 
   const handlePhoto = () => {
@@ -36,6 +38,8 @@ const NewArticle = ({ isOn, isEdit = false, setIsOn, articleId }: ArticleProps) 
     setPreviewPhotos(() => []);
     setCurrentPhotos(() => "");
     setContent(() => "");
+    setIsEdit(false);
+    setIsAddPhoto(false);
   };
 
   const submitNewArticle = () => {
@@ -62,7 +66,7 @@ const NewArticle = ({ isOn, isEdit = false, setIsOn, articleId }: ArticleProps) 
           if (res.status === 200) {
             alert("글 수정 완료😺");
 
-            if (location.pathname === "/") {
+            if (location.pathname === "/" || location.pathname === "/mypage") {
               window.location.reload();
             } else {
               setIsOn(false);
@@ -78,7 +82,7 @@ const NewArticle = ({ isOn, isEdit = false, setIsOn, articleId }: ArticleProps) 
           if (res.status === 201) {
             alert("글 작성 완료😺");
 
-            if (location.pathname === "/") {
+            if (location.pathname === "/" || location.pathname === "/mypage") {
               window.location.reload();
             } else {
               setIsOn(false);
@@ -123,9 +127,11 @@ const NewArticle = ({ isOn, isEdit = false, setIsOn, articleId }: ArticleProps) 
           uploadedPhotos={uploadedPhotos}
           previewPhotos={previewPhotos}
           currentPhotos={currentPhotos}
+          isAddPhoto={isAddPhoto}
           setUploadedPhotos={setUploadedPhotos}
           setPreviewPhotos={setPreviewPhotos}
           setCurrentPhotos={setCurrentPhotos}
+          setIsAddPhoto={setIsAddPhoto}
         />
       ) : (
         <WriteArticle uploadedPhotos={uploadedPhotos} content={content} setContent={setContent} />
