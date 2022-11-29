@@ -32,12 +32,12 @@ const Shop = () => {
 
   const orderItems = () => {
     if (selectedItems.length <= 0) {
-      alert("선택한 물품이 없습니다!");
+      alert("선택한 물품이 없습니다😿");
       return;
     }
 
     OrderItems(selectedItems, token).then(() => {
-      alert("교환 성공!");
+      alert("교환 성공😺");
       window.location.reload();
     });
   };
