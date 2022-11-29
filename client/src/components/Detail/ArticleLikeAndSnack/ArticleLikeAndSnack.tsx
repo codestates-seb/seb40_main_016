@@ -23,18 +23,17 @@ interface Prop {
 const ArticleLikeAndSnack = ({ authorId, articleId = 5, likeCnt, yummyCnt = 0, authorType, gotLiked }: Prop) => {
   const [currentLike, setCurrentLike] = useState<number>();
   const [currentSnack, setCurrentSnack] = useState<number>();
-  const [isSnackPopOn, setIsSnackPopOn] = useState<boolean>(false);
   const [isSubscribing, setIsSubscribing] = useState<boolean>(false);
-  const [canSubscribe, setCanSubscribe] = useState<boolean>(false);
+  const [isMy, setIsMy] = useState<boolean>(false);
   const token = useRecoilValue(accessTokenState);
   const myinfo = useRecoilValue(userInfoState);
   const isLogin = useRecoilValue(isLoginState);
 
   const checkCanSubscribe = () => {
     if (myinfo.userId === authorId) {
-      setCanSubscribe(false);
+      setIsMy(true);
     } else {
-      setCanSubscribe(true);
+      setIsMy(false);
     }
   };
 
@@ -109,22 +108,24 @@ const ArticleLikeAndSnack = ({ authorId, articleId = 5, likeCnt, yummyCnt = 0, a
             onInactive={offLike}
             disabled={!isLogin}
           />
-          <ReactionBtn
-            className="snack"
-            btnId="articleSnack"
-            btnType="snack"
-            userType={authorType}
-            defaultStatus={isSnackPopOn}
-            disabled={!isLogin}
-            articleId={articleId}
-            updateSnack={updateSnack}
-          />
+          {!isMy ? (
+            <ReactionBtn
+              className="snack"
+              btnId="articleSnack"
+              btnType="snack"
+              userType={authorType}
+              defaultStatus={false}
+              disabled={!isLogin}
+              articleId={articleId}
+              updateSnack={updateSnack}
+            />
+          ) : null}
         </GroupBtn>
         <GroupCounter>
           <Counter>좋아요 {ShortenNumber(currentLike)}</Counter>
           {authorType !== "PERSON" ? <Counter>간식 {ShortenNumber(currentSnack)}</Counter> : ""}
         </GroupCounter>
-        {canSubscribe ? (
+        {!isMy ? (
           <ReactionBtn
             className="subscribe"
             btnId="subscribe"
