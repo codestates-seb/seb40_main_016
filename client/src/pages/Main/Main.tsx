@@ -10,11 +10,23 @@ import ImageCard from "../../components/ImageCard/ImageCard";
 import Button from "../../components/Button/Button";
 import ImageSkeleton from "../../components/Skeleton/ImageSkeleton";
 import Banner from "../../components/Banner/Banner";
+import NoContent from "../../components/NoContent/NoContent";
+import Ballon from "../../components/Ballon/Ballon";
 
 import isLoginState from "../../_state/isLoginState";
 import accessTokenState from "../../_state/accessTokenState";
 
-import { FilterContainer, TabBox, SortBox, ImgContainer, ImgBox, Dim, InfoBox, Info } from "./style";
+import {
+  FilterContainer,
+  TabBox,
+  SortBox,
+  ImgContainer,
+  ImgBox,
+  Dim,
+  InfoBox,
+  Info,
+  NoArticleContainer,
+} from "./style";
 
 import { ReactComponent as HeartWIcon } from "../../assets/img/heart-w-icon.svg";
 import { ReactComponent as BoneWIcon } from "../../assets/img/bone-w-icon.svg";
@@ -40,6 +52,7 @@ const Main = ({ detailHandler, setArticleId }: Prop) => {
   const [isBannerOn, setIsBannerOn] = useState<boolean>(true);
   const obsRef = useRef(null);
   const preventRef = useRef(true);
+  const [articleLength, setArticleLength] = useState<number>(0);
 
   const isLogin = useRecoilValue(isLoginState);
   const token = useRecoilValue(accessTokenState);
@@ -92,6 +105,7 @@ const Main = ({ detailHandler, setArticleId }: Prop) => {
     setLoading(true);
     if (isLogin) {
       GetMain(page, sort, order, token).then((res: any) => {
+        setArticleLength(res.data.data.length);
         if (res.data.pageInfo.page === 1) {
           setArticles(res.data.data);
         } else {
@@ -103,6 +117,7 @@ const Main = ({ detailHandler, setArticleId }: Prop) => {
       });
     } else {
       GetMain(page, sort, order, null).then((res: any) => {
+        setArticleLength(res.data.data.length);
         if (res.data.pageInfo.page === 1) {
           setArticles(res.data.data);
         } else {
@@ -163,51 +178,59 @@ const Main = ({ detailHandler, setArticleId }: Prop) => {
                 </Button>
               </SortBox>
             </FilterContainer>
-            <ImgContainer>
-              {articles &&
-                articles.map((article: Articles) => (
-                  <ImgBox
-                    key={article.articleId}
-                    onClick={() => {
-                      handleImgBoxClick(article.articleId);
-                    }}
-                  >
-                    <Dim>
-                      <InfoBox className="info">
-                        <Info>
-                          <HeartWIcon className="likes" />
-                          {article.likeCnt}
-                        </Info>
-                        <Info>
-                          <BoneWIcon className="snacks" />
-                          {article.yummyCnt}
-                        </Info>
-                        <Info>
-                          <EyeWIcon className="views" />
-                          {article.views}
-                        </Info>
-                      </InfoBox>
-                    </Dim>
-                    <ImageCard
-                      className="img-card"
-                      imgUrl={article.articleImg.images[0].imgUrl}
-                      onClick={handleOpen}
-                    ></ImageCard>
-                  </ImgBox>
-                ))}
-              {loading ? (
-                Array(8)
-                  .fill(0)
-                  .map((_, i) => (
-                    <ImgBox key={i}>
-                      <ImageSkeleton />
+            {articleLength === 0 && sort !== "all" ? (
+              <NoArticleContainer>
+                <NoContent />
+                <span>아직 등록된 글이 없습니다.</span>
+              </NoArticleContainer>
+            ) : (
+              <>
+                <ImgContainer>
+                  {articles.map((article: Articles) => (
+                    <ImgBox
+                      key={article.articleId}
+                      onClick={() => {
+                        handleImgBoxClick(article.articleId);
+                      }}
+                    >
+                      <Dim>
+                        <InfoBox className="info">
+                          <Info>
+                            <HeartWIcon className="likes" />
+                            {article.likeCnt}
+                          </Info>
+                          <Info>
+                            <BoneWIcon className="snacks" />
+                            {article.yummyCnt}
+                          </Info>
+                          <Info>
+                            <EyeWIcon className="views" />
+                            {article.views}
+                          </Info>
+                        </InfoBox>
+                      </Dim>
+                      <ImageCard
+                        className="img-card"
+                        imgUrl={article.articleImg.images[0].imgUrl}
+                        onClick={handleOpen}
+                      ></ImageCard>
                     </ImgBox>
-                  ))
-              ) : (
-                <></>
-              )}
-              <div ref={obsRef} />
-            </ImgContainer>
+                  ))}
+                  {loading ? (
+                    Array(8)
+                      .fill(0)
+                      .map((_, i) => (
+                        <ImgBox key={i}>
+                          <ImageSkeleton />
+                        </ImgBox>
+                      ))
+                  ) : (
+                    <></>
+                  )}
+                  <div ref={obsRef} />
+                </ImgContainer>
+              </>
+            )}
           </InnerContainer>
         </OuterContainer>
       </div>
