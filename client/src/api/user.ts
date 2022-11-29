@@ -64,3 +64,14 @@ export const DeleteUser = async (userId: number, token: string) => {
 
   return response;
 };
+
+export const CheckPassword = async (token: string, password: string) => {
+  const response = await axios.post(`${URL}/user/passcheck`, JSON.stringify({ password: password }), {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `${token}`,
+    },
+  });
+
+  return response;
+};

@@ -6,6 +6,7 @@ import Input from "../../Input/Input";
 
 import { isPassword } from "../../../utills/Regex";
 import { SettingProps } from "../../../types/setting";
+import { CheckPassword, PatchProfile } from "../../../api/user";
 
 const Wrapper = styled.div`
   width: 80%;
@@ -63,7 +64,20 @@ const ChangePassword = ({ userId, token, movePage }: SettingProps) => {
     setPassword({ ...password, currentPassword: e.target.value });
   };
 
-  // 서버에 요청보내서 현재 비밀번호가 맞는지 체크해야함
+  const blurCurPassword = () => {
+    CheckPassword(token, password.currentPassword)
+      .then((res) => {
+        if (res.status === 200) {
+          setPasswordErr(() => ({ ...passwordErr, currentPassword: false }));
+        }
+      })
+      .catch((e) => {
+        if (e.response.status === 401) {
+          setPasswordErr(() => ({ ...passwordErr, currentPassword: true }));
+        }
+      });
+  };
+
   const changeNewPassword = (e: ChangeEvent<HTMLInputElement>) => {
     setPasswordErr(() => ({ ...passwordErr, newPassword: !isPassword(e.target.value) }));
     setPassword({ ...password, newPassword: e.target.value });
@@ -78,8 +92,24 @@ const ChangePassword = ({ userId, token, movePage }: SettingProps) => {
     return password.currentPassword.length > 0 && password.newPassword.length > 0 && password.checkPassword.length > 0;
   };
 
-  // 비밀번호 API 완료시 작성
-  const submitPassword = () => {};
+  const submitPassword = () => {
+    const formData = new FormData();
+
+    formData.append("userInfo", JSON.stringify({ password: password.newPassword }));
+
+    PatchProfile(userId, formData, token)
+      .then((res: any) => {
+        if (res.status === 200) {
+          alert("비밀번호 변경 성공😺");
+          movePage();
+        }
+      })
+      .catch((e) => {
+        if (e.response.status === 500) {
+          alert("비밀번호 변경 실패😿");
+        }
+      });
+  };
 
   useEffect(() => {
     if (!passwordErr.currentPassword && !passwordErr.newPassword && !passwordErr.checkPassword) {
@@ -96,6 +126,7 @@ const ChangePassword = ({ userId, token, movePage }: SettingProps) => {
           type="password"
           placeholder="이전 비밀번호를 입력하세요"
           onChange={changeCurPassword}
+          onBlur={blurCurPassword}
           label="이전 비밀번호"
           isError={passwordErr.currentPassword}
           errorMsg="현재 비밀번호와 일치하게 입력해 주세요."

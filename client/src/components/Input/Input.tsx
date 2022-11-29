@@ -3,6 +3,7 @@
 생성 : 2022.11.15
 수정 : 
   - 2022.11.17 (이수련) date 인풋 max 오늘 날짜 설정, onChange 타입 재설정
+  - 2022.11.29 (김윤희) onBlur 함수 추가
 소개 : 인풋 컴포넌트
 설명 : 
   - 페이지에서 공통적으로 사용되는 인풋 컴포넌트입니다.
@@ -36,6 +37,7 @@ interface InputProps {
   fontSize?: string;
   isError?: boolean;
   errorMsg?: string;
+  onBlur?: () => void;
 }
 
 function Input({
@@ -50,6 +52,7 @@ function Input({
   fontSize,
   isError = false,
   errorMsg,
+  onBlur = () => {},
 }: InputProps) {
   return (
     <Wrapper>
@@ -63,6 +66,7 @@ function Input({
           height={height}
           inputColor={inputColor}
           onChange={onChange}
+          onBlur={onBlur}
         />
       ) : (
         <InputStyle
