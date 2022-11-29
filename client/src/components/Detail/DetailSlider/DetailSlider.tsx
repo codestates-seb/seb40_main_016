@@ -1,13 +1,14 @@
 import { useState, useEffect, useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Navigation } from "swiper";
+import { Images } from "../../../types/article";
 
 import { Wrapper, NavigationBtn, SingleViewer } from "./style";
 
 import { ReactComponent as ArrowIcon } from "../../../assets/img/arrow-circle-icon.svg";
 
 interface Prop {
-  photos: string[];
+  photos: Images[];
 }
 
 const DetailSlider = ({ photos }: Prop) => {
@@ -49,15 +50,15 @@ const DetailSlider = ({ photos }: Prop) => {
       <Wrapper>
         {isSingle ? (
           <SingleViewer>
-            <img src={photos[0]} alt="" />
+            <img src={photos[0].imgUrl} alt="" />
           </SingleViewer>
         ) : (
           <>
             <Swiper {...settings}>
-              {photos.map((url, idx) => {
+              {photos.map((item) => {
                 return (
-                  <SwiperSlide key={idx}>
-                    <img src={url} alt="" />
+                  <SwiperSlide key={item.articleImgId}>
+                    <img src={item.imgUrl} alt="" />
                   </SwiperSlide>
                 );
               })}
