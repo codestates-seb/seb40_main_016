@@ -24,3 +24,13 @@ export const DeleteSubscribe = async (myId: number, authorId: number, token: str
   });
   return response;
 };
+
+export const GetFollowList = async (myId: number) => {
+  const response = await axios.get(`${URL}/follow/${myId}`);
+  return response;
+};
+
+export const GetFollowerList = async (myId: number) => {
+  const response = await axios.get(`${URL}/follower/${myId}`);
+  return response;
+};

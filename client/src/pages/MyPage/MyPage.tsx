@@ -10,10 +10,10 @@ import MyPageArticles from "./MyPageArticles";
 import MyPageComments from "./MyPageComments";
 import MyPageSnacks from "./MyPageSnacks";
 import FollowPopUp from "../../components/MyPage/FollowPopUp";
+import FollowerPopUp from "../../components/MyPage/FollowerPopUp";
 
 import { GetMyProfile } from "../../api/mypage";
 
-import userInfoState from "../../_state/userInfoState";
 import accessTokenState from "../../_state/accessTokenState";
 
 import { ReactComponent as FishIcon } from "../../assets/img/fish-icon.svg";
@@ -96,8 +96,6 @@ const MyPage = ({ detailHandler, setArticleId }: Prop) => {
     setOpenFollowerModal(!openFollowerModal);
   };
 
-  console.log(userInfo);
-
   return (
     <>
       <MyAccountPage>
@@ -128,10 +126,11 @@ const MyPage = ({ detailHandler, setArticleId }: Prop) => {
                     <button>게시물 {userArticlesNum}</button>
                     <button onClick={handleFollowModal}>팔로우 {userInfo.followCnt}</button>
                     <button onClick={handleFollowerModal}>팔로워 {userInfo.followerCnt}</button>
-                    {openFollowModal ? <FollowPopUp isOn={openFollowModal} setIsOn={setOpenFollowModal} /> : ""}
                   </div>
                   <p>{userInfo.content}</p>
                 </UserDesc>
+                {openFollowModal ? <FollowPopUp setIsOn={setOpenFollowModal} userId={userInfo.userId} /> : ""}
+                {openFollowerModal ? <FollowerPopUp setIsOn={setOpenFollowerModal} userId={userInfo.userId} /> : ""}
               </ProfileInfo>
             </ProfileContainer>
           </InnerContainer>
