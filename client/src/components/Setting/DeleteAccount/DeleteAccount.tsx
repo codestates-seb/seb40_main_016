@@ -6,7 +6,7 @@ import Input from "../../Input/Input";
 import Modal from "../../Modal/Modal";
 
 import { SettingProps } from "../../../types/setting";
-import { DeleteUser } from "../../../api/user";
+import { CheckPassword, PatchProfile } from "../../../api/user";
 
 const Wrapper = styled.div`
   width: 60%;
@@ -68,15 +68,31 @@ const DeleteAccount = ({ userId, token, movePage }: SettingProps) => {
   const [isOn, setIsOn] = useState<boolean>(false);
 
   const changePassword = (e: ChangeEvent<HTMLInputElement>) => {
-    /* 이전 비밀번호 불러와서 일치하는지 확인
-    setIsError(() => {}); */
     setPassword(() => e.target.value);
   };
 
+  const blurCurPassword = () => {
+    CheckPassword(token, password)
+      .then((res) => {
+        if (res.status === 200) {
+          setIsError(() => false);
+        }
+      })
+      .catch((e) => {
+        if (e.response.status === 401) {
+          setIsError(() => true);
+        }
+      });
+  };
+
   const deleteUser = () => {
-    DeleteUser(userId, token)
+    const formData = new FormData();
+
+    formData.append("userInfo", JSON.stringify({ userStatus: "USER_DROPPED" }));
+
+    PatchProfile(userId, formData, token)
       .then((res: any) => {
-        if (res.status === 204) {
+        if (res.status === 200) {
           alert("회원탈퇴 성공😿");
           movePage();
         }
@@ -97,6 +113,7 @@ const DeleteAccount = ({ userId, token, movePage }: SettingProps) => {
         label="비밀번호 입력"
         isError={isError}
         errorMsg="현재 비밀번호와 일치하게 입력해 주세요."
+        onBlur={blurCurPassword}
       />
       <Button
         width="200px"
