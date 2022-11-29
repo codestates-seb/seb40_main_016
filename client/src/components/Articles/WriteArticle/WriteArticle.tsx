@@ -38,7 +38,13 @@ const WriteArticle = ({ uploadedPhotos, content, setContent }: WriteArticleProps
   return (
     <InnerWrapper>
       <SelectedPhoto>
-        {uploadedPhotos.length > 0 && <DetailSlider photos={uploadedPhotos.map((photo) => photo.uploadedPhoto)} />}
+        {/* TODO: api 변경으로 오류남 DetailSlider에 photos 아래와 같은 형식으로 들어와야 함
+        photos: [{
+          articleImgId: number;
+          imgUrl: string;
+        }]
+        */}
+        {/* {uploadedPhotos.length > 0 && <DetailSlider photos={uploadedPhotos.map((photo) => photo.uploadedPhoto)} />} */}
       </SelectedPhoto>
       <ArticleWrapper>
         <Profile>

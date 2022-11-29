@@ -16,7 +16,7 @@ import accessTokenState from "../../_state/accessTokenState";
 import userInfoState from "../../_state/userInfoState";
 
 import { DetailViewer, AreaSlider, ArticleAndComments, ExtraModalWrapper, CommentEditModalWrapper } from "./style";
-import { DetailData } from "../../types/article";
+import { DetailData, Images } from "../../types/article";
 import { CommentType } from "../../types/comment";
 
 interface Prop {
@@ -35,7 +35,7 @@ const Detail = ({ articleId, isDetailOn, detailHandler, editPopupHandler }: Prop
   const [authorId, setAuthorId] = useState<number | null>(null);
   const [likeCnt, setLikeCnt] = useState<number>(0);
   const [gotLiked, setGotLiked] = useState<boolean>(false);
-  const [articleImg, setArticleImg] = useState<string[]>([]);
+  const [articleImg, setArticleImg] = useState<Images[]>([]);
   const myId = myInfo.userId;
 
   const [comments, setComments] = useState<CommentType[]>([
@@ -102,9 +102,7 @@ const Detail = ({ articleId, isDetailOn, detailHandler, editPopupHandler }: Prop
           setAuthorId(res.data.user.userId);
           setGotLiked(res.data.gotLiked);
           setLikeCnt(res.data.likeCnt);
-          const tempImgArr = [];
-          tempImgArr.push(res.data.articleImg);
-          setArticleImg(tempImgArr);
+          setArticleImg(res.data.articleImg.images);
         })
         .catch((e) => alert("게시글을 불러오는 데에 실패했습니다😿"));
 
