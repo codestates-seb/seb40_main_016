@@ -55,16 +55,6 @@ export const PatchProfile = async (userId: number, formData: FormData, token: st
   return response;
 };
 
-export const DeleteUser = async (userId: number, token: string) => {
-  const response = await axios.delete(`${URL}/user/${userId}`, {
-    headers: {
-      Authorization: `${token}`,
-    },
-  });
-
-  return response;
-};
-
 export const CheckPassword = async (token: string, password: string) => {
   const response = await axios.post(`${URL}/user/passcheck`, JSON.stringify({ password: password }), {
     headers: {
