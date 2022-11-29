@@ -22,6 +22,7 @@ interface Prop {
 
 const ArticleLikeAndSnack = ({ authorId, articleId = 5, likeCnt, yummyCnt = 0, authorType, gotLiked }: Prop) => {
   const [currentLike, setCurrentLike] = useState<number>();
+  const [currentSnack, setCurrentSnack] = useState<number>();
   const [isSnackPopOn, setIsSnackPopOn] = useState<boolean>(false);
   const [isSubscribing, setIsSubscribing] = useState<boolean>(false);
   const [canSubscribe, setCanSubscribe] = useState<boolean>(false);
@@ -58,7 +59,8 @@ const ArticleLikeAndSnack = ({ authorId, articleId = 5, likeCnt, yummyCnt = 0, a
 
   useEffect(() => {
     setCurrentLike(likeCnt);
-  }, [likeCnt]);
+    setCurrentSnack(yummyCnt);
+  }, [likeCnt, yummyCnt]);
 
   const onLike = () => {
     PostArticleLike(articleId, token)
@@ -75,17 +77,6 @@ const ArticleLikeAndSnack = ({ authorId, articleId = 5, likeCnt, yummyCnt = 0, a
       .catch((err) => alert("좋아요 취소에 실패했습니다.😿"));
   };
 
-  const onSnack = () => {
-    console.log("간식주기 켜기");
-  };
-  const offSnack = () => {
-    console.log("간식주기 끄기");
-  };
-
-  const alertNeedLogin = () => {
-    alert("로그인이 필요한 기능입니다.");
-  };
-
   const onSubscribe = () => {
     PostSubscribe(myinfo.userId, authorId, token)
       .then((res) => {
@@ -99,6 +90,10 @@ const ArticleLikeAndSnack = ({ authorId, articleId = 5, likeCnt, yummyCnt = 0, a
         return res;
       })
       .catch((err) => alert("구독에 실패했습니다.😿"));
+  };
+
+  const updateSnack = (value: number) => {
+    setCurrentSnack(currentSnack + value);
   };
 
   return (
@@ -120,14 +115,14 @@ const ArticleLikeAndSnack = ({ authorId, articleId = 5, likeCnt, yummyCnt = 0, a
             btnType="snack"
             userType={authorType}
             defaultStatus={isSnackPopOn}
-            onActive={onSnack}
-            onInactive={offSnack}
             disabled={!isLogin}
+            articleId={articleId}
+            updateSnack={updateSnack}
           />
         </GroupBtn>
         <GroupCounter>
           <Counter>좋아요 {ShortenNumber(currentLike)}</Counter>
-          {authorType !== "PERSON" ? <Counter>간식 {ShortenNumber(yummyCnt)}</Counter> : ""}
+          {authorType !== "PERSON" ? <Counter>간식 {ShortenNumber(currentSnack)}</Counter> : ""}
         </GroupCounter>
         {canSubscribe ? (
           <ReactionBtn
