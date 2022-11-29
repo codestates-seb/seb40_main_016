@@ -183,6 +183,7 @@ const Detail = ({ articleId, isDetailOn, detailHandler, editPopupHandler }: Prop
               setMorePopupId={setContsId}
               commentLoading={commentLoading}
               setCommentConts={setCommentConts}
+              detailHandler={detailHandler}
             />
             <CommentAdd articleId={articleId} resetComments={resetComments} />
           </ArticleAndComments>

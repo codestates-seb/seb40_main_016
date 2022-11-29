@@ -13,6 +13,7 @@ export const Comment = styled.div`
 
   .comment-avatar {
     flex-shrink: 0;
+    cursor: pointer;
   }
 `;
 
@@ -28,6 +29,7 @@ export const GroupConts = styled.div`
   span {
     margin-right: 10px;
     font-weight: bold;
+    cursor: pointer;
   }
 `;
 

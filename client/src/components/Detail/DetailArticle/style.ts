@@ -13,6 +13,7 @@ export const Info = styled.div`
 
   .avatar {
     flex-shrink: 0;
+    cursor: pointer;
   }
 `;
 
