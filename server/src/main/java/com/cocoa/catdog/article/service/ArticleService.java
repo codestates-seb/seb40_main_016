@@ -6,10 +6,7 @@ import com.cocoa.catdog.article.entity.Article;
 import com.cocoa.catdog.article.entity.ArticleImg;
 import com.cocoa.catdog.article.entity.Report;
 import com.cocoa.catdog.article.mapper.ArticleImgMapper;
-import com.cocoa.catdog.article.repository.ArticleImgRepository;
-import com.cocoa.catdog.article.repository.ArticleRepository;
-import com.cocoa.catdog.article.repository.LikeRepository;
-import com.cocoa.catdog.article.repository.ReportRepository;
+import com.cocoa.catdog.article.repository.*;
 import com.cocoa.catdog.article.entity.Like;
 import com.cocoa.catdog.comment.entity.Comment;
 import com.cocoa.catdog.comment.repository.CommentRepository;
@@ -51,6 +48,7 @@ public class ArticleService {
     private final SseEmitterService sseEmitterService;
     private final ApplicationEventPublisher eventPublisher;
     private final ArticleImgMapper mapper;
+
 
     @Value("${s3.articleDir}")
     private String articleDir;
@@ -146,29 +144,22 @@ public class ArticleService {
     * 게시물 목록 조회
     * */
     @Transactional(readOnly = true)
-    public Page<Article> findArticles(int page, int size, String sort, String order, long userId) {
-        //쿼리 정리
-        sort = queryFilter(sort, "sort");
-        order = queryFilter(order, "order");
-
+    public Page<Article> findArticles(int page, int size, String sort, String order, String search, long userId) {
+        //order로 pageRequest 생성
         PageRequest pageRequest = PageRequest.of(page, size,
-                Sort.by(order).descending().and(Sort.by("articleId").descending()));
-        Page<Article> articlePage;
+                Sort.by(orderFilter(order)).descending().and(Sort.by("articleId").descending()));
 
         //글목록을 쿼리별로 조회
-        if(sort.equals("all")) {
-            articlePage = articleRepository.findAll(pageRequest);
-        } else if(sort.equals("followings")) {
+        Page<Article> articlePage;
+        if(sort.equals("followings")) {
             User user = userService.findUser(userId);
-            articlePage = articleRepository.findByUser_UserIdIn(
-                    user.getFollowingUsers().stream()
-                            .map(followingUser -> followingUser.getFollowedUser().getUserId())
-                            .collect(Collectors.toList()),
-                    pageRequest);
+            List<Long> followedUsers = user.getFollowingUsers().stream()
+                    .map(followingUser -> followingUser.getFollowedUser().getUserId())
+                    .collect(Collectors.toList());
+            articlePage = articleRepository.findBySearchAndFollowing(pageRequest, followedUsers, search);
         } else {
-            articlePage = articleRepository.findByUser_UserType(User.UserType.valueOf(sort), pageRequest);
+            articlePage = articleRepository.findBySearch(pageRequest, sort, search);
         }
-
 
         return articlePage;
     }
@@ -178,31 +169,28 @@ public class ArticleService {
     * */
     @Transactional(readOnly = true)
     public Page<Article> findProfileArticles(int page, int size, String tab, Long userId) {
-        tab = queryFilter(tab, "tab");
-
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by("articleId").descending());
         Page<Article> articlePage;
-        if(tab.equals("post")) {
-            articlePage = articleRepository.findByUser_UserId(userId, pageRequest);
-        } else if(tab.equals("give")) {
-            List<Long> articleIdList = userService.findUser(userId).getWallet().getGives().stream()
-                    .map(giveTake -> giveTake.getArticle().getArticleId())
-                    .collect(Collectors.toList());
-            articlePage = articleRepository.findByArticleIdIn(articleIdList, pageRequest);
-        } else {
-            User user = userService.findUser(userId);
-            if(user.getUserType() == User.UserType.PERSON) {
-                throw new BusinessLogicException(ExceptionCode.BAD_REQUEST);
-            }
-            //yummyCnt가 아닌 거래내역을 기준으로 했을시
-//            List<Long> articleIdList = user.getWallet().getTakes().stream()
-//                    .map(giveTake -> giveTake.getArticle().getArticleId())
-//                    .collect(Collectors.toList());
-//            articlePage = articleRepository.findByArticleIdIn(articleIdList,
-//                    PageRequest.of(page, size, Sort.by("yummyCnt").descending()
-//                            .and(Sort.by("articleId").descending())));
-            articlePage = articleRepository.findAll(PageRequest.of(page, size, Sort.by("yummyCnt").descending()
-                            .and(Sort.by("articleId").descending())));
+        switch (tab) {
+            case "post":
+                articlePage = articleRepository.findByUser_UserId(userId, pageRequest);
+                break;
+            case "give":
+                List<Long> articleIdList = userService.findUser(userId).getWallet().getGives().stream()
+                        .map(giveTake -> giveTake.getArticle().getArticleId())
+                        .collect(Collectors.toList());
+                articlePage = articleRepository.findByArticleIdIn(articleIdList, pageRequest);
+                break;
+            case "take":
+                User user = userService.findUser(userId);
+                if (user.getUserType() == User.UserType.PERSON) {
+                    throw new BusinessLogicException(ExceptionCode.BAD_REQUEST);
+                }
+                articlePage = articleRepository.findAll(PageRequest.of(page, size, Sort.by("yummyCnt").descending()
+                        .and(Sort.by("articleId").descending())));
+                break;
+            default:
+                throw new BusinessLogicException(ExceptionCode.BAD_QUERY);
         }
 
         return articlePage;
@@ -225,72 +213,25 @@ public class ArticleService {
 
         articleRepository.delete(article);
 
-
-
-
-        /*Optional<Article> optionalArticle = articleRepository.findById(articleId);
-        optionalArticle.ifPresentOrElse(article -> {
-            if (!Objects.equals(article.getUser().getUserId(), userId)) {
-                throw new BusinessLogicException(ExceptionCode.USER_UNAUTHORIZED);
-            }
-            articleRepository.delete(article);
-
-        }, () -> {
-            return;
-        });*/
     }
 
     /*
-    * 쿼리파라미터 필터
+    * order 쿼리 필터
     * */
-    private String queryFilter(String query, String type) {
-        switch (type) {
-            case "order":
-                switch (query) {
-                    case "latest":
-                        query = "articleId";
-                        break;
-                    case "likes":
-                        query = "likeCnt";
-                        break;
-                    case "views":
-                        break;
-                    default:
-                        throw new BusinessLogicException(ExceptionCode.BAD_QUERY); //case 에 맞지않는 쿼리는 전부 예외처리
-                }
+    private String orderFilter(String order) {
+        switch (order) {
+            case "latest":
+                order = "articleId";
                 break;
-            case "sort":
-                switch (query) {
-                    case "all":
-                    case "followings":
-                        break;
-                    case "dogs":
-                        query = "DOG";
-                        break;
-                    case "cats":
-                        query = "CAT";
-                        break;
-                    case "persons":
-                        query = "PERSON";
-                        break;
-                    default:
-                        throw new BusinessLogicException(ExceptionCode.BAD_QUERY); //case 에 맞지않는 쿼리는 전부 예외처리
-                }
+            case "likes":
+                order = "likeCnt";
                 break;
-            case "tab":
-                switch (query) {
-                    case "post":
-                    case "give":
-                    case "take":
-                        break;
-                    default:
-                        throw new BusinessLogicException(ExceptionCode.BAD_QUERY); //case 에 맞지않는 쿼리는 전부 예외처리
-
-                }
+            case "views":
                 break;
+            default:
+                throw new BusinessLogicException(ExceptionCode.BAD_QUERY); //case 에 맞지않는 쿼리는 전부 예외처리
         }
-
-        return query;
+        return order;
     }
 
     /*
