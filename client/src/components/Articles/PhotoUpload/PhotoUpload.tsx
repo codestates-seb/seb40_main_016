@@ -34,20 +34,23 @@ interface PhotoUploadProps {
   uploadedPhotos: UploadedPhotos[];
   previewPhotos: any[];
   currentPhotos: string;
+  isAddPhoto: boolean;
   setUploadedPhotos: (arg: (arg: UploadedPhotos[]) => UploadedPhotos[]) => void;
   setPreviewPhotos: (arg: () => any[]) => void;
   setCurrentPhotos: (arg: () => string) => void;
+  setIsAddPhoto: (arg: (arg: boolean) => boolean) => void;
 }
 
 const PhotoUpload = ({
   uploadedPhotos,
   previewPhotos,
   currentPhotos,
+  isAddPhoto,
   setUploadedPhotos,
   setPreviewPhotos,
   setCurrentPhotos,
+  setIsAddPhoto,
 }: PhotoUploadProps) => {
-  const [isAddPhoto, setIsAddPhoto] = useState<boolean>(false);
   const uploadBoxRef = useRef<HTMLLabelElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
