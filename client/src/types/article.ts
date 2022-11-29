@@ -15,3 +15,24 @@ export interface DetailData {
   view: number;
   yummyCnt: number;
 }
+
+export interface Articles {
+  articleId: number;
+  articleImg: ArticleImg;
+  content: string;
+  likeCnt: number;
+  views: number;
+  reportCnt: number;
+  articleStatus: string;
+  yummyCnt: number;
+}
+
+export interface ArticleImg {
+  [index: number]: any;
+  images: Images[];
+}
+
+export interface Images {
+  articleImgId: number;
+  imgUrl: string;
+}
