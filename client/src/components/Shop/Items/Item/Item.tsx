@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 
 import ImageCard from "../../../ImageCard/ImageCard";
 import Checkbox from "../../../Checkbox/Checkbox";
@@ -22,6 +22,16 @@ const Item = ({ itemId, itemImg, itemName, price, stock, setTotalCost, setSelect
     }
   };
 
+  const changeQuantity = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let number = +e.target.value;
+
+    if (number > stock) {
+      e.target.value = `${stock}`;
+    } else if (number < 1) {
+      e.target.value = `1`;
+    }
+  };
+
   return (
     <Wrapper>
       <ImageCard imgUrl={itemImg} className="itemImg" />
@@ -35,7 +45,7 @@ const Item = ({ itemId, itemImg, itemName, price, stock, setTotalCost, setSelect
               defaultValue={stock > 0 ? 1 : 0}
               max={stock}
               min={1}
-              onChange={(e) => setQuantity(() => +e.target.value)}
+              onChange={changeQuantity /* (e) => setQuantity(() => +e.target.value) */}
               disabled={isChecked || stock <= 0 ? true : false}
             />
           </Price>
