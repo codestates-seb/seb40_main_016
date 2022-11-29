@@ -96,13 +96,12 @@ const NewArticle = ({ isOn, isEdit = false, setIsOn, articleId }: ArticleProps) 
       GetDetail(articleId, token).then((res: any) => {
         setContent(() => res.data.content);
 
-        //현재 articleId에 해당하는 이미지 배열로 들어오지 않아 오류남
-        // setUploadedPhotos((photos) => [
-        //   ...photos,
-        //   ...res.data.images.map((image: string) => {
-        //     return { uploadedPhoto: image };
-        //   }),
-        // ]);
+        setUploadedPhotos((photos) => [
+          ...photos,
+          ...res.data.articleImg.images.map((image: Images) => {
+            return { uploadedPhoto: image.imgUrl };
+          }),
+        ]);
       });
     }
   }, [articleId, isEdit]);
