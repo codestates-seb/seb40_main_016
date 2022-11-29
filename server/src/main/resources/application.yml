@@ -52,5 +52,3 @@ cloud:
     stack:
       auto: false
 
-s3:
-  articleDir: assets/articleImages/
