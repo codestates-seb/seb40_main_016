@@ -8,8 +8,10 @@ import com.cocoa.catdog.comment.entity.Comment;
 import com.cocoa.catdog.comment.entity.CommentLike;
 import com.cocoa.catdog.wallet.entity.Wallet;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,8 +49,12 @@ public class User extends AuditingEntity {
 
     private LocalDate userBirth;
 
-    @Getter
+    @Enumerated(value = EnumType.STRING)
     private UserStatus userStatus = UserStatus.USER_ACTIVE;
+
+    @Getter
+    @ColumnDefault("false")
+    private Boolean needSocialSet;
 
     @Enumerated(value = EnumType.STRING)
     private UserType userType;

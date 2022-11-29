@@ -29,6 +29,7 @@ public class UserResponseDto {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private List<String> roles;   // 유저 권한 표시 추가
+    private Boolean needSocialSet;
 
     @JsonIgnore
     private List<Follow> followingUsers;
