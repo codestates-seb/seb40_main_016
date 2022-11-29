@@ -6,10 +6,7 @@ import com.cocoa.catdog.article.entity.Article;
 import com.cocoa.catdog.article.entity.ArticleImg;
 import com.cocoa.catdog.article.entity.Report;
 import com.cocoa.catdog.article.mapper.ArticleImgMapper;
-import com.cocoa.catdog.article.repository.ArticleImgRepository;
-import com.cocoa.catdog.article.repository.ArticleRepository;
-import com.cocoa.catdog.article.repository.LikeRepository;
-import com.cocoa.catdog.article.repository.ReportRepository;
+import com.cocoa.catdog.article.repository.*;
 import com.cocoa.catdog.article.entity.Like;
 import com.cocoa.catdog.comment.entity.Comment;
 import com.cocoa.catdog.comment.repository.CommentRepository;
@@ -51,6 +48,7 @@ public class ArticleService {
     private final SseEmitterService sseEmitterService;
     private final ApplicationEventPublisher eventPublisher;
     private final ArticleImgMapper mapper;
+    private final ArticleRepositoryCustom articleRepositoryCustom = new ArticleRepositoryCustomImpl();
 
     @Value("${s3.articleDir}")
     private String articleDir;
@@ -146,7 +144,7 @@ public class ArticleService {
     * 게시물 목록 조회
     * */
     @Transactional(readOnly = true)
-    public Page<Article> findArticles(int page, int size, String sort, String order, long userId) {
+    public Page<Article> findArticles(int page, int size, String sort, String order, String search, long userId) {
         //쿼리 정리
         sort = queryFilter(sort, "sort");
         order = queryFilter(order, "order");
@@ -156,9 +154,8 @@ public class ArticleService {
         Page<Article> articlePage;
 
         //글목록을 쿼리별로 조회
-        if(sort.equals("all")) {
-            articlePage = articleRepository.findAll(pageRequest);
-        } else if(sort.equals("followings")) {
+
+        if(sort.equals("followings")) {
             User user = userService.findUser(userId);
             articlePage = articleRepository.findByUser_UserIdIn(
                     user.getFollowingUsers().stream()
@@ -166,7 +163,7 @@ public class ArticleService {
                             .collect(Collectors.toList()),
                     pageRequest);
         } else {
-            articlePage = articleRepository.findByUser_UserType(User.UserType.valueOf(sort), pageRequest);
+            articlePage = articleRepositoryCustom.findBySearch(pageRequest, sort, search);
         }
 
 
