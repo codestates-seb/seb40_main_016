@@ -80,7 +80,7 @@ const DeleteAccount = ({ userId, token, movePage }: SettingProps) => {
       })
       .catch((e) => {
         if (e.response.status === 401) {
-          setIsError(() => false);
+          setIsError(() => true);
         }
       });
   };
