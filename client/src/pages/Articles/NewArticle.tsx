@@ -1,12 +1,12 @@
 import { useRecoilValue } from "recoil";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 import Modal from "../../components/Modal/Modal";
 import PhotoUpload from "../../components/Articles/PhotoUpload/PhotoUpload";
 import WriteArticle from "../../components/Articles/WriteArticle/WriteArticle";
 
-import { UploadedPhotos } from "../../types/article";
+import { Images, UploadedPhotos } from "../../types/article";
 import { RegisterArticle, UpdateArticle, GetDetail } from "../../api/article";
 import accessTokenState from "../../_state/accessTokenState";
 
@@ -19,7 +19,7 @@ interface ArticleProps {
 
 const NewArticle = ({ isOn, isEdit = false, setIsOn, articleId }: ArticleProps) => {
   const token = useRecoilValue(accessTokenState);
-  const navigate = useNavigate();
+  const location = useLocation();
   const [isPhoto, setIsPhoto] = useState<boolean>(true);
   const [uploadedPhotos, setUploadedPhotos] = useState<UploadedPhotos[]>([]);
   const [previewPhotos, setPreviewPhotos] = useState([]);
@@ -35,9 +35,15 @@ const NewArticle = ({ isOn, isEdit = false, setIsOn, articleId }: ArticleProps) 
     setUploadedPhotos(() => []);
     setPreviewPhotos(() => []);
     setCurrentPhotos(() => "");
+    setContent(() => "");
   };
 
   const submitNewArticle = () => {
+    if (content.length <= 0) {
+      alert("내용을 입력해주세요.");
+      return;
+    }
+
     const formData = new FormData();
 
     for (let uploadedPhoto of uploadedPhotos) {
@@ -55,6 +61,12 @@ const NewArticle = ({ isOn, isEdit = false, setIsOn, articleId }: ArticleProps) 
         .then((res: any) => {
           if (res.status === 200) {
             alert("글 수정 완료😺");
+
+            if (location.pathname === "/") {
+              window.location.reload();
+            } else {
+              setIsOn(false);
+            }
           }
         })
         .catch((e) => {
@@ -65,7 +77,12 @@ const NewArticle = ({ isOn, isEdit = false, setIsOn, articleId }: ArticleProps) 
         .then((res: any) => {
           if (res.status === 201) {
             alert("글 작성 완료😺");
-            // navigate();
+
+            if (location.pathname === "/") {
+              window.location.reload();
+            } else {
+              setIsOn(false);
+            }
           }
         })
         .catch((e) => {
