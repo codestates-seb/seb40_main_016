@@ -21,20 +21,11 @@ import { ReactComponent as BoneWIcon } from "../../assets/img/bone-w-icon.svg";
 import { ReactComponent as EyeWIcon } from "../../assets/img/eye-w-icon..svg";
 
 import { GetMain } from "../../api/article";
+import { Articles } from "../../types/article";
 
 interface Prop {
   detailHandler: () => void;
   setArticleId: Dispatch<SetStateAction<number>>;
-}
-interface Articles {
-  articleId: number;
-  articleImg: string;
-  content: string;
-  likeCnt: number;
-  views: number;
-  reportCnt: number;
-  articleStatus: string;
-  yummyCnt: number;
 }
 
 const Main = ({ detailHandler, setArticleId }: Prop) => {
@@ -197,7 +188,11 @@ const Main = ({ detailHandler, setArticleId }: Prop) => {
                         </Info>
                       </InfoBox>
                     </Dim>
-                    <ImageCard className="img-card" imgUrl={article.articleImg} onClick={handleOpen}></ImageCard>
+                    <ImageCard
+                      className="img-card"
+                      imgUrl={article.articleImg.images[0].imgUrl}
+                      onClick={handleOpen}
+                    ></ImageCard>
                   </ImgBox>
                 ))}
               {loading ? (
