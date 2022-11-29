@@ -27,7 +27,6 @@ const SnackGiver = ({ className = "", articleId, setIsSnackGiver, updateSnack, s
     e.preventDefault();
     PostSnack(value, articleId, token)
       .then((res) => {
-        console.log(res);
         alert("성공적으로 간식을 전달하였습니다.😻");
         setIsSnackGiver(false);
         updateSnack(value);
