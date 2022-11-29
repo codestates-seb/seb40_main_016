@@ -5,7 +5,8 @@ spring:
     url: jdbc:mysql://cocoadatabase.ctcimtwch8lu.ap-northeast-2.rds.amazonaws.com:3306/cocoa?useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC
     #url: jdbc:mysql://preproject009.caqi1wpy8gu8.ap-northeast-2.rds.amazonaws.com:3306/test?serverTimezone=UTC&characterEncoding=UTF-8
     username: admin
-    password: "!q123456789"
+    password: ${rds_cocoa_password}
+
   jpa:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     database: mysql
