@@ -17,6 +17,7 @@ interface Prop {
   setMorePopupId: Dispatch<SetStateAction<number>>;
   commentLoading: boolean;
   setCommentConts: Dispatch<SetStateAction<string>>;
+  detailHandler: () => void;
 }
 
 const Comments = ({
@@ -27,6 +28,7 @@ const Comments = ({
   setMorePopupId,
   commentLoading,
   setCommentConts,
+  detailHandler,
 }: Prop) => {
   const myInfo = useRecoilValue(userInfoState);
 
@@ -71,6 +73,8 @@ const Comments = ({
                 MoreIconClick={() => {
                   onMoreClick(item);
                 }}
+                userId={item.user.userId}
+                detailHandler={detailHandler}
               />
             );
           })

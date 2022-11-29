@@ -59,7 +59,7 @@ const DetailArticle = ({
     <>
       <Wrapper>
         <Info>
-          <Avatar className="avatar" width="40px" height="40px" bgUrl={avatarUrl} />
+          <Avatar className="avatar" width="40px" height="40px" bgUrl={avatarUrl} onClick={handleOnProfilePage} />
           <AuthorName onClick={handleOnProfilePage}>{userName}</AuthorName>
           <TimeStamp>{DisplayCreatedAt(createdAt)}</TimeStamp>
         </Info>
