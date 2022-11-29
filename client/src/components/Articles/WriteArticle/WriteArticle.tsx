@@ -1,20 +1,23 @@
 /*
 담당 : 김윤희
 생성 : 2022.11.19
-수정 : 2022.11.22
+수정 : 2022.11.28
 소개 : 글 작성 컴포넌트
 설명 : 
   - 글 작성, 수정시 사용되는 글 작성 컴포넌트입니다.
   - 업로드된 파일의 임시주소와 파일 상태를 같이 관리할 수 있도록 수정
+  - 유저 네임, 이미지 전역에 저장된 값 가져오도록 수정
   - 사용 예시: <WriteArticle uploadedPhotos={uploadedPhotos} content={content} setContent={setContent} index={index} setIndex={setIndex} />
 */
 
-import { useState, useEffect } from "react";
+import { useRecoilValue } from "recoil";
+
 import Avatar from "../../Avatar/Avatar";
 import DetailSlider from "../../Detail/DetailSlider/DetailSlider";
+
 import { UploadedPhotos } from "../../../types/article";
-import { GetUserInfo } from "../../../api/user";
 import { InnerWrapper, ArticleWrapper, SelectedPhoto, Profile, Nickname, Textarea } from "./style";
+import userInfoState from "../../../_state/userInfoState";
 
 interface WriteArticleProps {
   uploadedPhotos: UploadedPhotos[];
@@ -23,17 +26,7 @@ interface WriteArticleProps {
 }
 
 const WriteArticle = ({ uploadedPhotos, content, setContent }: WriteArticleProps) => {
-  const [userName, setUseName] = useState<string>("");
-  const [userImg, setUserImg] = useState<string>("");
-  /* 로컬스토리지에서 유저 아이디 받아와야함! 임시 아이디 */
-  const userId = 32;
-
-  useEffect(() => {
-    GetUserInfo(userId).then((res: any) => {
-      setUseName(() => res.data.data.userName);
-      setUserImg(() => res.data.data.userImg);
-    });
-  }, []);
+  const { userName, userImg } = useRecoilValue(userInfoState);
 
   return (
     <InnerWrapper>

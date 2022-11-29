@@ -4,6 +4,7 @@
 수정 : 
   - 2022.11.16
   - 2022.11.19 (김윤희) 글 작성시 뒤로가기 기능 추가, 사진 선택&글 작성 컴포넌트 구분하는 함수 추가
+  - 2022.11.28 (김윤희) next, done 버튼 한글로 변경
 소개 : 모달 창 컴포넌트
 설명 : 
   - 페이지에서 공통적으로 사용되는 모달 창 컴포넌트입니다.
@@ -21,9 +22,8 @@
 */
 
 import React from "react";
-import { Bg, Popup, PopupHeader } from "./style";
+import { Bg, Popup, PopupHeader, PrevNextBtn } from "./style";
 import { ReactComponent as CloseBtn } from "../../assets/img/close-icon.svg";
-import { ReactComponent as NextBtn } from "../../assets/img/arrow-icon.svg";
 import { ReactComponent as DoneBtn } from "../../assets/img/check-icon.svg";
 import { ReactComponent as MoreBtn } from "../../assets/img/more-icon.svg";
 
@@ -71,13 +71,25 @@ const Modal = ({
       <Popup className={className} maxWidth={maxWidth}>
         {title && (
           <PopupHeader title={title}>
-            {titleBtn === "done" && <NextBtn className="orange prevBtn" onClick={onTitlePrevBtnClick} />}
+            {titleBtn === "done" && (
+              <PrevNextBtn className="prev" onClick={onTitlePrevBtnClick}>
+                이전
+              </PrevNextBtn>
+            )}
             {title}
             {
               {
                 close: <CloseBtn onClick={HandleOnOff} />,
-                next: <NextBtn className="orange" onClick={onTitleBtnClick} />,
-                done: <DoneBtn className="orange" onClick={onTitleBtnClick} />,
+                next: (
+                  <PrevNextBtn className="next" onClick={onTitleBtnClick}>
+                    다음
+                  </PrevNextBtn>
+                ),
+                done: (
+                  <PrevNextBtn className="done" onClick={onTitleBtnClick}>
+                    완료
+                  </PrevNextBtn>
+                ),
                 more: <MoreBtn onClick={onTitleBtnClick} />,
                 none: "",
               }[titleBtn]

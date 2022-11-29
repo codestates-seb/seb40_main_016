@@ -9,6 +9,7 @@
 */
 
 import styled from "styled-components";
+
 import { ReactComponent as CloseBtn } from "../../../assets/img/close-icon.svg";
 
 interface PhotoPreviewProps {

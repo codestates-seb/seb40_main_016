@@ -1,8 +1,11 @@
 import { useRecoilValue } from "recoil";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import Modal from "../../components/Modal/Modal";
 import PhotoUpload from "../../components/Articles/PhotoUpload/PhotoUpload";
 import WriteArticle from "../../components/Articles/WriteArticle/WriteArticle";
+
 import { UploadedPhotos } from "../../types/article";
 import { RegisterArticle, UpdateArticle, GetDetail } from "../../api/article";
 import accessTokenState from "../../_state/accessTokenState";
@@ -16,6 +19,7 @@ interface ArticleProps {
 
 const NewArticle = ({ isOn, isEdit = false, setIsOn, articleId }: ArticleProps) => {
   const token = useRecoilValue(accessTokenState);
+  const navigate = useNavigate();
   const [isPhoto, setIsPhoto] = useState<boolean>(true);
   const [uploadedPhotos, setUploadedPhotos] = useState<UploadedPhotos[]>([]);
   const [previewPhotos, setPreviewPhotos] = useState([]);
@@ -37,18 +41,36 @@ const NewArticle = ({ isOn, isEdit = false, setIsOn, articleId }: ArticleProps) 
     const formData = new FormData();
 
     for (let uploadedPhoto of uploadedPhotos) {
-      if (uploadedPhoto.file) formData.append("image", uploadedPhoto.file);
+      if (uploadedPhoto.file) formData.append("file", uploadedPhoto.file);
     }
-    formData.append("content", JSON.stringify(content));
+    formData.append(
+      "postDto",
+      new Blob([JSON.stringify(content)], {
+        type: "application/json",
+      }),
+    );
 
     if (isEdit) {
-      UpdateArticle(formData, articleId, token).then((res: any) => {
-        if (res.status(200)) alert("글 수정 완료!");
-      });
+      UpdateArticle(formData, articleId, token)
+        .then((res: any) => {
+          if (res.status === 200) {
+            alert("글 수정 완료😺");
+          }
+        })
+        .catch((e) => {
+          alert("글 수정 실패😿");
+        });
     } else {
-      RegisterArticle(formData, token).then((res: any) => {
-        if (res.status(201)) alert("글 작성 완료!");
-      });
+      RegisterArticle(formData, token)
+        .then((res: any) => {
+          if (res.status === 201) {
+            alert("글 작성 완료😺");
+            // navigate();
+          }
+        })
+        .catch((e) => {
+          alert("글 작성 실패😿");
+        });
     }
   };
 
