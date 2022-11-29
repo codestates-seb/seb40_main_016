@@ -7,6 +7,7 @@ import com.cocoa.catdog.audit.AuditingEntity;
 import com.cocoa.catdog.comment.entity.Comment;
 import com.cocoa.catdog.comment.entity.CommentLike;
 import com.cocoa.catdog.wallet.entity.Wallet;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
@@ -40,7 +41,9 @@ public class User extends AuditingEntity {
 
 
     // todo 유저 기본 이미지 url 추가 필요-s3 업로드
-    private String userImg;
+    @JsonManagedReference
+    @OneToOne
+    private UserImg userImg;
 
     private String userGender;
 

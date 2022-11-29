@@ -40,7 +40,7 @@ public class UserController {
     private final ArticleMapper articleMapper;
 
     //회원가입
-    @PostMapping("/user")
+    @PostMapping(value = "/user", consumes = "multipart/form-data")
     public ResponseEntity postUser(@Valid @RequestBody UserPostDto userPostDto) {
         User user = mapper.userPostDtoToUser(userPostDto);
         User response = userService.createUser(user);

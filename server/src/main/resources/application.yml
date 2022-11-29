@@ -17,9 +17,9 @@ spring:
           starttls:
             enable: true
   servlet:
-  multipart:
-    max-file-size: 10MB
-    max-request-size: 30MB
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 30MB
   security:
     oauth2:
       client:
