@@ -29,7 +29,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -144,10 +143,13 @@ public class ArticleService {
     @Transactional(readOnly = true)
     public Page<Article> findArticles(int page, int size, String sort, String order, String search, long userId) {
         //order로 pageRequest 생성
-        PageRequest pageRequest = PageRequest.of(page, size,
-                Sort.by(orderFilter(order)).descending().and(Sort.by("articleId").descending()));
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(orderFilter(order)).descending()
+                .and(Sort.by("articleId").descending()));
 
+        return articleRepository.findBySearch(pageRequest, sort, search, userId);
+        //----------------------------------<<querydsl로 리팩토링 하기 전>>-----------------------------//
         //글목록을 쿼리별로 조회
+        /*
         Page<Article> articlePage;
         if(sort.equals("followings")) {
             User user = userService.findUser(userId);
@@ -158,8 +160,9 @@ public class ArticleService {
         } else {
             articlePage = articleRepository.findBySearch(pageRequest, sort, search);
         }
-
         return articlePage;
+        */
+        //----------------------------------------------------------------------------------------------//
     }
 
     /*
@@ -167,7 +170,19 @@ public class ArticleService {
     * */
     @Transactional(readOnly = true)
     public Page<Article> findProfileArticles(int page, int size, String tab, Long userId) {
-        PageRequest pageRequest = PageRequest.of(page, size, Sort.by("articleId").descending());
+
+        PageRequest pageRequest;
+        if(tab.equals("take")) {
+            pageRequest = PageRequest.of(page, size, Sort.by("articleId").descending());
+        } else {
+            pageRequest = PageRequest.of(page, size, Sort.by("YummyCnt").descending()
+                    .and(Sort.by("articleId").descending()));
+        }
+
+        return articleRepository.findByProfile(pageRequest, tab, userId);
+
+        //----------------------------------<<querydsl로 리팩토링 하기 전>>-------------------------------//
+        /*
         Page<Article> articlePage;
         switch (tab) {
             case "post":
@@ -192,6 +207,8 @@ public class ArticleService {
         }
 
         return articlePage;
+        */
+        //--------------------------------------------------------------------------------------------//
     }
 
     /*
@@ -291,6 +308,16 @@ public class ArticleService {
 
         //article의 reportCnt 최신화
         article.changeReportCnt(article.getReports().size());
+
+        //신고누적횟수가 1이상일시 게시물을 신고상태로 변경
+        if(article.getReportCnt() >= 1) {
+            isReportedArticle(article);
+            user.changeReportedArticleCnt(user.getReportedArticleCnt() + 1);
+            //위의 결과로 인해 신고된 게시물이 2이상일시 유저를 휴면상태로 변경
+            if(user.getReportedArticleCnt() >= 2) {
+                userService.isSleptUser(user);
+            }
+        }
     }
     /*
      * 게시물 좋아요 여부 조회
@@ -353,6 +380,21 @@ public class ArticleService {
         if(optionalCommentReport.isPresent()) {
             throw new BusinessLogicException(ExceptionCode.EXIST_ARTICLE_REPORT);
         }
+    }
+
+    /*
+    * 게시물 조회수 증가
+    * */
+    public void increaseViews(Article article) {
+        article.IncreaseViews();
+        articleRepository.save(article);
+    }
+
+    /*
+    * 신고 누적시 일반 게시물을 신고된 게시물 상태로 변경
+    * */
+    private void isReportedArticle(Article article) {
+        article.changeArticleStatus(Article.ArticleStatus.REPORTED);
     }
 
     public Page<Article> searchArticles(String keyword, int page, int size) {

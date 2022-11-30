@@ -60,6 +60,8 @@ public class User extends AuditingEntity {
     @Enumerated(value = EnumType.STRING)
     private UserType userType;
 
+    private int reportedArticleCnt;
+
     // 유저 권한 관리를 위한 필드 추가
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
@@ -84,6 +86,14 @@ public class User extends AuditingEntity {
 
     @OneToMany(mappedBy = "user")
     private List<Report> reports = new ArrayList<>();
+
+    public void changeStatus(UserStatus userStatus) {
+        this.userStatus = userStatus;
+    }
+
+    public void changeReportedArticleCnt(int Cnt) {
+        this.reportedArticleCnt = Cnt;
+    }
 
     public void setWallet(Wallet wallet) {
         this.wallet = wallet;
