@@ -82,7 +82,6 @@ const Login = () => {
           })
           .then(() => {
             navigate("/");
-            navigate(0);
           })
           .catch((e) => {
             alert("회원 정보를 가져오는 데에 실패했습니다! 😿");
