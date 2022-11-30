@@ -51,6 +51,10 @@ const SnackImgBox = styled.div`
 const SnackImg = styled.div`
   overflow: hidden;
   border-radius: 20px;
+
+  .snack-img {
+    cursor: default;
+  }
 `;
 
 const ChangeList = styled.div`
@@ -192,7 +196,7 @@ const ProfileSnacks = ({ profileUserId }: Props) => {
                 <SnackBox key={`${item.orderId} - ${item.orderPrice}`}>
                   <SnackImgBox>
                     <SnackImg>
-                      <ImageCard imgUrl={item.itemImg} onClick={handleOpen} />
+                      <ImageCard className="snack-img" imgUrl={item.itemImg} onClick={handleOpen} />
                     </SnackImg>
                   </SnackImgBox>
                   <ChangeList>
