@@ -27,6 +27,7 @@ const NewArticle = ({ isOn, isEdit = false, setIsOn, setIsEdit, articleId }: Art
   const [currentPhotos, setCurrentPhotos] = useState<string>("");
   const [isAddPhoto, setIsAddPhoto] = useState<boolean>(false);
   const [content, setContent] = useState<string>("");
+  const [deletePhotos, setDeletePhotos] = useState<string[]>([]);
 
   const handlePhoto = () => {
     setIsPhoto(() => true);
@@ -50,17 +51,23 @@ const NewArticle = ({ isOn, isEdit = false, setIsOn, setIsEdit, articleId }: Art
 
     const formData = new FormData();
 
-    for (let uploadedPhoto of uploadedPhotos) {
-      if (uploadedPhoto.file) formData.append("file", uploadedPhoto.file);
-    }
-    formData.append(
-      "postDto",
-      new Blob([JSON.stringify(content)], {
-        type: "application/json",
-      }),
-    );
-
     if (isEdit) {
+      for (let uploadedPhoto of uploadedPhotos) {
+        if (uploadedPhoto.file) formData.append("add", uploadedPhoto.file);
+      }
+
+      const body = {
+        content: content,
+        delete: deletePhotos,
+      };
+
+      formData.append(
+        "patchDto",
+        new Blob([JSON.stringify(body)], {
+          type: "application/json",
+        }),
+      );
+
       UpdateArticle(formData, articleId, token)
         .then((res: any) => {
           if (res.status === 200) {
@@ -77,6 +84,17 @@ const NewArticle = ({ isOn, isEdit = false, setIsOn, setIsEdit, articleId }: Art
           alert("글 수정 실패😿");
         });
     } else {
+      for (let uploadedPhoto of uploadedPhotos) {
+        if (uploadedPhoto.file) formData.append("file", uploadedPhoto.file);
+      }
+
+      formData.append(
+        "postDto",
+        new Blob([JSON.stringify(content)], {
+          type: "application/json",
+        }),
+      );
+
       RegisterArticle(formData, token)
         .then((res: any) => {
           if (res.status === 201) {
@@ -132,6 +150,7 @@ const NewArticle = ({ isOn, isEdit = false, setIsOn, setIsEdit, articleId }: Art
           setPreviewPhotos={setPreviewPhotos}
           setCurrentPhotos={setCurrentPhotos}
           setIsAddPhoto={setIsAddPhoto}
+          setDeletePhotos={setDeletePhotos}
         />
       ) : (
         <WriteArticle uploadedPhotos={uploadedPhotos} content={content} setContent={setContent} />
