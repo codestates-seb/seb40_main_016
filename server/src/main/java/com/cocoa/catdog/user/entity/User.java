@@ -41,9 +41,7 @@ public class User extends AuditingEntity {
 
 
     // todo 유저 기본 이미지 url 추가 필요-s3 업로드
-    @JsonManagedReference
-    @OneToOne
-    private UserImg userImg;
+    private String userImg;
 
     private String userGender;
 

@@ -16,3 +16,4 @@ config:
 #  domain: http://preproject009-bucket.s3-website.ap-northeast-2.amazonaws.com
 s3:
   articleDir: assets/articleImages/
+  userDir: assets/userImages/
