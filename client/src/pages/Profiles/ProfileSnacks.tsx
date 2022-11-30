@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 import InnerContainer from "../../components/InnerContainer/InnerContainer";
 import ImageCard from "../../components/ImageCard/ImageCard";
+import NoContent from "../../components/NoContent/NoContent";
 
 import { GetUserSnacks } from "../../api/mypage";
 
@@ -108,6 +109,26 @@ const ChangeDate = styled.div`
   }
 `;
 
+const NoChangeSnackContainer = styled.div`
+  padding: 0px 0px 30px;
+  min-height: 150px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+
+  span {
+    margin-top: 20px;
+    font-weight: 700;
+    font-size: var(--fs-pc-regular);
+    color: var(--color-light-black);
+  }
+
+  img {
+    width: 150px;
+  }
+`;
+
 interface Props {
   profileUserId: number;
 }
@@ -131,14 +152,13 @@ interface SnackInfo {
 const ProfileSnacks = ({ profileUserId }: Props) => {
   const [open, setOpen] = useState<boolean>(false);
   const [snackList, setSnackList] = useState<SnackList[]>([]);
-
-  const handleOpen = () => {
-    setOpen(!open);
-  };
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     GetUserSnacks(profileUserId).then((res: any) => {
       setSnackList(res.data.data);
+      console.log(res.data.data);
+      setLoading(false);
     });
   }, []);
 
@@ -152,31 +172,42 @@ const ProfileSnacks = ({ profileUserId }: Props) => {
     return `${year}년 ${month}월 ${day}일`;
   };
 
+  const handleOpen = () => {
+    setOpen(!open);
+  };
+
   return (
     <InnerContainer>
       <SnackContainer>
         <SnackTitle>간식 교환 내역</SnackTitle>
-        {snackList &&
-          snackList.map((snack: SnackList) => (
-            <SnackBox key={snack.orderId}>
-              <SnackImgBox>
-                <SnackImg>
-                  <ImageCard
-                    imgUrl="https://user-images.githubusercontent.com/104997140/203379733-89a71f76-c1f1-4752-9c23-5bbadc0bc1a5.jpeg"
-                    onClick={handleOpen}
-                  />
-                </SnackImg>
-              </SnackImgBox>
-              <ChangeList>
-                <SnackName>now 그레인프리 어덜트 스몰브리드 2.72kg</SnackName>
-                <ChangeInfo>
-                  <Quantity>{`수량: ${snack.orderItems[0].quantity}개`}</Quantity>
-                  <Price>{`가격: ${snack.orderItems[0].orderPrice}알`}</Price>
-                  <ChangeDate>{`교환 날짜: ${handleChangeDate(snack.createdAt)}`}</ChangeDate>
-                </ChangeInfo>
-              </ChangeList>
-            </SnackBox>
-          ))}
+        {snackList.length === 0 && !loading ? (
+          <NoChangeSnackContainer>
+            <NoContent />
+            <span>아직 교환한 간식이 없습니다.</span>
+          </NoChangeSnackContainer>
+        ) : (
+          <>
+            {snackList.map((snack: SnackList) =>
+              snack.orderItems.map((item: any) => (
+                <SnackBox key={`${item.orderId} - ${item.orderPrice}`}>
+                  <SnackImgBox>
+                    <SnackImg>
+                      <ImageCard imgUrl={item.itemImg} onClick={handleOpen} />
+                    </SnackImg>
+                  </SnackImgBox>
+                  <ChangeList>
+                    <SnackName>{item.itemName}</SnackName>
+                    <ChangeInfo>
+                      <Quantity>{`수량: ${item.quantity}개`}</Quantity>
+                      <Price>{`가격: ${item.orderPrice}알`}</Price>
+                      <ChangeDate>{`교환 날짜: ${handleChangeDate(snack.createdAt)}`}</ChangeDate>
+                    </ChangeInfo>
+                  </ChangeList>
+                </SnackBox>
+              )),
+            )}
+          </>
+        )}
       </SnackContainer>
     </InnerContainer>
   );
