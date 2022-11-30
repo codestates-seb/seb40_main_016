@@ -11,7 +11,6 @@ export const ProfileContainer = styled.div`
 `;
 
 export const ProfileImg = styled.div`
-  margin-right: 10px;
   width: 40%;
   display: flex;
   justify-content: center;
@@ -30,7 +29,7 @@ export const ProfileInfo = styled.div`
 `;
 
 export const UserInfo = styled.div`
-  width: 80%;
+  width: 70%;
   height: 50px;
   display: flex;
   flex-direction: row;
@@ -121,8 +120,15 @@ export const UserDesc = styled.div`
     margin-top: 20px;
     font-size: var(--fs-pc-small);
 
-    span {
-      margin-right: 20px;
+    button {
+      padding: 0px;
+      margin-right: 30px;
+      border: none;
+      background-color: transparent;
+
+      &:not(:first-child) {
+        cursor: pointer;
+      }
     }
 
     @media screen and (max-width: 736px) {

@@ -9,10 +9,11 @@ import Avatar from "../../components/Avatar/Avatar";
 import MyPageArticles from "./MyPageArticles";
 import MyPageComments from "./MyPageComments";
 import MyPageSnacks from "./MyPageSnacks";
+import FollowPopUp from "../../components/MyPage/FollowPopUp";
+import FollowerPopUp from "../../components/MyPage/FollowerPopUp";
 
 import { GetMyProfile } from "../../api/mypage";
 
-import userInfoState from "../../_state/userInfoState";
 import accessTokenState from "../../_state/accessTokenState";
 
 import { ReactComponent as FishIcon } from "../../assets/img/fish-icon.svg";
@@ -87,9 +88,13 @@ const MyPage = ({ detailHandler, setArticleId }: Prop) => {
     setUserArticlesNum(articles);
   };
 
-  // const handleFollowModal = () => {
+  const handleFollowModal = () => {
+    setOpenFollowModal(!openFollowModal);
+  };
 
-  // }
+  const handleFollowerModal = () => {
+    setOpenFollowerModal(!openFollowerModal);
+  };
 
   return (
     <>
@@ -105,7 +110,7 @@ const MyPage = ({ detailHandler, setArticleId }: Prop) => {
                   <UserName>{userInfo.userName}</UserName>
                   <UserBtn>
                     <YummyBtn>
-                      {userInfo.userType === "CAT" ? <FishIcon /> : <BoneIcon />}
+                      {userInfo.userType === "DOG" ? <BoneIcon /> : <FishIcon />}
                       <span>간식 {userWallet.yummy}알</span>
                     </YummyBtn>
                     <SettingWalletBtn onClick={() => navigate("/setting")}>
@@ -118,12 +123,14 @@ const MyPage = ({ detailHandler, setArticleId }: Prop) => {
                 </UserInfo>
                 <UserDesc>
                   <div>
-                    <span>게시물 {userArticlesNum}</span>
-                    <span>팔로우 {userInfo.followCnt}</span>
-                    <span>팔로워 {userInfo.followerCnt}</span>
+                    <button>게시물 {userArticlesNum}</button>
+                    <button onClick={handleFollowModal}>팔로우 {userInfo.followCnt}</button>
+                    <button onClick={handleFollowerModal}>팔로워 {userInfo.followerCnt}</button>
                   </div>
                   <p>{userInfo.content}</p>
                 </UserDesc>
+                {openFollowModal ? <FollowPopUp setIsOn={setOpenFollowModal} userId={userInfo.userId} /> : ""}
+                {openFollowerModal ? <FollowerPopUp setIsOn={setOpenFollowerModal} userId={userInfo.userId} /> : ""}
               </ProfileInfo>
             </ProfileContainer>
           </InnerContainer>
@@ -147,7 +154,7 @@ const MyPage = ({ detailHandler, setArticleId }: Prop) => {
                     case "댓글":
                       return (
                         <>
-                          <MyPageComments />
+                          <MyPageComments detailHandler={detailHandler} setArticleId={setArticleId} />
                         </>
                       );
                     case "간식":
@@ -182,7 +189,7 @@ const MyPage = ({ detailHandler, setArticleId }: Prop) => {
                     case "댓글":
                       return (
                         <>
-                          <MyPageComments />
+                          <MyPageComments detailHandler={detailHandler} setArticleId={setArticleId} />
                         </>
                       );
                     default:

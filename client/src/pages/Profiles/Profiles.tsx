@@ -8,12 +8,16 @@ import Tab from "../../components/Tab/Tab";
 import Avatar from "../../components/Avatar/Avatar";
 import ProfileArticles from "./ProfileArticles";
 import ProfileSnacks from "./ProfileSnacks";
+import FollowPopUp from "../../components/MyPage/FollowPopUp";
+import FollowerPopUp from "../../components/MyPage/FollowerPopUp";
+import UnFollowPopUp from "../../components/MyPage/UnFollowPopUp";
 
 import { GetProfile } from "../../api/mypage";
 import { GetIsSubscribe, PostSubscribe, DeleteSubscribe } from "../../api/subscribe";
 
 import userInfoState from "../../_state/userInfoState";
 import accessTokenState from "../../_state/accessTokenState";
+import isLoginState from "../../_state/isLoginState";
 
 import {
   MyAccountPage,
@@ -47,8 +51,12 @@ const Profiles = ({ detailHandler, setArticleId }: Prop) => {
   const profileUserId = parseInt(useParams().id);
   const myInfo = useRecoilValue(userInfoState);
   const token = useRecoilValue(accessTokenState);
+  const isLogin = useRecoilValue(isLoginState);
   const [nowTab, setNowTab] = useState<string>("게시물");
   const [onFollow, setOnFollow] = useState<boolean>(false);
+  const [openFollowModal, setOpenFollowModal] = useState<boolean>(false);
+  const [openFollowerModal, setOpenFollowerModal] = useState<boolean>(false);
+  const [openUnFollowModal, setOpenUnFollowModal] = useState<boolean>(false);
   const [userInfo, setUserInfo] = useState<UserInfoProps>({
     content: "",
     email: "",
@@ -78,25 +86,35 @@ const Profiles = ({ detailHandler, setArticleId }: Prop) => {
   }, []);
 
   const handleFollow = () => {
-    if (onFollow === true) {
-      DeleteSubscribe(myInfo.userId, profileUserId, token)
-        .then((res) => {
-          return res;
-        })
-        .catch((err) => alert("구독에 실패했습니다.😿"));
-      setOnFollow(false);
-    } else if (onFollow === false) {
+    if (onFollow && isLogin) {
+      handleUnFollowModal();
+    } else if (!onFollow && isLogin) {
       PostSubscribe(myInfo.userId, profileUserId, token)
         .then((res) => {
           return res;
         })
         .catch((err) => alert("구독에 실패했습니다.😿"));
       setOnFollow(true);
+      window.location.reload();
+    } else if (!isLogin) {
+      alert("로그인이 필요합니다.😆");
     }
   };
 
   const handleArticlesNum = (articles: number) => {
     setUserArticlesNum(articles);
+  };
+
+  const handleFollowModal = () => {
+    setOpenFollowModal(!openFollowModal);
+  };
+
+  const handleFollowerModal = () => {
+    setOpenFollowerModal(!openFollowerModal);
+  };
+
+  const handleUnFollowModal = () => {
+    setOpenUnFollowModal(!openUnFollowModal);
   };
 
   return (
@@ -115,14 +133,28 @@ const Profiles = ({ detailHandler, setArticleId }: Prop) => {
                     {onFollow ? <span>팔로잉</span> : <span>팔로우</span>}
                   </FollowBtn>
                 </UserInfo>
+
                 <UserDesc>
                   <div>
-                    <span>게시물 {userArticlesNum}</span>
-                    <span>팔로우 {userInfo.followCnt}</span>
-                    <span>팔로워 {userInfo.followerCnt}</span>
+                    <button>게시물 {userArticlesNum}</button>
+                    <button onClick={handleFollowModal}>팔로우 {userInfo.followCnt}</button>
+                    <button onClick={handleFollowerModal}>팔로워 {userInfo.followerCnt}</button>
                   </div>
                   <p>{userInfo.content}</p>
                 </UserDesc>
+                {openFollowModal ? <FollowPopUp setIsOn={setOpenFollowModal} userId={userInfo.userId} /> : ""}
+                {openFollowerModal ? <FollowerPopUp setIsOn={setOpenFollowerModal} userId={userInfo.userId} /> : ""}
+                {openUnFollowModal ? (
+                  <UnFollowPopUp
+                    setIsOn={setOpenUnFollowModal}
+                    userName={userInfo.userName}
+                    userImg={userInfo.userImg}
+                    userId={profileUserId}
+                    setOnFollow={setOnFollow}
+                  />
+                ) : (
+                  ""
+                )}
               </ProfileInfo>
             </ProfileContainer>
           </InnerContainer>

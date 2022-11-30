@@ -29,18 +29,25 @@ export const ProfileInfo = styled.div`
 `;
 
 export const UserInfo = styled.div`
+  width: 55%;
+  min-width: 20%;
   height: 50px;
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: space-between;
+
+  @media screen and (max-width: 736px) {
+    width: 80%;
+  }
 `;
 
 export const UserName = styled.span`
-  width: 30%;
   display: flex;
   align-items: center;
   font-weight: 700;
   font-size: var(--fs-pc-xlarge);
+  white-space: nowrap;
 
   @media screen and (max-width: 736px) {
     font-size: var(--fs-pc-large);
@@ -71,6 +78,12 @@ export const FollowBtn = styled.div`
     background-color: var(--color-white);
     color: var(--color-green);
   }
+
+  @media screen and (max-width: 736px) {
+    padding: 0px 25px;
+    height: 35px;
+    font-size: 12px;
+  }
 `;
 
 export const UserDesc = styled.div`
@@ -78,12 +91,30 @@ export const UserDesc = styled.div`
     margin-top: 20px;
     font-size: var(--fs-pc-small);
 
-    span {
-      margin-right: 20px;
+    button {
+      padding: 0px;
+      margin-right: 30px;
+      border: none;
+      background-color: transparent;
+
+      &:not(:first-child) {
+        cursor: pointer;
+      }
+    }
+
+    @media screen and (max-width: 736px) {
+      margin-top: 5px;
+      font-size: 12px;
     }
   }
+
   p {
     margin-top: 30px;
     font-size: var(--fs-pc-regular);
+
+    @media screen and (max-width: 736px) {
+      margin-top: 10px;
+      font-size: var(--fs-pc-small);
+    }
   }
 `;

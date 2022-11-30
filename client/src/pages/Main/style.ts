@@ -1,14 +1,14 @@
 import styled from "styled-components";
 
 export const FilterContainer = styled.main`
-  padding: 50px 0px;
+  padding: 80px 0px 50px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
 
   @media screen and (max-width: 736px) {
-    padding: 30px 0px;
+    padding: 80px 0px 50px;
     flex-direction: column;
   }
 `;
@@ -128,5 +128,30 @@ export const Info = styled.div`
 
   .views {
     width: 20px;
+  }
+`;
+
+export const NoArticleContainer = styled.div`
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+
+  span {
+    margin-top: 20px;
+    font-weight: 700;
+    font-size: var(--fs-pc-large);
+    color: var(--color-light-black);
+  }
+
+  @media screen and (max-width: 736px) {
+    height: 80vh;
+
+    span {
+      font-size: var(--fs-pc-regular);
+    }
+    img {
+      width: 150px;
+    }
   }
 `;

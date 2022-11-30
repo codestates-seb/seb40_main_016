@@ -8,12 +8,15 @@ import ImageCard from "../../components/ImageCard/ImageCard";
 import Button from "../../components/Button/Button";
 import Avatar from "../../components/Avatar/Avatar";
 import ImageSkeleton from "../../components/Skeleton/ImageSkeleton";
+import NoContent from "../../components/NoContent/NoContent";
 
 import { ImgContainer, Dim } from "../Main/style";
 
 import accessTokenState from "../../_state/accessTokenState";
 
 import { GetMyArticles } from "../../api/mypage";
+
+import { ArticleImg } from "../../types/article";
 
 import { ReactComponent as BoneIcon } from "../../assets/img/bone-icon.svg";
 import { ReactComponent as BoneWIcon } from "../../assets/img/bone-w-icon.svg";
@@ -23,12 +26,16 @@ import { ReactComponent as CrownIcon } from "../../assets/img/crown-icon.svg";
 
 const MostRecieved = styled.div`
   padding: 10px 0px;
-  margin: 30px 0px;
+  margin: 30px 0px 50px;
   background-color: #f6f6f6;
 
   p {
     margin-left: 10px;
     font-size: var(--fs-pc-small);
+  }
+
+  @media screen and (max-width: 736px) {
+    margin: 20px 0px 20px;
   }
 `;
 
@@ -129,7 +136,6 @@ const AvatarBox = styled.div`
 const MainContainer = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
 
   .img-box {
     position: relative;
@@ -137,7 +143,7 @@ const MainContainer = styled.div`
 `;
 
 const FilterBtnBox = styled.div`
-  margin: 0px 0px 30px;
+  margin: 0px 0px 50px;
   width: 210px;
   height: 51px;
   display: flex;
@@ -145,6 +151,7 @@ const FilterBtnBox = styled.div`
   justify-content: space-between;
 
   @media screen and (max-width: 736px) {
+    margin: 0px 0px 30px;
     width: 170px;
   }
 
@@ -215,6 +222,26 @@ const SnackCount = styled.div`
   }
 `;
 
+const NoArticleContainer = styled.div`
+  padding: 0px 0px 30px;
+  min-height: 150px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+
+  span {
+    margin-top: 20px;
+    font-weight: 700;
+    font-size: var(--fs-pc-regular);
+    color: var(--color-light-black);
+  }
+
+  img {
+    width: 150px;
+  }
+`;
+
 interface Props {
   handleArticlesNum: (arg: number) => void;
   detailHandler: () => void;
@@ -223,7 +250,7 @@ interface Props {
 }
 interface MyArticles {
   articleId: number;
-  articleImg: string;
+  articleImg: ArticleImg;
   content: string;
   createdAt: string;
   likeCnt: number;
@@ -266,6 +293,10 @@ const MyPageArticles = ({ handleArticlesNum, detailHandler, setArticleId, userTy
   }, [tab]);
 
   useEffect(() => {
+    getMyArticles();
+  }, []);
+
+  useEffect(() => {
     const observer = new IntersectionObserver(obsHandler);
     if (obsRef.current) observer.observe(obsRef.current);
     return () => {
@@ -306,32 +337,49 @@ const MyPageArticles = ({ handleArticlesNum, detailHandler, setArticleId, userTy
 
   return (
     <>
-      <MostRecieved>
-        <InnerContainer>
-          <p>가장 간식을 많이 받은 글 Best 5 👍</p>
-          <MostRecievedArticles>
-            <CrownIcon className="crown-icon" />
-            <ArticleList>
-              {mostReceivedArticles.map((article: MyArticles) => (
-                <Article
-                  key={article.articleId}
-                  onClick={() => {
-                    handleImgBoxClick(article.articleId);
-                  }}
-                >
-                  <AvatarBox>
-                    <Avatar className="avatar" bgUrl={article.articleImg} width="120px" height="120px"></Avatar>
-                  </AvatarBox>
-                  <div className="avatar-snack">
-                    {userType === "CAT" ? <FishIcon /> : <BoneIcon />}
-                    <span>{article.yummyCnt}알</span>
-                  </div>
-                </Article>
-              ))}
-            </ArticleList>
-          </MostRecievedArticles>
-        </InnerContainer>
-      </MostRecieved>
+      {userType === "PERSON" ? (
+        ""
+      ) : (
+        <>
+          <MostRecieved>
+            <InnerContainer>
+              <p>가장 간식을 많이 받은 글 Best 5 👍</p>
+              {myArticles.length === 0 ? (
+                <NoArticleContainer>
+                  <span>아직 간식을 받은 글이 없습니다.</span>
+                </NoArticleContainer>
+              ) : (
+                <MostRecievedArticles>
+                  <CrownIcon className="crown-icon" />
+                  <ArticleList>
+                    {mostReceivedArticles.map((article: MyArticles) => (
+                      <Article
+                        key={article.articleId}
+                        onClick={() => {
+                          handleImgBoxClick(article.articleId);
+                        }}
+                      >
+                        <AvatarBox>
+                          <Avatar
+                            className="avatar"
+                            bgUrl={article.articleImg.images[0].imgUrl}
+                            width="120px"
+                            height="120px"
+                          ></Avatar>
+                        </AvatarBox>
+                        <div className="avatar-snack">
+                          {userType === "DOG" ? <BoneIcon /> : <FishIcon />}
+                          <span>{article.yummyCnt}알</span>
+                        </div>
+                      </Article>
+                    ))}
+                  </ArticleList>
+                </MostRecievedArticles>
+              )}
+            </InnerContainer>
+          </MostRecieved>
+        </>
+      )}
       <InnerContainer>
         <MainContainer>
           <FilterBtnBox>
@@ -354,35 +402,46 @@ const MyPageArticles = ({ handleArticlesNum, detailHandler, setArticleId, userTy
               간식을 준 글
             </Button>
           </FilterBtnBox>
-          <ImgContainer>
-            {myArticles.map((article: MyArticles) => (
-              <ImgBox
-                key={article.articleId}
-                onClick={() => {
-                  handleImgBoxClick(article.articleId);
-                }}
-              >
-                <Dim />
-                <SnackCount>
-                  {userType === "CAT" ? <FishWIcon /> : <BoneWIcon />}
-                  {article.yummyCnt}알
-                </SnackCount>
-                <ImageCard className="img-card" imgUrl={article.articleImg} onClick={handleOpen}></ImageCard>
-              </ImgBox>
-            ))}
-            {loading ? (
-              Array(8)
-                .fill(0)
-                .map((_, i) => (
-                  <ImgBox key={i}>
-                    <ImageSkeleton />
-                  </ImgBox>
-                ))
-            ) : (
-              <></>
-            )}
-            <div ref={obsRef} />
-          </ImgContainer>
+          {myArticles.length === 0 ? (
+            <NoArticleContainer>
+              <NoContent />
+              <span>아직 작성한 글이 없습니다.</span>
+            </NoArticleContainer>
+          ) : (
+            <ImgContainer>
+              {myArticles.map((article: MyArticles) => (
+                <ImgBox
+                  key={article.articleId}
+                  onClick={() => {
+                    handleImgBoxClick(article.articleId);
+                  }}
+                >
+                  <Dim />
+                  <SnackCount>
+                    {userType === "DOG" ? <BoneWIcon /> : <FishWIcon />}
+                    {article.yummyCnt}알
+                  </SnackCount>
+                  <ImageCard
+                    className="img-card"
+                    imgUrl={article.articleImg.images[0].imgUrl}
+                    onClick={handleOpen}
+                  ></ImageCard>
+                </ImgBox>
+              ))}
+              {loading ? (
+                Array(8)
+                  .fill(0)
+                  .map((_, i) => (
+                    <ImgBox key={i}>
+                      <ImageSkeleton />
+                    </ImgBox>
+                  ))
+              ) : (
+                <></>
+              )}
+              <div ref={obsRef} />
+            </ImgContainer>
+          )}
         </MainContainer>
       </InnerContainer>
     </>
