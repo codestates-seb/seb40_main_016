@@ -35,14 +35,16 @@ public class ArticleRepositoryCustomImpl extends QuerydslRepositorySupport imple
         JPQLQuery<Article> query =
                 queryFactory
                         .select(article)
-                        .from(article, follow)
+                        .from(article)
                         .join(article.user, user)
+                        .leftJoin(article.user.followedUsers, follow)
                         .where(
                                 eqSort(sort, userId),
-                                containUserName(search)/*,
-                                ltReportCnt(1),
+                                containUserName(search),
                                 neUserStatus(User.UserStatus.USER_DROPPED),
-                                neUserStatus(User.UserStatus.USER_SLEEP)*/
+                                neUserStatus(User.UserStatus.USER_SLEEP),
+                                neArticleStatus(Article.ArticleStatus.REPORTED),
+                                neArticleStatus(Article.ArticleStatus.PRIVATE)
                         );
 
         List<Article> articles = this.getQuerydsl().applyPagination(pageable, query).fetch();
@@ -101,12 +103,13 @@ public class ArticleRepositoryCustomImpl extends QuerydslRepositorySupport imple
         }
     }
 
-    private BooleanExpression ltReportCnt(int reportCnt) {
-        return article.reportCnt.lt(reportCnt);
-    }
 
     private BooleanExpression neUserStatus(User.UserStatus userStatus) {
         return user.userStatus.ne(userStatus);
+    }
+
+    private BooleanExpression neArticleStatus(Article.ArticleStatus articleStatus) {
+        return article.articleStatus.ne(articleStatus);
     }
 
 }

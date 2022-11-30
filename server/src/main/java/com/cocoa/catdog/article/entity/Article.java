@@ -84,12 +84,17 @@ public class Article extends AuditingEntity {
     public void changeLikeCnt(int likeCnt) {
         this.likeCnt = likeCnt;
     }
+
     public void changeReportCnt(int reportCnt) {
         this.reportCnt = reportCnt;
     }
 
     public void changeYummyCnt(int yummyCnt) {
         this.yummyCnt = yummyCnt;
+    }
+
+    public void changeArticleStatus(ArticleStatus articleStatus) {
+        this.articleStatus = articleStatus;
     }
 
     //==연관관계 메서드==//

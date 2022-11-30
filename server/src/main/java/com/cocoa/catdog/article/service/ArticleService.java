@@ -308,6 +308,16 @@ public class ArticleService {
 
         //article의 reportCnt 최신화
         article.changeReportCnt(article.getReports().size());
+
+        //신고누적횟수가 1이상일시 게시물을 신고상태로 변경
+        if(article.getReportCnt() >= 1) {
+            isReportedArticle(article);
+            user.changeReportedArticleCnt(user.getReportedArticleCnt() + 1);
+            //위의 결과로 인해 신고된 게시물이 2이상일시 유저를 휴면상태로 변경
+            if(user.getReportedArticleCnt() >= 2) {
+                userService.isSleptUser(user);
+            }
+        }
     }
     /*
      * 게시물 좋아요 여부 조회
@@ -378,6 +388,13 @@ public class ArticleService {
     public void increaseViews(Article article) {
         article.IncreaseViews();
         articleRepository.save(article);
+    }
+
+    /*
+    * 신고 누적시 일반 게시물을 신고된 게시물 상태로 변경
+    * */
+    private void isReportedArticle(Article article) {
+        article.changeArticleStatus(Article.ArticleStatus.REPORTED);
     }
 
     public Page<Article> searchArticles(String keyword, int page, int size) {

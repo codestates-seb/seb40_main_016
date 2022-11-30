@@ -170,6 +170,11 @@ public class UserService {
         return optionalUser.orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
     }
 
+    //신고된 게시물 누적시 일반 회원을 휴면 회원으로 변경
+    public void isSleptUser (User user) {
+        user.changeStatus(User.UserStatus.USER_SLEEP);
+    }
+
     public boolean verifyExistsEmail(String email) {
         return userRepository.existsByEmail(email);
     }
