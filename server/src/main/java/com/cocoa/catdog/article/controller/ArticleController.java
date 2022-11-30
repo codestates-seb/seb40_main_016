@@ -83,6 +83,7 @@ public class ArticleController {
                                    @RequestHeader(name = "Authorization", required = false, defaultValue = "null") String token) {
         long userId = token.equals("null") ? 0 : jwtTokenizer.getUserId(token);
         Article foundArticle = articleService.findArticle(articleId);
+        articleService.increaseViews(foundArticle);
         ArticleDto.Response response = mapper.entityToResponseDto(foundArticle);
         response.addGotLiked(articleService.checkLikeArticle(articleId, userId));
 

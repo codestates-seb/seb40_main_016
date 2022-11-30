@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface ArticleRepositoryCustom {
-    Page<Article> findBySearch(Pageable pageable, String sort, String search);
+    Page<Article> findBySearch(Pageable pageable, String sort, String search, Long userId);
 
-    Page<Article> findBySearchAndFollowing(Pageable pageable, List<Long> followedUsers, String search);
+    Page<Article> findByProfile(Pageable pageable, String tab, Long userId);
 }

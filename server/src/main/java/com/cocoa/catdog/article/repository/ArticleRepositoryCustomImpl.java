@@ -19,6 +19,8 @@ import java.util.List;
 
 import static com.cocoa.catdog.article.entity.QArticle.article;
 import static com.cocoa.catdog.user.entity.QUser.user;
+import static com.cocoa.catdog.user.entity.QFollow.follow;
+import static com.cocoa.catdog.wallet.entity.QGiveTake.giveTake;
 
 public class ArticleRepositoryCustomImpl extends QuerydslRepositorySupport implements ArticleRepositoryCustom {
     @Autowired
@@ -29,12 +31,13 @@ public class ArticleRepositoryCustomImpl extends QuerydslRepositorySupport imple
     }
 
     @Override
-    public Page<Article> findBySearch (Pageable pageable, String sort, String search) {
+    public Page<Article> findBySearch (Pageable pageable, String sort, String search, Long userId) {
         JPQLQuery<Article> query =
                 queryFactory
-                        .selectFrom(article)
+                        .select(article)
+                        .from(article, follow)
                         .join(article.user, user)
-                        .where(eqType(sort), containUserName(search));
+                        .where(eqSort(sort, userId), containUserName(search));
 
         List<Article> articles = this.getQuerydsl().applyPagination(pageable, query).fetch();
         return new PageImpl<Article>(articles, pageable, query.fetchCount());
@@ -42,23 +45,29 @@ public class ArticleRepositoryCustomImpl extends QuerydslRepositorySupport imple
     }
 
     @Override
-    public Page<Article> findBySearchAndFollowing (Pageable pageable, List<Long> followedUsers ,String search) {
+    public Page<Article> findByProfile (Pageable pageable, String tab, Long userId) {
         JPAQuery<Article> query =
                 queryFactory
-                        .selectFrom(article)
+                        .select(article)
+                        .from(giveTake)
+                        .rightJoin(giveTake.article, article)
                         .join(article.user, user)
-                        .where(user.userId.in(followedUsers), containUserName(search));
+                        .where(eqTab(tab, userId));
 
         List<Article> articles = this.getQuerydsl().applyPagination(pageable, query).fetch();
         return new PageImpl<Article>(articles, pageable, query.fetchCount());
 
     }
 
-    private BooleanExpression eqType(String sort) {
+    private BooleanExpression eqSort(String sort, Long userId) {
         if(sort == null || sort.isEmpty() || sort.equals("all")) {
             return null;
         } else if(sort.equals("dogs") || sort.equals("cats") || sort.equals("persons")) {
             return user.userType.eq(User.UserType.valueOf(sort.substring(0, sort.length() - 1).toUpperCase()));
+        } else if(sort.equals("followings")) {
+            return user.userId.eq(follow.followedUser.userId)
+                    .and(follow.followingUser.userId.eq(userId));
+
         } else {
             throw new BusinessLogicException(ExceptionCode.BAD_QUERY);
         }
@@ -70,4 +79,20 @@ public class ArticleRepositoryCustomImpl extends QuerydslRepositorySupport imple
         }
         return user.userName.contains(search);
     }
+
+    private BooleanExpression eqTab(String tab, Long userId) {
+        if(tab == null || tab.isEmpty()) {
+            return null;
+        } else if(tab.equals("post")) {
+            return user.userId.eq(userId);
+        } else if(tab.equals("give")) {
+            return giveTake.giveWlt.user.userId.eq(userId)
+                    .and(article.articleId.eq(giveTake.article.articleId));
+        } else if(tab.equals("take")) {
+            return null;
+        } else {
+            throw new BusinessLogicException(ExceptionCode.BAD_QUERY);
+        }
+    }
+
 }
