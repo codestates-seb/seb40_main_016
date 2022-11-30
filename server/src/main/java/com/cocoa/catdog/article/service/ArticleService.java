@@ -50,9 +50,10 @@ public class ArticleService {
 
     @Value("${s3.articleDir}")
     private String articleDir;
+
     /*
-    * 게시물 등록
-    * */
+     * 게시물 등록
+     * */
     public Article saveArticle(Article article, Long userId, List<MultipartFile> files) {
 
         User findUser = userService.findUser(userId);
@@ -89,25 +90,25 @@ public class ArticleService {
     }
 
     //테스트
-    public Article saveArticleTest (Article article, Long userId) {
+    public Article saveArticleTest(Article article, Long userId) {
         User findUser = userService.findUser(userId);
         article.addUser(findUser);
 
         eventPublisher.publishEvent(findUser);
-        return  articleRepository.save(article);
+        return articleRepository.save(article);
     }
 
     /*
-    * 게시물 조회
-    * */
+     * 게시물 조회
+     * */
     @Transactional(readOnly = true)
-    public Article findArticle(Long articleId){
+    public Article findArticle(Long articleId) {
         return findVerifiedArticle(articleId);
     }
 
     /*
-    * 게시물 존재여부 검증
-    * */
+     * 게시물 존재여부 검증
+     * */
     @Transactional(readOnly = true)
     private Article findVerifiedArticle(Long articleId) {
         return articleRepository.findById(articleId)
@@ -115,21 +116,21 @@ public class ArticleService {
     }
 
     /*
-    * 게시물 작성자 일치 검증
-    * */
+     * 게시물 작성자 일치 검증
+     * */
     @Transactional(readOnly = true)
-    private void verifiedUser (Article article, Long userId) {
+    private void verifiedUser(Article article, Long userId) {
         if (!article.getUser().getUserId().equals(userId)) {
             throw new BusinessLogicException(ExceptionCode.USER_UNAUTHORIZED);
         }
     }
 
     /*
-    * 게시물 수정
-    * */
+     * 게시물 수정
+     * */
     public Article updateArticle(Article newArticle, Long userId) {
         Article article = findVerifiedArticle(newArticle.getArticleId());
-        verifiedUser(newArticle, userId);
+        verifiedUser(article, userId);
         Optional.ofNullable(newArticle.getArticleImg())
                 .ifPresent(articleImg -> article.setArticleImg(articleImg));
         Optional.ofNullable(newArticle.getContent())
@@ -139,8 +140,8 @@ public class ArticleService {
     }
 
     /*
-    * 게시물 목록 조회
-    * */
+     * 게시물 목록 조회
+     * */
     @Transactional(readOnly = true)
     public Page<Article> findArticles(int page, int size, String sort, String order, String search, long userId) {
         //order로 pageRequest 생성
@@ -149,7 +150,7 @@ public class ArticleService {
 
         //글목록을 쿼리별로 조회
         Page<Article> articlePage;
-        if(sort.equals("followings")) {
+        if (sort.equals("followings")) {
             User user = userService.findUser(userId);
             List<Long> followedUsers = user.getFollowingUsers().stream()
                     .map(followingUser -> followingUser.getFollowedUser().getUserId())
@@ -163,8 +164,8 @@ public class ArticleService {
     }
 
     /*
-    * 마이페이지 게시물 조회
-    * */
+     * 마이페이지 게시물 조회
+     * */
     @Transactional(readOnly = true)
     public Page<Article> findProfileArticles(int page, int size, String tab, Long userId) {
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by("articleId").descending());
@@ -195,14 +196,14 @@ public class ArticleService {
     }
 
     /*
-    * 게시물 삭제
-    * */
+     * 게시물 삭제
+     * */
     public void deleteArticle(Long articleId, Long userId) {
         Article article = findArticle(articleId);
         verifiedUser(article, userId);
         article.getUser().removeArticle(article);
         List<Comment> comments = article.getComments();
-        for (int i = comments.size() - 1; i >=0 ; i--) {
+        for (int i = comments.size() - 1; i >= 0; i--) {
             Comment comment = comments.get(i);
             comment.getUser().removeComment(comment);
             comment.getArticle().removeComment(comment);
@@ -214,8 +215,8 @@ public class ArticleService {
     }
 
     /*
-    * order 쿼리 필터
-    * */
+     * order 쿼리 필터
+     * */
     private String orderFilter(String order) {
         switch (order) {
             case "latest":
@@ -235,7 +236,7 @@ public class ArticleService {
     /*
      * 게시물 좋아요
      * */
-    public void likeArticle (Long articleId, Long userId) {
+    public void likeArticle(Long articleId, Long userId) {
         //엔티티 조회
         Article article = findArticle(articleId);
         User user = userService.findUser(userId);
@@ -255,7 +256,7 @@ public class ArticleService {
     /*
      * 게시물 좋아요 취소
      * */
-    public void deleteLikeArticle (Long articleId, Long userId) {
+    public void deleteLikeArticle(Long articleId, Long userId) {
         //엔티티 조회
         Article article = findArticle(articleId);
         User user = userService.findUser(userId);
@@ -292,6 +293,7 @@ public class ArticleService {
         //article의 reportCnt 최신화
         article.changeReportCnt(article.getReports().size());
     }
+
     /*
      * 게시물 좋아요 여부 조회
      * */
@@ -307,7 +309,7 @@ public class ArticleService {
     @Transactional(readOnly = true)
     private void verifiedArticleLike(Long articleId, Long userId) {
         Optional<Like> optionalCommentLike = Optional.ofNullable(findArticleLike(articleId, userId));
-        if(optionalCommentLike.isPresent()) {
+        if (optionalCommentLike.isPresent()) {
             throw new BusinessLogicException(ExceptionCode.EXIST_ARTICLE_LIKE);
         }
     }
@@ -318,7 +320,7 @@ public class ArticleService {
     @Transactional(readOnly = true)
     private void verifiedNotArticleLike(Long articleId, Long userId) {
         Optional<Like> optionalCommentLike = Optional.ofNullable(findArticleLike(articleId, userId));
-        if(optionalCommentLike.isEmpty()) {
+        if (optionalCommentLike.isEmpty()) {
             throw new BusinessLogicException(ExceptionCode.NOT_EXIST_ARTICLE_LIKE);
         }
     }
@@ -328,7 +330,7 @@ public class ArticleService {
      * */
     @Transactional(readOnly = true)
     public boolean checkLikeArticle(Long articleId, Long userId) {
-        try{
+        try {
             verifiedArticleLike(articleId, userId);
             return false;
         } catch (BusinessLogicException e) {
@@ -340,7 +342,7 @@ public class ArticleService {
      * 게시물 신고 여부 조회
      * */
     @Transactional(readOnly = true)
-    private Report findArticleReport (Long articleId, Long userId) {
+    private Report findArticleReport(Long articleId, Long userId) {
         return reportRepository.findByArticle_ArticleIdAndUser_UserId(articleId, userId);
     }
 
@@ -350,42 +352,54 @@ public class ArticleService {
     @Transactional(readOnly = true)
     private void verifiedReportArticle(Long articleId, Long userId) {
         Optional<Report> optionalCommentReport = Optional.ofNullable(findArticleReport(articleId, userId));
-        if(optionalCommentReport.isPresent()) {
+        if (optionalCommentReport.isPresent()) {
             throw new BusinessLogicException(ExceptionCode.EXIST_ARTICLE_REPORT);
         }
     }
 
     public Page<Article> searchArticles(String keyword, int page, int size) {
         return articleRepository.findAllByContentContaining(keyword,
-                    PageRequest.of(page, size, Sort.by("articleId").descending()));
+                PageRequest.of(page, size, Sort.by("articleId").descending()));
 
-        }
+    }
 
-        public void addImage(Long userId, List<MultipartFile> files, Long articleId) {
-            Article article = findVerifiedArticle(articleId);
-            verifiedUser(article, userId);
+    public void addImage(Long userId, List<MultipartFile> files, Long articleId) {
+        Article article = findArticle(articleId);
+        verifiedUser(article, userId);
 //            if (files.size() == 0) throw new BusinessLogicException(ExceptionCode.NO_FILE_SELECTED);
 
-            if (!CollectionUtils.isNullOrEmpty(files)) {
-                ArticleImgDto.Post articleImgDto;
-                ArticleImg articleImg;
-                List<ArticleImg> articleImgList = article.getArticleImg();
-                for (MultipartFile file : files) {
-                    String imgUrl = s3Service.uploadFile(articleDir, file);
+        if (!CollectionUtils.isNullOrEmpty(files)) {
+            ArticleImgDto.Post articleImgDto;
+            ArticleImg articleImg;
+            List<ArticleImg> articleImgList = article.getArticleImg();
+            for (MultipartFile file : files) {
+                String imgUrl = s3Service.uploadFile(articleDir, file);
 
-                    articleImgDto = ArticleImgDto.Post.builder()
-                            .imgUrl(imgUrl)
-                            .article(article)
-                            .build();
-                    articleImg = new ArticleImg(
-                            articleImgDto.getImgUrl());
-                    articleImg.setArticle(article);
+                articleImgDto = ArticleImgDto.Post.builder()
+                        .imgUrl(imgUrl)
+                        .article(article)
+                        .build();
+                articleImg = new ArticleImg(
+                        articleImgDto.getImgUrl());
+                articleImg.setArticle(article);
 
-                    article.getArticleImg().add(articleImg);
-                    articleImgRepository.save(articleImg);
-                }
+                article.getArticleImg().add(articleImg);
+                articleImgRepository.save(articleImg);
             }
-            articleRepository.save(article);
         }
+        articleRepository.save(article);
+    }
+
+    public void deleteImage(Long userId, List<String> urlList, Long  articleId) {
+        Article article = findArticle(articleId);
+        verifiedUser(article, userId);
+
+        for (String url : urlList) {
+            String originalFileName = url.split("amazonaws.com/")[1];
+            s3Service.removeS3File(originalFileName);
+            articleImgRepository.delete(articleImgRepository.findByImgUrl(url));
+        }
+    }
+
 
 }
