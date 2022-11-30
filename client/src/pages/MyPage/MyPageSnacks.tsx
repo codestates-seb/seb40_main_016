@@ -54,10 +54,6 @@ const SnackImgBox = styled.div`
 const SnackImg = styled.div`
   overflow: hidden;
   border-radius: 20px;
-
-  div {
-    cursor: auto;
-  }
 `;
 
 const ChangeList = styled.div`
@@ -160,7 +156,6 @@ const MyPageSnacks = () => {
   useEffect(() => {
     GetMySnacks(token).then((res: any) => {
       setMySnackList(res.data.data);
-      console.log(res.data.data);
       setLoading(false);
     });
   }, []);

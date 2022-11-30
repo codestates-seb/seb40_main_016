@@ -14,7 +14,7 @@ const NoContent = () => {
   return (
     <NoContentContainer>
       <NoContentBox>
-        <img src="./assets/no-comments-clipart.png" alt="no-content" />
+        <img src="../assets/no-comments-clipart.png" alt="no-content" />
       </NoContentBox>
     </NoContentContainer>
   );

@@ -11,7 +11,6 @@ export const ProfileContainer = styled.div`
 `;
 
 export const ProfileImg = styled.div`
-  margin-right: 10px;
   width: 40%;
   display: flex;
   justify-content: center;
