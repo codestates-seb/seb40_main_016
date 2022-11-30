@@ -16,7 +16,7 @@ import accessTokenState from "../../_state/accessTokenState";
 
 import { GetMyArticles } from "../../api/mypage";
 
-import { ArticleImg } from "../../types/article";
+import { ArticleImg, Articles } from "../../types/article";
 
 import { ReactComponent as BoneIcon } from "../../assets/img/bone-icon.svg";
 import { ReactComponent as BoneWIcon } from "../../assets/img/bone-w-icon.svg";
@@ -280,7 +280,7 @@ const MyPageArticles = ({ handleArticlesNum, detailHandler, setArticleId, userTy
     detailHandler();
   };
 
-  const handleTabClick = (tab: "post" | "give" | "take") => {
+  const handleTabClick = (tab: "post" | "give") => {
     setTab(tab);
   };
 
@@ -289,12 +289,9 @@ const MyPageArticles = ({ handleArticlesNum, detailHandler, setArticleId, userTy
   }, [page]);
 
   useEffect(() => {
-    if (page !== 0) getMyArticles();
-  }, [tab]);
-
-  useEffect(() => {
     getMyArticles();
-  }, []);
+    GetMostReceived();
+  }, [tab]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(obsHandler);
@@ -318,20 +315,26 @@ const MyPageArticles = ({ handleArticlesNum, detailHandler, setArticleId, userTy
     GetMyArticles(token, tab).then((res: any) => {
       const data = res.data.data;
 
-      const mostReceived = data.slice(0, 5).sort((a: any, b: any) => {
-        return b.yummyCnt - a.yummyCnt;
-      });
-
       if (res.data.pageInfo.page === 1) {
         setMyArticles(data);
       } else {
         setMyArticles(myArticles.concat(data));
       }
       preventRef.current = true;
-      setMostReceivedArticles(mostReceived);
       handleArticlesNum(data.length);
       setTotalPage(res.data.pageInfo.totalPages);
       setLoading(false);
+    });
+  };
+
+  const GetMostReceived = () => {
+    GetMyArticles(token, "post").then((res: any) => {
+      const data = res.data.data;
+
+      const mostReceived = data.slice(0, 5).sort((a: any, b: any) => {
+        return b.yummyCnt - a.yummyCnt;
+      });
+      setMostReceivedArticles(mostReceived);
     });
   };
 
