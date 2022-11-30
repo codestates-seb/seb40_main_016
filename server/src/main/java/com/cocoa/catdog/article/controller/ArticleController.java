@@ -86,15 +86,6 @@ public class ArticleController {
                 articleService.updateArticle(article, parsedUserId));
     }
 
-//    @PatchMapping(value = "/{article-id}/editImage", consumes = {"multipart/form-data"})
-//    @ResponseStatus(HttpStatus.OK)
-//    public void addImage(@RequestHeader(name = "Authorization") String token,
-//                         @PathVariable Long articleId,
-//                         @RequestPart(required = false, value = "file")
-//                                  List<MultipartFile> files) {
-//    articleService.addImage(jwtTokenizer.getUserId(token), files, articleId);
-//
-//    }
 
 
     /*
