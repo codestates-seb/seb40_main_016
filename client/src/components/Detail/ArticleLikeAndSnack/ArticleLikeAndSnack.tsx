@@ -4,7 +4,7 @@ import ShortenNumber from "../../../utills/ShortenNumber";
 import { PostArticleLike, DeleteArticleLike } from "../../../api/article";
 import { GetIsSubscribe, PostSubscribe, DeleteSubscribe } from "../../../api/subscribe";
 
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import accessTokenState from "../../../_state/accessTokenState";
 import userInfoState from "../../../_state/userInfoState";
 import isLoginState from "../../../_state/isLoginState";
@@ -31,7 +31,7 @@ const ArticleLikeAndSnack = ({ authorId, articleId = 5, likeCnt, yummyCnt = 0, a
   const myinfo = useRecoilValue(userInfoState);
   const isLogin = useRecoilValue(isLoginState);
 
-  const [articles, setMainList] = useRecoilState<Articles[]>(mainListState);
+  const setMainList = useSetRecoilState<Articles[]>(mainListState);
 
   const checkCanSubscribe = () => {
     if (myinfo.userId === authorId) {
@@ -69,15 +69,12 @@ const ArticleLikeAndSnack = ({ authorId, articleId = 5, likeCnt, yummyCnt = 0, a
     PostArticleLike(articleId, token)
       .then((res) => {
         setCurrentLike((current) => current + 1);
-        setMainList((prev) => {
-          return prev.map((article) => {
-            if (article.articleId === articleId) {
-              article.likeCnt += 1;
-              return article;
-            }
+        setMainList((prev) =>
+          prev.map((article) => {
+            if (article.articleId === articleId) article.likeCnt += 1;
             return article;
-          });
-        });
+          }),
+        );
       })
       .catch((err) => {
         console.log(err);
@@ -88,15 +85,12 @@ const ArticleLikeAndSnack = ({ authorId, articleId = 5, likeCnt, yummyCnt = 0, a
     DeleteArticleLike(articleId, token)
       .then((res) => {
         setCurrentLike((current) => current - 1);
-        setMainList((prev) => {
-          return prev.map((article) => {
-            if (article.articleId === articleId) {
-              article.likeCnt -= 1;
-              return article;
-            }
+        setMainList((prev) =>
+          prev.map((article) => {
+            if (article.articleId === articleId) article.likeCnt -= 1;
             return article;
-          });
-        });
+          }),
+        );
       })
       .catch((err) => alert("좋아요 취소에 실패했습니다.😿"));
   };
@@ -118,15 +112,12 @@ const ArticleLikeAndSnack = ({ authorId, articleId = 5, likeCnt, yummyCnt = 0, a
 
   const updateSnack = (value: number) => {
     setCurrentSnack(currentSnack + value);
-    setMainList((prev) => {
-      return prev.map((article) => {
-        if (article.articleId === articleId) {
-          article.yummyCnt += value;
-          return article;
-        }
+    setMainList((prev) =>
+      prev.map((article) => {
+        if (article.articleId === articleId) article.yummyCnt += value;
         return article;
-      });
-    });
+      }),
+    );
   };
 
   return (
