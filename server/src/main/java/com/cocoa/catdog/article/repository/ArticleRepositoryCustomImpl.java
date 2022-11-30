@@ -36,8 +36,8 @@ public class ArticleRepositoryCustomImpl extends QuerydslRepositorySupport imple
                 queryFactory
                         .select(article)
                         .from(article)
-                        .join(article.user, user)
-                        .leftJoin(article.user.followedUsers, follow)
+                        .leftJoin(article.user, user)
+                        .leftJoin(user.followedUsers, follow)
                         .where(
                                 eqSort(sort, userId),
                                 containUserName(search),
