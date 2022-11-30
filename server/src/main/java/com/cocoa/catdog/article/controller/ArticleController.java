@@ -60,16 +60,30 @@ public class ArticleController {
     /*
     * 게시물 수정
     * */
-    @PatchMapping("/{article-id}")
+    @PatchMapping(value = "/{article-id}", consumes = {"multipart/form-data"})
     @ResponseStatus(HttpStatus.OK)
     ArticleDto.Response patchArticle(@PathVariable("article-id") Long articleId,
                                      @RequestHeader(name = "Authorization") String token,
-                                     @RequestBody ArticleDto.Patch patchDto) {
+                                     @RequestPart(required = false) ArticleDto.Patch patchDto,
+                                     @RequestPart(required = false, value = "add")
+                                     List<MultipartFile> add
+                                     ) {
+        Long parsedUserId = jwtTokenizer.getUserId(token);
+
+
         patchDto.setArticleId(articleId);
         Article article = mapper.patchDtoToEntity(patchDto);
 
+        List<String> deleteList = patchDto.getDelete();
+
+        if (add != null)
+        {articleService.addImage(parsedUserId, add, articleId);}
+
+        if (deleteList != null)
+        {articleService.deleteImage(parsedUserId, deleteList, articleId);}
+
         return mapper.entityToResponseDto(
-                articleService.updateArticle(article, jwtTokenizer.getUserId(token)));
+                articleService.updateArticle(article, parsedUserId));
     }
 
 

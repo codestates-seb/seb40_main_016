@@ -62,6 +62,7 @@ public class ArticleDto {
     public static class Patch {
         private Long articleId;
         private String content;
+        List<String> delete;
 
         public  void setArticleId(Long articleId) {this.articleId = articleId;}
     }

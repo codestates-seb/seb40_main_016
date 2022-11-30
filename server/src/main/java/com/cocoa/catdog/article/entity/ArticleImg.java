@@ -18,7 +18,7 @@ public class ArticleImg {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long articleImgId;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private String imgUrl;
 
     @JsonIgnore
