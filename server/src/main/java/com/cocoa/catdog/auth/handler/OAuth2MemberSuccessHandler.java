@@ -84,6 +84,9 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         // 이메일로 가입된 유저인지 확인
         if(userService.verifyExistsEmail(email)) {
             log.info("이미 가입된 유저입니다.");
+
+            String returnUri = "http://localhost:3000/google-login";
+
             if(userService.checkNeedSocialSet(email)) {
                 log.info("기본 정보 설정이 필요합니다.");
                 // 이메일로 유저 찾기
@@ -91,20 +94,25 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
                 // 토큰 생성
                 String accessToken = delegateAccessToken(findUser);
                 // 리다이렉션 주소 생성
-                String targetUrl = UriComponentsBuilder.fromUriString("http://localhost:3000/google-login")
+                String targetUrl = UriComponentsBuilder.fromUriString(returnUri)
                         .queryParam("accessToken", accessToken)
+                        .queryParam("sign", 1)
+                        .queryParam("info", 0)
                         .build().toUriString();
                 // 토큰을 파라미터로 전달
                 getRedirectStrategy().sendRedirect(request, response, targetUrl);
             }
             else {        // 가입되어 있고 기본 정보 설정이 필요하지 않은 경우
+                log.info("정상 유저 로그인을 진행합니다.");
                 // 이메일로 유저 찾기
                 User findUser = userService.findUserByEmail(email);
                 // 토큰 생성
                 String accessToken = delegateAccessToken(findUser);
                 // 리다이렉션 주소 생성
-                String targetUrl = UriComponentsBuilder.fromUriString("http://localhost:3000/google-login")
+                String targetUrl = UriComponentsBuilder.fromUriString(returnUri)
                         .queryParam("accessToken", accessToken)
+                        .queryParam("sign", 1)
+                        .queryParam("info", 1)
                         .build().toUriString();
                 // 토큰을 파라미터로 전달
                 getRedirectStrategy().sendRedirect(request, response, targetUrl);
@@ -113,7 +121,7 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         }
         // 소셜로 신규 가입 하는 경우
         else {
-
+            log.info("소셜 이메일로 신규 가입합니다..");
             // 신규 유저 정보 저정
             User savedUser = saveMember(email);
 
@@ -121,8 +129,10 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
             // 토큰 생성
             String accessToken = delegateAccessToken(savedUser);
             // 리다이렉션 주소 생성
-            String targetUrl = UriComponentsBuilder.fromUriString("http://localhost:3000/google-login")
+            String targetUrl = UriComponentsBuilder.fromUriString("returnUri")
                     .queryParam("accessToken", accessToken)
+                    .queryParam("sign", 0)
+                    .queryParam("info", 0)
                     .build().toUriString();
 
             // 토큰을 파라미터로 전달
