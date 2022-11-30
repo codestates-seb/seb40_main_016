@@ -36,10 +36,19 @@ const Shop = () => {
       return;
     }
 
-    OrderItems(selectedItems, token).then(() => {
-      alert("교환 성공😺");
-      window.location.reload();
-    });
+    OrderItems(selectedItems, token)
+      .then(() => {
+        alert("교환 성공😺");
+        window.location.reload();
+      })
+      .catch((e) => {
+        if (e.response.status === 404) {
+          alert("선택한 물품의 재고가 없습니다😿");
+          window.location.reload();
+        } else {
+          alert("교환 실패😿");
+        }
+      });
   };
   return (
     <Wrapper>
