@@ -48,8 +48,10 @@ public class UserService {
         user.setWallet(new Wallet());
         user.setNeedSocialSet(false);
 
+        if (file != null) {
             String url = s3Service.uploadFile(userDir, file);
             user.setUserImg(url);
+        }
 
         //db에 유저 역할 정보 저장
         List<String> roles = authorityUtils.createRoles(user.getEmail());
@@ -88,10 +90,11 @@ public class UserService {
     public User updateUser(User user, MultipartFile file) {
         User findUser = findVerifiedUser(user.getUserId());
 
-
         if (file != null) {
-            String originalFileName = findUser.getUserImg().split("amazonaws.com/")[1];
-            s3Service.removeS3File(originalFileName);
+            if (findUser.getUserImg() != null) {
+                String originalFileName = findUser.getUserImg().split("amazonaws.com/")[1];
+                s3Service.removeS3File(originalFileName);
+            }
             String imgUrl = s3Service.uploadFile(userDir, file);
             findUser.setUserImg(imgUrl);
         }
