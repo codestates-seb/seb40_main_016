@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef, Dispatch, SetStateAction } from "react";
 import { useNavigate } from "react-router-dom";
 import "react-loading-skeleton/dist/skeleton.css";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 
 import OuterContainer from "../../components/OuterContainer/OuterConainer";
 import InnerContainer from "../../components/InnerContainer/InnerContainer";
@@ -11,6 +11,8 @@ import Button from "../../components/Button/Button";
 import ImageSkeleton from "../../components/Skeleton/ImageSkeleton";
 import Banner from "../../components/Banner/Banner";
 import NoContent from "../../components/NoContent/NoContent";
+// import Ballon from "../../components/Ballon/Ballon";
+import TopButton from "../../components/TopButton/TopButton";
 
 import isLoginState from "../../_state/isLoginState";
 import accessTokenState from "../../_state/accessTokenState";
@@ -33,6 +35,7 @@ import { ReactComponent as EyeWIcon } from "../../assets/img/eye-w-icon..svg";
 
 import { GetMain } from "../../api/article";
 import { Articles } from "../../types/article";
+import mainListState from "../../_state/mainLIstState";
 
 interface Prop {
   detailHandler: () => void;
@@ -44,7 +47,6 @@ const Main = ({ detailHandler, setArticleId }: Prop) => {
   const [open, setOpen] = useState<boolean>(false);
   const [sort, setSort] = useState<string>("all");
   const [order, setOrder] = useState<string>("latest");
-  const [articles, setArticles] = useState<Articles[]>([]);
   const [page, setPage] = useState<number>(0);
   const [totalPage, setTotalPage] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(false);
@@ -52,6 +54,8 @@ const Main = ({ detailHandler, setArticleId }: Prop) => {
   const obsRef = useRef(null);
   const preventRef = useRef(true);
   const [articleLength, setArticleLength] = useState<number>(0);
+
+  const [articles, setMainList] = useRecoilState<Articles[]>(mainListState);
 
   const isLogin = useRecoilValue(isLoginState);
   const token = useRecoilValue(accessTokenState);
@@ -106,9 +110,9 @@ const Main = ({ detailHandler, setArticleId }: Prop) => {
       GetMain(page, sort, order, token).then((res: any) => {
         setArticleLength(res.data.data.length);
         if (res.data.pageInfo.page === 1) {
-          setArticles(res.data.data);
+          setMainList(res.data.data);
         } else {
-          setArticles(articles.concat(res.data.data));
+          setMainList(articles.concat(res.data.data));
         }
         preventRef.current = true;
         setTotalPage(res.data.pageInfo.totalPages);
@@ -118,9 +122,9 @@ const Main = ({ detailHandler, setArticleId }: Prop) => {
       GetMain(page, sort, order, null).then((res: any) => {
         setArticleLength(res.data.data.length);
         if (res.data.pageInfo.page === 1) {
-          setArticles(res.data.data);
+          setMainList(res.data.data);
         } else {
-          setArticles(articles.concat(res.data.data));
+          setMainList(articles.concat(res.data.data));
         }
         preventRef.current = true;
         setTotalPage(res.data.pageInfo.totalPages);
@@ -230,6 +234,7 @@ const Main = ({ detailHandler, setArticleId }: Prop) => {
                 </ImgContainer>
               </>
             )}
+            <TopButton />
           </InnerContainer>
         </OuterContainer>
       </div>
