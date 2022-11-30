@@ -65,12 +65,12 @@ public class UserController {
 
 
     //회원정보 수정
-    @PatchMapping(value = "/user/{user-id}", consumes = "multipart/form-data")
-    public ResponseEntity patchUser(@PathVariable("user-id") long userId,
+    @PatchMapping(value = "/user", consumes = "multipart/form-data")
+    public ResponseEntity patchUser(@RequestHeader(name = "Authorization") String token,
                                     @Valid @RequestPart(value = "patchDto") UserPatchDto userPatchDto,
                                     @RequestPart(required = false, value = "file") MultipartFile file) {
 
-        userPatchDto.setUserId(userId);
+        userPatchDto.setUserId(jwtTokenizer.getUserId(token));
         User user = mapper.userPatchDtoToUser(userPatchDto);
         User response = userService.updateUser(user, file);
 
@@ -98,9 +98,9 @@ public class UserController {
     }
 
     //회원 삭제
-    @DeleteMapping("/user/{user-id}")
-    public ResponseEntity deleteUser(@PathVariable("user-id") long userId) {
-        userService.deleteUser(userId);
+    @DeleteMapping("/user")
+    public ResponseEntity deleteUser(@RequestHeader(name = "Authorization") String token) {
+        userService.deleteUser(jwtTokenizer.getUserId(token));
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
