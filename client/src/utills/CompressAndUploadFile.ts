@@ -37,7 +37,7 @@ export const compresseAndUploadFile = async (
     if (!FileFormatCheck || !FileSizeCheck) continue;
 
     const reader = new FileReader();
-    const compressedFile = await imageCompression(files[i], options);
+    const compressedFile = files[i].type !== "image/gif" ? await imageCompression(files[i], options) : files[i];
 
     reader.onloadend = () => {
       const result = reader.result as string;
