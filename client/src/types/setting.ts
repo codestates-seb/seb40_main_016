@@ -1,5 +1,5 @@
 export interface SettingProps {
-  userId: number;
+  userId?: number;
   token: string;
   movePage: () => void;
 }

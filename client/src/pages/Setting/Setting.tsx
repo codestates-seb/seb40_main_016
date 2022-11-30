@@ -41,9 +41,9 @@ const Setting = () => {
                   case "프로필 편집":
                     return <EditProfile userId={userId} token={token} movePage={moveMypage} />;
                   case "비밀번호 변경":
-                    return <ChangePassword userId={userId} token={token} movePage={moveMypage} />;
+                    return <ChangePassword token={token} movePage={moveMypage} />;
                   case "회원탈퇴":
-                    return <DeleteAccount userId={userId} token={token} movePage={() => navigate("/")} />;
+                    return <DeleteAccount token={token} movePage={() => navigate("/")} />;
                   default:
                     return "";
                 }

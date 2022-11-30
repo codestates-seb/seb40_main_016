@@ -7,6 +7,11 @@ import Modal from "../../Modal/Modal";
 
 import { SettingProps } from "../../../types/setting";
 import { CheckPassword, PatchProfile } from "../../../api/user";
+import { useSetRecoilState } from "recoil";
+import accessTokenState from "../../../_state/accessTokenState";
+import refreshTokenState from "../../../_state/refreshTokenState";
+import isLoginState from "../../../_state/isLoginState";
+import userInfoState from "../../../_state/userInfoState";
 
 const Wrapper = styled.div`
   width: 60%;
@@ -62,7 +67,11 @@ const ButtonWrapper = styled.div`
   }
 `;
 
-const DeleteAccount = ({ userId, token, movePage }: SettingProps) => {
+const DeleteAccount = ({ token, movePage }: SettingProps) => {
+  const setAccessToken = useSetRecoilState(accessTokenState);
+  const setRefreshToken = useSetRecoilState(refreshTokenState);
+  const setIsLogin = useSetRecoilState(isLoginState);
+  const setUserInfo = useSetRecoilState(userInfoState);
   const [password, setPassword] = useState<string>("");
   const [isError, setIsError] = useState<boolean>(false);
   const [isOn, setIsOn] = useState<boolean>(false);
@@ -88,12 +97,25 @@ const DeleteAccount = ({ userId, token, movePage }: SettingProps) => {
   const deleteUser = () => {
     const formData = new FormData();
 
-    formData.append("userInfo", JSON.stringify({ userStatus: "USER_DROPPED" }));
+    formData.append(
+      "patchDto",
+      new Blob([JSON.stringify({ userStatus: "USER_DROPPED" })], {
+        type: "application/json",
+      }),
+    );
 
-    PatchProfile(userId, formData, token)
+    PatchProfile(formData, token)
       .then((res: any) => {
         if (res.status === 200) {
           alert("회원탈퇴 성공😿");
+          setAccessToken(null);
+          setRefreshToken(null);
+          setIsLogin(false);
+          setUserInfo({
+            userName: "",
+            userImg: "",
+            userType: "",
+          });
           movePage();
         }
       })

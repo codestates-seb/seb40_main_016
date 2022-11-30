@@ -44,8 +44,8 @@ export const PostHelpPw = async (email: string) => {
   return response;
 };
 
-export const PatchProfile = async (userId: number, formData: FormData, token: string) => {
-  const response = await axios.patch(`${URL}/user/${userId}`, formData, {
+export const PatchProfile = async (formData: FormData, token: string) => {
+  const response = await axios.patch(`${URL}/user`, formData, {
     headers: {
       "Content-Type": "multipart/form-data",
       Authorization: `${token}`,

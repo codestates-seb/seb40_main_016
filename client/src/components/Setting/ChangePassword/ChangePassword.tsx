@@ -47,7 +47,7 @@ const ButtonWrapper = styled.div`
   }
 `;
 
-const ChangePassword = ({ userId, token, movePage }: SettingProps) => {
+const ChangePassword = ({ token, movePage }: SettingProps) => {
   const [password, setPassword] = useState({
     currentPassword: "",
     newPassword: "",
@@ -102,7 +102,7 @@ const ChangePassword = ({ userId, token, movePage }: SettingProps) => {
       }),
     );
 
-    PatchProfile(userId, formData, token)
+    PatchProfile(formData, token)
       .then((res: any) => {
         if (res.status === 200) {
           alert("비밀번호 변경 성공😺");
