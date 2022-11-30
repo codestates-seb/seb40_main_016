@@ -14,8 +14,9 @@ import NewArticle from "./pages/Articles/NewArticle";
 import Detail from "./pages/Detail/Detail";
 import Shop from "./pages/Shop/Shop";
 import Setting from "./pages/Setting/Setting";
-import Social from "./pages/Social/Social";
+import InfoSocialSet from "./pages/InfoSocialSet/InfoSocialSet";
 import Introduce from "./pages/Introduce/Introduce";
+import PendingLogin from "./pages/PendingLogin/PendingLogin";
 
 function App() {
   const [isOn, setIsOn] = useState<boolean>(false);
@@ -61,7 +62,7 @@ function App() {
           <Route index path="/" element={<Main detailHandler={detailHandler} setArticleId={setArticleId} />} />
           <Route index path="/signup" element={<Signup />} />
           <Route index path="/login" element={<Login />} />
-          <Route index path="/social" element={<Social />} />
+          <Route index path="/social" element={<InfoSocialSet />} />
           <Route index path="/mypage" element={<Mypage detailHandler={detailHandler} setArticleId={setArticleId} />} />
           <Route
             index
@@ -71,6 +72,7 @@ function App() {
           <Route index path="/shop" element={<Shop />} />
           <Route index path="/setting" element={<Setting />} />
           <Route index path="/introduce" element={<Introduce />} />
+          <Route index path="/google-login" element={<PendingLogin />} />
           <Route index path="*" element={<NotFound />} />
         </Routes>
         <NewArticle isOn={isOn} setIsOn={setIsOn} isEdit={isEdit} setIsEdit={setIsEdit} articleId={articleId} />
