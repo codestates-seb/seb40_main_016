@@ -29,7 +29,7 @@ public class UserPostDto {
     private String content;
     private String userType;
     private String userGender;
-    private String userImg;
+//    private String userImg;
     private LocalDate userBirth;
 
     private LocalDateTime createdAt;

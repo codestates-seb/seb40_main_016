@@ -1,9 +1,10 @@
 package com.cocoa.catdog.user.service;
 
+import com.cocoa.catdog.config.aws.S3Service;
 import com.cocoa.catdog.wallet.entity.Wallet;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -15,8 +16,8 @@ import com.cocoa.catdog.exception.BusinessLogicException;
 import com.cocoa.catdog.exception.ExceptionCode;
 import com.cocoa.catdog.user.entity.User;
 import com.cocoa.catdog.user.repository.UserRepository;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -27,24 +28,33 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final CustomAuthorityUtils authorityUtils;
+    private final S3Service s3Service;
+    @Value("${s3.userDir}")
+    private String userDir;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, CustomAuthorityUtils authorityUtils) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, CustomAuthorityUtils authorityUtils, S3Service s3Service) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authorityUtils = authorityUtils;
+        this.s3Service = s3Service;
     }
 
     //일반 회원 가입
-    public User createUser(User user) {
+    public User createUser(User user, MultipartFile file) {
         verifyExistsEmail(user.getEmail());
         //패스워드 암호화
         String encryptedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encryptedPassword);
         user.setWallet(new Wallet());
         user.setNeedSocialSet(false);
+
+            String url = s3Service.uploadFile(userDir, file);
+            user.setUserImg(url);
+
         //db에 유저 역할 정보 저장
         List<String> roles = authorityUtils.createRoles(user.getEmail());
         user.setRoles(roles);
+
         return userRepository.save(user);
     }
 
@@ -75,9 +85,16 @@ public class UserService {
         } else { return false; }
     }
     //유저 정보 수정 (이메일은 고유값으로 변경 불가, 비밀번호, 이름, 소개 변경 가능) todo 필수 아닌 추가 정보 수정 가능하도록
-    public User updateUser(User user) {
+    public User updateUser(User user, MultipartFile file) {
         User findUser = findVerifiedUser(user.getUserId());
 
+
+        if (file != null) {
+            String originalFileName = findUser.getUserImg().split("amazonaws.com/")[1];
+            s3Service.removeS3File(originalFileName);
+            String imgUrl = s3Service.uploadFile(userDir, file);
+            findUser.setUserImg(imgUrl);
+        }
         Optional.ofNullable(user.getUserName())
                 .ifPresent(userName -> findUser.setUserName(userName));
         Optional.ofNullable(user.getContent())
@@ -86,8 +103,8 @@ public class UserService {
                 .ifPresent(userGender -> findUser.setUserGender(userGender));
         Optional.ofNullable(user.getUserBirth())
                 .ifPresent(userBirth -> findUser.setUserBirth(userBirth));
-        Optional.ofNullable(user.getUserImg())
-                .ifPresent(userImg -> findUser.setUserImg(userImg));
+//        Optional.ofNullable(user.getUserImg())
+//                .ifPresent(imgUrl -> findUser.setUserImg(imgUrl));
         Optional.ofNullable(user.getUserType())
                 .ifPresent(userType -> findUser.setUserType(userType));
         Optional.ofNullable(user.getUserStatus())

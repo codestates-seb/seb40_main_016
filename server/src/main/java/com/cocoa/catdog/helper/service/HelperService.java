@@ -38,7 +38,7 @@ public class HelperService {
         String pw = passwordEncoder.encode(str);
         User user = userService.findUserByEmail(email);
         user.setPassword(pw);
-        userService.updateUser(user);
+        userService.updateUser(user, null);
     }
 
     public String getTempPassword(){

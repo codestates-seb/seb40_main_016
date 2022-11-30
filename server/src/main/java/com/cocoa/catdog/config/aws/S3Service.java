@@ -25,7 +25,7 @@ import java.io.InputStream;
 @Component
 @RequiredArgsConstructor
 @Service
-public class S3Uploader {
+public class S3Service {
 
 
     @Value("${cloud.aws.s3.bucket}")
@@ -106,7 +106,7 @@ public class S3Uploader {
         final DeleteObjectRequest deleteObjectRequest =
                 new DeleteObjectRequest(bucket, fileName);
         client.deleteObject(deleteObjectRequest);
-
+//        amazonS3.deleteObject(new DeleteObjectRequest(bucket, fileName));
     }
 
 

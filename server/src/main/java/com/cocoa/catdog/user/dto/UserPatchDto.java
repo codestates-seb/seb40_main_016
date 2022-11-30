@@ -17,7 +17,7 @@ public class UserPatchDto {
     private String content;
     private String userType;
     private String userGender;
-    private String userImg;
+
     private LocalDate userBirth;
 
     private LocalDateTime createdAt;

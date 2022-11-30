@@ -21,6 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
@@ -40,10 +41,12 @@ public class UserController {
     private final ArticleMapper articleMapper;
 
     //회원가입
-    @PostMapping("/user")
-    public ResponseEntity postUser(@Valid @RequestBody UserPostDto userPostDto) {
+    @PostMapping(value = "/user", consumes = "multipart/form-data")
+    public ResponseEntity postUser(@Valid @RequestPart(value = "postDto") UserPostDto userPostDto,
+                                   @RequestPart(required = false, value = "file")MultipartFile file) {
+
         User user = mapper.userPostDtoToUser(userPostDto);
-        User response = userService.createUser(user);
+        User response = userService.createUser(user, file);
 
         return new ResponseEntity<>(
                 new SingleResponseDto<>(mapper.userToUserResponseDto(response)), HttpStatus.CREATED);
@@ -55,18 +58,21 @@ public class UserController {
         userPatchDto.setUserId(jwtTokenizer.getUserId(token));
         userPatchDto.setNeedSocialSet(false);
         User user = mapper.userPatchDtoToUser(userPatchDto);
-        User response = userService.updateUser(user);
+        User response = userService.updateUser(user, null);
         return new ResponseEntity<>(
                 new SingleResponseDto<>(mapper.userToUserResponseDto(response)), HttpStatus.OK);
     }
 
 
     //회원정보 수정
-    @PatchMapping("/user/{user-id}")
-    public ResponseEntity patchUser(@PathVariable("user-id") long userId, @Valid @RequestBody UserPatchDto userPatchDto) {
+    @PatchMapping(value = "/user/{user-id}", consumes = "multipart/form-data")
+    public ResponseEntity patchUser(@PathVariable("user-id") long userId,
+                                    @Valid @RequestPart(value = "patchDto") UserPatchDto userPatchDto,
+                                    @RequestPart(required = false, value = "file") MultipartFile file) {
+
         userPatchDto.setUserId(userId);
         User user = mapper.userPatchDtoToUser(userPatchDto);
-        User response = userService.updateUser(user);
+        User response = userService.updateUser(user, file);
 
         return new ResponseEntity<>(
                 new SingleResponseDto<>(mapper.userToUserResponseDto(response)), HttpStatus.OK);

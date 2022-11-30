@@ -12,4 +12,5 @@ spring:
     hibernate:
       ddl-auto: create
 s3:
-  articleDir: assets/testImages/
+  articleDir: assets/testImagesArticle/
+  userDir: assets/testImagesUser/

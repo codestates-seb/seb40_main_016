@@ -10,7 +10,7 @@ import com.cocoa.catdog.article.repository.*;
 import com.cocoa.catdog.article.entity.Like;
 import com.cocoa.catdog.comment.entity.Comment;
 import com.cocoa.catdog.comment.repository.CommentRepository;
-import com.cocoa.catdog.config.aws.S3Uploader;
+import com.cocoa.catdog.config.aws.S3Service;
 import com.cocoa.catdog.exception.BusinessLogicException;
 import com.cocoa.catdog.exception.ExceptionCode;
 import com.cocoa.catdog.message.SseEmitterService;
@@ -27,11 +27,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 @Transactional
@@ -44,7 +42,7 @@ public class ArticleService {
     private final LikeRepository likeRepository;
     private final ReportRepository reportRepository;
     private final CommentRepository commentRepository;
-    private final S3Uploader s3Uploader;
+    private final S3Service s3Service;
     private final SseEmitterService sseEmitterService;
     private final ApplicationEventPublisher eventPublisher;
     private final ArticleImgMapper mapper;
@@ -66,7 +64,7 @@ public class ArticleService {
             for (MultipartFile file : files) {
                 String originalFileName = file.getOriginalFilename();
 
-                String imgUrl = s3Uploader.uploadFile(articleDir, file);
+                String imgUrl = s3Service.uploadFile(articleDir, file);
 
                 articleImgDto = ArticleImgDto.Post.builder()
                         .imgUrl(imgUrl)
