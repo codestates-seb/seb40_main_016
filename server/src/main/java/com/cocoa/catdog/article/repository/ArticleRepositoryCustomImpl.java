@@ -37,7 +37,13 @@ public class ArticleRepositoryCustomImpl extends QuerydslRepositorySupport imple
                         .select(article)
                         .from(article, follow)
                         .join(article.user, user)
-                        .where(eqSort(sort, userId), containUserName(search));
+                        .where(
+                                eqSort(sort, userId),
+                                containUserName(search)/*,
+                                ltReportCnt(1),
+                                neUserStatus(User.UserStatus.USER_DROPPED),
+                                neUserStatus(User.UserStatus.USER_SLEEP)*/
+                        );
 
         List<Article> articles = this.getQuerydsl().applyPagination(pageable, query).fetch();
         return new PageImpl<Article>(articles, pageable, query.fetchCount());
@@ -93,6 +99,14 @@ public class ArticleRepositoryCustomImpl extends QuerydslRepositorySupport imple
         } else {
             throw new BusinessLogicException(ExceptionCode.BAD_QUERY);
         }
+    }
+
+    private BooleanExpression ltReportCnt(int reportCnt) {
+        return article.reportCnt.lt(reportCnt);
+    }
+
+    private BooleanExpression neUserStatus(User.UserStatus userStatus) {
+        return user.userStatus.ne(userStatus);
     }
 
 }

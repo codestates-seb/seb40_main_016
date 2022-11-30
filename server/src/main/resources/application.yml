@@ -27,7 +27,7 @@ spring:
           google:
             clientId: ${GOOGLE_OAUTH_CLIENT_ID}
             clientSecret: ${GOOGLE_OAUTH_SECRET}
-#            redirect-uri: http://api.givemesnack.me:8080/login/oauth2/code/google
+            redirect-uri: http://api.givemesnack.me:8080/login/oauth2/code/google
             scope:
               - email
               - profile
