@@ -47,7 +47,9 @@ public enum ExceptionCode {
     
     ITEM_NOT_FOUND(404, "Item not found"),
     
-    COMMENT_NOT_FOUND(404, "Comment not found");
+    COMMENT_NOT_FOUND(404, "Comment not found"),
+
+    NO_FILE_SELECTED(404, "File not selected");
            
 
 

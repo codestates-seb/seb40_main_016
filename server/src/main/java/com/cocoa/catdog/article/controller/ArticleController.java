@@ -60,11 +60,12 @@ public class ArticleController {
     /*
     * 게시물 수정
     * */
-    @PatchMapping("/{article-id}")
+    @PatchMapping(value = "/{article-id}")
     @ResponseStatus(HttpStatus.OK)
     ArticleDto.Response patchArticle(@PathVariable("article-id") Long articleId,
                                      @RequestHeader(name = "Authorization") String token,
-                                     @RequestBody ArticleDto.Patch patchDto) {
+                                     @RequestPart(required = false) ArticleDto.Patch patchDto
+                                     ) {
         patchDto.setArticleId(articleId);
         Article article = mapper.patchDtoToEntity(patchDto);
 
@@ -72,7 +73,27 @@ public class ArticleController {
                 articleService.updateArticle(article, jwtTokenizer.getUserId(token)));
     }
 
+    @PatchMapping(value = "/{article-id}/editImage", consumes = {"multipart/form-data"})
+    @ResponseStatus(HttpStatus.OK)
+    public void addImage(@RequestHeader(name = "Authorization") String token,
+                         @PathVariable Long articleId,
+                         @RequestPart(required = false, value = "file")
+                                  List<MultipartFile> files) {
+    articleService.addImage(jwtTokenizer.getUserId(token), files, articleId);
 
+    }
+
+//@GetMapping("/my-page")
+//public ResponseEntity getMyArticles(@RequestHeader(name = "Authorization") String token,
+//                                    @RequestParam(required = false, defaultValue = "post") String tab,
+//                                    @RequestParam(required = false, defaultValue = "1") int page) {
+//    Page<Article> pageArticles = articleService.findProfileArticles(page - 1, 24, tab, jwtTokenizer.getUserId(token));
+//    List<Article> articles = pageArticles.getContent();
+//
+//    return new ResponseEntity<>(
+//            new MultiResponseDto<>(mapper.entityToProfileResponseDtoList(articles), pageArticles), HttpStatus.OK);
+//
+//}
 
     /*
     * 게시물 조회

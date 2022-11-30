@@ -361,4 +361,31 @@ public class ArticleService {
 
         }
 
+        public void addImage(Long userId, List<MultipartFile> files, Long articleId) {
+            Article article = findVerifiedArticle(articleId);
+            verifiedUser(article, userId);
+//            if (files.size() == 0) throw new BusinessLogicException(ExceptionCode.NO_FILE_SELECTED);
+
+            if (!CollectionUtils.isNullOrEmpty(files)) {
+                ArticleImgDto.Post articleImgDto;
+                ArticleImg articleImg;
+                List<ArticleImg> articleImgList = article.getArticleImg();
+                for (MultipartFile file : files) {
+                    String imgUrl = s3Service.uploadFile(articleDir, file);
+
+                    articleImgDto = ArticleImgDto.Post.builder()
+                            .imgUrl(imgUrl)
+                            .article(article)
+                            .build();
+                    articleImg = new ArticleImg(
+                            articleImgDto.getImgUrl());
+                    articleImg.setArticle(article);
+
+                    article.getArticleImg().add(articleImg);
+                    articleImgRepository.save(articleImg);
+                }
+            }
+            articleRepository.save(article);
+        }
+
 }
