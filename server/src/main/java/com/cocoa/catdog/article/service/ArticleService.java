@@ -147,7 +147,10 @@ public class ArticleService {
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by(orderFilter(order)).descending()
                 .and(Sort.by("articleId").descending()));
 
-        return articleRepository.findBySearch(pageRequest, sort, search, userId);
+        if(sort.equals("followings")) {
+            return articleRepository.findBySearchOnFlw(pageRequest, search, userId);
+        }
+        return articleRepository.findBySearch(pageRequest, sort, search);
         //----------------------------------<<querydsl로 리팩토링 하기 전>>-----------------------------//
         //글목록을 쿼리별로 조회
         /*
@@ -313,10 +316,11 @@ public class ArticleService {
         //신고누적횟수가 1이상일시 게시물을 신고상태로 변경
         if(article.getReportCnt() >= 1) {
             isReportedArticle(article);
-            user.changeReportedArticleCnt(user.getReportedArticleCnt() + 1);
+            User articleUser = article.getUser();
+            articleUser.changeReportedArticleCnt(articleUser.getReportedArticleCnt() + 1);
             //위의 결과로 인해 신고된 게시물이 2이상일시 유저를 휴면상태로 변경
-            if(user.getReportedArticleCnt() >= 2) {
-                userService.isSleptUser(user);
+            if(articleUser.getReportedArticleCnt() >= 2) {
+                userService.isSleptUser(articleUser);
             }
         }
     }
