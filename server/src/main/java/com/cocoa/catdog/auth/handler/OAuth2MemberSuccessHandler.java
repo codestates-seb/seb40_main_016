@@ -86,8 +86,16 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
             log.info("이미 가입된 유저입니다.");
             if(userService.checkNeedSocialSet(email)) {
                 log.info("기본 정보 설정이 필요합니다.");
-                // 가입되어있으나 기본 정보 설정이 필요한 유저 페이지로 이동
-                response.sendRedirect("http://givemesnack.me/social");
+                // 이메일로 유저 찾기
+                User findUser = userService.findUserByEmail(email);
+                // 토큰 생성
+                String accessToken = delegateAccessToken(findUser);
+                // 리다이렉션 주소 생성
+                String targetUrl = UriComponentsBuilder.fromUriString("http://localhost:3000/google-login")
+                        .queryParam("accessToken", accessToken)
+                        .build().toUriString();
+                // 토큰을 파라미터로 전달
+                getRedirectStrategy().sendRedirect(request, response, targetUrl);
             }
             else {        // 가입되어 있고 기본 정보 설정이 필요하지 않은 경우
                 // 이메일로 유저 찾기
@@ -95,7 +103,7 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
                 // 토큰 생성
                 String accessToken = delegateAccessToken(findUser);
                 // 리다이렉션 주소 생성
-                String targetUrl = UriComponentsBuilder.fromUriString("http://givemesnack.me/google-login")
+                String targetUrl = UriComponentsBuilder.fromUriString("http://localhost:3000/google-login")
                         .queryParam("accessToken", accessToken)
                         .build().toUriString();
                 // 토큰을 파라미터로 전달
@@ -113,7 +121,7 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
             // 토큰 생성
             String accessToken = delegateAccessToken(savedUser);
             // 리다이렉션 주소 생성
-            String targetUrl = UriComponentsBuilder.fromUriString("http://givemesnack.me/google-login")
+            String targetUrl = UriComponentsBuilder.fromUriString("http://localhost:3000/google-login")
                     .queryParam("accessToken", accessToken)
                     .build().toUriString();
 
