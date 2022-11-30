@@ -95,7 +95,12 @@ const ChangePassword = ({ userId, token, movePage }: SettingProps) => {
   const submitPassword = () => {
     const formData = new FormData();
 
-    formData.append("userInfo", JSON.stringify({ password: password.newPassword }));
+    formData.append(
+      "patchDto",
+      new Blob([JSON.stringify({ password: password.newPassword })], {
+        type: "application/json",
+      }),
+    );
 
     PatchProfile(userId, formData, token)
       .then((res: any) => {

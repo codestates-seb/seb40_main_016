@@ -34,7 +34,7 @@ const EditProfile = ({ userId, token, movePage }: SettingProps) => {
 
     const formData = new FormData();
 
-    if (uploadedAvatar[0]) formData.append("userImg", uploadedAvatar[0].file);
+    if (uploadedAvatar[0]) formData.append("file", uploadedAvatar[0].file);
 
     let body: EditProfileInfo = {
       userName: userInfo.userName,
@@ -46,7 +46,12 @@ const EditProfile = ({ userId, token, movePage }: SettingProps) => {
       body.userBirth = userInfo.userBirth;
     }
 
-    formData.append("userInfo", JSON.stringify(body));
+    formData.append(
+      "patchDto",
+      new Blob([JSON.stringify(body)], {
+        type: "application/json",
+      }),
+    );
 
     PatchProfile(userId, formData, token)
       .then((res: any) => {
@@ -56,6 +61,7 @@ const EditProfile = ({ userId, token, movePage }: SettingProps) => {
         }
       })
       .catch((e) => {
+        console.dir(e);
         if (e.response.status === 500) {
           alert("프로필 수정 실패😿");
         }
