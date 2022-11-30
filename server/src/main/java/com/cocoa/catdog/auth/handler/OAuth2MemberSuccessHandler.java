@@ -2,9 +2,11 @@ package com.cocoa.catdog.auth.handler;
 
 import com.cocoa.catdog.auth.CustomAuthorityUtils;
 import com.cocoa.catdog.auth.jwt.JwtTokenizer;
+import com.cocoa.catdog.user.dto.UserResponseDto;
 import com.cocoa.catdog.user.entity.User;
 import com.cocoa.catdog.user.service.UserService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -34,7 +36,7 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         this.userService = userService;
     }
 
-    @Override
+/*    @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         var oAuth2User = (OAuth2User)authentication.getPrincipal();
         String email = String.valueOf(oAuth2User.getAttributes().get("email"));
@@ -70,9 +72,59 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
             response.sendRedirect("http://givemesnack.me/social");
 
         }
+    }*/
+
+    @Override
+    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+        var oAuth2User = (OAuth2User)authentication.getPrincipal();
+        String email = String.valueOf(oAuth2User.getAttributes().get("email"));
+
+        log.info("구글 로그인 완료");
+
+        // 이메일로 가입된 유저인지 확인
+        if(userService.verifyExistsEmail(email)) {
+            log.info("이미 가입된 유저입니다.");
+            if(userService.checkNeedSocialSet(email)) {
+                log.info("기본 정보 설정이 필요합니다.");
+                // 가입되어있으나 기본 정보 설정이 필요한 유저 페이지로 이동
+                response.sendRedirect("http://givemesnack.me/social");
+            }
+            else {        // 가입되어 있고 기본 정보 설정이 필요하지 않은 경우
+                // 이메일로 유저 찾기
+                User findUser = userService.findUserByEmail(email);
+                // 토큰 생성
+                String accessToken = delegateAccessToken(findUser);
+                // 리다이렉션 주소 생성
+                String targetUrl = UriComponentsBuilder.fromUriString("http://givemesnack.me/google-login")
+                        .queryParam("accessToken", accessToken)
+                        .build().toUriString();
+                // 토큰을 파라미터로 전달
+                getRedirectStrategy().sendRedirect(request, response, targetUrl);
+
+            }
+        }
+        // 소셜로 신규 가입 하는 경우
+        else {
+
+            // 신규 유저 정보 저정
+            User savedUser = saveMember(email);
+
+            User findUser = userService.findUserByEmail(email);
+            // 토큰 생성
+            String accessToken = delegateAccessToken(savedUser);
+            // 리다이렉션 주소 생성
+            String targetUrl = UriComponentsBuilder.fromUriString("http://givemesnack.me/google-login")
+                    .queryParam("accessToken", accessToken)
+                    .build().toUriString();
+
+            // 토큰을 파라미터로 전달
+            getRedirectStrategy().sendRedirect(request, response, targetUrl);
+
+        }
     }
 
-    // 유저 정보로 토튼 생성 후 리스폰스용 헤더에 입력
+
+    // 유저 정보로 토큰 생성 후 리스폰스용 헤더에 입력
     private HttpServletResponse setTokenToHeader (HttpServletResponse response, User user) {
         // 토큰 생성
         String accessToken = delegateAccessToken(user);
@@ -86,7 +138,7 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
     }
 
 
-    // 신규 소셜 유저 저장
+    // 신규 소셜 유저 저장 (기본 유저이름 google, 패스워드 1111)
     private User saveMember(String email) {
         List<String> authorities = List.of("USER");
         User user = new User(email, "1111", "google");

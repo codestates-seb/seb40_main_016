@@ -86,7 +86,7 @@ public class UserService {
             return true;
         } else { return false; }
     }
-    //유저 정보 수정 (이메일은 고유값으로 변경 불가, 비밀번호, 이름, 소개 변경 가능) todo 필수 아닌 추가 정보 수정 가능하도록
+    //유저 정보 수정 (이메일은 고유값으로 변경 불가, 비밀번호, 이름, 소개 변경 가능)
     public User updateUser(User user, MultipartFile file) {
         User findUser = findVerifiedUser(user.getUserId());
 
@@ -114,6 +114,8 @@ public class UserService {
                 .ifPresent(userStatus -> findUser.setUserStatus(userStatus));
         Optional.ofNullable(user.getNeedSocialSet())
                 .ifPresent(needSocialSet -> findUser.setNeedSocialSet(needSocialSet));
+        Optional.ofNullable(user.getPassword())
+                .ifPresent(password -> findUser.setPassword(passwordEncoder.encode(password)));
 
         return userRepository.save(findUser);
     }
