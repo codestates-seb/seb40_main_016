@@ -39,7 +39,6 @@ const EditProfile = ({ userId, token, movePage }: SettingProps) => {
     let body: EditProfileInfo = {
       userName: userInfo.userName,
       content: userInfo.content,
-      userType: "",
     };
 
     if (userInfo.userType !== "PERSON") {
@@ -61,7 +60,6 @@ const EditProfile = ({ userId, token, movePage }: SettingProps) => {
         }
       })
       .catch((e) => {
-        console.dir(e);
         if (e.response.status === 500) {
           alert("프로필 수정 실패😿");
         }

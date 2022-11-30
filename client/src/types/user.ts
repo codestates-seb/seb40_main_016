@@ -26,5 +26,5 @@ export interface EditProfileInfo {
   content?: string;
   userImg?: string;
   userBirth?: string;
-  userType: "PERSON" | "CAT" | "DOG" | "";
+  userType?: "PERSON" | "CAT" | "DOG" | "";
 }
