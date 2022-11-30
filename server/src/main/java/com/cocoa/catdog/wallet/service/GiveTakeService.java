@@ -25,9 +25,14 @@ public class GiveTakeService {
     public GiveTake createGiveTake(GiveTake giveTake, Long articleId, Long userId) {
         //엔티티 조회
         Article article = articleService.findArticle(articleId);
-        Wallet giveWlt = article.getUser().getWallet();
-        Wallet takeWlt = userService.findUser(userId).getWallet();
+        Wallet takeWlt = article.getUser().getWallet();
+        Wallet giveWlt = userService.findUser(userId).getWallet();
         int giveYummy = giveTake.getGiveYummy();
+
+        //자기 자신에게 보내는 경우 에러처리
+        if(giveWlt.getWalletId().equals(takeWlt.getWalletId())) {
+            throw new BusinessLogicException(ExceptionCode.CANT_GIVE_ONESELF);
+        }
 
         //yummy 계산
         giveWlt.minusYummy(giveYummy); // 기부자는 yummy차감

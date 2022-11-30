@@ -142,6 +142,11 @@ public class UserService {
 
     }
 
+    // 기본 정보 입력이 필요한 유저인지 확인
+    public boolean checkNeedSocialSet(String email) {
+        Optional<User> findUser = userRepository.findByEmail(email);
+        return findUser.get().getNeedSocialSet();
+    }
 
     //유저 삭제
     public void deleteUser(long userId) {
@@ -164,26 +169,6 @@ public class UserService {
         //유저정보가 없으면 예외 발생
         return optionalUser.orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
     }
-
-    //가입된 이메일인지 확인
-/*
-    public void verifyExistsEmail(String email) {
-        User user = userRepository.findByEmail(email);
-        if(user != null)
-            log.info("이미 가입된 유저입니다.");
-            throw new BusinessLogicException(ExceptionCode.USER_EXISTS);
-
-    }
-*/
-
-/*    public void verifyExistsEmail(String email) {
-        if (userRepository.existsByEmail(email) == true) {
-            log.info("이미 가입된 유저입니다.");
-        } else {
-            log.info("가입되지 않은 유저입니다.");
-        }
-    }
-}*/
 
     public boolean verifyExistsEmail(String email) {
         return userRepository.existsByEmail(email);

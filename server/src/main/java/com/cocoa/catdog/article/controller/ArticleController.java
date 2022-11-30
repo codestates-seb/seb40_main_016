@@ -97,9 +97,10 @@ public class ArticleController {
     MultiResponseDto<ArticleDto.Response> getArticles(@Positive @RequestParam(required = false, defaultValue = "1") int page,
                                                       @RequestParam(required = false, defaultValue = "all") String sort,
                                                       @RequestParam(required = false, defaultValue = "latest") String order,
+                                                      @RequestParam(required = false) String search,
                                                       @RequestHeader(name = "Authorization", required = false, defaultValue = "null") String token) {
         long userId = token.equals("null") ? 0 : jwtTokenizer.getUserId(token);
-        Page<Article> pageArticles = articleService.findArticles(page - 1, 24, sort, order, userId);
+        Page<Article> pageArticles = articleService.findArticles(page - 1, 24, sort, order, search, userId);
         List<Article> articles = pageArticles.getContent();
 
         List<ArticleDto.Response> articleResponseDtos = mapper.entityListToResponseDtoList(articles)

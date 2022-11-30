@@ -33,6 +33,8 @@ public enum ExceptionCode {
 
     EXIST_ARTICLE_REPORT(404, "Exist article report"),
 
+    CANT_GIVE_ONESELF(404, "Cant give oneself"),
+
     NOT_EXIST_COMMENT_LIKE(404, "Not exist comment like"),
 
     EXIST_COMMENT_LIKE(404, "Exist comment like"),
