@@ -2,6 +2,7 @@ import styled, { keyframes } from "styled-components";
 
 export const HeaderBox = styled.div`
   position: fixed;
+  top: 0;
   width: 100%;
   background-color: var(--color-white);
   height: var(--header-height);
