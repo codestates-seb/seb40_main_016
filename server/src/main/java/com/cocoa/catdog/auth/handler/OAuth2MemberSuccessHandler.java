@@ -125,11 +125,11 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
             // 신규 유저 정보 저정
             User savedUser = saveMember(email);
 
-            User findUser = userService.findUserByEmail(email);
             // 토큰 생성
             String accessToken = delegateAccessToken(savedUser);
             // 리다이렉션 주소 생성
-            String targetUrl = UriComponentsBuilder.fromUriString("returnUri")
+            String returnUri = "http://localhost:3000/google-login";
+            String targetUrl = UriComponentsBuilder.fromUriString(returnUri)
                     .queryParam("accessToken", accessToken)
                     .queryParam("sign", 0)
                     .queryParam("info", 0)
