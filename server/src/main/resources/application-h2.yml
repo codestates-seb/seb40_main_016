@@ -1,0 +1,73 @@
+spring:
+  h2:
+    console:
+      enabled: true
+      path: /h2
+  datasource:
+    url: jdbc:h2:./data/testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: ${GOOGLE_OAUTH_CLIENT_ID}
+            clientSecret: ${GOOGLE_OAUTH_SECRET}
+            redirect-uri: http://localhost:8080/login/oauth2/code/google
+            scope:
+              - email
+              - profile
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: sanguk821@gmail.com
+    password: pxroizhqydkvcctp
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+  servlet:
+  multipart:
+    max-file-size: 10MB
+    max-request-size: 30MB
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        highlight_sql: true
+        show_sql: false
+        format_sql: true
+jwt:
+  key:
+    secret: ${JWT_SECRET_KEY}
+  access-token-expiration-minutes: 600
+  refresh-token-expiration-minutes: 420
+mail:
+  address:
+    admin: admin@gmail.com
+logging:
+  level:
+    org:
+      springframework:
+        orm:
+          jpa: INFO
+cloud:
+  aws:
+    credentials:
+      accessKey: ${s3_access_key}
+      secretKey: ${s3_secret_key}
+    s3:
+      bucket: catdogbucket
+      folder:
+        [ folderName ]: [ folderName/ ]
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+s3:
+  articleDir: assets/articleImages/

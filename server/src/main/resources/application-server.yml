@@ -1,0 +1,20 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    #url: jdbc:mysql://preproject009.caqi1wpy8gu8.ap-northeast-2.rds.amazonaws.com:3306/test?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul
+    url: jdbc:mysql://cocoadatabase.ctcimtwch8lu.ap-northeast-2.rds.amazonaws.com:3306/cocoa?useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC
+    #url: jdbc:mysql://preproject009.caqi1wpy8gu8.ap-northeast-2.rds.amazonaws.com:3306/test?serverTimezone=UTC&characterEncoding=UTF-8
+    username: admin
+    password: ${rds_cocoa_password}
+
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    database: mysql
+    hibernate:
+      ddl-auto: update
+config:
+#  domain: http://preproject009-bucket.s3-website.ap-northeast-2.amazonaws.com
+s3:
+  articleDir: assets/articleImages/
+  userDir: assets/userImages/
+
