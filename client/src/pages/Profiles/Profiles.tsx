@@ -11,6 +11,7 @@ import ProfileSnacks from "./ProfileSnacks";
 import FollowPopUp from "../../components/MyPage/FollowPopUp";
 import FollowerPopUp from "../../components/MyPage/FollowerPopUp";
 import UnFollowPopUp from "../../components/MyPage/UnFollowPopUp";
+import TopButton from "../../components/TopButton/TopButton";
 
 import { GetProfile } from "../../api/mypage";
 import { GetIsSubscribe, PostSubscribe, DeleteSubscribe } from "../../api/subscribe";
@@ -213,6 +214,7 @@ const Profiles = ({ detailHandler, setArticleId }: Prop) => {
               </div>
             </>
           )}
+          <TopButton />
         </OuterContainer>
       </MyAccountPage>
     </>

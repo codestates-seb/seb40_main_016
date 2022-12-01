@@ -231,70 +231,57 @@ interface UserArticles {
 }
 
 const ProfileArticles = ({ profileUserId, handleArticlesNum, detailHandler, setArticleId, userType }: Props) => {
-  const [open, setOpen] = useState<boolean>(false);
-  const [userArticles, setUserArticles] = useState<UserArticles[]>([]);
+  const [userArticles, setUserArticles] = useState<UserArticles[]>(null);
   const [mostReceivedArticles, setMostReceivedArticles] = useState<UserArticles[]>([]);
-  const [page, setPage] = useState<number>(0);
+  const [page, setPage] = useState<number>(1);
   const [totalPage, setTotalPage] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(false);
   const obsRef = useRef(null);
-  const preventRef = useRef(true);
-
-  const handleOpen = () => {
-    setOpen(!open);
-  };
-
-  useEffect(() => {
-    if (page !== 0 && page <= totalPage) getUserArticles();
-  }, [page]);
 
   const handleImgBoxClick = (articleId: number) => {
     setArticleId(articleId);
     detailHandler();
   };
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(obsHandler);
-    if (obsRef.current) observer.observe(obsRef.current);
-    return () => {
-      observer.disconnect();
-    };
-  }, []);
-
-  useEffect(() => {
-    getUserArticles();
-  }, []);
-
-  const obsHandler = (entries: any) => {
-    const target = entries[0];
-
-    if (target.isIntersecting && preventRef.current) {
-      preventRef.current = false;
-      setPage((prev) => prev + 1);
-    }
-  };
-
-  const getUserArticles = () => {
+  const getUserArticles = (profileUserId: number, page: number) => {
     setLoading(true);
-    GetUserArticles(profileUserId).then((res: any) => {
+
+    GetUserArticles(profileUserId, page).then((res) => {
       const data = res.data.data;
-      console.log(data);
+
       const mostReceived = data.slice(0, 5).sort((a: any, b: any) => {
         return b.yummyCnt - a.yummyCnt;
       });
+      setMostReceivedArticles(mostReceived);
 
       if (res.data.pageInfo.page === 1) {
-        setUserArticles(data);
+        setUserArticles(res.data.data);
+        setPage(2);
       } else {
-        setUserArticles(userArticles.concat(data));
+        setUserArticles(userArticles.concat(res.data.data));
+        setPage((prev) => prev + 1);
       }
-      preventRef.current = true;
-      setMostReceivedArticles(mostReceived);
-      handleArticlesNum(data.length);
+      handleArticlesNum(res.data.data.length);
       setTotalPage(res.data.pageInfo.totalPages);
       setLoading(false);
     });
   };
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && page <= totalPage) {
+        getUserArticles(profileUserId, page);
+      }
+    });
+
+    if (obsRef.current) {
+      observer.observe(obsRef.current);
+    }
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [page, totalPage]);
 
   return (
     <>
@@ -304,7 +291,7 @@ const ProfileArticles = ({ profileUserId, handleArticlesNum, detailHandler, setA
         <MostRecieved>
           <InnerContainer>
             <p>가장 간식을 많이 받은 글 Best 5 👍</p>
-            {userArticles.length === 0 ? (
+            {userArticles && userArticles.length === 0 ? (
               <NoArticleContainer>
                 <span>아직 간식을 받은 글이 없습니다.</span>
               </NoArticleContainer>
@@ -341,32 +328,33 @@ const ProfileArticles = ({ profileUserId, handleArticlesNum, detailHandler, setA
       )}
       <InnerContainer>
         <MainContainer>
-          {userArticles.length === 0 ? (
+          {userArticles && userArticles.length === 0 ? (
             <NoArticleContainer>
               <NoContent />
               <span>아직 작성한 글이 없습니다.</span>
             </NoArticleContainer>
           ) : (
             <ImgContainer>
-              {userArticles.map((article: UserArticles) => (
-                <ImgBox
-                  key={article.articleId}
-                  onClick={() => {
-                    handleImgBoxClick(article.articleId);
-                  }}
-                >
-                  <Dim />
-                  <SnackCount>
-                    {userType === "DOG" ? <BoneWIcon /> : <FishWIcon />}
-                    {article.yummyCnt}알
-                  </SnackCount>
-                  <ImageCard
-                    className="img-card"
-                    imgUrl={article.articleImg.images[0].imgUrl}
-                    onClick={handleOpen}
-                  ></ImageCard>
-                </ImgBox>
-              ))}
+              {userArticles &&
+                userArticles.map((article: UserArticles) => (
+                  <ImgBox
+                    key={article.articleId}
+                    onClick={() => {
+                      handleImgBoxClick(article.articleId);
+                    }}
+                  >
+                    <Dim />
+                    <SnackCount>
+                      {userType === "DOG" ? <BoneWIcon /> : <FishWIcon />}
+                      {article.yummyCnt}알
+                    </SnackCount>
+                    <ImageCard
+                      className="img-card"
+                      imgUrl={article.articleImg.images[0].imgUrl}
+                      onClick={() => {}}
+                    ></ImageCard>
+                  </ImgBox>
+                ))}
               {loading ? (
                 Array(8)
                   .fill(0)
@@ -378,9 +366,9 @@ const ProfileArticles = ({ profileUserId, handleArticlesNum, detailHandler, setA
               ) : (
                 <></>
               )}
-              <div ref={obsRef} />
             </ImgContainer>
           )}
+          <div ref={obsRef} />
         </MainContainer>
       </InnerContainer>
     </>
