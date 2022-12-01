@@ -1,17 +1,15 @@
 import { Dispatch, SetStateAction } from "react";
-import { useNavigate } from "react-router-dom";
 
 import Modal from "../../Modal/Modal";
 import Button from "../../Button/Button";
-import { DeleteArticle, PostArticleReport } from "../../../api/article";
-import { GetComments, DeleteComment, PostCommentReport } from "../../../api/comment";
+import { PostArticleReport } from "../../../api/article";
+import { DeleteComment, PostCommentReport } from "../../../api/comment";
 
 import { useRecoilValue } from "recoil";
 import accessTokenState from "../../../_state/accessTokenState";
 import isLoginState from "../../../_state/isLoginState";
 
 import { Wrapper } from "./style";
-import { CommentType } from "../../../types/comment";
 
 interface Prop {
   className: string;
@@ -25,6 +23,7 @@ interface Prop {
   editPopupHandler: () => void;
   detailHandler: () => void;
   commentEditPopupHandler: () => void;
+  cofirmDeletePopupHandler: () => void;
 }
 
 const ExtraFeatureModal = ({
@@ -35,12 +34,11 @@ const ExtraFeatureModal = ({
   contsId,
   setIsOn,
   resetComments,
-  articleId,
   editPopupHandler,
   detailHandler,
   commentEditPopupHandler,
+  cofirmDeletePopupHandler,
 }: Prop) => {
-  const navigate = useNavigate();
   const token = useRecoilValue(accessTokenState);
   const isLogin = useRecoilValue(isLoginState);
 
@@ -88,13 +86,7 @@ const ExtraFeatureModal = ({
 
   const onDelete = () => {
     if (type === "article") {
-      DeleteArticle(contsId, token)
-        .then((res) => {
-          if (res.status === 204) {
-            navigate(0);
-          }
-        })
-        .catch((err) => alert("글 삭제에 실패하였습니다.😿"));
+      cofirmDeletePopupHandler();
     } else if (type === "comment") {
       DeleteComment(contsId, token)
         .then((res) => {

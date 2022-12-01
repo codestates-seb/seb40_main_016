@@ -9,6 +9,7 @@ import Comments from "../../components/Detail/Comments/Comments";
 import CommentAdd from "../../components/Detail/CommentAdd/CommentAdd";
 import ExtraFeatureModal from "../../components/Detail/ExtraFeatureModal.tsx/ExtraFeatureModal";
 import CommentEditModal from "../../components/Detail/CommentEditModal/CommentEditModal";
+import ConfirmDeleteModal from "../../components/Detail/ConfirmDeleteModal/ConfirmDeleteModal";
 import { GetDetail } from "../../api/article";
 import { GetComments } from "../../api/comment";
 
@@ -67,6 +68,9 @@ const Detail = ({ articleId, isDetailOn, detailHandler, editPopupHandler }: Prop
   //state for comment edit popup
   const [isCommentEditPopupOn, setIsCommentEditPopupOn] = useState<boolean>(false);
   const [commentConts, setCommentConts] = useState<string>("");
+
+  //state for confirm delete popup
+  const [isCofirmDeletePopupOn, setIsCofirmDeletePopupOn] = useState<boolean>(false);
 
   const checkIsMyArticle = () => {
     if (articleId && authorId) {
@@ -138,6 +142,11 @@ const Detail = ({ articleId, isDetailOn, detailHandler, editPopupHandler }: Prop
     setIsCommentEditPopupOn(!isCommentEditPopupOn);
   };
 
+  const cofirmDeletePopupHandler = () => {
+    setIsCofirmDeletePopupOn(!isCofirmDeletePopupOn);
+    setIsMorePopupOn(!isMorePopupOn);
+  };
+
   return (
     <>
       <Modal
@@ -202,6 +211,7 @@ const Detail = ({ articleId, isDetailOn, detailHandler, editPopupHandler }: Prop
           editPopupHandler={editPopupHandler}
           detailHandler={detailHandler}
           commentEditPopupHandler={commentEditPopupHandler}
+          cofirmDeletePopupHandler={cofirmDeletePopupHandler}
         />
       </ExtraModalWrapper>
       <CommentEditModalWrapper>
@@ -214,6 +224,11 @@ const Detail = ({ articleId, isDetailOn, detailHandler, editPopupHandler }: Prop
           resetComments={resetComments}
         />
       </CommentEditModalWrapper>
+      <ConfirmDeleteModal
+        isCofirmDeletePopupOn={isCofirmDeletePopupOn}
+        setIsCofirmDeletePopupOn={setIsCofirmDeletePopupOn}
+        contsId={contsId}
+      />
     </>
   );
 };
