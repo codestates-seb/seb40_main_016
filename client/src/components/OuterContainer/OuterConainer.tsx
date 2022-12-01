@@ -26,10 +26,15 @@ const Wrapper = styled.div`
 interface Prop {
   children: React.ReactNode;
   className?: string;
+  style?: any;
 }
 
-const OuterContainer = ({ children, className }: Prop) => {
-  return <Wrapper className={className}>{children}</Wrapper>;
+const OuterContainer = ({ children, className, style }: Prop) => {
+  return (
+    <Wrapper className={className} style={style}>
+      {children}
+    </Wrapper>
+  );
 };
 
 export default OuterContainer;

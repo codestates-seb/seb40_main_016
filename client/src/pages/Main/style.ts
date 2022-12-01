@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const FilterContainer = styled.main`
-  padding: 80px 0px 50px;
+  padding: 80px 0px 65px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -51,7 +51,7 @@ export const SortBox = styled.div`
 `;
 
 export const ImgContainer = styled.main`
-  padding: 0px 0px 50px 0px;
+  padding: 0px 0px 65px 0px;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-gap: 40px;
@@ -132,7 +132,7 @@ export const Info = styled.div`
 `;
 
 export const NoArticleContainer = styled.div`
-  height: 100vh;
+  height: 50vh;
   display: flex;
   align-items: center;
   flex-direction: column;

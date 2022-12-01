@@ -50,7 +50,7 @@ const TopButton = () => {
         setShowButton(false);
       }
     };
-    console.log(window.screenY);
+
     window.addEventListener("scroll", handleShowButton);
     return () => {
       window.removeEventListener("scroll", handleShowButton);
