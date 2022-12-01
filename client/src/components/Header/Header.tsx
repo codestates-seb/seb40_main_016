@@ -77,9 +77,14 @@ const Header = ({ popupHandler }: HeaderProps) => {
   const onSearch = (e: KeyboardEvent<HTMLDivElement>) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      navigate(`/?search=${keyword}`);
+      let path = keyword ? `/?search=${keyword}` : "/";
+      navigate(path);
       setKeyword("");
     }
+  };
+
+  const onClick = () => {
+    window.location.reload();
   };
 
   return (
@@ -87,15 +92,15 @@ const Header = ({ popupHandler }: HeaderProps) => {
       <InnerContainer className="inner">
         <LogoBox>
           <Link to="/">
-            <Logo className="logo" />
+            <Logo className="logo" onClick={onClick} />
           </Link>
           <Link to="/">
-            <MansaeCat className="logo-responsive" />
+            <MansaeCat className="logo-responsive" onClick={onClick} />
           </Link>
         </LogoBox>
         <SearchBox>
           <SearchIcon className="search-icon" />
-          <SearchInput type="text" placeholder="검색" onChange={onChange} onKeyPress={onSearch} />
+          <SearchInput type="text" placeholder="검색" onChange={onChange} onKeyPress={onSearch} value={keyword} />
         </SearchBox>
         {isLogin ? (
           <MenuBox>
