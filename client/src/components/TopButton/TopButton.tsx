@@ -33,8 +33,6 @@ const Top = styled.button`
 `;
 
 const TopButton = () => {
-  const [showButton, setShowButton] = useState<Boolean>(false);
-
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
@@ -42,29 +40,12 @@ const TopButton = () => {
     });
   };
 
-  useEffect(() => {
-    const handleShowButton = () => {
-      if (window.screenY > 20) {
-        setShowButton(true);
-      } else {
-        setShowButton(false);
-      }
-    };
-
-    window.addEventListener("scroll", handleShowButton);
-    return () => {
-      window.removeEventListener("scroll", handleShowButton);
-    };
-  }, []);
-
   return (
-    showButton && (
-      <TopButtonContainer>
-        <Top onClick={scrollToTop} type="button">
-          Top
-        </Top>
-      </TopButtonContainer>
-    )
+    <TopButtonContainer>
+      <Top onClick={scrollToTop} type="button">
+        Top
+      </Top>
+    </TopButtonContainer>
   );
 };
 

@@ -40,8 +40,6 @@ interface Prop {
   setArticleId: Dispatch<SetStateAction<number>>;
 }
 
-const SIZE = 24;
-
 const Main = ({ detailHandler, setArticleId }: Prop) => {
   const navigate = useNavigate();
   const [open, setOpen] = useState<boolean>(false);
@@ -91,32 +89,33 @@ const Main = ({ detailHandler, setArticleId }: Prop) => {
   }, []);
 
   useEffect(() => {
-    if (page !== 0 && page <= totalPage) getArticles();
+    if (page !== 0) {
+      getArticles(1);
+      setPage(1);
+    }
+  }, [keyword]);
+
+  useEffect(() => {
+    if (page !== 0 && page <= totalPage) {
+      getArticles(page);
+    }
   }, [page]);
 
   useEffect(() => {
-    if (page !== 0) getArticles();
+    if (page !== 0) getArticles(page);
   }, [sort, order]);
-
-  useEffect(() => {
-    setPage(1);
-  }, [keyword]);
 
   const obsHandler = (entries: any) => {
     const target = entries[0];
-
     if (target.isIntersecting && preventRef.current) {
       preventRef.current = false;
-
-      if (page === 0) {
-        setPage((prev) => prev + 1);
-      } else if (articleLength === SIZE) {
-        setPage((prev) => prev + 1);
-      }
+      setPage((prev) => {
+        return prev + 1;
+      });
     }
   };
 
-  const getArticles = () => {
+  const getArticles = (page: number) => {
     setLoading(true);
     if (isLogin) {
       GetMain(page, sort, order, token, keyword).then((res: any) => {
@@ -238,17 +237,14 @@ const Main = ({ detailHandler, setArticleId }: Prop) => {
                       ></ImageCard>
                     </ImgBox>
                   ))}
-                  {loading ? (
+                  {loading &&
                     Array(8)
                       .fill(0)
                       .map((_, i) => (
                         <ImgBox key={i}>
                           <ImageSkeleton />
                         </ImgBox>
-                      ))
-                  ) : (
-                    <></>
-                  )}
+                      ))}
                 </ImgContainer>
               </>
             )}
