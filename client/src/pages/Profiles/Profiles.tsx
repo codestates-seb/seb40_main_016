@@ -120,7 +120,7 @@ const Profiles = ({ detailHandler, setArticleId }: Prop) => {
   return (
     <>
       <MyAccountPage>
-        <OuterContainer>
+        <OuterContainer style={{ minHeight: "calc(100vh - 150px)" }}>
           <InnerContainer>
             <ProfileContainer>
               <ProfileImg>
