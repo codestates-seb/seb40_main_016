@@ -13,7 +13,7 @@
   - 부자연스러운 애니메이션 삭제
 */
 
-import { useState } from "react";
+import { KeyboardEvent, ChangeEvent, FormEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useRecoilState, useSetRecoilState } from "recoil";
 
@@ -36,6 +36,7 @@ import { ReactComponent as MansaeCat } from "../../assets/img/mansae-cat.svg";
 import { ReactComponent as MenuIcon } from "../../assets/img/menu-icon.svg";
 
 import { HeaderBox, LogoBox, SearchBox, SearchInput, MenuBox, LoginBoforeBtn, LoginAfterBtn } from "./style";
+import Ballon from "../Balloon/Balloon";
 
 interface HeaderProps {
   popupHandler: () => void;
@@ -48,6 +49,7 @@ const Header = ({ popupHandler }: HeaderProps) => {
   const setAccessToken = useSetRecoilState(accessTokenState);
   const setRefreshToken = useSetRecoilState(refreshTokenState);
   const [userInfo, setUserInfo] = useRecoilState(userInfoState);
+  const [keyword, setKeyword] = useState<string>("");
   const navigate = useNavigate();
 
   const handleMenuOn = () => {
@@ -67,6 +69,19 @@ const Header = ({ popupHandler }: HeaderProps) => {
     navigate("/");
   };
 
+  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    setKeyword(e.target.value);
+  };
+
+  const onSearch = (e: KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      navigate(`/?search=${keyword}`);
+      setKeyword("");
+    }
+  };
+
   return (
     <HeaderBox id="header">
       <InnerContainer className="inner">
@@ -80,25 +95,33 @@ const Header = ({ popupHandler }: HeaderProps) => {
         </LogoBox>
         <SearchBox>
           <SearchIcon className="search-icon" />
-          <SearchInput type="text" placeholder="search..." />
+          <SearchInput type="text" placeholder="검색" onChange={onChange} onKeyPress={onSearch} />
         </SearchBox>
         {isLogin ? (
           <MenuBox>
             <LoginAfterBtn>
-              <AddIcon onClick={popupHandler} />
+              <AddIcon className="add-icon" onClick={popupHandler} />
+              <Ballon className="add-balloon">글 등록하기</Ballon>
             </LoginAfterBtn>
             <Link to="/shop">
-              <LoginAfterBtn>
-                <ShopIcon />
-              </LoginAfterBtn>
+              {userInfo.userType !== "PERSON" ? (
+                <LoginAfterBtn>
+                  <ShopIcon className="shop-icon" />
+                  <Ballon className="shop-balloon">상점 가기</Ballon>
+                </LoginAfterBtn>
+              ) : (
+                ""
+              )}
             </Link>
             <Link to="/mypage">
               <LoginAfterBtn className="user-img">
-                <Avatar width="40px" height="40px" bgUrl={userInfo.userImg} />
+                <Avatar className="user-image" width="40px" height="40px" bgUrl={userInfo.userImg} />
+                <Ballon className="user-balloon">마이페이지</Ballon>
               </LoginAfterBtn>
             </Link>
             <LoginAfterBtn onClick={handleLogout}>
-              <LogoutIcon />
+              <LogoutIcon className="logout-icon" />
+              <Ballon className="logout-balloon">Logout</Ballon>
             </LoginAfterBtn>
             <LoginAfterBtn className="menu-icon" onClick={handleMenuOn}>
               <MenuIcon />
