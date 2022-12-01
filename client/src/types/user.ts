@@ -28,3 +28,17 @@ export interface EditProfileInfo {
   userBirth?: string;
   userType?: "PERSON" | "CAT" | "DOG" | "";
 }
+
+export interface UserInfo {
+  content: string;
+  createdAt: string;
+  followCnt: number;
+  followerCnt: number;
+  userBirth: string;
+  userGender: "MALE" | "FEMALE";
+  userId: number;
+  userImg: string;
+  userName: string;
+  userStatus: string;
+  userType: "PERSON" | "CAT" | "DOG";
+}

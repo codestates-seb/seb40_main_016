@@ -1,22 +1,27 @@
 import React, { useState, Dispatch, SetStateAction } from "react";
-import { useRecoilValue } from "recoil";
-import Button from "../../Button/Button";
-import { PostSnack } from "../../../api/article";
+import { useSetRecoilState, useRecoilValue } from "recoil";
+import Button from "../../../Button/Button";
+import mainListState from "../../../../_state/mainLIstState";
 
-import accessTokenState from "../../../_state/accessTokenState";
+import { PostSnack } from "../../../../api/article";
+
+import accessTokenState from "../../../../_state/accessTokenState";
+import isLoginState from "../../../../_state/isLoginState";
 
 import { Wrapper, Contents, BtnGroup, Btn, GroupForm } from "./style";
+import { Articles } from "../../../../types/article";
 
 interface Prop {
   className?: string;
   articleId?: number;
-  setIsSnackGiver: Dispatch<SetStateAction<boolean>>;
-  updateSnack?: (arg: number) => void;
-  setChecked: Dispatch<SetStateAction<boolean>>;
+  setIsOn: Dispatch<SetStateAction<boolean>>;
+  setCurrentSnack: Dispatch<SetStateAction<number>>;
 }
 
-const SnackGiver = ({ className = "", articleId, setIsSnackGiver, updateSnack, setChecked }: Prop) => {
+const SnackGiver = ({ className = "", articleId, setIsOn, setCurrentSnack }: Prop) => {
+  const setMainList = useSetRecoilState<Articles[]>(mainListState);
   const token = useRecoilValue(accessTokenState);
+  const isLogin = useRecoilValue(isLoginState);
   const [value, setValue] = useState<number>(0);
 
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -27,19 +32,32 @@ const SnackGiver = ({ className = "", articleId, setIsSnackGiver, updateSnack, s
     }
   };
 
+  const updateSnack = (value: number) => {
+    setCurrentSnack((prev) => prev + value);
+    setMainList((prev) =>
+      prev.map((article) => {
+        if (article.articleId === articleId) article.yummyCnt += value;
+        return article;
+      }),
+    );
+  };
+
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    PostSnack(value, articleId, token)
-      .then((res) => {
-        alert("성공적으로 간식을 전달하였습니다.😻");
-        setIsSnackGiver(false);
-        updateSnack(value);
-        setChecked(false);
-      })
-      .catch((err) => {
-        alert("간식 주기에 실패하였습니다.😿");
-      });
-    setValue(0);
+    if (!isLogin) {
+      alert("로그인이 필요합니다.");
+    } else {
+      PostSnack(value, articleId, token)
+        .then((res) => {
+          alert("성공적으로 간식을 전달하였습니다.😻");
+          setIsOn(false);
+          updateSnack(value);
+        })
+        .catch((err) => {
+          alert("간식 주기에 실패하였습니다.😿");
+        });
+      setValue(0);
+    }
   };
 
   const AddQuantity = (e: React.SyntheticEvent) => {
