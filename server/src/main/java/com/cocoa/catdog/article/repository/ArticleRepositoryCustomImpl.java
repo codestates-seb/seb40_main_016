@@ -61,6 +61,7 @@ public class ArticleRepositoryCustomImpl extends QuerydslRepositorySupport imple
                         .from(follow)
                         .leftJoin(article)
                         .on(follow.followedUser.userId.eq(article.user.userId))
+                        .leftJoin(article.user, user)
                         .where(
                                 eqUser(userId),
                                 containUserName(search),
@@ -80,7 +81,7 @@ public class ArticleRepositoryCustomImpl extends QuerydslRepositorySupport imple
                 queryFactory
                         .select(article)
                         .from(giveTake)
-                        .rightJoin(article)
+                        .join(article)
                         .on(giveTake.article.articleId.eq(article.articleId))
                         .where(eqGiveUser(userId))
                         .orderBy(giveTake.giveTakeId.desc());
@@ -97,7 +98,7 @@ public class ArticleRepositoryCustomImpl extends QuerydslRepositorySupport imple
                 queryFactory
                         .select(giveTake.giveYummy)
                         .from(giveTake)
-                        .rightJoin(article)
+                        .join(article)
                         .on(giveTake.article.articleId.eq(article.articleId))
                         .where(eqGiveUser(userId))
                         .orderBy(giveTake.giveTakeId.desc());
