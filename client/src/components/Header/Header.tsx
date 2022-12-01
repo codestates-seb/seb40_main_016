@@ -95,10 +95,10 @@ const Header = ({ popupHandler }: HeaderProps) => {
       <InnerContainer className="inner">
         <LogoBox>
           <Link to="/">
-            <Logo className="logo" onClick={onClick} />
+            <Logo className="logo" />
           </Link>
           <Link to="/">
-            <MansaeCat className="logo-responsive" onClick={onClick} />
+            <MansaeCat className="logo-responsive" />
           </Link>
         </LogoBox>
         <SearchBox>

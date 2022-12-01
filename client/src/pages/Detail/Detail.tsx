@@ -9,6 +9,7 @@ import Comments from "../../components/Detail/Comments/Comments";
 import CommentAdd from "../../components/Detail/CommentAdd/CommentAdd";
 import ExtraFeatureModal from "../../components/Detail/ExtraFeatureModal.tsx/ExtraFeatureModal";
 import CommentEditModal from "../../components/Detail/CommentEditModal/CommentEditModal";
+import ConfirmDeleteModal from "../../components/Detail/ConfirmDeleteModal/ConfirmDeleteModal";
 import { GetDetail } from "../../api/article";
 import { GetComments } from "../../api/comment";
 
@@ -18,6 +19,7 @@ import userInfoState from "../../_state/userInfoState";
 import { DetailViewer, AreaSlider, ArticleAndComments, ExtraModalWrapper, CommentEditModalWrapper } from "./style";
 import { DetailData, Images } from "../../types/article";
 import { CommentType } from "../../types/comment";
+import Loading from "../../components/Loading/Loading";
 
 interface Prop {
   articleId: number;
@@ -36,6 +38,7 @@ const Detail = ({ articleId, isDetailOn, detailHandler, editPopupHandler }: Prop
   const [likeCnt, setLikeCnt] = useState<number>(0);
   const [gotLiked, setGotLiked] = useState<boolean>(false);
   const [articleImg, setArticleImg] = useState<Images[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const myId = myInfo.userId;
 
   const [comments, setComments] = useState<CommentType[]>([
@@ -68,6 +71,9 @@ const Detail = ({ articleId, isDetailOn, detailHandler, editPopupHandler }: Prop
   const [isCommentEditPopupOn, setIsCommentEditPopupOn] = useState<boolean>(false);
   const [commentConts, setCommentConts] = useState<string>("");
 
+  //state for confirm delete popup
+  const [isCofirmDeletePopupOn, setIsCofirmDeletePopupOn] = useState<boolean>(false);
+
   const checkIsMyArticle = () => {
     if (articleId && authorId) {
       if (myInfo.userId === authorId) {
@@ -96,6 +102,7 @@ const Detail = ({ articleId, isDetailOn, detailHandler, editPopupHandler }: Prop
     document.querySelector("#scroll-area").scrollTo(0, 0);
 
     if (articleId) {
+      setIsLoading(true);
       GetDetail(articleId, token)
         .then((res) => {
           setData(res.data);
@@ -103,6 +110,7 @@ const Detail = ({ articleId, isDetailOn, detailHandler, editPopupHandler }: Prop
           setGotLiked(res.data.gotLiked);
           setLikeCnt(res.data.likeCnt);
           setArticleImg(res.data.articleImg.images);
+          setIsLoading(false);
         })
         .catch((e) => alert("게시글을 불러오는 데에 실패했습니다😿"));
 
@@ -138,6 +146,11 @@ const Detail = ({ articleId, isDetailOn, detailHandler, editPopupHandler }: Prop
     setIsCommentEditPopupOn(!isCommentEditPopupOn);
   };
 
+  const cofirmDeletePopupHandler = () => {
+    setIsCofirmDeletePopupOn(!isCofirmDeletePopupOn);
+    setIsMorePopupOn(!isMorePopupOn);
+  };
+
   return (
     <>
       <Modal
@@ -155,7 +168,7 @@ const Detail = ({ articleId, isDetailOn, detailHandler, editPopupHandler }: Prop
       >
         <DetailViewer>
           <AreaSlider>
-            <DetailSlider photos={articleImg} />
+            {isLoading ? <Loading className="indicator" /> : <DetailSlider photos={articleImg} />}
           </AreaSlider>
           <ArticleAndComments id="scroll-area" onScroll={onScroll}>
             <DetailArticle
@@ -202,6 +215,7 @@ const Detail = ({ articleId, isDetailOn, detailHandler, editPopupHandler }: Prop
           editPopupHandler={editPopupHandler}
           detailHandler={detailHandler}
           commentEditPopupHandler={commentEditPopupHandler}
+          cofirmDeletePopupHandler={cofirmDeletePopupHandler}
         />
       </ExtraModalWrapper>
       <CommentEditModalWrapper>
@@ -214,6 +228,11 @@ const Detail = ({ articleId, isDetailOn, detailHandler, editPopupHandler }: Prop
           resetComments={resetComments}
         />
       </CommentEditModalWrapper>
+      <ConfirmDeleteModal
+        isCofirmDeletePopupOn={isCofirmDeletePopupOn}
+        setIsCofirmDeletePopupOn={setIsCofirmDeletePopupOn}
+        contsId={contsId}
+      />
     </>
   );
 };

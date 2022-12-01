@@ -67,7 +67,16 @@ const Signup = () => {
       body = userInfo;
     }
 
-    PostSignUp(body)
+    const formData = new FormData();
+
+    formData.append(
+      "postDto",
+      new Blob([JSON.stringify(body)], {
+        type: "application/json",
+      }),
+    );
+
+    PostSignUp(formData)
       .then((res: any) => {
         if (res.status === 201) {
           setStep(3);
