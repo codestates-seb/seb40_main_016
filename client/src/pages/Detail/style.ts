@@ -19,6 +19,17 @@ export const AreaSlider = styled.div`
     width: 56.8vw;
     max-width: 548px;
   }
+
+  .indicator {
+    position: relative;
+    height: 100%;
+    > div {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
 `;
 
 export const ArticleAndComments = styled.div`
