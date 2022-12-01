@@ -130,11 +130,16 @@ const AvatarBox = styled.div`
 `;
 
 const MainContainer = styled.div`
+  margin-top: 50px;
   display: flex;
   flex-direction: column;
 
   .img-box {
     position: relative;
+  }
+
+  @media screen and (max-width: 736px) {
+    margin-top: 20px;
   }
 `;
 
@@ -149,7 +154,6 @@ const ImgBox = styled.div`
   }
 
   @media screen and (max-width: 736px) {
-    margin-top: 30px;
     border-radius: 0px;
   }
 `;
