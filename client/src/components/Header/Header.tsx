@@ -13,8 +13,8 @@
   - 부자연스러운 애니메이션 삭제
 */
 
-import { KeyboardEvent, ChangeEvent, FormEvent, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { KeyboardEvent, ChangeEvent, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useRecoilState, useSetRecoilState } from "recoil";
 
 import InnerContainer from "../InnerContainer/InnerContainer";
@@ -51,6 +51,7 @@ const Header = ({ popupHandler }: HeaderProps) => {
   const [userInfo, setUserInfo] = useRecoilState(userInfoState);
   const [keyword, setKeyword] = useState<string>("");
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleMenuOn = () => {
     setMenuList(!menuList);
@@ -84,7 +85,9 @@ const Header = ({ popupHandler }: HeaderProps) => {
   };
 
   const onClick = () => {
-    window.location.reload();
+    if (location.pathname === "/") {
+      window.location.reload();
+    }
   };
 
   return (
