@@ -65,7 +65,7 @@ const StepForm = ({ userInfo, setUserInfo, setHasNoError }: Prop) => {
             fontSize="pc-regular"
             label="닉네임"
             isError={userNameErr}
-            errorMsg="한글, 영문, 숫자 조합 2-10자리로 입력해 주세요."
+            errorMsg="2-10자리로 입력해 주세요.(한글, 영문, 숫자 가능)"
           />
         ) : (
           <Input
@@ -78,7 +78,7 @@ const StepForm = ({ userInfo, setUserInfo, setHasNoError }: Prop) => {
             fontSize="pc-regular"
             label="이름"
             isError={userNameErr}
-            errorMsg="한글, 영문, 숫자 조합 2-10자리로 입력해 주세요."
+            errorMsg="2-10자리로 입력해 주세요.(한글, 영문, 숫자 가능)"
           />
         )}
 
