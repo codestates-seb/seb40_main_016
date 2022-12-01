@@ -83,19 +83,15 @@ const Header = ({ popupHandler }: HeaderProps) => {
     }
   };
 
-  const onClick = () => {
-    window.location.reload();
-  };
-
   return (
     <HeaderBox id="header">
       <InnerContainer className="inner">
         <LogoBox>
           <Link to="/">
-            <Logo className="logo" onClick={onClick} />
+            <Logo className="logo" />
           </Link>
           <Link to="/">
-            <MansaeCat className="logo-responsive" onClick={onClick} />
+            <MansaeCat className="logo-responsive" />
           </Link>
         </LogoBox>
         <SearchBox>
