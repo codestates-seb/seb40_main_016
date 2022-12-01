@@ -39,6 +39,7 @@ interface PhotoUploadProps {
   setPreviewPhotos: (arg: () => any[]) => void;
   setCurrentPhotos: (arg: () => string) => void;
   setIsAddPhoto: (arg: (arg: boolean) => boolean) => void;
+  setDeletePhotos: (arg: (arg: string[]) => string[]) => void;
 }
 
 const PhotoUpload = ({
@@ -50,6 +51,7 @@ const PhotoUpload = ({
   setPreviewPhotos,
   setCurrentPhotos,
   setIsAddPhoto,
+  setDeletePhotos,
 }: PhotoUploadProps) => {
   const uploadBoxRef = useRef<HTMLLabelElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -77,7 +79,14 @@ const PhotoUpload = ({
     };
 
     const deletePhoto = () => {
-      uploadedPhotos.splice(uploadedPhotos.findIndex(isDeleteImage), 1);
+      const deletePhoto = uploadedPhotos.findIndex(isDeleteImage);
+
+      if (!uploadedPhotos[deletePhoto].file) {
+        const test = uploadedPhotos[deletePhoto].uploadedPhoto;
+        setDeletePhotos((photos) => [...photos, test]);
+      }
+
+      uploadedPhotos.splice(deletePhoto, 1);
       setUploadedPhotos((photos) => [...photos]);
       if (uploadedPhotos.length === 0) setIsAddPhoto((isAddPhoto) => !isAddPhoto);
     };

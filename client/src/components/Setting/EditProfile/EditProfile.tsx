@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
 
+import { useSetRecoilState, useRecoilValue } from "recoil";
+import userInfoState from "../../../_state/userInfoState";
+
 import UserInfo from "./UserInfo/UserInfo";
 import Button from "../../Button/Button";
 
@@ -11,6 +14,8 @@ import { SettingProps } from "../../../types/setting";
 import { GetUserInfo, PatchProfile } from "../../../api/user";
 
 const EditProfile = ({ userId, token, movePage }: SettingProps) => {
+  const setUserImg = useSetRecoilState(userInfoState);
+  const curUserInfo = useRecoilValue(userInfoState);
   const [userInfo, setUserInfo] = useState<EditProfileInfo>({
     userName: "",
     content: "",
@@ -34,24 +39,32 @@ const EditProfile = ({ userId, token, movePage }: SettingProps) => {
 
     const formData = new FormData();
 
-    if (uploadedAvatar[0]) formData.append("userImg", uploadedAvatar[0].file);
+    if (uploadedAvatar[0]) formData.append("file", uploadedAvatar[0].file);
 
     let body: EditProfileInfo = {
       userName: userInfo.userName,
       content: userInfo.content,
-      userType: "",
     };
 
     if (userInfo.userType !== "PERSON") {
       body.userBirth = userInfo.userBirth;
     }
 
-    formData.append("userInfo", JSON.stringify(body));
+    formData.append(
+      "patchDto",
+      new Blob([JSON.stringify(body)], {
+        type: "application/json",
+      }),
+    );
 
-    PatchProfile(userId, formData, token)
+    PatchProfile(formData, token)
       .then((res: any) => {
         if (res.status === 200) {
           alert("프로필 수정 성공😺");
+          setUserImg({
+            ...curUserInfo,
+            userImg: res.data.data.userImg,
+          });
           movePage();
         }
       })

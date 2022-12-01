@@ -82,7 +82,6 @@ const Login = () => {
           })
           .then(() => {
             navigate("/");
-            navigate(0);
           })
           .catch((e) => {
             alert("회원 정보를 가져오는 데에 실패했습니다! 😿");
@@ -131,7 +130,7 @@ const Login = () => {
                 </FormCard>
                 <Footer>
                   계정이 없으신가요?
-                  <Link to="/signup">화원가입</Link>
+                  <Link to="/signup">회원가입</Link>
                 </Footer>
               </AreaForm>
             </Conts>

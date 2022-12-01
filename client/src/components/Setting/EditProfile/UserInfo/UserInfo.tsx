@@ -26,7 +26,7 @@ const UserInfo = ({ userInfo, setUserInfo, setHasNoError }: UserInfoProps) => {
 
   const onChangeContent = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setContentErr(() => (e.target.value.length >= 150 ? true : false));
-    setUserInfo((userInfo) => ({ ...userInfo, contentErr: e.target.value }));
+    setUserInfo((userInfo) => ({ ...userInfo, content: e.target.value }));
   };
 
   const onChangeBirth = (e: ChangeEvent<HTMLInputElement>) => {

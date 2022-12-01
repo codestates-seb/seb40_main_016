@@ -46,7 +46,7 @@ const GithubLink = styled.a`
 
 const Footer = () => {
   return (
-    <FooterContainer>
+    <FooterContainer id="footer">
       <MainBox>
         <p>
           <span>대표이사</span>

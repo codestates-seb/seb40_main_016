@@ -1,4 +1,5 @@
 import axios from "axios";
+
 import { SignupUserInfo, SignupPersonInfo, LoginInfo } from "../types/user";
 
 const URL = process.env.REACT_APP_URL;
@@ -44,8 +45,8 @@ export const PostHelpPw = async (email: string) => {
   return response;
 };
 
-export const PatchProfile = async (userId: number, formData: FormData, token: string) => {
-  const response = await axios.patch(`${URL}/user/${userId}`, formData, {
+export const PatchProfile = async (formData: FormData, token: string) => {
+  const response = await axios.patch(`${URL}/user`, formData, {
     headers: {
       "Content-Type": "multipart/form-data",
       Authorization: `${token}`,
@@ -68,4 +69,14 @@ export const CheckPassword = async (token: string, password: string) => {
 
 export const LoginGoogle = () => {
   location.href = `${URL}/oauth2/authorization/google`;
+};
+
+export const PostSocialInfo = async (body: SignupUserInfo | SignupPersonInfo, token: string) => {
+  const response = await axios.post(`${URL}/user/setinfo`, JSON.stringify(body), {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `${token}`,
+    },
+  });
+  return response;
 };
