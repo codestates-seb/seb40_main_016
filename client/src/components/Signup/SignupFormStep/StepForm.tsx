@@ -85,7 +85,7 @@ const StepForm = ({ userInfo, setUserInfo, setHasNoError }: Prop) => {
         <Input
           type="text"
           value={userInfo.email}
-          placeholder="이메일을 입력하세요"
+          placeholder="example@email.com"
           onChange={onChangeEmail}
           height="50px"
           inputColor="ivory"

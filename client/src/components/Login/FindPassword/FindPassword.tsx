@@ -56,7 +56,7 @@ const FindPassword = ({ isOn, setIsOn }: Prop) => {
               <Input
                 type="text"
                 value={value}
-                placeholder="이메일을 입력하세요"
+                placeholder="example@email.com"
                 onChange={onChange}
                 height="50px"
                 inputColor="ivory"
