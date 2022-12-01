@@ -48,6 +48,21 @@ public class ArticleDto {
     }
 
     @Getter
+    @Builder
+    public static class ProfileOnGiveResponse {
+        private Long articleId;
+        private ArticleImgDto articleImg;
+        private String content;
+        private int likeCnt;
+        private int views;
+        private int reportCnt;
+        private int YummyCnt;
+        private int giveYummyCnt;
+        private LocalDateTime createdAt;
+        private Article.ArticleStatus articleStatus;
+    }
+
+    @Getter
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder

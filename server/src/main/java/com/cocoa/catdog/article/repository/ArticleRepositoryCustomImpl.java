@@ -71,34 +71,49 @@ public class ArticleRepositoryCustomImpl extends QuerydslRepositorySupport imple
                         );
 
         List<Article> articles = this.getQuerydsl().applyPagination(pageable, query).fetch();
-        return new PageImpl<Article>(articles, pageable, query.fetchCount());
+        return new PageImpl<>(articles, pageable, query.fetchCount());
     }
 
     @Override
-    public Page<Article> findByProfile (Pageable pageable, String tab, Long userId) {
+    public Page<Article> findByProfileOnGive (Pageable pageable, Long userId) {
         JPAQuery<Article> query =
                 queryFactory
                         .select(article)
                         .from(giveTake)
-                        .rightJoin(giveTake.article, article)
-                        .join(article.user, user)
-                        .where(eqTab(tab, userId));
+                        .rightJoin(article)
+                        .on(giveTake.article.articleId.eq(article.articleId))
+                        .where(eqGiveUser(userId))
+                        .orderBy(giveTake.giveTakeId.desc());
+
+
 
         List<Article> articles = this.getQuerydsl().applyPagination(pageable, query).fetch();
-        return new PageImpl<Article>(articles, pageable, query.fetchCount());
-
+        return new PageImpl<>(articles, pageable, query.fetch().size());
     }
+
+    @Override
+    public Page<Integer> findYummyByProfileOnGive(Pageable pageable, Long userId) {
+        JPAQuery<Integer> query =
+                queryFactory
+                        .select(giveTake.giveYummy)
+                        .from(giveTake)
+                        .rightJoin(article)
+                        .on(giveTake.article.articleId.eq(article.articleId))
+                        .where(eqGiveUser(userId))
+                        .orderBy(giveTake.giveTakeId.desc());
+
+
+        List<Integer> giveYummys = this.getQuerydsl().applyPagination(pageable, query).fetch();
+        return new PageImpl<Integer>(giveYummys, pageable, query.fetch().size());
+    }
+
 
     private BooleanExpression eqSort(String sort) {
         if(sort == null || sort.isEmpty() || sort.equals("all")) {
             return null;
         } else if(sort.equals("dogs") || sort.equals("cats") || sort.equals("persons")) {
             return user.userType.eq(User.UserType.valueOf(sort.substring(0, sort.length() - 1).toUpperCase()));
-        } /*else if(sort.equals("followings")) {
-            return user.userId.eq(follow.followedUser.userId)
-                    .and(follow.followingUser.userId.eq(userId));
-
-        } */else {
+        } else {
             throw new BusinessLogicException(ExceptionCode.BAD_QUERY);
         }
     }
@@ -123,13 +138,20 @@ public class ArticleRepositoryCustomImpl extends QuerydslRepositorySupport imple
         } else if(tab.equals("post")) {
             return user.userId.eq(userId);
         } else if(tab.equals("give")) {
-            return giveTake.giveWlt.user.userId.eq(userId)
-                    .and(article.articleId.eq(giveTake.article.articleId));
+            return giveTake.giveWlt.user.userId.eq(userId);
+
         } else if(tab.equals("take")) {
             return null;
         } else {
             throw new BusinessLogicException(ExceptionCode.BAD_QUERY);
+        }// give 와 post,take 나눌것
+    }
+
+    private BooleanExpression eqGiveUser(Long userId) {
+        if(userId == 0) {
+            throw new BusinessLogicException(ExceptionCode.BAD_QUERY);
         }
+        return giveTake.giveWlt.user.userId.eq(userId);
     }
 
 

@@ -174,8 +174,30 @@ public class ArticleService {
      * */
     @Transactional(readOnly = true)
     public Page<Article> findProfileArticles(int page, int size, String tab, Long userId) {
+        Page<Article> articlePage;
 
-        PageRequest pageRequest;
+        switch (tab) {
+            case "post":
+                articlePage = articleRepository.findByUser_UserId(userId, PageRequest.of(page, size, Sort.by("articleId").descending()));
+                break;
+            case "give":
+                articlePage = articleRepository.findByProfileOnGive(PageRequest.of(page, size), userId);
+                break;
+            case "take":
+                User user = userService.findUser(userId);
+                if (user.getUserType() == User.UserType.PERSON) {
+                    throw new BusinessLogicException(ExceptionCode.BAD_REQUEST);
+                }
+                articlePage = articleRepository.findByUser_UserId(userId,(PageRequest.of(page, size, Sort.by("yummyCnt").descending()
+                        .and(Sort.by("articleId").descending()))));
+                break;
+            default:
+                throw new BusinessLogicException(ExceptionCode.BAD_QUERY);
+        }
+
+        return articlePage;
+        //----------------------------------<<querydsl로 리팩토링 하기 전>>-------------------------------//
+        /*PageRequest pageRequest;
         if(tab.equals("take")) {
             pageRequest = PageRequest.of(page, size, Sort.by("articleId").descending());
         } else {
@@ -185,8 +207,7 @@ public class ArticleService {
 
         return articleRepository.findByProfile(pageRequest, tab, userId);
 
-        //----------------------------------<<querydsl로 리팩토링 하기 전>>-------------------------------//
-        /*
+        //-----------------------------------------------------------------------------------------------//
         Page<Article> articlePage;
         switch (tab) {
             case "post":
@@ -214,6 +235,11 @@ public class ArticleService {
         */
         //--------------------------------------------------------------------------------------------//
     }
+    public Page<Integer> findYummyByProfileOnGive(int page, int size, Long userId) {
+        PageRequest pageRequest = PageRequest.of(page, size);
+        return articleRepository.findYummyByProfileOnGive(pageRequest, userId);
+    }
+
 
     /*
      * 게시물 삭제

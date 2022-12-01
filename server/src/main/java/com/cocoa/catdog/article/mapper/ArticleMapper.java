@@ -8,6 +8,7 @@ import com.cocoa.catdog.article.entity.Report;
 import com.cocoa.catdog.user.dto.UserSimpleResponseDto;
 import org.mapstruct.Mapper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
@@ -60,7 +61,33 @@ public interface ArticleMapper {
                 .articleStatus(article.getArticleStatus())
                 .build();
     }
+
     List<ArticleDto.ProfileResponse> entityToProfileResponseDtoList(List<Article> articles);
+    default ArticleDto.ProfileOnGiveResponse entityToProfileOnGiveResponseDto(Article article, Integer giveYummy) {
+        return ArticleDto.ProfileOnGiveResponse.builder()
+                .articleId(article.getArticleId())
+                .articleImg(
+                        ArticleImgDto.Response.builder()
+                                .images(article.getArticleImg())
+                                .build()
+                )
+                .content(article.getContent())
+                .likeCnt(article.getLikeCnt())
+                .views(article.getViews())
+                .reportCnt(article.getReportCnt())
+                .YummyCnt(article.getYummyCnt())
+                .giveYummyCnt(giveYummy)
+                .createdAt(article.getCreatedAt())
+                .articleStatus(article.getArticleStatus())
+                .build();
+    }
+    default List<ArticleDto.ProfileOnGiveResponse> entityToProfileOnGiveResponseDtoList(List<Article> articles, List<Integer> giveYummys) {
+        List<ArticleDto.ProfileOnGiveResponse> dtoList = new ArrayList<>();
+        for (int i = 0; i < articles.size(); i++) {
+            dtoList.add(entityToProfileOnGiveResponseDto(articles.get(i), giveYummys.get(i)));
+        }
+        return dtoList;
+    }
 
     Report reportToReportDto(ArticleDto.Report report);
 }

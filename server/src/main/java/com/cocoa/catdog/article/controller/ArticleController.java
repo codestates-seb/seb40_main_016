@@ -5,6 +5,7 @@ import com.cocoa.catdog.article.Dto.ArticleDto;
 import com.cocoa.catdog.article.entity.Article;
 import com.cocoa.catdog.article.entity.Report;
 import com.cocoa.catdog.article.mapper.ArticleMapper;
+import com.cocoa.catdog.article.repository.ArticleRepository;
 import com.cocoa.catdog.article.service.ArticleService;
 import com.cocoa.catdog.auth.jwt.JwtTokenizer;
 import com.cocoa.catdog.exception.BusinessLogicException;
@@ -184,6 +185,12 @@ public class ArticleController {
                                         @RequestParam(required = false, defaultValue = "1") int page) {
         Page<Article> pageArticles = articleService.findProfileArticles(page - 1, 24, tab, jwtTokenizer.getUserId(token));
         List<Article> articles = pageArticles.getContent();
+
+        if(tab.equals("give")) {
+            List<Integer> GiveYummys = articleService.findYummyByProfileOnGive(page - 1, 24, jwtTokenizer.getUserId(token)).getContent();
+            return new ResponseEntity<>(
+                    new MultiResponseDto<>(mapper.entityToProfileOnGiveResponseDtoList(articles, GiveYummys), pageArticles), HttpStatus.OK);
+        }
 
         return new ResponseEntity<>(
                 new MultiResponseDto<>(mapper.entityToProfileResponseDtoList(articles), pageArticles), HttpStatus.OK);
