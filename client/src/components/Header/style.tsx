@@ -19,7 +19,11 @@ export const LogoBox = styled.div`
   position: relative;
 
   @media screen and (max-width: 736px) {
-    width: 80px;
+    width: 60px;
+  }
+
+  @media screen and (max-width: 396px) {
+    width: 40px;
   }
 
   .logo {
@@ -34,20 +38,24 @@ export const LogoBox = styled.div`
   .logo-responsive {
     position: absolute;
     top: 20px;
-    left: 0px;
-    width: 80px;
+    left: 10px;
+    width: 70px;
     height: 40px;
     opacity: 0;
 
     @media screen and (max-width: 736px) {
       opacity: 1;
     }
+
+    @media screen and (max-width: 396px) {
+      left: 0px;
+    }
   }
 `;
 
 export const SearchBox = styled.form`
-  margin: 0px 40px 0px 50px;
-  width: 60%;
+  margin: 0px 40px;
+  width: 100%;
   border: 2px solid var(--color-gray);
   position: relative;
   border-radius: 10px;
@@ -142,9 +150,49 @@ export const LoginAfterBtn = styled.button`
     display: none;
   }
 
+  .add-icon {
+    position: relative;
+  }
+
+  .shop-icon {
+    position: relative;
+  }
+
+  .user-image {
+    position: relative;
+  }
+
+  .logout-icon {
+    position: relative;
+  }
+
   &:hover {
     cursor: pointer;
     transform: scale(1.1, 1.1);
     transition: all 0.2s;
+
+    .add-balloon,
+    .shop-balloon,
+    .user-balloon,
+    .logout-balloon {
+      display: block;
+
+      &:before {
+        left: calc(50% - 5px);
+      }
+    }
+
+    .add-balloon {
+      left: -22px;
+    }
+
+    .shop-balloon {
+      left: -16px;
+    }
+
+    .user-balloon,
+    .logout-balloon {
+      left: -13px;
+    }
   }
 `;

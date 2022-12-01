@@ -10,6 +10,7 @@ const FooterContainer = styled.footer`
 `;
 
 const MainBox = styled.div`
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -22,6 +23,19 @@ const MainBox = styled.div`
 
     span {
       margin: 0px 20px;
+
+      &:first-child {
+        @media screen and (max-width: 736px) {
+          margin-bottom: 20px;
+        }
+      }
+    }
+
+    @media screen and (max-width: 736px) {
+      margin: 10px 0px 0px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
   }
 `;

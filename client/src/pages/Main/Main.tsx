@@ -11,7 +11,6 @@ import Button from "../../components/Button/Button";
 import ImageSkeleton from "../../components/Skeleton/ImageSkeleton";
 import Banner from "../../components/Banner/Banner";
 import NoContent from "../../components/NoContent/NoContent";
-// import Ballon from "../../components/Ballon/Ballon";
 import TopButton from "../../components/TopButton/TopButton";
 
 import isLoginState from "../../_state/isLoginState";
@@ -36,11 +35,12 @@ import { ReactComponent as EyeWIcon } from "../../assets/img/eye-w-icon..svg";
 import { GetMain } from "../../api/article";
 import { Articles } from "../../types/article";
 import mainListState from "../../_state/mainLIstState";
-
 interface Prop {
   detailHandler: () => void;
   setArticleId: Dispatch<SetStateAction<number>>;
 }
+
+const SIZE = 24;
 
 const Main = ({ detailHandler, setArticleId }: Prop) => {
   const navigate = useNavigate();
@@ -54,11 +54,12 @@ const Main = ({ detailHandler, setArticleId }: Prop) => {
   const obsRef = useRef(null);
   const preventRef = useRef(true);
   const [articleLength, setArticleLength] = useState<number>(0);
-
   const [articles, setMainList] = useRecoilState<Articles[]>(mainListState);
-
   const isLogin = useRecoilValue(isLoginState);
   const token = useRecoilValue(accessTokenState);
+
+  const params = new URLSearchParams(window.location.search);
+  const keyword = params.get("search");
 
   const handleOpen = () => {
     setOpen(!open);
@@ -81,7 +82,9 @@ const Main = ({ detailHandler, setArticleId }: Prop) => {
 
   useEffect(() => {
     const observer = new IntersectionObserver(obsHandler);
-    if (obsRef.current) observer.observe(obsRef.current);
+    if (obsRef.current) {
+      observer.observe(obsRef.current);
+    }
     return () => {
       observer.disconnect();
     };
@@ -95,19 +98,28 @@ const Main = ({ detailHandler, setArticleId }: Prop) => {
     if (page !== 0) getArticles();
   }, [sort, order]);
 
+  useEffect(() => {
+    setPage(1);
+  }, [keyword]);
+
   const obsHandler = (entries: any) => {
     const target = entries[0];
 
     if (target.isIntersecting && preventRef.current) {
       preventRef.current = false;
-      setPage((prev) => prev + 1);
+
+      if (page === 0) {
+        setPage((prev) => prev + 1);
+      } else if (articleLength === SIZE) {
+        setPage((prev) => prev + 1);
+      }
     }
   };
 
   const getArticles = () => {
     setLoading(true);
     if (isLogin) {
-      GetMain(page, sort, order, token).then((res: any) => {
+      GetMain(page, sort, order, token, keyword).then((res: any) => {
         setArticleLength(res.data.data.length);
         if (res.data.pageInfo.page === 1) {
           setMainList(res.data.data);
@@ -119,7 +131,7 @@ const Main = ({ detailHandler, setArticleId }: Prop) => {
         setLoading(false);
       });
     } else {
-      GetMain(page, sort, order, null).then((res: any) => {
+      GetMain(page, sort, order, null, keyword).then((res: any) => {
         setArticleLength(res.data.data.length);
         if (res.data.pageInfo.page === 1) {
           setMainList(res.data.data);
@@ -161,7 +173,7 @@ const Main = ({ detailHandler, setArticleId }: Prop) => {
         }}
       />
       <div>
-        <OuterContainer>
+        <OuterContainer style={{ minHeight: "calc(100vh - 150px)" }}>
           <InnerContainer>
             <FilterContainer>
               <TabBox>
@@ -188,7 +200,7 @@ const Main = ({ detailHandler, setArticleId }: Prop) => {
                 </Button>
               </SortBox>
             </FilterContainer>
-            {articleLength === 0 && sort !== "all" ? (
+            {articleLength === 0 && !loading ? (
               <NoArticleContainer>
                 <NoContent />
                 <span>아직 등록된 글이 없습니다.</span>
@@ -237,10 +249,10 @@ const Main = ({ detailHandler, setArticleId }: Prop) => {
                   ) : (
                     <></>
                   )}
-                  <div ref={obsRef} />
                 </ImgContainer>
               </>
             )}
+            <div ref={obsRef} />
             <TopButton />
           </InnerContainer>
         </OuterContainer>

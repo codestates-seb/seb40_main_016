@@ -11,7 +11,8 @@
 
 import styled, { keyframes } from "styled-components";
 import { useRecoilValue } from "recoil";
-import { useNavigate } from "react-router-dom";
+
+import Balloon from "../Balloon/Balloon";
 
 import isLoginState from "../../_state/isLoginState";
 
@@ -67,21 +68,39 @@ const SortBtn = styled.button`
 
   .all-symbol {
     width: 35px;
+    position: relative;
   }
   .dog-symbol {
     width: 45px;
+    position: relative;
   }
   .cat-symbol {
     width: 40px;
+    position: relative;
   }
   .follow-symbol {
     width: 25px;
+    position: relative;
   }
 
   svg {
     &:hover {
       cursor: pointer;
       animation: ${Bling} 0.5s infinite;
+    }
+  }
+
+  &:hover {
+    .all-balloon,
+    .dog-balloon,
+    .cat-balloon,
+    .follow-balloon {
+      display: block;
+    }
+    .dog-balloon,
+    .cat-balloon,
+    .follow-balloon {
+      left: -33px;
     }
   }
 `;
@@ -109,21 +128,26 @@ const SortTab = ({ handleSortClick, sort }: Props) => {
       <Wrapper>
         <SortBtn className={sort === "all" ? "clicked" : ""} onClick={() => handleSortClick("all")}>
           <AllSymbol className="all-symbol" />
+          <Balloon className="all-balloon">모든 계정 보기</Balloon>
         </SortBtn>
         <SortBtn className={sort === "dogs" ? "clicked" : ""} onClick={() => handleSortClick("dogs")}>
           <DogSymbol className="dog-symbol" />
+          <Balloon className="dog-balloon">강아지 계정만 보기</Balloon>
         </SortBtn>
         <SortBtn className={sort === "cats" ? "clicked" : ""} onClick={() => handleSortClick("cats")}>
           <CatSymbol className="cat-symbol" />
+          <Balloon className="cat-balloon">고양이 계정만 보기</Balloon>
         </SortBtn>
         {isLogin ? (
           <SortBtn className={sort === "followings" ? "clicked" : ""} onClick={() => handleSortClick("followings")}>
             <FollowSymbol className="follow-symbol" />
+            <Balloon className="follow-balloon">구독한 계정만 보기</Balloon>
           </SortBtn>
         ) : (
           ""
         )}
       </Wrapper>
+      <Balloon />
     </>
   );
 };

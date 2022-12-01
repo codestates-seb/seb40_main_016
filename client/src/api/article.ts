@@ -86,8 +86,11 @@ export const PostArticleReport = async (articleId: string | number, content: str
   return response;
 };
 
-export const GetMain = async (page: number, sort: string, order: string, token: string | null) => {
-  const response = await axios.get(`${URL}/articles?page=${page}&sort=${sort}&order=${order}`, {
+export const GetMain = async (page: number, sort: string, order: string, token: string | null, search: string) => {
+  let url = `${URL}/articles?page=${page}&sort=${sort}&order=${order}`;
+  if (search) url += `&search=${search}`;
+
+  const response = await axios.get(url, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `${token}`,
