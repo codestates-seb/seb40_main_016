@@ -13,8 +13,8 @@ export const GetMyProfile = async (token: string) => {
   return response;
 };
 
-export const GetMyArticles = async (token: string, post: string) => {
-  const response = await axios.get(`${URL}/articles/my-page?tab=${post}`, {
+export const GetMyArticles = async (page: number, tab: string, token: string | null) => {
+  const response = await axios.get(`${URL}/articles/my-page?page=${page}&tab=${tab}`, {
     headers: {
       Authorization: `${token}`,
     },
@@ -22,8 +22,8 @@ export const GetMyArticles = async (token: string, post: string) => {
   return response;
 };
 
-export const GetMyComments = async (token: string) => {
-  const response = await axios.get(`${URL}/comments/my-page`, {
+export const GetMyComments = async (page: number, token: string) => {
+  const response = await axios.get(`${URL}/comments/my-page?page=${page}`, {
     headers: {
       Authorization: `${token}`,
     },
@@ -31,8 +31,8 @@ export const GetMyComments = async (token: string) => {
   return response;
 };
 
-export const GetMySnacks = async (token: string) => {
-  const response = await axios.get(`${URL}/order/my-page`, {
+export const GetMySnacks = async (page: number, token: string) => {
+  const response = await axios.get(`${URL}/order/my-page?page=${page}`, {
     headers: {
       Authorization: `${token}`,
     },
@@ -51,8 +51,8 @@ export const GetProfile = async (userId: string | number) => {
   return response;
 };
 
-export const GetUserArticles = async (userId: string | number) => {
-  const response = await axios.get(`${URL}/articles/profile/${userId}`, {
+export const GetUserArticles = async (userId: string | number, page: number) => {
+  const response = await axios.get(`${URL}/articles/profile/${userId}?page=${page}`, {
     headers: {
       "Content-Type": "application/json",
     },
@@ -60,8 +60,8 @@ export const GetUserArticles = async (userId: string | number) => {
   return response;
 };
 
-export const GetUserSnacks = async (userId: string | number) => {
-  const response = await axios.get(`${URL}/order/profile/${userId}`, {
+export const GetUserSnacks = async (userId: string | number, page: number) => {
+  const response = await axios.get(`${URL}/order/profile/${userId}?page=${page}`, {
     headers: {
       "Content-Type": "application/json",
     },
