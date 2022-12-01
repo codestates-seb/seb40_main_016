@@ -4,10 +4,10 @@ import { SignupUserInfo, SignupPersonInfo, LoginInfo } from "../types/user";
 
 const URL = process.env.REACT_APP_URL;
 
-export const PostSignUp = async (body: SignupUserInfo | SignupPersonInfo) => {
-  const response = await axios.post(`${URL}/user`, JSON.stringify(body), {
+export const PostSignUp = async (formData: FormData) => {
+  const response = await axios.post(`${URL}/user`, formData, {
     headers: {
-      "Content-Type": "application/json",
+      "Content-Type": "multipart/form-data",
     },
   });
   return response;
