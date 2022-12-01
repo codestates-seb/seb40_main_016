@@ -18,6 +18,7 @@ import DetailSlider from "../../Detail/DetailSlider/DetailSlider";
 import { UploadedPhotos } from "../../../types/article";
 import { InnerWrapper, ArticleWrapper, SelectedPhoto, Profile, Nickname, Textarea } from "./style";
 import userInfoState from "../../../_state/userInfoState";
+import React from "react";
 
 interface WriteArticleProps {
   uploadedPhotos: UploadedPhotos[];
@@ -27,6 +28,15 @@ interface WriteArticleProps {
 
 const WriteArticle = ({ uploadedPhotos, content, setContent }: WriteArticleProps) => {
   const { userName, userImg } = useRecoilValue(userInfoState);
+
+  const changeContent = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    if (e.target.value.length > 500) {
+      alert("글자수는 500자 이하로 입력해주세요😿");
+      return;
+    }
+
+    setContent(() => e.target.value);
+  };
 
   return (
     <InnerWrapper>
@@ -42,12 +52,7 @@ const WriteArticle = ({ uploadedPhotos, content, setContent }: WriteArticleProps
           <Avatar width="50px" height="50px" bgUrl={userImg} />
           <Nickname>{userName}</Nickname>
         </Profile>
-        <Textarea
-          placeholder="글 입력"
-          maxLength={500}
-          defaultValue={content}
-          onChange={(e) => setContent(() => e.target.value)}
-        />
+        <Textarea placeholder="글 입력" maxLength={500} defaultValue={content} onChange={changeContent} />
       </ArticleWrapper>
     </InnerWrapper>
   );
