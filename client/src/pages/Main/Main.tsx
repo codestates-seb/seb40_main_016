@@ -145,6 +145,13 @@ const Main = ({ detailHandler, setArticleId }: Prop) => {
     window.addEventListener("scroll", checkScroll);
   }, []);
 
+  useEffect(() => {
+    const header = document.querySelector("#header") as HTMLElement;
+    const footer = document.querySelector("#footer") as HTMLElement;
+    header.style.display = "block";
+    footer.style.display = "block";
+  }, []);
+
   return (
     <>
       <Banner
