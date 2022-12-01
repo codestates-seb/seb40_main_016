@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "esnext",
+    "strict": true,
+    "strictNullChecks": false,
+    "esModuleInterop": true,
+    "outDir": "./dist",
+    "jsx": "react-jsx",
+    "moduleResolution": "node"
+  },
+  "include": ["src", "src/custom.d.ts"]
+  // "compilerOptions": {
+  //   "target": "es5",
+  //   "lib": ["dom", "dom.iterable", "esnext"],
+  //   "allowJs": true, // js 파일들 ts에서 import해서 쓸 수 있는지
+  //   "skipLibCheck": true, // 정의 파일의 타입 확인을 건너 뛸 지 여부
+  //   "esModuleInterop": true, // 모든 imports에 대한 namespace 생성을 통해 CommonJS와 ES Modules 간의 상호 운용성이 생기게할 지 여부
+  //   "allowSyntheticDefaultImports": true, // default export이 아닌 모듈에서도 default import가 가능하게 할 지 여부, 해당 설정은 코드 추출에 영향은 주지 않고, 타입확인에만 영향을 줍니다.
+  //   "strict": true, //strict 관련, noimplicit 어쩌구 관련 모드 전부 켜기
+  //   "forceConsistentCasingInFileNames": true, // 같은 파일에 대한 일관되지 않은 참조를 허용하지 않을 지 여부
+  //   "noFallthroughCasesInSwitch": true, // switch문에서 fallthrough 케이스에 대한 에러보고 여부
+  //   "module": "esnext", // 자바스크립트 파일간 import 문법을 구현할 때 어떤 문법을 쓸지 정함 ex) commonjs는 require, es2015, esnext는 import 문법
+  //   "moduleResolution": "node", // 모듈 해석 방법 설정: 'node' (Node.js) 혹은 'classic' (TypeScript pre-1.6).
+  //   "resolveJsonModule": true,
+  //   "isolatedModules": true, // 각 파일을 분리된 모듈로 트랜스파일 ('ts.transpileModule'과 비슷합니다).
+  //   "noEmit": true, // 결과 파일 내보낼지 여부
+  //   "jsx": "react-jsx" // JSX 코드 생성 설정: 'preserve', 'react-native', 혹은 'react'.
+  // },
+  // "include": ["src"]
+}
