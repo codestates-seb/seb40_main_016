@@ -20,7 +20,11 @@ const SnackGiver = ({ className = "", articleId, setIsSnackGiver, updateSnack, s
   const [value, setValue] = useState<number>(0);
 
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(Number(e.target.value));
+    if (Number(e.target.value) <= 100000) {
+      setValue(Number(e.target.value));
+    } else {
+      setValue(100000);
+    }
   };
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
