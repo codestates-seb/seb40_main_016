@@ -1,10 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { useRecoilValue } from "recoil";
 
 import InnerContainer from "../../components/InnerContainer/InnerContainer";
 import ImageCard from "../../components/ImageCard/ImageCard";
 import NoContent from "../../components/NoContent/NoContent";
+import Loading from "../../components/Loading/Loading";
 
 import { GetMySnacks } from "../../api/mypage";
 
@@ -154,15 +155,42 @@ interface SnackInfo {
 const MyPageSnacks = () => {
   const token = useRecoilValue(accessTokenState);
   const [mySnackList, setMySnackList] = useState<SnackList[]>([]);
-  const [open, setOpen] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [page, setPage] = useState<number>(1);
+  const [totalPage, setTotalPage] = useState<number>(1);
+  const obsRef = useRef(null);
 
-  useEffect(() => {
-    GetMySnacks(token).then((res: any) => {
-      setMySnackList(res.data.data);
+  const getMySnackList = (page: number, token: string) => {
+    setLoading(true);
+
+    GetMySnacks(page, token).then((res: any) => {
+      if (res.data.pageInfo.page === 1) {
+        setMySnackList(res.data.data);
+        setPage(2);
+      } else {
+        setMySnackList(mySnackList.concat(res.data.data));
+        setPage((prev) => prev + 1);
+      }
+      setTotalPage(res.data.pageInfo.totalPages);
       setLoading(false);
     });
-  }, []);
+  };
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && page <= totalPage) {
+        getMySnackList(page, token);
+      }
+    });
+
+    if (obsRef.current) {
+      observer.observe(obsRef.current);
+    }
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [page, totalPage, token]);
 
   const handleChangeDate = (date: string) => {
     const changeDate = new Date(date);
@@ -174,42 +202,41 @@ const MyPageSnacks = () => {
     return `${year}년 ${month}월 ${day}일`;
   };
 
-  const handleOpen = () => {
-    setOpen(!open);
-  };
-
   return (
     <InnerContainer>
       <SnackContainer>
         <SnackTitle>간식 교환 내역</SnackTitle>
-        {mySnackList.length === 0 && !loading ? (
+        {mySnackList && mySnackList.length === 0 && !loading ? (
           <NoChangeSnackContainer>
             <NoContent />
             <span>아직 교환한 간식이 없습니다.</span>
           </NoChangeSnackContainer>
         ) : (
           <>
-            {mySnackList.map((snack: SnackList) =>
-              snack.orderItems.map((item: any) => (
-                <SnackBox key={`${item.orderId} - ${item.orderPrice}`}>
-                  <SnackImgBox>
-                    <SnackImg>
-                      <ImageCard className="snack-img" imgUrl={item.itemImg} onClick={handleOpen} />
-                    </SnackImg>
-                  </SnackImgBox>
-                  <ChangeList>
-                    <SnackName>{item.itemName}</SnackName>
-                    <ChangeInfo>
-                      <Quantity>{`수량: ${item.quantity}개`}</Quantity>
-                      <Price>{`가격: ${item.orderPrice}알`}</Price>
-                      <ChangeDate>{`교환 날짜: ${handleChangeDate(snack.createdAt)}`}</ChangeDate>
-                    </ChangeInfo>
-                  </ChangeList>
-                </SnackBox>
-              )),
-            )}
+            {mySnackList &&
+              mySnackList.map((snack: SnackList) =>
+                snack.orderItems.map((item: any) => (
+                  <SnackBox key={`${item.orderId} - ${item.orderPrice}`}>
+                    <SnackImgBox>
+                      <SnackImg>
+                        <ImageCard className="snack-img" imgUrl={item.itemImg} onClick={() => {}} />
+                      </SnackImg>
+                    </SnackImgBox>
+                    <ChangeList>
+                      <SnackName>{item.itemName}</SnackName>
+                      <ChangeInfo>
+                        <Quantity>{`수량: ${item.quantity}개`}</Quantity>
+                        <Price>{`가격: ${item.orderPrice}알`}</Price>
+                        <ChangeDate>{`교환 날짜: ${handleChangeDate(snack.createdAt)}`}</ChangeDate>
+                      </ChangeInfo>
+                    </ChangeList>
+                  </SnackBox>
+                )),
+              )}
+            {loading ? <Loading /> : null}
           </>
         )}
+        <div ref={obsRef} />
       </SnackContainer>
     </InnerContainer>
   );

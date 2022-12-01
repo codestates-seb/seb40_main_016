@@ -16,7 +16,7 @@ import accessTokenState from "../../_state/accessTokenState";
 
 import { GetMyArticles } from "../../api/mypage";
 
-import { ArticleImg, Articles } from "../../types/article";
+import { ArticleImg } from "../../types/article";
 
 import { ReactComponent as BoneIcon } from "../../assets/img/bone-icon.svg";
 import { ReactComponent as BoneWIcon } from "../../assets/img/bone-w-icon.svg";
@@ -255,80 +255,50 @@ interface MyArticles {
   createdAt: string;
   likeCnt: number;
   reportCnt: number;
+  giveYummyCnt: number;
   views: number;
   yummyCnt: number;
 }
 
 const MyPageArticles = ({ handleArticlesNum, detailHandler, setArticleId, userType }: Props) => {
   const token = useRecoilValue(accessTokenState);
-  const [open, setOpen] = useState<boolean>(false);
-  const [myArticles, setMyArticles] = useState<MyArticles[]>([]);
+  const [myArticles, setMyArticles] = useState<MyArticles[]>(null);
   const [mostReceivedArticles, setMostReceivedArticles] = useState<MyArticles[]>([]);
   const [tab, setTab] = useState<string>("post");
-  const [page, setPage] = useState<number>(0);
+  const [page, setPage] = useState<number>(1);
   const [totalPage, setTotalPage] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(false);
   const obsRef = useRef(null);
-  const preventRef = useRef(true);
-
-  const handleOpen = () => {
-    setOpen(!open);
-  };
 
   const handleImgBoxClick = (articleId: number) => {
     setArticleId(articleId);
     detailHandler();
   };
 
-  const handleTabClick = (tab: "post" | "give") => {
-    setTab(tab);
+  const handleTabClick = async (tabArg: "post" | "give") => {
+    setTab(tabArg);
+    getMyArticles(1, tabArg, token);
   };
 
-  useEffect(() => {
-    if (page !== 0 && page <= totalPage) getMyArticles();
-  }, [page]);
-
-  useEffect(() => {
-    getMyArticles();
-    GetMostReceived();
-  }, [tab]);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(obsHandler);
-    if (obsRef.current) observer.observe(obsRef.current);
-    return () => {
-      observer.disconnect();
-    };
-  }, []);
-
-  const obsHandler = (entries: any) => {
-    const target = entries[0];
-
-    if (target.isIntersecting && preventRef.current) {
-      preventRef.current = false;
-      setPage((prev) => prev + 1);
-    }
-  };
-
-  const getMyArticles = () => {
+  const getMyArticles = (page: number, tab: string, token: string) => {
     setLoading(true);
-    GetMyArticles(token, tab).then((res: any) => {
-      const data = res.data.data;
 
+    GetMyArticles(page, tab, token).then((res) => {
       if (res.data.pageInfo.page === 1) {
-        setMyArticles(data);
+        setMyArticles(res.data.data);
+        setPage(2);
       } else {
-        setMyArticles(myArticles.concat(data));
+        setMyArticles(myArticles.concat(res.data.data));
+        setPage((prev) => prev + 1);
       }
-      preventRef.current = true;
-      handleArticlesNum(data.length);
+      handleArticlesNum(res.data.data.length);
       setTotalPage(res.data.pageInfo.totalPages);
       setLoading(false);
     });
   };
 
-  const GetMostReceived = () => {
-    GetMyArticles(token, "post").then((res: any) => {
+  const GetMostReceived = (page: number, token: string) => {
+    GetMyArticles(page, "post", token).then((res: any) => {
       const data = res.data.data;
 
       const mostReceived = data.slice(0, 5).sort((a: any, b: any) => {
@@ -337,6 +307,23 @@ const MyPageArticles = ({ handleArticlesNum, detailHandler, setArticleId, userTy
       setMostReceivedArticles(mostReceived);
     });
   };
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && page <= totalPage) {
+        getMyArticles(page, tab, token);
+        GetMostReceived(page, token);
+      }
+    });
+
+    if (obsRef.current) {
+      observer.observe(obsRef.current);
+    }
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [page, totalPage, tab, token]);
 
   return (
     <>
@@ -347,7 +334,7 @@ const MyPageArticles = ({ handleArticlesNum, detailHandler, setArticleId, userTy
           <MostRecieved>
             <InnerContainer>
               <p>가장 간식을 많이 받은 글 Best 5 👍</p>
-              {myArticles.length === 0 ? (
+              {myArticles && myArticles.length === 0 ? (
                 <NoArticleContainer>
                   <span>아직 간식을 받은 글이 없습니다.</span>
                 </NoArticleContainer>
@@ -405,32 +392,33 @@ const MyPageArticles = ({ handleArticlesNum, detailHandler, setArticleId, userTy
               간식을 준 글
             </Button>
           </FilterBtnBox>
-          {myArticles.length === 0 ? (
+          {myArticles && myArticles.length === 0 ? (
             <NoArticleContainer>
               <NoContent />
               <span>아직 작성한 글이 없습니다.</span>
             </NoArticleContainer>
           ) : (
             <ImgContainer>
-              {myArticles.map((article: MyArticles) => (
-                <ImgBox
-                  key={article.articleId}
-                  onClick={() => {
-                    handleImgBoxClick(article.articleId);
-                  }}
-                >
-                  <Dim />
-                  <SnackCount>
-                    {userType === "DOG" ? <BoneWIcon /> : <FishWIcon />}
-                    {article.yummyCnt}알
-                  </SnackCount>
-                  <ImageCard
-                    className="img-card"
-                    imgUrl={article.articleImg.images[0].imgUrl}
-                    onClick={handleOpen}
-                  ></ImageCard>
-                </ImgBox>
-              ))}
+              {myArticles &&
+                myArticles.map((article: MyArticles, i) => (
+                  <ImgBox
+                    key={`${i}-${article.articleId}`}
+                    onClick={() => {
+                      handleImgBoxClick(article.articleId);
+                    }}
+                  >
+                    <Dim />
+                    <SnackCount>
+                      {userType === "DOG" ? <BoneWIcon /> : <FishWIcon />}
+                      {tab === "give" ? `${article.giveYummyCnt}알 선물` : `${article.yummyCnt}알`}
+                    </SnackCount>
+                    <ImageCard
+                      className="img-card"
+                      imgUrl={article.articleImg.images[0].imgUrl}
+                      onClick={() => {}}
+                    ></ImageCard>
+                  </ImgBox>
+                ))}
               {loading ? (
                 Array(8)
                   .fill(0)
@@ -442,9 +430,9 @@ const MyPageArticles = ({ handleArticlesNum, detailHandler, setArticleId, userTy
               ) : (
                 <></>
               )}
-              <div ref={obsRef} />
             </ImgContainer>
           )}
+          <div ref={obsRef} />
         </MainContainer>
       </InnerContainer>
     </>
