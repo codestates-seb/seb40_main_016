@@ -1,8 +1,12 @@
 import { Indicator } from "./style";
 
-const Loading = () => {
+interface Prop {
+  className?: string;
+}
+
+const Loading = ({ className }: Prop) => {
   return (
-    <Indicator>
+    <Indicator className={className}>
       <div className="lds-ellipsis">
         <div></div>
         <div></div>

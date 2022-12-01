@@ -19,6 +19,7 @@ import userInfoState from "../../_state/userInfoState";
 import { DetailViewer, AreaSlider, ArticleAndComments, ExtraModalWrapper, CommentEditModalWrapper } from "./style";
 import { DetailData, Images } from "../../types/article";
 import { CommentType } from "../../types/comment";
+import Loading from "../../components/Loading/Loading";
 
 interface Prop {
   articleId: number;
@@ -37,6 +38,7 @@ const Detail = ({ articleId, isDetailOn, detailHandler, editPopupHandler }: Prop
   const [likeCnt, setLikeCnt] = useState<number>(0);
   const [gotLiked, setGotLiked] = useState<boolean>(false);
   const [articleImg, setArticleImg] = useState<Images[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const myId = myInfo.userId;
 
   const [comments, setComments] = useState<CommentType[]>([
@@ -100,6 +102,7 @@ const Detail = ({ articleId, isDetailOn, detailHandler, editPopupHandler }: Prop
     document.querySelector("#scroll-area").scrollTo(0, 0);
 
     if (articleId) {
+      setIsLoading(true);
       GetDetail(articleId, token)
         .then((res) => {
           setData(res.data);
@@ -107,6 +110,7 @@ const Detail = ({ articleId, isDetailOn, detailHandler, editPopupHandler }: Prop
           setGotLiked(res.data.gotLiked);
           setLikeCnt(res.data.likeCnt);
           setArticleImg(res.data.articleImg.images);
+          setIsLoading(false);
         })
         .catch((e) => alert("게시글을 불러오는 데에 실패했습니다😿"));
 
@@ -164,7 +168,7 @@ const Detail = ({ articleId, isDetailOn, detailHandler, editPopupHandler }: Prop
       >
         <DetailViewer>
           <AreaSlider>
-            <DetailSlider photos={articleImg} />
+            {isLoading ? <Loading className="indicator" /> : <DetailSlider photos={articleImg} />}
           </AreaSlider>
           <ArticleAndComments id="scroll-area" onScroll={onScroll}>
             <DetailArticle
