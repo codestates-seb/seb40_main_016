@@ -132,10 +132,11 @@ export const Info = styled.div`
 `;
 
 export const NoArticleContainer = styled.div`
-  height: 50vh;
+  height: 100%;
   display: flex;
   align-items: center;
   flex-direction: column;
+  padding-bottom: 50px;
 
   span {
     margin-top: 20px;
@@ -145,8 +146,6 @@ export const NoArticleContainer = styled.div`
   }
 
   @media screen and (max-width: 736px) {
-    height: 80vh;
-
     span {
       font-size: var(--fs-pc-regular);
     }
