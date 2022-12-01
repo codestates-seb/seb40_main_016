@@ -54,4 +54,5 @@ export const TabBtn = styled.label`
   align-items: center;
   height: 44px;
   cursor: pointer;
+  font-size: var(--fs-pc-small);
 `;

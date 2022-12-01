@@ -40,11 +40,11 @@ interface PopupProp {
 export const Popup = styled.div<PopupProp>`
   position: absolute;
   left: 50%;
-  top: 50%;
+  top: calc(50% + 20px);
   transform: translate(-50%, -50%);
 
   min-height: 200px;
-  max-height: 90vh;
+  max-height: 85vh;
   overflow: auto;
   width: calc(100% - 16px * 2);
   max-width: ${(props) => props.maxWidth};
@@ -93,17 +93,30 @@ export const PopupHeader = styled.div<PopupHeaderProp>`
         fill: var(--color-light-black);
       }
     }
+  }
+`;
 
-    &.orange {
-      path {
-        fill: var(--color-orange);
-      }
+export const PrevNextBtn = styled.button`
+  position: absolute;
+  top: 0;
+  background-color: var(--color-white);
+  padding: 8px 13px;
+  border: none;
+  font-size: var(--fs-pc-regular);
+  font-weight: 600;
+  color: var(--color-orange);
+  cursor: pointer;
 
-      &:hover {
-        path {
-          filter: brightness(1.5);
-        }
-      }
-    }
+  &.next,
+  &.done {
+    right: 0;
+  }
+
+  &.prev {
+    left: 0;
+  }
+
+  &:hover {
+    opacity: 0.7;
   }
 `;

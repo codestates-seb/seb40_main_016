@@ -3,12 +3,12 @@ import { useNavigate, Link } from "react-router-dom";
 
 import OuterContainer from "../../components/OuterContainer/OuterConainer";
 import InnerContainer from "../../components/InnerContainer/InnerContainer";
-import StepType from "../../components/SignupTypeStep/StepType";
-import StepForm from "../../components/SignupFormStep/StepForm";
-import StepSuccess from "../../components/SignupSuccessStep/StepSucess";
+import StepType from "../../components/Signup/SignupTypeStep/StepType";
+import StepForm from "../../components/Signup/SignupFormStep/StepForm";
+import StepSuccess from "../../components/Signup/SignupSuccessStep/StepSucess";
 import Button from "../../components/Button/Button";
 import { SignupPage, Conts, Card, Header, StepNum, StepDesc, Footer, PrevStepBtn, Notice } from "./style";
-import { PostSignUp } from "../../api/api";
+import { PostSignUp } from "../../api/user";
 
 import { ReactComponent as Step01Symbol } from "../../assets/img/finger-one-symbol.svg";
 import { ReactComponent as Step02Symbol } from "../../assets/img/finger-two-symbol.svg";
@@ -16,6 +16,11 @@ import { ReactComponent as Step03Symbol } from "../../assets/img/finger-three-sy
 import { ReactComponent as ArrowIcon } from "../../assets/img/arrow-icon.svg";
 
 import { SignupUserInfo } from "../../types/user";
+
+interface Check {
+  requiredField: string[];
+  userInfo: SignupUserInfo;
+}
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -33,10 +38,6 @@ const Signup = () => {
   const [hasNoEmptyRequired, setHasNoEmptyRequired] = useState<boolean>(false); //빈 인풋 있는지
   const [alreadyExistError, setAlreadyExistError] = useState<boolean>(false);
 
-  interface Check {
-    requiredField: string[];
-    userInfo: SignupUserInfo;
-  }
   const checkAllWritten = ({ requiredField, userInfo }: Check) => {
     const EmptyArr: string[] = requiredField.filter((el) => {
       return userInfo[el].length === 0;
@@ -66,7 +67,16 @@ const Signup = () => {
       body = userInfo;
     }
 
-    PostSignUp(body)
+    const formData = new FormData();
+
+    formData.append(
+      "postDto",
+      new Blob([JSON.stringify(body)], {
+        type: "application/json",
+      }),
+    );
+
+    PostSignUp(formData)
       .then((res: any) => {
         if (res.status === 201) {
           setStep(3);

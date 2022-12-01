@@ -13,5 +13,6 @@ export const Wrapper = styled.div<WrapperProp>`
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
+  background-color: #6666;
   background-image: ${(props) => (props.bgUrl ? `url(${props.bgUrl})` : "url('./assets/default-avatar-bg.png')")};
 `;
