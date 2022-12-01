@@ -1,9 +1,11 @@
 HELP.md
 .gradle
 build/
+data/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
+src/main/resources/application-aws.yml
 
 ### STS ###
 .apt_generated
@@ -35,3 +37,7 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### AWS related ###
+src/main/resources/application-aws.yml
+!/data/
