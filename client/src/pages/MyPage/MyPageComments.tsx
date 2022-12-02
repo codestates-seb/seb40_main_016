@@ -1,4 +1,4 @@
-import { useState, useEffect, Dispatch, SetStateAction } from "react";
+import { useState, useEffect, Dispatch, SetStateAction, useRef } from "react";
 import styled from "styled-components";
 import { useRecoilValue } from "recoil";
 
@@ -6,7 +6,7 @@ import InnerContainer from "../../components/InnerContainer/InnerContainer";
 import ImageCard from "../../components/ImageCard/ImageCard";
 import DisplayCreatedAt from "../../utills/DisplayCreatedAt";
 import NoContent from "../../components/NoContent/NoContent";
-import ImageSkeleton from "../../components/Skeleton/ImageSkeleton";
+import Loading from "../../components/Loading/Loading";
 
 import { GetMyComments } from "../../api/mypage";
 
@@ -137,20 +137,43 @@ interface MyComments {
 
 const MyPageComments = ({ detailHandler, setArticleId }: Prop) => {
   const token = useRecoilValue(accessTokenState);
-  const [open, setOpen] = useState<boolean>(false);
   const [myComments, setMyComments] = useState<MyComments[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [page, setPage] = useState<number>(1);
+  const [totalPage, setTotalPage] = useState<number>(1);
+  const obsRef = useRef(null);
 
-  const handleOpen = () => {
-    setOpen(!open);
+  const getMyComments = (page: number, token: string) => {
+    setLoading(true);
+
+    GetMyComments(page, token).then((res) => {
+      if (res.data.pageInfo.page === 1) {
+        setMyComments(res.data.data);
+        setPage(2);
+      } else {
+        setMyComments(myComments.concat(res.data.data));
+        setPage((prev) => prev + 1);
+      }
+      setTotalPage(res.data.pageInfo.totalPages);
+      setLoading(false);
+    });
   };
 
   useEffect(() => {
-    GetMyComments(token).then((res: any) => {
-      setMyComments(res.data.data);
-      setLoading(false);
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && page <= totalPage) {
+        getMyComments(page, token);
+      }
     });
-  }, []);
+
+    if (obsRef.current) {
+      observer.observe(obsRef.current);
+    }
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [page, totalPage, token]);
 
   useEffect(() => {
     DisplayCreatedAt("");
@@ -165,39 +188,42 @@ const MyPageComments = ({ detailHandler, setArticleId }: Prop) => {
     <>
       <InnerContainer>
         <CommentContainer>
-          {myComments.length === 0 && !loading ? (
+          {myComments && myComments.length === 0 && !loading ? (
             <NoCommentContainer>
               <NoContent />
               <span>아직 작성한 댓글이 없습니다.</span>
             </NoCommentContainer>
           ) : (
             <>
-              {myComments.map((comment: MyComments) => (
-                <CommentBox key={comment.commentId}>
-                  <CommentImgBox>
-                    <CommentImg
-                      onClick={() => {
-                        handleImgBoxClick(comment.articleId);
-                      }}
-                    >
-                      <ImageCard
-                        className="img-card"
-                        imgUrl={comment.articleImg.images[0].imgUrl}
-                        onClick={handleOpen}
-                      />
-                    </CommentImg>
-                  </CommentImgBox>
-                  <CommentContent>
-                    <Content>{comment.content}</Content>
-                    <CommentInfo>
-                      <Time>{DisplayCreatedAt(comment.createdAt)}</Time>
-                      <Likes>좋아요 {comment.likeCnt}개</Likes>
-                    </CommentInfo>
-                  </CommentContent>
-                </CommentBox>
-              ))}
+              {myComments &&
+                myComments.map((comment: MyComments) => (
+                  <CommentBox key={comment.commentId}>
+                    <CommentImgBox>
+                      <CommentImg
+                        onClick={() => {
+                          handleImgBoxClick(comment.articleId);
+                        }}
+                      >
+                        <ImageCard
+                          className="img-card"
+                          imgUrl={comment.articleImg.images[0].imgUrl}
+                          onClick={() => {}}
+                        />
+                      </CommentImg>
+                    </CommentImgBox>
+                    <CommentContent>
+                      <Content>{comment.content}</Content>
+                      <CommentInfo>
+                        <Time>{DisplayCreatedAt(comment.createdAt)}</Time>
+                        <Likes>좋아요 {comment.likeCnt}개</Likes>
+                      </CommentInfo>
+                    </CommentContent>
+                  </CommentBox>
+                ))}
+              {loading ? <Loading /> : null}
             </>
           )}
+          <div ref={obsRef} />
         </CommentContainer>
       </InnerContainer>
     </>

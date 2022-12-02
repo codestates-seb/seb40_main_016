@@ -80,12 +80,15 @@ const Header = ({ popupHandler }: HeaderProps) => {
       e.preventDefault();
       let path = keyword ? `/?search=${keyword}` : "/";
       navigate(path);
-      setKeyword("");
+      if (!keyword && location.pathname === "/") {
+        window.location.reload();
+      }
     }
   };
 
   const onClick = () => {
     if (location.pathname === "/") {
+      navigate("/");
       window.location.reload();
     }
   };
@@ -95,10 +98,10 @@ const Header = ({ popupHandler }: HeaderProps) => {
       <InnerContainer className="inner">
         <LogoBox>
           <Link to="/">
-            <Logo className="logo" />
+            <Logo className="logo" onClick={onClick} />
           </Link>
           <Link to="/">
-            <MansaeCat className="logo-responsive" />
+            <MansaeCat className="logo-responsive" onClick={onClick} />
           </Link>
         </LogoBox>
         <SearchBox>

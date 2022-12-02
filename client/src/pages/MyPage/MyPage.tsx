@@ -11,6 +11,7 @@ import MyPageComments from "./MyPageComments";
 import MyPageSnacks from "./MyPageSnacks";
 import FollowPopUp from "../../components/MyPage/FollowPopUp";
 import FollowerPopUp from "../../components/MyPage/FollowerPopUp";
+import TopButton from "../../components/TopButton/TopButton";
 
 import { GetMyProfile } from "../../api/mypage";
 
@@ -199,6 +200,7 @@ const MyPage = ({ detailHandler, setArticleId }: Prop) => {
               </div>
             </>
           )}
+          <TopButton />
         </OuterContainer>
       </MyAccountPage>
     </>
