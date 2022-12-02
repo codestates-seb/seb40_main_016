@@ -10,6 +10,7 @@ import com.cocoa.catdog.comment.repository.CommentReportRepository;
 import com.cocoa.catdog.comment.repository.CommentRepository;
 import com.cocoa.catdog.exception.BusinessLogicException;
 import com.cocoa.catdog.exception.ExceptionCode;
+import com.cocoa.catdog.message.EventService;
 import com.cocoa.catdog.user.entity.User;
 import com.cocoa.catdog.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,7 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final CommentLikeRepository commentLikeRepository;
     private final CommentReportRepository commentReportRepository;
+    private final EventService eventService;
 
     /*
     * 댓글 생성
@@ -43,7 +45,9 @@ public class CommentService {
         Article article = articleService.findArticle(articleId);
         article.addComment(comment);                //article에 comment(댓글) 주입
 
-        return commentRepository.save(comment);
+        comment = commentRepository.save(comment);
+        eventService.sendGetCommentMessage(user, comment);
+        return comment;
     }
 
     /*

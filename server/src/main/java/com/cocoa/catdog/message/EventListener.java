@@ -13,8 +13,8 @@ public class EventListener {
 
     @TransactionalEventListener
     @Async
-    public void handleEvent(EventDto eventDto) {
+    public void handleEvent(EventDto eventDto) throws InterruptedException {
         log.info("~메세지전송~ articleId : {}", eventDto.getUrl());
-            sseEmitterService.send(eventDto);
+        sseEmitterService.send(eventDto);
     }
 }

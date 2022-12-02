@@ -15,6 +15,7 @@ import com.cocoa.catdog.exception.BusinessLogicException;
 import com.cocoa.catdog.exception.ExceptionCode;
 import com.cocoa.catdog.message.Event;
 import com.cocoa.catdog.message.EventDto;
+import com.cocoa.catdog.message.EventService;
 import com.cocoa.catdog.message.SseEmitterService;
 import com.cocoa.catdog.user.entity.User;
 import com.cocoa.catdog.user.repository.UserRepository;
@@ -38,15 +39,14 @@ import java.util.Optional;
 public class ArticleService {
     private final ArticleRepository articleRepository;
     private final ArticleImgRepository articleImgRepository;
-    private final UserRepository userRepository;
     private final UserService userService;
     private final LikeRepository likeRepository;
     private final ReportRepository reportRepository;
     private final CommentRepository commentRepository;
     private final S3Service s3Service;
-    private final SseEmitterService sseEmitterService;
     private final ApplicationEventPublisher eventPublisher;
     private final ArticleImgMapper mapper;
+    private final EventService eventService;
 
 
     @Value("${s3.articleDir}")
@@ -87,27 +87,10 @@ public class ArticleService {
         findUser.getArticles().add(article);
         article = articleRepository.save(article);
 
-        sendCreateArticleMessage(findUser, article);//<<<<<< sse
+        eventService.sendCreateArticleMessage(findUser, article);//<<<<<< sse
         return article;
     }
 
-    private void sendCreateArticleMessage (User user, Article article){
-        String type = "create new article";
-        String content = user.getUserId() + "번 유저가 새로운 글을 등록하셨습니다.";
-        String url = "articleId = " + article.getArticleId();
-        boolean isRead = false;
-        user.getFollowedUsers().forEach(follow -> {
-            EventDto eventDto = EventDto.builder()
-                    .type(type)
-                    .content(content)
-                    .url(url)
-                    .isRead(isRead)
-                    .userId(follow.getFollowingUser().getUserId())
-                    .build();
-            eventPublisher.publishEvent(eventDto);
-
-        });
-    }
 
     /*
      * 게시물 조회
