@@ -27,8 +27,12 @@ const Item = ({ itemId, itemImg, itemName, price, stock, setTotalCost, setSelect
 
     if (number > stock) {
       e.target.value = `${stock}`;
+      setQuantity(() => stock);
     } else if (number < 1) {
       e.target.value = `1`;
+      setQuantity(() => 1);
+    } else {
+      setQuantity(() => +e.target.value);
     }
   };
 
@@ -45,7 +49,7 @@ const Item = ({ itemId, itemImg, itemName, price, stock, setTotalCost, setSelect
               defaultValue={stock > 0 ? 1 : 0}
               max={stock}
               min={1}
-              onChange={changeQuantity /* (e) => setQuantity(() => +e.target.value) */}
+              onChange={changeQuantity}
               disabled={isChecked || stock <= 0 ? true : false}
             />
           </Price>

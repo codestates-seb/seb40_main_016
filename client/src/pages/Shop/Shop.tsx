@@ -38,7 +38,7 @@ const Shop = () => {
 
     OrderItems(selectedItems, token)
       .then(() => {
-        alert("교환 성공😺");
+        alert("교환 성공! 교환 내역은 마이페이지 간식탭에서 확인해주세요😺");
         window.location.reload();
       })
       .catch((e) => {
