@@ -8,13 +8,10 @@ import com.cocoa.catdog.auth.jwt.JwtTokenizer;
 import com.cocoa.catdog.user.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
@@ -32,19 +29,6 @@ public class SecurityConfiguration {
     private JwtTokenizer jwtTokenizer;
     private CustomAuthorityUtils authorityUtils;
     private UserService userService;
-
-// 순환 참고 회피를 위한 주입 방식 적용
-/*    public void setJwtTokenizer(JwtTokenizer jwtTokenizer) {
-        this.jwtTokenizer = jwtTokenizer;
-    }
-
-    public void setAuthorityUtils(CustomAuthorityUtils authorityUtils) {
-        this.authorityUtils = authorityUtils;
-    }
-
-    public void setUserService(UserService userService) {
-        this.userService = userService;
-    }*/
 
     public SecurityConfiguration(JwtTokenizer jwtTokenizer,
                                    CustomAuthorityUtils authorityUtils,
@@ -67,12 +51,12 @@ public class SecurityConfiguration {
                 .formLogin().disable()
                 .httpBasic().disable()
                 .exceptionHandling()  // 추가
-                .authenticationEntryPoint(new UserAuthenticationEntryPoint())  // 추가
-                .accessDeniedHandler(new UserAccessDeniedHandler())            // 추가
+                .authenticationEntryPoint(new UserAuthenticationEntryPoint())
+                .accessDeniedHandler(new UserAccessDeniedHandler())
                 .and()
-                .apply(new CustomFilterConfigurer())  // 추가
+                .apply(new CustomFilterConfigurer())
                 .and()
-                .authorizeHttpRequests(authorize -> authorize // url authorization 전체 추가
+                .authorizeHttpRequests(authorize -> authorize
                                 .anyRequest().permitAll()
                 )
                 .oauth2Login(oauth2 -> oauth2
@@ -86,9 +70,8 @@ public class SecurityConfiguration {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-//        configuration.setAllowedOrigins(List.of("*"));
         configuration.setAllowedOriginPatterns(List.of("*"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "PUT", "DELETE", "HEAD"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "PUT", "DELETE", "HEAD", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setExposedHeaders(List.of("*"));
 
