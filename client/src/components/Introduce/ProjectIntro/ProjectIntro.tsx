@@ -1,4 +1,4 @@
-import { Wrapper, Title, Intro, Section, Desc, Photo } from "./style";
+import { Wrapper, Title, Intro, Desc } from "./style";
 
 const ProjectIntro = () => {
   return (
@@ -6,62 +6,142 @@ const ProjectIntro = () => {
       <Wrapper>
         <Title>내 밥은 내가 번다냥!</Title>
         <Intro>
-          내 밥은 내가 번다냥은 반려동물의 사진과 글을 올리는 서비스입니다.
+          📷 내 밥은 내가 번다냥은 반려동물의 사진과 글을 올리는 서비스입니다.
           <br />
-          동물 계정으로 가입해 사진을 올리고 좋아요와 간식을 받아보세요! 간식을 모으면 상점에서 간식과 물품을 교환할 수
-          있습니다.
+          😺 동물 계정으로 가입해 사진을 올리고 좋아요와 간식을 받아보세요! 간식을 모으면 상점에서 간식과 물품을 교환할
+          수 있습니다.
           <br />
-          사람 계정으로 가입해 좋아하는 동물에게 간식을 선물해보세요! 좋아하는 동물에게 실제 간식과 교환할 수 있는 알을
-          선물할 수 있습니다.
+          🧑 사람 계정으로 가입해 좋아하는 동물에게 간식을 선물해보세요! 좋아하는 동물에게 실제 간식과 교환할 수 있는
+          알을 선물할 수 있습니다.
         </Intro>
-        <Section className="ratio7-3">
+        <Desc>
+          <h3>회원가입</h3>
+          <img src="./assets/signup.gif" alt="회원가입 페이지" />
+          <ul>
+            <li>종을 선택해 종에 따라 다른 항목을 입력해 회원가입할 수 있습니다.</li>
+          </ul>
+        </Desc>
+        <Desc>
+          <h3>로그인</h3>
+          <img src="./assets/login.gif" alt="로그인 페이지" />
+          <img src="./assets/social-login.gif" alt="소셜 로그인 페이지" />
+          <ul>
+            <li>서비스내 자체 로그인 혹은 구글을 이용해 로그인 할 수 있습니다.</li>
+            <li>구글로 첫 로그인시 서비스 이용을 매끄럽게 하기위해 추가 정보 입력이 있습니다.</li>
+          </ul>
+        </Desc>
+        <Desc>
+          <h3>비밀번호 찾기</h3>
+          <img src="./assets/find-password.gif" alt="비밀번호 찾기 페이지" />
+          <ul>
+            <li>가입했던 이메일을 작성하면 해당 이메일로 임시 비밀번호를 전달합니다.</li>
+          </ul>
+        </Desc>
+        <Desc>
+          <h3>로그아웃</h3>
+          <img src="./assets/logout.gif" alt="로그아웃 페이지" />
+          <ul>
+            <li>상단에 있는 로그아웃 버튼으로 간편하게 로그아웃할 수 있습니다.</li>
+          </ul>
+        </Desc>
+        <Desc>
+          <h3>메인</h3>
+          <img src="./assets/main.webp" alt="메인 페이지" />
+          <ul>
+            <li>전체, 강아지, 고양이, 내가 구독한 계정 게시물로 필터링할 수 있습니다.</li>
+            <li>New(최신순), Favorite(좋아요)를 기준으로 정렬할 수 있습니다.</li>
+            <li>게시물에 마우스를 올리면 게시물이 받은 좋아요, 간식, 조회수를 볼 수 있습니다.</li>
+            <li>사진을 클릭하면 상세페이지로 이동할 수 있습니다.</li>
+          </ul>
+        </Desc>
+        <Desc>
           <Desc>
-            <h3>헤더</h3>
-            <img src="./assets/header.png" alt="" width="1000px" />
+            <h3>검색</h3>
+            <img src="./assets/search.gif" alt="검색 페이지" />
             <ul>
-              <li>로고를 누르면 메인 페이지로 돌아올 수 있습니다.</li>
-              <li>
-                검색창에서 검색어를 입력하고 엔터를 누르면 해당 키워드가 이름인 유저 혹은 키워드를 포함하고 있는 글이
-                검색됩니다.
-              </li>
-              <li>우측 아이콘은 차례대로 글 작성, 상점 이동, 마이페이지 이동, 로그아웃을 할 수 있습니다.</li>
+              <li>작성한 검색어를 포함한 유저를 조회합니다.</li>
+              <li>검색 결과물에서 필터와 정렬을 사용할 수 있습니다.</li>
             </ul>
           </Desc>
-          {/* <Photo><img src="./assets/cat-selfie-clipart.png" alt="" /></Photo> */}
-        </Section>
-        <Section className="ratio7-3">
-          <Desc>
-            <h3>마이페이지</h3>
-            <ul>
-              <img src="./assets/my-page.png" alt="" width="1000px" />
-              <li>
-                <p>
-                  좌측 상단의 아이콘은 필터입니다. 각각 전체, 강아지, 고양이, 내가 구독한 계정 게시물로 필터링할 수
-                  있습니다.
-                </p>
-                <img src="./assets/my-page-filter.png" alt="" />
-              </li>
-              <li>
-                <p>우측 상단의 버튼은 정렬입니다. New는 최신순, Favorite은 좋아요순으로 정렬할 수 있습니다.</p>
-                <img src="./assets/my-page-sort.png" alt="" />
-              </li>
-              <li>
-                <p>사진을 클릭하면 상세페이지로 이동할 수 있습니다.</p>
-                <img src="./assets/imageCard.png" alt="" />
-              </li>
-            </ul>
-          </Desc>
-          {/* <Photo><img src="./assets/cat-selfie-clipart.png" alt="" /></Photo> */}
-        </Section>
-        <Section className="ratio3-7">
-          {/* <Photo><img src="./assets/cat-selfie-clipart.png" alt="" /></Photo> */}
-          <Desc>
-            <h3>상세 페이지</h3>
-            <ul>
-              <li></li>
-            </ul>
-          </Desc>
-        </Section>
+          <h3>글 상세</h3>
+          <img src="./assets/detail.gif" alt="상세 페이지" />
+          <ul>
+            <li>
+              하트와 간식 모양을 클릭하면 각각 좋아요와 간식을 줄 수 있습니다 (❗단, 간식은 동물 계정에게만 줄 수
+              있습니다)
+            </li>
+            <li>북마크 표시를 클릭하면 게시물을 올린 계정을 팔로우할 수 있습니다.</li>
+            <li>댓글을 작성할 수 있고 작성된 댓글에 좋아요를 누를 수 있습니다.</li>
+            <li>
+              내가 올린 게시물, 댓글이라면 수정, 삭제, 신고, 취소 모두 할 수 있고 그게 아니라면 신고와 취소만
+              가능합니다.(❗신고 횟수 누적시 이용에 제한이 있습니다.)
+            </li>
+          </ul>
+        </Desc>
+        <Desc>
+          <h3>글 작성</h3>
+          <img src="./assets/write-article.gif" alt="글 작성 페이지" />
+          <ul>
+            <li>화면에 사진을 드래그하거나 컴퓨터에서 선택 버튼을 클릭해서 사진을 업로드할 수 있습니다.</li>
+            <li>
+              사진을 하나 이상 업로드하고 우측 하단에 뜨는 아이콘을 클릭해 추가로 사진을 업로드하거나 X버튼을 눌러
+              삭제할 수 있습니다.
+            </li>
+            <li>다음을 클릭하면 업로드한 사진을 볼 수 있고 글을 작성할 수 있습니다.</li>
+            <li>❗사진은 최대 3장까지 업로드 가능하며 각 이미지는 5MB를 넘지 않아야합니다.</li>
+          </ul>
+        </Desc>
+        <Desc>
+          <h3>상점</h3>
+          <img src="./assets/shop.gif" alt="상점 페이지" />
+          <ul>
+            <li>모은 알은 상점 페이지에서 반려동물 물품과 교환할 수 있습니다.</li>
+            <li>아래에서 현재 보유 알, 선택한 물품의 가격, 교환 후 남은 알을 볼 수 있습니다.</li>
+            <li>보유한 알보다 금액이 큰 물품을 선택할 경우 교환이 제한됩니다.</li>
+          </ul>
+        </Desc>
+        <Desc>
+          <h3>프로필 페이지</h3>
+          <img src="./assets/other-profile.gif" alt="프로필 페이지" />
+          <ul>
+            <li>상세페이지에서 다른 계정을 클릭했을 때 들어갈 수 있는 다른 계정의 프로필 페이지입니다.</li>
+            <li>해당 계정이 올린 게시물과 동물 계정일 경우 교환한 간식 내역을 확인할 수 있습니다.</li>
+            <li>프로필 정보와 팔로우, 팔로잉을 확인할 수 있으며 팔로우하거나 팔로우 취소를 할 수 있습니다.</li>
+          </ul>
+        </Desc>
+        <Desc>
+          <h3>마이페이지</h3>
+          <img src="./assets/my-page.gif" alt="마이페이지" />
+          <ul>
+            <li>프로필 정보와 팔로우, 팔로잉 목록을 볼 수 있습니다.</li>
+            <li>게시물 탭에서 내가 쓴 글과 간식을 준 글을 확인할 수 있습니다.</li>
+            <li>댓글 탭에서 내가 쓴 댓글을 확인할 수 있습니다.</li>
+            <li>간식 탭에서 상점에서 그동안 교환할 물품 정보를 확인할 수 있습니다.</li>
+            <li>❗동물 계정이 아닌 경우 간식을 교환할 수 없기 때문에 간식 탭을 이용할 수 없습니다.</li>
+          </ul>
+        </Desc>
+        <Desc>
+          <h3>프로필 편집</h3>
+          <img src="./assets/profile-change.gif" alt="프로필 편집 페이지" />
+          <ul>
+            <li>프로필 사진, 닉네임, 자기소개, 생년월일(동물 계정의 경우)를 변경할 수 있습니다.</li>
+          </ul>
+        </Desc>
+        <Desc>
+          <h3>비밀번호 변경</h3>
+          <img src="./assets/change-password.gif" alt="비밀번호 변경 페이지" />
+          <ul>
+            <li>현재 비밀번호가 일치하는지 확인하고 새로운 비밀번호로 변경할 수 있습니다.</li>
+          </ul>
+        </Desc>
+        <Desc>
+          <h3>회원탈퇴</h3>
+          <img src="./assets/delete-account.gif" alt="회원탈퇴 페이지" />
+          <ul>
+            <li>현재 비밀번호가 일치하는지 확인하고 회원 탈퇴를 진행할 수 있습니다.</li>
+            <li>작성했던 글을 삭제하지 않아도 회원탈퇴시 메인에서 작성했던 글이 사라집니다.</li>
+          </ul>
+        </Desc>
       </Wrapper>
     </>
   );
