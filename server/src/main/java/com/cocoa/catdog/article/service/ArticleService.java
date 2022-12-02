@@ -13,6 +13,8 @@ import com.cocoa.catdog.comment.repository.CommentRepository;
 import com.cocoa.catdog.config.aws.S3Service;
 import com.cocoa.catdog.exception.BusinessLogicException;
 import com.cocoa.catdog.exception.ExceptionCode;
+import com.cocoa.catdog.message.Event;
+import com.cocoa.catdog.message.EventDto;
 import com.cocoa.catdog.message.SseEmitterService;
 import com.cocoa.catdog.user.entity.User;
 import com.cocoa.catdog.user.repository.UserRepository;
@@ -81,20 +83,30 @@ public class ArticleService {
             }
         }
 
-
         article.setUser(findUser);
-
         findUser.getArticles().add(article);
-        return articleRepository.save(article);
+        article = articleRepository.save(article);
+
+        sendCreateArticleMessage(findUser, article);//<<<<<< sse
+        return article;
     }
 
-    //테스트
-    public Article saveArticleTest(Article article, Long userId) {
-        User findUser = userService.findUser(userId);
-        article.addUser(findUser);
+    private void sendCreateArticleMessage (User user, Article article){
+        String type = "create new article";
+        String content = user.getUserId() + "번 유저가 새로운 글을 등록하셨습니다.";
+        String url = "articleId = " + article.getArticleId();
+        boolean isRead = false;
+        user.getFollowedUsers().forEach(follow -> {
+            EventDto eventDto = EventDto.builder()
+                    .type(type)
+                    .content(content)
+                    .url(url)
+                    .isRead(isRead)
+                    .userId(follow.getFollowingUser().getUserId())
+                    .build();
+            eventPublisher.publishEvent(eventDto);
 
-        eventPublisher.publishEvent(findUser);
-        return articleRepository.save(article);
+        });
     }
 
     /*

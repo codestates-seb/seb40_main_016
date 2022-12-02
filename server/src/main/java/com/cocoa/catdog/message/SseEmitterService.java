@@ -1,6 +1,7 @@
 package com.cocoa.catdog.message;
 
 import com.cocoa.catdog.user.entity.User;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -16,15 +17,12 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 @Component
+@RequiredArgsConstructor
 @Slf4j
 public class SseEmitterService {
     private final EmitterRepository emitterRepository;
     private final EventRepository eventRepository;
-
-    SseEmitterService (EmitterRepository emitterRepository, EventRepository eventRepository) {
-        this.emitterRepository = emitterRepository;
-        this.eventRepository = eventRepository;
-    }
+    private final EventMapper eventMapper;
 
     SseEmitter add (Long userId, String lastEventId) {
         String emitterId = "U"+userId+"@"+System.currentTimeMillis();
@@ -64,8 +62,9 @@ public class SseEmitterService {
     }
 
 
-    public void send(Long userId, String type, String content, String url) {
-        Event event = eventRepository.save(Event.builder().userId(userId).type(type).content(content).url(url).isRead(false).build());
+    public void send(EventDto eventDto) {
+        Event event = eventRepository.save(eventMapper.DtoToEntity(eventDto));
+        Long userId = event.getUserId();
         String eventId = "U"+userId+"@"+System.currentTimeMillis();
         Object eventCache = emitterRepository.saveEventCache(eventId, event);
         Map<String, SseEmitter> emitters = emitterRepository.findAllEmitterStartWithByMemberId(userId.toString());
