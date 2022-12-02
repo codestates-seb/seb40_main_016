@@ -5,6 +5,7 @@ import InnerContainer from "../../components/InnerContainer/InnerContainer";
 import ProjectIntro from "../../components/Introduce/ProjectIntro/ProjectIntro";
 import RollingPaper from "../../components/Introduce/RollingPaper/RollingPaper";
 import Tab from "../../components/Tab/Tab";
+import TopButton from "../../components/TopButton/TopButton";
 
 import { Wrapper } from "./style";
 
@@ -42,6 +43,7 @@ const Introduce = () => {
                 }
               })()}
             </div>
+            <TopButton />
           </InnerContainer>
         </OuterContainer>
       </Wrapper>
