@@ -1,3 +1,4 @@
+/*
 package com.cocoa.catdog.message.kafka;
 
 import lombok.RequiredArgsConstructor;
@@ -25,3 +26,4 @@ public class KafkaController {
         return "test";
     }
 }
+*/

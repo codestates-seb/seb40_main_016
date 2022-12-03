@@ -1,3 +1,4 @@
+/*
 package com.cocoa.catdog.message.kafka;
 
 import org.springframework.kafka.annotation.KafkaListener;
@@ -12,4 +13,4 @@ public class KafkaConsumer {
     public void consume(String message) throws IOException {
         System.out.println(String.format("Consumed message : %s", message));
     }
-}
+}*/

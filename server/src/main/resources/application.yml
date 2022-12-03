@@ -31,35 +31,35 @@ spring:
             scope:
               - email
               - profile
-  kafka:
-    bootstrap-servers: localhost:9092
-    consumer:
-      # consumer bootstrap servers가 따로 존재하면 설정
-      enable-auto-commit: true
-      max-poll-records: 1000
-
-      # bootstrap-servers: 192.168.0.4:9092
-      # 식별 가능한 Consumer Group Id
-      group-id: oingdaddy
-      # Kafka 서버에 초기 offset이 없거나, 서버에 현재 offset이 더 이상 존재하지 않을 경우 수행할 작업을 설정
-      # latest: 가장 최근에 생산된 메시지로 offeset reset
-      # earliest: 가장 오래된 메시지로 offeset reset
-      # none: offset 정보가 없으면 Exception 발생
-      auto-offset-reset: latest
-      # 데이터를 받아올 때, key/value를 역직렬화
-      # JSON 데이터를 받아올 것이라면 JsonDeserializer
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-    producer:
-      # producer bootstrap servers가 따로 존재하면 설정
-      # bootstrap-servers: 3.34.97.97:9092
-
-      # 데이터를 보낼 때, key/value를 직렬화
-      # JSON 데이터를 보낼 것이라면 JsonDeserializer
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.apache.kafka.common.serialization.StringSerializer
-    template:
-      default-topic: oingdaddy
+#  kafka:
+#    bootstrap-servers: localhost:9092
+#    consumer:
+#      # consumer bootstrap servers가 따로 존재하면 설정
+#      enable-auto-commit: true
+#      max-poll-records: 1000
+#
+#      # bootstrap-servers: 192.168.0.4:9092
+#      # 식별 가능한 Consumer Group Id
+#      group-id: oingdaddy
+#      # Kafka 서버에 초기 offset이 없거나, 서버에 현재 offset이 더 이상 존재하지 않을 경우 수행할 작업을 설정
+#      # latest: 가장 최근에 생산된 메시지로 offeset reset
+#      # earliest: 가장 오래된 메시지로 offeset reset
+#      # none: offset 정보가 없으면 Exception 발생
+#      auto-offset-reset: latest
+#      # 데이터를 받아올 때, key/value를 역직렬화
+#      # JSON 데이터를 받아올 것이라면 JsonDeserializer
+#      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+#      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+#    producer:
+#      # producer bootstrap servers가 따로 존재하면 설정
+#      # bootstrap-servers: 3.34.97.97:9092
+#
+#      # 데이터를 보낼 때, key/value를 직렬화
+#      # JSON 데이터를 보낼 것이라면 JsonDeserializer
+#      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+#      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+#    template:
+#      default-topic: oingdaddy
 mail:
   address:
     admin: admin@gmail.com
