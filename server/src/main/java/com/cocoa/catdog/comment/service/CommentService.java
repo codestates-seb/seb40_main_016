@@ -10,7 +10,7 @@ import com.cocoa.catdog.comment.repository.CommentReportRepository;
 import com.cocoa.catdog.comment.repository.CommentRepository;
 import com.cocoa.catdog.exception.BusinessLogicException;
 import com.cocoa.catdog.exception.ExceptionCode;
-import com.cocoa.catdog.message.EventService;
+import com.cocoa.catdog.message.event.EventService;
 import com.cocoa.catdog.user.entity.User;
 import com.cocoa.catdog.user.service.UserService;
 import lombok.RequiredArgsConstructor;

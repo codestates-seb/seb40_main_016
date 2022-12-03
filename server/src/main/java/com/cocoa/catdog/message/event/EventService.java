@@ -1,10 +1,9 @@
-package com.cocoa.catdog.message;
+package com.cocoa.catdog.message.event;
 
 import com.cocoa.catdog.article.entity.Article;
 import com.cocoa.catdog.comment.entity.Comment;
 import com.cocoa.catdog.user.entity.User;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;

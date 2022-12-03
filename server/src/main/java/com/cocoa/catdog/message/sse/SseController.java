@@ -1,16 +1,14 @@
-package com.cocoa.catdog.message;
+package com.cocoa.catdog.message.sse;
 
 import com.cocoa.catdog.auth.jwt.JwtTokenizer;
+import com.cocoa.catdog.message.sse.SseEmitterService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
-
-import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor

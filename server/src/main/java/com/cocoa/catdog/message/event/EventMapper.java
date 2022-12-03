@@ -1,5 +1,6 @@
-package com.cocoa.catdog.message;
+package com.cocoa.catdog.message.event;
 
+import com.cocoa.catdog.message.event.Event;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 

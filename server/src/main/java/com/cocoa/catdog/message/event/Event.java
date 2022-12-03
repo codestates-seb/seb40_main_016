@@ -1,4 +1,4 @@
-package com.cocoa.catdog.message;
+package com.cocoa.catdog.message.event;
 
 import com.cocoa.catdog.user.entity.User;
 import lombok.Builder;
