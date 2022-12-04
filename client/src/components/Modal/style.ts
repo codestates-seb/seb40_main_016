@@ -102,7 +102,7 @@ export const PrevNextBtn = styled.button`
   background-color: var(--color-white);
   padding: 8px 13px;
   border: none;
-  font-size: var(--fs-pc-regular);
+  font-size: var(--fs-pc-large);
   font-weight: 600;
   color: var(--color-orange);
   cursor: pointer;

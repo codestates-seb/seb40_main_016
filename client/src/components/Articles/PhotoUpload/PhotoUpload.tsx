@@ -82,8 +82,8 @@ const PhotoUpload = ({
       const deletePhoto = uploadedPhotos.findIndex(isDeleteImage);
 
       if (!uploadedPhotos[deletePhoto].file) {
-        const test = uploadedPhotos[deletePhoto].uploadedPhoto;
-        setDeletePhotos((photos) => [...photos, test]);
+        const deletedPhoto = uploadedPhotos[deletePhoto].uploadedPhoto;
+        setDeletePhotos((photos) => [...photos, deletedPhoto]);
       }
 
       uploadedPhotos.splice(deletePhoto, 1);

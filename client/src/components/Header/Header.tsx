@@ -13,8 +13,8 @@
   - 부자연스러운 애니메이션 삭제
 */
 
-import { KeyboardEvent, ChangeEvent, FormEvent, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { KeyboardEvent, ChangeEvent, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useRecoilState, useSetRecoilState } from "recoil";
 
 import InnerContainer from "../InnerContainer/InnerContainer";
@@ -51,6 +51,7 @@ const Header = ({ popupHandler }: HeaderProps) => {
   const [userInfo, setUserInfo] = useRecoilState(userInfoState);
   const [keyword, setKeyword] = useState<string>("");
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleMenuOn = () => {
     setMenuList(!menuList);
@@ -79,7 +80,16 @@ const Header = ({ popupHandler }: HeaderProps) => {
       e.preventDefault();
       let path = keyword ? `/?search=${keyword}` : "/";
       navigate(path);
-      setKeyword("");
+      if (!keyword && location.pathname === "/") {
+        window.location.reload();
+      }
+    }
+  };
+
+  const onClick = () => {
+    if (location.pathname === "/") {
+      navigate("/");
+      window.location.reload();
     }
   };
 
@@ -88,10 +98,10 @@ const Header = ({ popupHandler }: HeaderProps) => {
       <InnerContainer className="inner">
         <LogoBox>
           <Link to="/">
-            <Logo className="logo" />
+            <Logo className="logo" onClick={onClick} />
           </Link>
           <Link to="/">
-            <MansaeCat className="logo-responsive" />
+            <MansaeCat className="logo-responsive" onClick={onClick} />
           </Link>
         </LogoBox>
         <SearchBox>

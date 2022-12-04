@@ -47,17 +47,15 @@ export const PhotoListWrapper = styled.div`
   left: 1%;
   top: 60%;
   display: flex;
-  max-width: 600px;
-  max-height: 200px;
+  width: 600px;
+  height: 200px;
   background-color: rgba(0, 0, 0, 0.8);
   border-radius: 10px;
   padding: 30px;
 
   .addIcon {
-    position: fixed;
-    top: 71%;
-    right: 8%;
-    width: 80px;
+    width: 50px;
+    margin-left: 10px;
     fill: var(--color-white);
     cursor: pointer;
   }

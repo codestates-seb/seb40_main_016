@@ -34,6 +34,10 @@ const NewArticle = ({ isOn, isEdit = false, setIsOn, setIsEdit, articleId }: Art
   };
 
   const resetPhoto = () => {
+    if (uploadedPhotos.length > 0) {
+      uploadedPhotos.forEach((photo) => URL.revokeObjectURL(photo.uploadedPhoto));
+    }
+
     setIsPhoto(() => true);
     setUploadedPhotos(() => []);
     setPreviewPhotos(() => []);

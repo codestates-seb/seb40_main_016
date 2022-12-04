@@ -23,7 +23,7 @@ const LoginForm = ({ loginInfo, setLoginInfo }: Prop) => {
         <Input
           type="text"
           value={loginInfo.email}
-          placeholder="이메일을 입력하세요"
+          placeholder="example@email.com"
           onChange={onChangeEmail}
           height="50px"
           inputColor="ivory"

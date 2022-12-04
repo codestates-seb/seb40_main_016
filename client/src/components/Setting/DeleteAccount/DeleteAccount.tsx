@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import styled from "styled-components";
 
 import Button from "../../Button/Button";
@@ -77,11 +77,7 @@ const DeleteAccount = ({ token, movePage }: SettingProps) => {
   const [isOn, setIsOn] = useState<boolean>(false);
 
   const changePassword = (e: ChangeEvent<HTMLInputElement>) => {
-    setPassword(() => e.target.value);
-  };
-
-  const blurCurPassword = () => {
-    CheckPassword(token, password)
+    CheckPassword(token, e.target.value)
       .then((res) => {
         if (res.status === 200) {
           setIsError(() => false);
@@ -92,6 +88,8 @@ const DeleteAccount = ({ token, movePage }: SettingProps) => {
           setIsError(() => true);
         }
       });
+
+    setPassword(() => e.target.value);
   };
 
   const deleteUser = () => {
@@ -135,7 +133,6 @@ const DeleteAccount = ({ token, movePage }: SettingProps) => {
         label="비밀번호 입력"
         isError={isError}
         errorMsg="현재 비밀번호와 일치하게 입력해 주세요."
-        onBlur={blurCurPassword}
       />
       <Button
         width="200px"
