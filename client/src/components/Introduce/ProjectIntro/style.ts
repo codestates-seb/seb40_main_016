@@ -12,58 +12,12 @@ export const Title = styled.h2`
 
 export const Intro = styled.p`
   margin-bottom: 70px;
-  font-size: 14px;
-  line-height: 18px;
+  line-height: 30px;
 `;
 
-export const Section = styled.section`
-  display: flex;
+export const Desc = styled.section`
   margin-bottom: 40px;
 
-  &.ratio7-3 {
-    flex-direction: column;
-
-    @media screen and (min-width: 736px) {
-      flex-direction: row;
-    }
-
-    > div:first-child {
-      width: 100%;
-      @media screen and (min-width: 736px) {
-        width: 70%;
-      }
-    }
-    > div:nth-child(2) {
-      width: 100%;
-      @media screen and (min-width: 736px) {
-        width: 30%;
-      }
-    }
-  }
-
-  &.ratio3-7 {
-    flex-direction: column-reverse;
-
-    @media screen and (min-width: 736px) {
-      flex-direction: row;
-    }
-
-    > div:first-child {
-      width: 100%;
-      @media screen and (min-width: 736px) {
-        width: 30%;
-      }
-    }
-    > div:nth-child(2) {
-      width: 100%;
-      @media screen and (min-width: 736px) {
-        width: 70%;
-      }
-    }
-  }
-`;
-
-export const Desc = styled.div`
   h3 {
     margin-bottom: 16px;
     font-size: 20px;
@@ -71,15 +25,18 @@ export const Desc = styled.div`
     color: var(--color-orange);
   }
 
-  p {
-    line-height: 22px;
+  ul {
+    list-style: square;
+    margin: 0 20px;
   }
-`;
 
-export const Photo = styled.div`
+  li {
+    padding: 10px 0;
+  }
+
   img {
-    aspect-ratio: 1;
-    object-fit: contain;
-    width: 100%;
+    max-width: 100%;
+    width: 800px;
+    margin-bottom: 10px;
   }
 `;

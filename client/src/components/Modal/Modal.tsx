@@ -21,7 +21,7 @@
   - 
 */
 
-import React from "react";
+import React, { useRef } from "react";
 import { Bg, Popup, PopupHeader, PrevNextBtn } from "./style";
 import { ReactComponent as CloseBtn } from "../../assets/img/close-icon.svg";
 import { ReactComponent as DoneBtn } from "../../assets/img/check-icon.svg";
@@ -54,12 +54,23 @@ const Modal = ({
   onTitlePrevBtnClick,
   onCloseBefore,
 }: Prop) => {
+  const outSection = useRef();
   const HandleOnOff = () => {
     setIsOn(!isOn);
   };
 
   return (
-    <Bg bg={bg} isOn={isOn}>
+    <Bg
+      bg={bg}
+      isOn={isOn}
+      ref={outSection}
+      onClick={(e) => {
+        if (outSection.current === e.target) {
+          if (onCloseBefore) onCloseBefore();
+          setIsOn(false);
+        }
+      }}
+    >
       {bg && (
         <CloseBtn
           onClick={() => {

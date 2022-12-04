@@ -1,7 +1,6 @@
 import styled from "styled-components";
 
 export const Wrapper = styled.div`
-  display: none;
   position: absolute;
   bottom: 0;
   left: -10px;
@@ -28,10 +27,6 @@ export const Wrapper = styled.div`
     background-color: var(--color-white);
     border-top: 1px solid var(--color-gray);
     border-right: 1px solid var(--color-gray);
-  }
-
-  &.active {
-    display: block;
   }
 `;
 

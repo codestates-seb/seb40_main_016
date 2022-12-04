@@ -14,6 +14,15 @@ export interface DetailData {
   updatedAt: string;
   view: number;
   yummyCnt: number;
+  gotLiked: boolean;
+  user?: User;
+}
+
+interface User {
+  userId?: number;
+  userImg?: string;
+  userName?: string;
+  userStatus?: string;
 }
 
 export interface Articles {

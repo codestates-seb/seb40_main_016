@@ -32,11 +32,9 @@ const Detail = ({ articleId, isDetailOn, detailHandler, editPopupHandler }: Prop
   const token = useRecoilValue(accessTokenState);
   const myInfo = useRecoilValue(userInfoState);
   const [data, setData] = useState<DetailData>();
-  const [authorType, setAauthorType] = useState<"PERSON" | "CAT" | "DOG">("PERSON");
-  const [authorNickname, setAuthorNickname] = useState<string>("");
+  const [authorType, setAauthorType] = useState<"PERSON" | "CAT" | "DOG">();
+  const [modalName, setModalName] = useState<string>("");
   const [authorId, setAuthorId] = useState<number | null>(null);
-  const [likeCnt, setLikeCnt] = useState<number>(0);
-  const [gotLiked, setGotLiked] = useState<boolean>(false);
   const [articleImg, setArticleImg] = useState<Images[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const myId = myInfo.userId;
@@ -107,10 +105,9 @@ const Detail = ({ articleId, isDetailOn, detailHandler, editPopupHandler }: Prop
         .then((res) => {
           setData(res.data);
           setAuthorId(res.data.user.userId);
-          setGotLiked(res.data.gotLiked);
-          setLikeCnt(res.data.likeCnt);
           setArticleImg(res.data.articleImg.images);
           setIsLoading(false);
+          return res.data;
         })
         .catch((e) => alert("게시글을 불러오는 데에 실패했습니다😿"));
 
@@ -154,7 +151,7 @@ const Detail = ({ articleId, isDetailOn, detailHandler, editPopupHandler }: Prop
   return (
     <>
       <Modal
-        title={`${authorNickname}님의 글`}
+        title={`${modalName}님의 글`}
         maxWidth="960px"
         bg={true}
         isOn={isDetailOn}
@@ -172,22 +169,12 @@ const Detail = ({ articleId, isDetailOn, detailHandler, editPopupHandler }: Prop
           </AreaSlider>
           <ArticleAndComments id="scroll-area" onScroll={onScroll}>
             <DetailArticle
-              userId={authorId}
-              createdAt={data?.createdAt}
-              content={data?.content}
+              articleData={data}
               setAuthorType={setAauthorType}
-              setAuthorNickname={setAuthorNickname}
+              setModalName={setModalName}
               detailHandler={detailHandler}
-              myId={myId}
             />
-            <ArticleLikeAndSnack
-              authorId={authorId}
-              articleId={articleId}
-              likeCnt={likeCnt}
-              yummyCnt={data?.yummyCnt}
-              authorType={authorType}
-              gotLiked={gotLiked}
-            />
+            <ArticleLikeAndSnack articleData={data} authorType={authorType} />
             <Comments
               comments={comments}
               setIsMorePopupOn={setIsMorePopupOn}

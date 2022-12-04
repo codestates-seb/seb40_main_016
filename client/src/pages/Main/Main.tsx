@@ -13,7 +13,6 @@ import Banner from "../../components/Banner/Banner";
 import NoContent from "../../components/NoContent/NoContent";
 import TopButton from "../../components/TopButton/TopButton";
 
-import isLoginState from "../../_state/isLoginState";
 import accessTokenState from "../../_state/accessTokenState";
 
 import {
@@ -40,110 +39,73 @@ interface Prop {
   setArticleId: Dispatch<SetStateAction<number>>;
 }
 
-const SIZE = 24;
-
 const Main = ({ detailHandler, setArticleId }: Prop) => {
   const navigate = useNavigate();
-  const [open, setOpen] = useState<boolean>(false);
   const [sort, setSort] = useState<string>("all");
   const [order, setOrder] = useState<string>("latest");
-  const [page, setPage] = useState<number>(0);
+  const [page, setPage] = useState<number>(1);
   const [totalPage, setTotalPage] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(false);
   const [isBannerOn, setIsBannerOn] = useState<boolean>(true);
   const obsRef = useRef(null);
-  const preventRef = useRef(true);
   const [articleLength, setArticleLength] = useState<number>(0);
   const [articles, setMainList] = useRecoilState<Articles[]>(mainListState);
-  const isLogin = useRecoilValue(isLoginState);
   const token = useRecoilValue(accessTokenState);
 
   const params = new URLSearchParams(window.location.search);
   const keyword = params.get("search");
-
-  const handleOpen = () => {
-    setOpen(!open);
-  };
-
-  const handleSortClick = (sort: string) => {
-    setSort(sort);
-    setPage(1);
-  };
-
-  const handleOrderClick = (order: "latest" | "likes") => {
-    setOrder(order);
-    setPage(1);
-  };
 
   const handleImgBoxClick = (articleId: number) => {
     setArticleId(articleId);
     detailHandler();
   };
 
+  const handleSortClick = async (sortArg: string) => {
+    setSort(sortArg);
+    getArticles(1, sortArg, order, token, keyword);
+  };
+
+  const handleOrderClick = async (orderArg: "latest" | "likes") => {
+    setOrder(orderArg);
+    getArticles(1, sort, orderArg, token, keyword);
+  };
+
+  const getArticles = (page: number, sort: string, order: string, token: string | null, keyword: string) => {
+    setLoading(true);
+
+    GetMain(page, sort, order, token, keyword).then((res) => {
+      setArticleLength(res.data.data.length);
+      if (res.data.pageInfo.page === 1) {
+        setMainList(res.data.data);
+        setPage(2);
+      } else {
+        setMainList(articles.concat(res.data.data));
+        setPage((prev) => prev + 1);
+      }
+      setTotalPage(res.data.pageInfo.totalPages);
+      setLoading(false);
+    });
+  };
+
   useEffect(() => {
-    const observer = new IntersectionObserver(obsHandler);
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && page <= totalPage) {
+        getArticles(page, sort, order, token, keyword);
+      }
+    });
+
     if (obsRef.current) {
       observer.observe(obsRef.current);
     }
+
     return () => {
       observer.disconnect();
     };
-  }, []);
+  }, [page, totalPage, order, sort, keyword, token]);
 
   useEffect(() => {
-    if (page !== 0 && page <= totalPage) getArticles();
-  }, [page]);
-
-  useEffect(() => {
-    if (page !== 0) getArticles();
-  }, [sort, order]);
-
-  useEffect(() => {
-    setPage(1);
+    if (keyword) getArticles(1, sort, order, token, keyword);
   }, [keyword]);
-
-  const obsHandler = (entries: any) => {
-    const target = entries[0];
-
-    if (target.isIntersecting && preventRef.current) {
-      preventRef.current = false;
-
-      if (page === 0) {
-        setPage((prev) => prev + 1);
-      } else if (articleLength === SIZE) {
-        setPage((prev) => prev + 1);
-      }
-    }
-  };
-
-  const getArticles = () => {
-    setLoading(true);
-    if (isLogin) {
-      GetMain(page, sort, order, token, keyword).then((res: any) => {
-        setArticleLength(res.data.data.length);
-        if (res.data.pageInfo.page === 1) {
-          setMainList(res.data.data);
-        } else {
-          setMainList(articles.concat(res.data.data));
-        }
-        preventRef.current = true;
-        setTotalPage(res.data.pageInfo.totalPages);
-        setLoading(false);
-      });
-    } else {
-      GetMain(page, sort, order, null, keyword).then((res: any) => {
-        setArticleLength(res.data.data.length);
-        if (res.data.pageInfo.page === 1) {
-          setMainList(res.data.data);
-        } else {
-          setMainList(articles.concat(res.data.data));
-        }
-        preventRef.current = true;
-        setTotalPage(res.data.pageInfo.totalPages);
-        setLoading(false);
-      });
-    }
-  };
 
   const checkScroll = () => {
     if (window.scrollY < 60) {
@@ -234,21 +196,18 @@ const Main = ({ detailHandler, setArticleId }: Prop) => {
                       <ImageCard
                         className="img-card"
                         imgUrl={article.articleImg.images[0].imgUrl}
-                        onClick={handleOpen}
+                        onClick={() => {}}
                       ></ImageCard>
                     </ImgBox>
                   ))}
-                  {loading ? (
+                  {loading &&
                     Array(8)
                       .fill(0)
                       .map((_, i) => (
                         <ImgBox key={i}>
                           <ImageSkeleton />
                         </ImgBox>
-                      ))
-                  ) : (
-                    <></>
-                  )}
+                      ))}
                 </ImgContainer>
               </>
             )}

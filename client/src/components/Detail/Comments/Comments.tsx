@@ -8,6 +8,7 @@ import userInfoState from "../../../_state/userInfoState";
 
 import { Wrapper, NoComments, EndPoint } from "./style";
 import { CommentType } from "../../../types/comment";
+import { GetComments } from "../../../api/comment";
 
 interface Prop {
   comments: CommentType[];
@@ -31,9 +32,10 @@ const Comments = ({
   detailHandler,
 }: Prop) => {
   const myInfo = useRecoilValue(userInfoState);
+  const myId = myInfo.userId;
 
   const checkIsMyComment = (writerId: number) => {
-    writerId === myInfo.userId ? setIsMyComment(true) : setIsMyComment(false);
+    writerId === myId ? setIsMyComment(true) : setIsMyComment(false);
   };
 
   const onMoreClick = (item: CommentType) => {

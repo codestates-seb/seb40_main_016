@@ -20,6 +20,7 @@ const Top = styled.button`
   box-shadow: 0px 2px 10px 0px var(--color-gray);
   border: none;
   border-radius: 40px;
+  font-weight: 700;
 
   &:hover {
     background-color: var(--color-ivory);
@@ -33,8 +34,6 @@ const Top = styled.button`
 `;
 
 const TopButton = () => {
-  const [showButton, setShowButton] = useState<Boolean>(false);
-
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
@@ -42,29 +41,12 @@ const TopButton = () => {
     });
   };
 
-  useEffect(() => {
-    const handleShowButton = () => {
-      if (window.screenY > 20) {
-        setShowButton(true);
-      } else {
-        setShowButton(false);
-      }
-    };
-
-    window.addEventListener("scroll", handleShowButton);
-    return () => {
-      window.removeEventListener("scroll", handleShowButton);
-    };
-  }, []);
-
   return (
-    showButton && (
-      <TopButtonContainer>
-        <Top onClick={scrollToTop} type="button">
-          Top
-        </Top>
-      </TopButtonContainer>
-    )
+    <TopButtonContainer>
+      <Top onClick={scrollToTop} type="button">
+        <span>Top</span>
+      </Top>
+    </TopButtonContainer>
   );
 };
 

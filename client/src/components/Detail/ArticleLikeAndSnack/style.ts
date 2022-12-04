@@ -20,8 +20,7 @@ export const Wrapper = styled.div`
 `;
 
 export const GroupBtn = styled.div`
-  flex-shrink: 0;
-  display: inline-block;
+  display: flex;
 
   > div:nth-child(1) {
     margin-right: 5px;

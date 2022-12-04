@@ -26,3 +26,19 @@ export const NoComments = styled.div`
 export const EndPoint = styled.div`
   height: 50px;
 `;
+
+export const PopupWrapper = styled.div`
+  position: fixed;
+  > div {
+    height: 100vh;
+    width: 100vw;
+  }
+`;
+
+export const EditPopupWrapper = styled.div`
+  position: fixed;
+  > div {
+    height: 100vh;
+    width: 100vw;
+  }
+`;

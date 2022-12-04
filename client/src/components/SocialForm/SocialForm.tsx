@@ -114,7 +114,7 @@ const SocialForm = ({ userInfo, setUserInfo, setHasNoError }: Prop) => {
               fontSize="pc-regular"
               label={userInfo.userType === "PERSON" ? "닉네임" : "이름"}
               isError={userNameErr}
-              errorMsg="한글, 영문, 숫자 조합 2-10자리로 입력해 주세요."
+              errorMsg="2-10자리로 입력해 주세요.(한글, 영문, 숫자 가능)"
             />
             <Input
               type="password"

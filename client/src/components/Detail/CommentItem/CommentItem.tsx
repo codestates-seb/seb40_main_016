@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 
 import Avatar from "../../Avatar/Avatar";
-import ReactionBtn from "../ReactionBtn/ReactionBtn";
+import CommentLikeBtn from "../Reactions/CommentLikeBtn/CommentLikeBtn";
 import { PostCommentLike, DeleteCommentLike } from "../../../api/comment";
 
 import { useRecoilValue } from "recoil";
@@ -96,15 +96,7 @@ const CommentItem = ({
             </Footer>
           </Conts>
           <AreaBtn>
-            <ReactionBtn
-              btnId={`comment-like${commentId}`}
-              btnType="like"
-              userType="CAT"
-              defaultStatus={gotLiked}
-              onActive={onCommentLike}
-              onInactive={offCommentLike}
-              disabled={!isLogin}
-            />
+            <CommentLikeBtn commentId={commentId} setCurrentLike={setCurrentLike} gotLiked={gotLiked} />
           </AreaBtn>
         </Comment>
       </GroupComment>
