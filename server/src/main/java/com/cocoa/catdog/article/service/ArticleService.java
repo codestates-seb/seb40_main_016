@@ -52,7 +52,6 @@ public class ArticleService {
     /*
      * 게시물 등록
      * */
-    @Async
     public void saveArticle(Article article, Long userId, List<MultipartFile> files) throws InterruptedException {
         User findUser = userService.findUser(userId);
         Long articleId = article.getArticleId();
