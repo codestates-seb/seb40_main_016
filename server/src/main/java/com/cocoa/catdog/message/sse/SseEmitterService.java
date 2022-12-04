@@ -58,7 +58,7 @@ public class SseEmitterService {
     }
 
 
-    public void send(EventDto eventDto) {
+    public void send(EventDto.Message eventDto) {
         Event event = eventRepository.save(eventMapper.DtoToEntity(eventDto));
         Long userId = event.getUserId();
         String eventId = "U"+userId+"@"+System.currentTimeMillis();

@@ -2,6 +2,7 @@
 package com.cocoa.catdog.message.kafka;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -10,22 +11,16 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class KafkaProducer {
-    //    @Value(value = "${message.topic.name}")
-//    private String topicName;
     private static final String TOPIC = "oingdaddy";
 
-    private final KafkaTemplate<String, String> kafkaTemplate;
+    private final KafkaTemplate<String, KafkaArticleDto> kafkaTemplate;
 
-
-    //    public void sendMessage(String message) {
-//        System.out.println(String.format("Produce message : %s", message));
-//        this.kafkaTemplate.send(topicName, message);
-//    }
     @Async
-    public void sendMessage(String message) {
-        ProducerRecord<String, String> stringStringProducerRecord = new ProducerRecord<>(TOPIC, "key", "value");
-        System.out.println(String.format("Produce message : %s", message));
-        this.kafkaTemplate.send(stringStringProducerRecord);
+    public void sendObject(KafkaArticleDto kafkaArticleDto) {
+        log.info("ArticlePost : {}", kafkaArticleDto.toString());
+        kafkaTemplate.send(TOPIC, kafkaArticleDto);
     }
-}*/
+}
+*/

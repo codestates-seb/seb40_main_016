@@ -55,7 +55,7 @@ dependencies {
 	implementation 'com.h2database:h2'
 	runtimeOnly 'com.h2database:h2'
 
-
+	implementation group: 'commons-fileupload', name: 'commons-fileupload', version: '1.4'
 
 	// mapstruct
 	implementation 'org.mapstruct:mapstruct:1.5.3.Final'
