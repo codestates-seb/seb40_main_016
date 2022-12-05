@@ -95,12 +95,125 @@ https://givemesnack.me/
   
 <br/>
 
-## Demo
-
+## 📺 서비스 시연
+<html>
+<table>
+  <tr>
+    <th>
+      회원가입
+    </th>
+    <th>
+      로그인
+    </th>
+    <th>
+      소셜로그인
+    </th>
+  </tr>
+  <tr>
+    <td>
+      <img src="https://user-images.githubusercontent.com/63777183/205606606-efb49407-29ce-4715-bffc-ea77365a68ab.gif" alt="signup page" width = 100%>
+    </td>
+    <td>
+      <img src="https://user-images.githubusercontent.com/63777183/205606058-e73b374c-d26b-46ed-a35e-6e46d004c092.gif"  alt="login page" width = 100% >
+    </td>
+    <td>
+      <img src="https://user-images.githubusercontent.com/63777183/205606866-b1e42dfb-a4e9-41e4-9373-7d3f613d84b6.gif" alt="social login" width = 100%>
+    </td>
+   </tr> 
+  <tr>
+    <th>
+      비밀번호 찾기
+    </th>
+    <th>
+      로그아웃
+    </th>
+    <th>
+      메인 페이지
+    </th>
+  </tr>
+  <tr>
+    <td>
+      <img src="https://user-images.githubusercontent.com/63777183/205607091-e0c52c8d-cd08-461e-b003-091144a4a964.gif"  alt="find password" width = 100%>
+    </td>
+    <td>
+      <img src="https://user-images.githubusercontent.com/63777183/205607474-f21ee862-3f52-43fb-8770-0763f5654782.gif" alt="logout" width = 100%>
+    </td>
+    <td>
+      <img src="https://user-images.githubusercontent.com/63777183/205613430-276705cf-a17b-409c-8594-60feca77903e.gif" alt="logout" width = 100%>
+    </td>
+   </tr>
+  <tr>
+    <th>
+      검색
+    </th>
+    <th>
+      글상세
+    </th>
+    <th>
+      글작성
+    </th>
+  </tr>
+   <tr>
+    <td>
+      <img src="https://user-images.githubusercontent.com/63777183/205614106-9bee0664-cbd5-428f-8b12-4dde938fda63.gif" alt="search" width = 100%>
+    </td>
+    <td>
+      <img src="https://user-images.githubusercontent.com/63777183/205614488-06360805-38fd-4370-863b-f00bdf5ba1ad.gif" alt="detail" width = 100%>
+    </td>
+    <td>
+      <img src="https://user-images.githubusercontent.com/63777183/205614851-c2b6cd8b-2dc2-4e09-a6c1-fa00421326ad.gif" alt="write" width = 100%>
+    </td>
+   </tr>
+  <tr>
+    <th>
+      상점
+    </th>
+    <th>
+      프로필
+    </th>
+    <th>
+      마이페이지
+    </th>
+  </tr>
+  <tr>
+    <td>
+      <img src="https://user-images.githubusercontent.com/63777183/205615919-a82da452-67b2-4fb6-bfce-13f7b6ba56a0.gif" alt="shop" width = 100%>
+    </td>
+    <td>
+      <img src="https://user-images.githubusercontent.com/63777183/205615811-c34dd78d-df92-49a0-9a87-5033e9cd498a.gif" alt="profile" width = 100%>
+    </td>
+    <td>
+      <img src="https://user-images.githubusercontent.com/63777183/205615723-1002a03e-45d3-4eff-b90a-b58e2b92591d.gif" alt="my page" width = 100%>
+    </td>
+   </tr>
+  <tr>
+    <th>
+      프로필 편집
+    </th>
+    <th>
+      비밀번호 변경
+    </th>
+    <th>
+      회원탈퇴
+    </th>
+  </tr>
+  <tr>
+    <td>
+      <img src="https://user-images.githubusercontent.com/63777183/205616693-4f6159c3-8ba0-4532-8982-8b7daf01e036.gif" alt="edit profile" width = 100%>
+    </td>
+    <td>
+      <img src="https://user-images.githubusercontent.com/63777183/205616783-311d9c6e-59ab-40fc-a020-11275fdceed9.gif" alt="password change" width = 100%>
+    </td>
+    <td>
+      <img src="https://user-images.githubusercontent.com/63777183/205616853-4da66029-27ec-4a8e-8cec-b01a518afdbf.gif" alt="delete account" width = 100%>
+    </td>
+   </tr>
+</table>
+</html>
 
 <br/>
 
-## Commit Message
+## 🔖커밋 컨벤션
 |Tag Name|Description|
 |------|---|
 |✨ feat|새로운 기능 추가|
