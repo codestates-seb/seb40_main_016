@@ -1,4 +1,5 @@
-🔨리드미 작성중 중간 반영
+![title_대지 1](https://user-images.githubusercontent.com/63777183/205604346-ec4856e2-f17c-43d2-a890-57e6cebc5249.svg)
+
 
 ## 🐾 배포링크
 https://givemesnack.me/
@@ -77,17 +78,25 @@ https://givemesnack.me/
 
 ## ⚙️기술스텍
 
-###### FE
+###### Frontend
 ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
 ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
 ![Styled Components](https://img.shields.io/badge/styled--components-DB7093?style=for-the-badge&logo=styled-components&logoColor=white)
 ![Recoil](https://img.shields.io/badge/Recoil-3578E5?style=for-the-badge&logo=Recoil&logoColor=black)
 ![Axios](https://img.shields.io/badge/Axios-181717?style=for-the-badge&logo=Axios&logoColor=white)
 ![ESLint](https://img.shields.io/badge/ESLint-4B3263?style=for-the-badge&logo=eslint&logoColor=white)
-![Prettier](https://img.shields.io/badge/Prettier-F7B93E?style=for-the-badge&logo=Prettier&logoColor=black)
+![Prettier](https://img.shields.io/badge/Prettier-F7B93E?style=for-the-badge&logo=Prettier&logoColor=black) <img src="https://img.shields.io/badge/AmazonS3-339933?style=for-the-badge&logo=AmazonS3&logoColor=white">
 
-###### BE
+###### Backend
 <img src="https://img.shields.io/badge/java 11-007396?style=for-the-badge&logo=OpenJDK&logoColor=white"> <img src="https://img.shields.io/badge/Spring Boot-6DB33F?style=for-the-badge&logo=Spring Boot&logoColor=white"> <img src="https://img.shields.io/badge/Spring Security-6DB33F?style=for-the-badge&logo=Spring Security&logoColor=white"> <img src="https://img.shields.io/badge/Spring Data JPA-0ABF53?style=for-the-badge"> ![MySQL](https://img.shields.io/badge/mysql-%2300f.svg?style=for-the-badge&logo=mysql&logoColor=white) <img src="https://img.shields.io/badge/QueryDsl-0769AD?style=for-the-badge&logo=QueryDsl&logoColor=white"> ![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white) <img src="https://img.shields.io/badge/Oauth2-EB5424?style=for-the-badge&logo=&logoColor=white"> ![JWT](https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens)
+
+###### Team Collaboration Tool
+![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white) ![Discord](https://img.shields.io/badge/Discord-%235865F2.svg?style=for-the-badge&logo=discord&logoColor=white) ![Gather Town](https://img.shields.io/badge/GatherTown-%4285F4.svg?style=for-the-badge&logo=GatherTown&logoColor=white)
+  
+<br/>
+
+## Demo
+
 
 <br/>
 
