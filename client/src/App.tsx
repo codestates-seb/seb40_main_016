@@ -17,12 +17,14 @@ import Setting from "./pages/Setting/Setting";
 import InfoSocialSet from "./pages/InfoSocialSet/InfoSocialSet";
 import Introduce from "./pages/Introduce/Introduce";
 import PendingLogin from "./pages/PendingLogin/PendingLogin";
+import SubAlert from "./components/SubAlert/SubAlert";
 
 function App() {
   const [isOn, setIsOn] = useState<boolean>(false);
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [isDetailOn, setIsDetailOn] = useState<boolean>(false);
   const [articleId, setArticleId] = useState<number>(null);
+  // const eventSource = new EventSource(`/sse`);
 
   const createPopupHandler = () => {
     setIsEdit(false);
@@ -56,6 +58,7 @@ function App() {
   return (
     <>
       <BrowserRouter>
+        <SubAlert />
         <ScrollToTop />
         <Header popupHandler={createPopupHandler} />
         <Routes>
