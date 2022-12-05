@@ -1,11 +1,11 @@
 🔨리드미 작성중 중간 반영
 
-### 🐾 배포링크
+## 🐾 배포링크
 https://givemesnack.me/
 
 <br/>
 
-### 🐈 프로젝트 소개
+## 🐈 프로젝트 소개
 📷 **내 밥은 내가 번다냥**은 반려동물의 사진과 글을 올리는 서비스입니다.<br/>
 😺 **동물 계정**으로 가입해 사진을 올리고 좋아요와 간식을 받아보세요! <br/>
 간식을 모으면 상점에서 간식과 물품을 교환할 수 있습니다.<br/>
@@ -14,13 +14,13 @@ https://givemesnack.me/
 
 <br/>
 
-### ☕️ Cocoa
+## ☕️ Cocoa
 팀명 "코코아"는 코딩코딩아이조아의 줄임말로써,
 즐겁게 코딩하자는 의미를 담았습니다.
 
 <br/>
 
-### 👨‍👩‍👧‍👦 Member
+## 👨‍👩‍👧‍👦 Member
 |[김윤희](https://github.com/kyh1685)|[송인선](https://github.com/ssunip)|[이수련](https://github.com/SuRyeon-Lee)|[김정민](https://github.com/jaybknd)|[남상욱](https://github.com/kugnas)|[조지선](https://github.com/appstew)|
 |:---:|:---:|:---:|:---:|:---:|:---:|
 |FE|FE(팀장)|FE|BE|BE|BE|
@@ -28,7 +28,7 @@ https://givemesnack.me/
 
 <br/>
 
-### 👷‍♀️ Role
+## 👷‍♀️ Role
 |이름|담당|
 |:--:|:--:|
 |김윤희|글 작성/수정, 상점 페이지, 설정 페이지, 소개 페이지|
@@ -40,7 +40,7 @@ https://givemesnack.me/
 
 <br/>
 
-### ⏰ 타임스탬프
+## ⏰ 타임스탬프
 - 2022.11.08 ~ 2022.11.13: 아이디어, 기획, 디자인
 - 2022.11.14 ~ 2022.11.20: 1차 기본 기능 구현
 - 2022.11.21 ~ 2022.11.27: 2차 심화 기능 구현
@@ -48,7 +48,7 @@ https://givemesnack.me/
 
 <br/>
 
-### 💼 문서
+## 💼 문서
 - [유저플로우](https://www.figma.com/file/mvDzExmm7j5hxxjM71I4nO/%EB%A9%94%EC%9D%B8-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8_%EC%9C%A0%EC%A0%80-%ED%94%8C%EB%A1%9C%EC%96%B4?node-id=0%3A1&t=cdPTocCTzRo7TmlU-0)
 - [사용자 요구사항 정의서](https://docs.google.com/spreadsheets/d/1gmvqH28FuZbL-A_i6DfNovSWkP8jq7mffPc2gDLDZwE/edit#gid=0)
 - [화면정의서](https://www.figma.com/file/2cQLkYRDo6zWGaK7gZMEPb/%EB%82%B4-%EB%B0%A5%EC%9D%80-%EB%82%B4%EA%B0%80-%EB%B2%88%EB%8B%A4%EB%83%A5?node-id=0%3A1&t=pbIyZseAdgDmyxBC-0)
@@ -58,13 +58,13 @@ https://givemesnack.me/
 
 <br/>
 
-### 🎤 발표
+## 🎤 발표
 - [발표문서](https://www.notion.so/codestates/2713f4aa854d4e68a169a85b6070bab5?p=be16bf5dc4124b02a5fa0759cdc06d80&pm=s)
 - [발표영상](https://www.youtube.com/watch?v=me5D0NIVkAg&t=341s)
 
 <br/>
 
-### Commit Message
+## Commit Message
 |Tag Name|Description|
 |------|---|
 |✨ feat|새로운 기능 추가|
