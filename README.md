@@ -60,7 +60,7 @@ https://givemesnack.me/
 
 ## 🎤 발표
 - [발표문서](https://www.notion.so/codestates/2713f4aa854d4e68a169a85b6070bab5?p=be16bf5dc4124b02a5fa0759cdc06d80&pm=s)
-- [발표영상](https://www.youtube.com/watch?v=me5D0NIVkAg&t=341s)
+- [유튜브 발표영상](https://www.youtube.com/watch?v=me5D0NIVkAg&t=341s)
 
 <br/>
 
