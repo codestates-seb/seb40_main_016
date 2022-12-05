@@ -51,8 +51,8 @@ public class S3Service {
         try (InputStream inputStream = multipartFile.getInputStream()) {
 
             client.putObject(new PutObjectRequest(bucket, fileName, inputStream,
-                    objectMetadata)
-                    .withCannedAcl(CannedAccessControlList.PublicRead));
+                    objectMetadata));
+//                    .withCannedAcl(CannedAccessControlList.PublicRead));
         } catch (Exception e) {
             log.error("Cannot upload image, ", e);
             throw new RuntimeException("Cannot upload image");

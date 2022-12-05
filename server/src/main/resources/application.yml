@@ -45,7 +45,7 @@ cloud:
       accessKey: ${s3_access_key}
       secretKey: ${s3_secret_key}
     s3:
-      bucket: catdogbucket
+      bucket: givemesnack.me
       folder:
     region:
       static: ap-northeast-2
