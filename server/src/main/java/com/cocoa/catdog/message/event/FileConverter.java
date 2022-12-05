@@ -27,7 +27,6 @@ public class FileConverter {
         try {
             // 혹시나 파일 이름이 중복될 수 있으니 파일 이름 앞에 랜덤한 숫자값을 덧붙여줌
             convFile = new File(file.getOriginalFilename());
-            convFile.createNewFile();
             FileOutputStream fos = new FileOutputStream(convFile);
             fos.write(file.getBytes());
             fos.close();
@@ -38,7 +37,7 @@ public class FileConverter {
             e.printStackTrace();
 
         } finally {
-            if(result=false && convFile.exists()){
+            if(! result && convFile.exists()){
                 convFile.delete();
             }
         }
@@ -49,9 +48,8 @@ public class FileConverter {
 //        File file = new File("/path/to/file");
         FileItem fileItem = new DiskFileItem("mainFile", Files.probeContentType(file.toPath()), false, file.getName(), (int) file.length(), file.getParentFile());
 
-        try {
-            InputStream input = new FileInputStream(file);
-            OutputStream os = fileItem.getOutputStream();
+        try (InputStream input = new FileInputStream(file);
+             OutputStream os = fileItem.getOutputStream();) {
             IOUtils.copy(input, os);
             // Or faster..
             // IOUtils.copy(new FileInputStream(file), fileItem.getOutputStream());

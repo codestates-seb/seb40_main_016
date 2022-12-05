@@ -14,6 +14,7 @@ import com.cocoa.catdog.config.aws.S3Service;
 import com.cocoa.catdog.exception.BusinessLogicException;
 import com.cocoa.catdog.exception.ExceptionCode;
 import com.cocoa.catdog.message.event.EventService;
+import com.cocoa.catdog.message.event.FileConverter;
 import com.cocoa.catdog.user.entity.User;
 import com.cocoa.catdog.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,9 +58,10 @@ public class ArticleService {
     /*
      * 게시물 등록
      * */
-    public void saveArticle(Article article, Long userId, List<MultipartFile> files) throws InterruptedException {
+    public void saveArticle(Article article, Long userId, List<MultipartFile> files ) throws IOException {
         User findUser = userService.findUser(userId);
         Long articleId = article.getArticleId();
+
         if (!CollectionUtils.isNullOrEmpty(files)) {
             ArticleImgDto.Post articleImgDto;
             ArticleImg articleImg;
@@ -72,6 +79,9 @@ public class ArticleService {
                         articleImgDto.getImgUrl()
                 );
                 articleImg.setArticle(article);
+
+                assert originalFileName != null;
+                Files.delete(Paths.get(originalFileName));
 
                 article.getArticleImg().add(articleImg);
                 articleImgRepository.save(articleImg);
