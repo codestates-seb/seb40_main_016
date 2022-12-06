@@ -25,7 +25,7 @@ https://givemesnack.me/
 🧑**사람 계정**으로 가입해 좋아하는 동물에게 간식을 선물해보세요!<br/>
 좋아하는 동물에게 실제 간식과 교환할 수 있는 알을 선물할 수 있습니다.<br/>
 <br/>
-[더 알고 싶어요!🙋🏻‍♀️](https://givemesnack.me/introduce)
+[소개 페이지에서 보기 🚗](https://givemesnack.me/introduce)
 
 <br/>
 
