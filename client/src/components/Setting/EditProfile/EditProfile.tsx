@@ -63,6 +63,7 @@ const EditProfile = ({ userId, token, movePage }: SettingProps) => {
           alert("프로필 수정 성공😺");
           setUserImg({
             ...curUserInfo,
+            userName: res.data.data.userName,
             userImg: res.data.data.userImg,
           });
           movePage();

@@ -65,7 +65,10 @@ const Modal = ({
       isOn={isOn}
       ref={outSection}
       onClick={(e) => {
-        outSection.current === e.target ? setIsOn(false) : null;
+        if (outSection.current === e.target) {
+          if (onCloseBefore) onCloseBefore();
+          setIsOn(false);
+        }
       }}
     >
       {bg && (

@@ -3,19 +3,6 @@ import imageCompression from "browser-image-compression";
 import { FileFormatCheck, FileSizeCheck } from "./FileValidCheck";
 import { UploadedPhotos } from "../types/article";
 
-const createBlob = (dataURI: string) => {
-  const byteString = atob(dataURI.split(",")[1]);
-
-  const ab = new ArrayBuffer(byteString.length);
-  const ia = new Uint8Array(ab);
-
-  for (let i = 0; i < byteString.length; i++) {
-    ia[i] = byteString.charCodeAt(i);
-  }
-
-  return new Blob([ia]);
-};
-
 export const compresseAndUploadFile = async (
   files: FileList,
   uploadedPhotos: UploadedPhotos[],
@@ -36,24 +23,14 @@ export const compresseAndUploadFile = async (
   for (let i = 0; i < files.length; i++) {
     if (!FileFormatCheck || !FileSizeCheck) continue;
 
-    const reader = new FileReader();
     const compressedFile = files[i].type !== "image/gif" ? await imageCompression(files[i], options) : files[i];
+    const file = new File([compressedFile], files[i].name, { type: files[i].type });
+    const url = URL.createObjectURL(compressedFile);
 
-    reader.onloadend = () => {
-      const result = reader.result as string;
-
-      const blob = createBlob(result);
-      const file = new File([blob], files[i].name, { type: files[i].type });
-
-      if (result) {
-        if (!isAvatar) {
-          setUploadedPhotos((photo) => [...photo, { uploadedPhoto: result, file: file }].slice(0, 3));
-        } else {
-          setUploadedPhotos(() => [{ uploadedPhoto: result, file: file }]);
-        }
-      }
-    };
-
-    reader.readAsDataURL(compressedFile);
+    if (!isAvatar) {
+      setUploadedPhotos((photo) => [...photo, { uploadedPhoto: url, file: file }].slice(0, 3));
+    } else {
+      setUploadedPhotos(() => [{ uploadedPhoto: url, file: file }]);
+    }
   }
 };

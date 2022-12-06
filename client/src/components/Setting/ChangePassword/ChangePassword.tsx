@@ -49,34 +49,14 @@ const ButtonWrapper = styled.div`
 
 const ChangePassword = ({ token, movePage }: SettingProps) => {
   const [password, setPassword] = useState({
-    currentPassword: "",
     newPassword: "",
     checkPassword: "",
   });
   const [passwordErr, setPasswordErr] = useState({
-    currentPassword: false,
     newPassword: false,
     checkPassword: false,
   });
   const [hasNoError, setHasNoError] = useState<boolean>(true);
-
-  const changeCurPassword = (e: ChangeEvent<HTMLInputElement>) => {
-    setPassword({ ...password, currentPassword: e.target.value });
-  };
-
-  const blurCurPassword = () => {
-    CheckPassword(token, password.currentPassword)
-      .then((res) => {
-        if (res.status === 200) {
-          setPasswordErr(() => ({ ...passwordErr, currentPassword: false }));
-        }
-      })
-      .catch((e) => {
-        if (e.response.status === 401) {
-          setPasswordErr(() => ({ ...passwordErr, currentPassword: true }));
-        }
-      });
-  };
 
   const changeNewPassword = (e: ChangeEvent<HTMLInputElement>) => {
     setPasswordErr(() => ({ ...passwordErr, newPassword: !isPassword(e.target.value) }));
@@ -89,7 +69,7 @@ const ChangePassword = ({ token, movePage }: SettingProps) => {
   };
 
   const isNoEmpty = () => {
-    return password.currentPassword.length > 0 && password.newPassword.length > 0 && password.checkPassword.length > 0;
+    return password.newPassword.length > 0 && password.checkPassword.length > 0;
   };
 
   const submitPassword = () => {
@@ -117,7 +97,7 @@ const ChangePassword = ({ token, movePage }: SettingProps) => {
   };
 
   useEffect(() => {
-    if (!passwordErr.currentPassword && !passwordErr.newPassword && !passwordErr.checkPassword) {
+    if (!passwordErr.newPassword && !passwordErr.checkPassword) {
       setHasNoError(true);
     } else {
       setHasNoError(false);
@@ -127,15 +107,6 @@ const ChangePassword = ({ token, movePage }: SettingProps) => {
   return (
     <Wrapper>
       <PasswordWrapper>
-        <Input
-          type="password"
-          placeholder="이전 비밀번호를 입력하세요"
-          onChange={changeCurPassword}
-          onBlur={blurCurPassword}
-          label="이전 비밀번호"
-          isError={passwordErr.currentPassword}
-          errorMsg="현재 비밀번호와 일치하게 입력해 주세요."
-        />
         <Input
           type="password"
           placeholder="새 비밀번호를 입력하세요"

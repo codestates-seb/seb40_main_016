@@ -35,4 +35,5 @@ export const TimeStamp = styled.small`
 export const Conts = styled.pre`
   margin: 16px 0 6px;
   line-height: 20px;
+  white-space: pre-line;
 `;
