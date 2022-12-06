@@ -7,9 +7,9 @@ https://givemesnack.me/
 <br/>
 
 ## 👤 테스트 계정
-저희 서비스는 동물, 사람 계정별로 접근 가능 정보와 액션이 다릅니다.
-동물 계정 > 사료 알 받기 및 교환 가능, 상점 페이지 활성화, 마이페이지 간식 탭 활성화
-사람 계정 > 사료 알 주기만 가능, 상점 페이지 비활성화, 마이페이지 간식 탭 비활성화
+저희 서비스는 동물, 사람 계정별로 접근 가능 정보와 액션이 다릅니다.<br/>
+* 동물 계정 > 사료 알 받기 및 교환 가능, 상점 페이지 활성화, 마이페이지 간식 탭 활성화<br/>
+* 사람 계정 > 사료 알 주기만 가능, 상점 페이지 비활성화, 마이페이지 간식 탭 비활성화<br/>
 |타입|이메일|비밀번호|
 |:--:|:--:|:--:|
 |😺고양이|guest@abc.com|guest123|
@@ -50,7 +50,7 @@ https://givemesnack.me/
 |이수련|회원가입, 로그인, 소셜로그인, 상세페이지|
 |김정민|각 도메인 서비스 기능 구현, 알람|
 |남상욱|유저 가입/소셜 로그인, 도메인 연결 및 SSL 설정, 캐싱|
-|조지선|프로젝트 및 깃헙 환경 세팅, 게시글, 이미지|
+|조지선|게시글, 이미지|
 
 <br/>
 
@@ -76,6 +76,14 @@ https://givemesnack.me/
 - [발표문서](https://www.notion.so/codestates/2713f4aa854d4e68a169a85b6070bab5?p=be16bf5dc4124b02a5fa0759cdc06d80&pm=s)
 - [유튜브 발표영상](https://www.youtube.com/watch?v=me5D0NIVkAg&t=341s)
 - [발표 ppt](https://www.canva.com/design/DAFTkRFbu2s/-jIlaQbPSQDsKdSKUa3sRQ/view#6)
+
+<br/>
+
+## 🙋🏻‍♀️ 궁금한게 있어요!
+질문, 아이디어, 그게 아니면 어떤 잡담도 모두 환영입니다.🎉<br/>
+디스커션 채널에 오셔서 남겨주세요!
+
+🚀 [디스커션 바로가기](https://github.com/codestates-seb/seb40_main_016/discussions/categories/polls)
 
 <br/>
 
