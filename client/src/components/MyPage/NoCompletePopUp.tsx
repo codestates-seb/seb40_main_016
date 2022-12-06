@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 import { ReactComponent as CloseBtn } from "../../assets/img/close-icon.svg";
 
-const SnackCheckModal = styled.div`
+const NoCompleteModal = styled.div`
   position: fixed;
   top: calc(40%);
   left: calc(45% - 30px);
@@ -39,17 +39,20 @@ const SnackCheckModal = styled.div`
   }
 `;
 
-const SnackContainer = styled.div`
+const NoCompleteContainer = styled.div`
   height: 200px;
   overflow: scroll;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   &::-webkit-scrollbar {
     display: none;
   }
 `;
 
-const SnackCheck = styled.div`
-  padding: 10px 20px;
+const NoCompleteContent = styled.div`
+  padding: 0px 20px;
   font-size: var(--fs-pc-small);
   display: flex;
   align-items: center;
@@ -57,7 +60,6 @@ const SnackCheck = styled.div`
   flex-direction: column;
 
   img {
-    margin-top: 15px;
     width: 100px;
   }
 
@@ -83,7 +85,7 @@ interface Props {
   setIsOn: (arg: boolean) => void;
 }
 
-const SnackPopUp = ({ setIsOn }: Props) => {
+const NoCompletePopUp = ({ setIsOn }: Props) => {
   useEffect(() => {
     document.body.style.cssText = `
       position: fixed; 
@@ -99,19 +101,18 @@ const SnackPopUp = ({ setIsOn }: Props) => {
 
   return (
     <>
-      <SnackCheckModal>
+      <NoCompleteModal>
         <CloseBtn className="close-btn" onClick={() => setIsOn(false)} />
-        <SnackContainer>
-          <SnackCheck>
-            <img src="../assets/dog-with-snack-clipart.png" alt="dog-with-snack" />
-            <p>상품이 곧 도착할거다멍!</p>
-            <p>기다려봐멍 🐾</p>
-          </SnackCheck>
-        </SnackContainer>
-      </SnackCheckModal>
+        <NoCompleteContainer>
+          <NoCompleteContent>
+            <img src="../assets/no-comments-clipart.png" alt="no-complete" />
+            <p>준비 중입니다... 🛠</p>
+          </NoCompleteContent>
+        </NoCompleteContainer>
+      </NoCompleteModal>
       <Backdrop onClick={() => setIsOn(false)} />
     </>
   );
 };
 
-export default SnackPopUp;
+export default NoCompletePopUp;

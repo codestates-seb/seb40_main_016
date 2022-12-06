@@ -12,6 +12,7 @@ import MyPageSnacks from "./MyPageSnacks";
 import FollowPopUp from "../../components/MyPage/FollowPopUp";
 import FollowerPopUp from "../../components/MyPage/FollowerPopUp";
 import TopButton from "../../components/TopButton/TopButton";
+import NoCompletePopUp from "../../components/MyPage/NoCompletePopUp";
 
 import { GetMyProfile } from "../../api/mypage";
 
@@ -62,6 +63,7 @@ const MyPage = ({ detailHandler, setArticleId }: Prop) => {
   const [userArticlesNum, setUserArticlesNum] = useState<number>(0);
   const [openFollowModal, setOpenFollowModal] = useState<boolean>(false);
   const [openFollowerModal, setOpenFollowerModal] = useState<boolean>(false);
+  const [openNoCompleteModal, setOpenNoCompleteModal] = useState<boolean>(false);
   const [userInfo, setUserInfo] = useState<UserInfoProps>({
     content: "",
     email: "",
@@ -97,6 +99,10 @@ const MyPage = ({ detailHandler, setArticleId }: Prop) => {
     setOpenFollowerModal(!openFollowerModal);
   };
 
+  const handleNoCompleteModal = () => {
+    setOpenNoCompleteModal(!openNoCompleteModal);
+  };
+
   return (
     <>
       <MyAccountPage>
@@ -118,8 +124,9 @@ const MyPage = ({ detailHandler, setArticleId }: Prop) => {
                       <SettingIcon />
                     </SettingWalletBtn>
                     <SettingWalletBtn>
-                      <WalletIcon />
+                      <WalletIcon onClick={handleNoCompleteModal} />
                     </SettingWalletBtn>
+                    {openNoCompleteModal && <NoCompletePopUp setIsOn={setOpenNoCompleteModal} />}
                   </UserBtn>
                 </UserInfo>
                 <UserDesc>

@@ -7,6 +7,8 @@ import accessTokenState from "../../_state/accessTokenState";
 
 import { ReactComponent as MansaeCat } from "../../assets/img/mansae-cat.svg";
 
+import sound from "../../assets/sound/cartoon-pop-clean.mp3";
+
 const EventSource = EventSourcePolyfill || NativeEventSource;
 
 const movein = () => keyframes`
@@ -72,6 +74,11 @@ const SubAlert = () => {
   const [openSubAlert, setOpenSubAlert] = useState<Boolean>(false);
   const lsatId = useRef(null);
 
+  const popUpSound = () => {
+    const audio = new Audio(sound);
+    audio.play();
+  };
+
   const handleOpenSubAlert = () => {
     setOpenSubAlert(true);
   };
@@ -98,6 +105,7 @@ const SubAlert = () => {
           if (!data.includes("EventStream is Created")) {
             const data = JSON.parse(event.data);
             handleOpenSubAlert();
+            popUpSound();
             setSseContent(data.content);
             lsatId.current = event.lastEventId;
             setTimeout(() => {

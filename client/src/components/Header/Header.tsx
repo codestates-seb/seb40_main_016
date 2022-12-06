@@ -106,7 +106,7 @@ const Header = ({ popupHandler }: HeaderProps) => {
         </LogoBox>
         <SearchBox>
           <SearchIcon className="search-icon" />
-          <SearchInput type="text" placeholder="검색" onChange={onChange} onKeyPress={onSearch} value={keyword} />
+          <SearchInput type="text" placeholder="계정 검색" onChange={onChange} onKeyPress={onSearch} value={keyword} />
         </SearchBox>
         {isLogin ? (
           <MenuBox>
