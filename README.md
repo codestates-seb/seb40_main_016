@@ -239,7 +239,10 @@ https://givemesnack.me/
 |🔥 remove|파일을 삭제하는 작업만 수행한 경우|
 
 
-![0001-0020](https://user-images.githubusercontent.com/78314354/205844264-59c8d616-a3f8-4ae6-9db3-de8ae6c5fff1.gif)
+
+
+https://user-images.githubusercontent.com/78314354/205858516-2c3be64d-3903-4734-9928-a26cea1b18a7.mp4
+
 
 
 
