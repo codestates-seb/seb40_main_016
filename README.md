@@ -239,9 +239,8 @@ https://givemesnack.me/
 |🔥 remove|파일을 삭제하는 작업만 수행한 경우|
 
 
+[1.webm](https://user-images.githubusercontent.com/78314354/205858651-c1d931f8-9d84-478e-bf8a-35340baf61d1.webm)
 
-
-https://user-images.githubusercontent.com/78314354/205858516-2c3be64d-3903-4734-9928-a26cea1b18a7.mp4
 
 
 
