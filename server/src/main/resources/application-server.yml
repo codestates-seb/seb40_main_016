@@ -17,4 +17,5 @@ config:
 s3:
   articleDir: assets/articleImages/
   userDir: assets/userImages/
-
+cdn:
+  url: https://img.givemesnack.me/

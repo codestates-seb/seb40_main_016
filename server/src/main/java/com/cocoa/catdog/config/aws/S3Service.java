@@ -31,6 +31,8 @@ public class S3Service {
 
     @Value("${cloud.aws.s3.bucket}")
     public String bucket;
+    @Value("${cdn.url}")
+    public String cdnUrl;
     private final AmazonS3 amazonS3;
     private final AmazonS3Client client;
     private final AmazonS3Component component;
@@ -57,7 +59,7 @@ public class S3Service {
             log.error("Cannot upload image, ", e);
             throw new RuntimeException("Cannot upload image");
         }
-        String url = client.getUrl(bucket, fileName).toString();
+        String url = cdnUrl + fileName;
 
 
 
