@@ -8,6 +8,7 @@ const variables = css`
   --color-gray: #bfbfbf;
   --color-dark-gray: #b3b3b3;
   --color-yellow: #ffcc41;
+  --color-faded-yellow: #fdf4d5;
   --color-orange: #ff864b;
   --color-faded-orange: #ffede6;
   --color-red: #d20000;
