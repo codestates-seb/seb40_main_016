@@ -4,6 +4,7 @@ import com.cocoa.catdog.article.entity.Article;
 import com.cocoa.catdog.article.service.ArticleService;
 import com.cocoa.catdog.exception.BusinessLogicException;
 import com.cocoa.catdog.exception.ExceptionCode;
+import com.cocoa.catdog.message.event.EventService;
 import com.cocoa.catdog.user.entity.User;
 import com.cocoa.catdog.user.service.UserService;
 import com.cocoa.catdog.wallet.entity.GiveTake;
@@ -21,12 +22,15 @@ public class GiveTakeService {
     private final ArticleService articleService;
     private final UserService userService;
     private final GiveTakeRepository giveTakeRepository;
+    private final EventService eventService;
 
     public GiveTake createGiveTake(GiveTake giveTake, Long articleId, Long userId) {
         //엔티티 조회
         Article article = articleService.findArticle(articleId);
-        Wallet takeWlt = article.getUser().getWallet();
-        Wallet giveWlt = userService.findUser(userId).getWallet();
+        User takeUser = article.getUser();
+        Wallet takeWlt = takeUser.getWallet();
+        User giveUser = userService.findUser(userId);
+        Wallet giveWlt = giveUser.getWallet();
         int giveYummy = giveTake.getGiveYummy();
 
         //자기 자신에게 보내는 경우 에러처리
@@ -50,7 +54,9 @@ public class GiveTakeService {
         Article updatedArticle = giveTake.getArticle();
         updatedArticle.changeYummyCnt(updatedArticle.getGiveTakes().stream().mapToInt(GiveTake::getGiveYummy).sum());
 
-        return giveTakeRepository.save(giveTake);
+        GiveTake save = giveTakeRepository.save(giveTake);
+        eventService.sendGetYummyMessage(giveUser, takeUser, giveYummy);
+        return save;
     }
 
 }

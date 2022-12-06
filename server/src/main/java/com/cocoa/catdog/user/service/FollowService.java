@@ -2,6 +2,7 @@ package com.cocoa.catdog.user.service;
 
 import com.cocoa.catdog.exception.BusinessLogicException;
 import com.cocoa.catdog.exception.ExceptionCode;
+import com.cocoa.catdog.message.event.EventService;
 import com.cocoa.catdog.user.entity.Follow;
 import com.cocoa.catdog.user.entity.User;
 import com.cocoa.catdog.user.repository.FollowRepository;
@@ -20,6 +21,7 @@ import java.util.Optional;
 public class FollowService {
     private final UserRepository userRepository;
     private final FollowRepository followRepository;
+    private final EventService eventService;
 
     //팔로우
     public Follow createFollow(long followerId, long followedId) {
@@ -31,7 +33,9 @@ public class FollowService {
                 .build();
 
 
-        return followRepository.save(follow);
+        Follow save = followRepository.save(follow);
+        eventService.sendGetFollowMessage(findUser(followerId), followedId);
+        return save;
     }
 
     // 내가 팔로우 하고 있는 유저 목록 조회

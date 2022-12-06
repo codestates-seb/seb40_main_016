@@ -59,6 +59,38 @@ public class EventService {
         eventPublisher.publishEvent(eventDto);
     }
 
+    public void sendGetFollowMessage (User follower, Long followedUserId) {
+        String type = "get new follower";
+        String content = follower.getUserName() + "님이 당신을 팔로우 하셨습니다.";
+        String url = "";
+        boolean isRead = false;
+        EventDto.Message eventDto = EventDto.Message.builder()
+                .type(type)
+                .content(content)
+                .url(url)
+                .isRead(isRead)
+                .userId(followedUserId)
+                .build();
+
+        eventPublisher.publishEvent(eventDto);
+    }
+
+    public void sendGetYummyMessage (User giveUser, User takeUser, int giveYummy) {
+        String type = "get new Yummy";
+        String content = giveUser.getUserName() + "님이 " + giveYummy +"개의 간식을 선물하셨습니다.";
+        String url = "";
+        boolean isRead = false;
+        EventDto.Message eventDto = EventDto.Message.builder()
+                .type(type)
+                .content(content)
+                .url(url)
+                .isRead(isRead)
+                .userId(takeUser.getUserId())
+                .build();
+
+        eventPublisher.publishEvent(eventDto);
+    }
+
     public void postArticle (Article article, Long userId, List<MultipartFile> files) {
         List<File> collect = files.stream().map(FileConverter::multipartFileToFile).collect(Collectors.toList());
 
