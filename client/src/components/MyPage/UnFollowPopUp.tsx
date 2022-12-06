@@ -14,7 +14,6 @@ const UnFollowModal = styled.div`
   position: absolute;
   left: 38%;
   z-index: 3;
-  width: 300px;
   height: 200px;
   border-radius: 20px;
   background-color: #fff;

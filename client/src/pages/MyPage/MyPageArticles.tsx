@@ -343,13 +343,12 @@ const MyPageArticles = ({ handleArticlesNum, detailHandler, setArticleId, userTy
                   <CrownIcon className="crown-icon" />
                   <ArticleList>
                     {mostReceivedArticles.map((article: MyArticles) => (
-                      <Article
-                        key={article.articleId}
-                        onClick={() => {
-                          handleImgBoxClick(article.articleId);
-                        }}
-                      >
-                        <AvatarBox>
+                      <Article key={article.articleId}>
+                        <AvatarBox
+                          onClick={() => {
+                            handleImgBoxClick(article.articleId);
+                          }}
+                        >
                           <Avatar
                             className="avatar"
                             bgUrl={article.articleImg.images[0].imgUrl}

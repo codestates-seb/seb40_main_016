@@ -136,6 +136,7 @@ const NoChangeSnackContainer = styled.div`
 
 interface Props {
   profileUserId: number;
+  pathname: string;
 }
 
 interface SnackList {
@@ -154,7 +155,7 @@ interface SnackInfo {
   quantity?: number;
 }
 
-const ProfileSnacks = ({ profileUserId }: Props) => {
+const ProfileSnacks = ({ profileUserId, pathname }: Props) => {
   const [snackList, setSnackList] = useState<SnackList[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
@@ -191,7 +192,7 @@ const ProfileSnacks = ({ profileUserId }: Props) => {
     return () => {
       observer.disconnect();
     };
-  }, [page, totalPage]);
+  }, [page, totalPage, pathname]);
 
   const handleChangeDate = (date: string) => {
     const changeDate = new Date(date);

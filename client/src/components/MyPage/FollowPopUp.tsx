@@ -11,11 +11,11 @@ import { ReactComponent as CloseBtn } from "../../assets/img/close-icon.svg";
 
 const FollowModal = styled.div`
   position: absolute;
-  left: 40%;
+  left: calc(45% - 20px);
+  display: block;
   z-index: 3;
   width: 200px;
   height: 250px;
-  max-height: 85vh;
   border-radius: 20px;
   box-sizing: border-box;
   background-color: #fff;
@@ -54,13 +54,17 @@ const FollowModalHeader = styled.div`
   }
 `;
 
-const FollowBox = styled.div`
-  margin: 10px 0px;
-  overflow: auto;
+const FollowerContainer = styled.div`
+  height: 200px;
+  overflow: scroll;
 
   &::-webkit-scrollbar {
     display: none;
   }
+`;
+
+const FollowBox = styled.div`
+  margin: 10px 0px;
 `;
 
 const Follow = styled.div`
@@ -159,20 +163,25 @@ const FollowPopUp = ({ setIsOn, userId }: Prop) => {
             <span>내가 팔로우한 사람이 없습니다.</span>
           </NoFollowContainer>
         ) : (
-          <>
+          <FollowerContainer>
             {followList.map((follow: FollowListProps) => (
               <FollowBox key={follow.followedId}>
-                <Follow>
-                  <FollowImg onClick={() => navigate(`/profiles/${follow.followedId}`)}>
+                <Follow
+                  onClick={() => {
+                    navigate(`/profiles/${follow.followedId}`);
+                    window.location.reload();
+                  }}
+                >
+                  <FollowImg>
                     <Avatar className="follow-avatar" bgUrl={follow.followedImg} width="40px" height="40px" />
                   </FollowImg>
-                  <FollowName onClick={() => navigate(`/profiles/${follow.followedId}`)}>
+                  <FollowName>
                     <span>{follow.followedName}</span>
                   </FollowName>
                 </Follow>
               </FollowBox>
             ))}
-          </>
+          </FollowerContainer>
         )}
       </FollowModal>
       <Backdrop onClick={() => setIsOn(false)} />

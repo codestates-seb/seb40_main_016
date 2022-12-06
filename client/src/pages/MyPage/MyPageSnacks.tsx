@@ -6,6 +6,7 @@ import InnerContainer from "../../components/InnerContainer/InnerContainer";
 import ImageCard from "../../components/ImageCard/ImageCard";
 import NoContent from "../../components/NoContent/NoContent";
 import Loading from "../../components/Loading/Loading";
+import SnackPopUp from "../../components/MyPage/SnackPopUp";
 
 import { GetMySnacks } from "../../api/mypage";
 
@@ -57,7 +58,7 @@ const SnackImg = styled.div`
   border-radius: 20px;
 
   .snack-img {
-    cursor: default;
+    cursor: pointer;
   }
 `;
 
@@ -159,6 +160,7 @@ const MyPageSnacks = () => {
   const [page, setPage] = useState<number>(1);
   const [totalPage, setTotalPage] = useState<number>(1);
   const obsRef = useRef(null);
+  const [onSnackModal, SetOnSnackModal] = useState<Boolean>(false);
 
   const getMySnackList = (page: number, token: string) => {
     setLoading(true);
@@ -202,6 +204,10 @@ const MyPageSnacks = () => {
     return `${year}년 ${month}월 ${day}일`;
   };
 
+  const handleSnackModal = () => {
+    SetOnSnackModal(!onSnackModal);
+  };
+
   return (
     <InnerContainer>
       <SnackContainer>
@@ -218,7 +224,7 @@ const MyPageSnacks = () => {
                 snack.orderItems.map((item: any) => (
                   <SnackBox key={`${item.orderId} - ${item.orderPrice}`}>
                     <SnackImgBox>
-                      <SnackImg>
+                      <SnackImg onClick={() => handleSnackModal()}>
                         <ImageCard className="snack-img" imgUrl={item.itemImg} onClick={() => {}} />
                       </SnackImg>
                     </SnackImgBox>
@@ -233,6 +239,7 @@ const MyPageSnacks = () => {
                   </SnackBox>
                 )),
               )}
+            {onSnackModal && <SnackPopUp setIsOn={SetOnSnackModal} />}
             {loading ? <Loading /> : null}
           </>
         )}

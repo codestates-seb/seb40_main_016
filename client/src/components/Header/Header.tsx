@@ -137,7 +137,11 @@ const Header = ({ popupHandler }: HeaderProps) => {
             <LoginAfterBtn className="menu-icon" onClick={handleMenuOn}>
               <MenuIcon />
             </LoginAfterBtn>
-            {menuList ? <MenuList handleMenuOn={handleMenuOn} handleLogout={handleLogout} /> : ""}
+            {menuList ? (
+              <MenuList handleMenuOn={handleMenuOn} handleLogout={handleLogout} popupHandler={popupHandler} />
+            ) : (
+              ""
+            )}
           </MenuBox>
         ) : (
           <MenuBox>

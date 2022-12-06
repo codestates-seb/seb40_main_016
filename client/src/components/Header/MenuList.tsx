@@ -26,6 +26,7 @@ import { ReactComponent as LogoutIcon } from "../../assets/img/logout-icon.svg";
 interface Prop {
   handleMenuOn: () => void;
   handleLogout: () => void;
+  popupHandler: () => void;
 }
 
 const MenuPop = (from: string, to: string) => keyframes`
@@ -94,14 +95,14 @@ const Backdrop = styled.div`
   z-index: 2;
 `;
 
-const MenuList = ({ handleMenuOn, handleLogout }: Prop) => {
+const MenuList = ({ handleMenuOn, handleLogout, popupHandler }: Prop) => {
   const userInfo = useRecoilValue(userInfoState);
 
   return (
     <>
       <MenuBox>
         <ItemList onClick={() => handleMenuOn()}>
-          <Item>
+          <Item onClick={popupHandler}>
             <AddIcon />글 작성하기
           </Item>
           <StyledLink to="/shop">

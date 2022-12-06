@@ -47,6 +47,7 @@ export const UserName = styled.span`
   align-items: center;
   font-weight: 700;
   font-size: var(--fs-pc-xlarge);
+  white-space: nowrap;
 
   @media screen and (max-width: 736px) {
     font-size: var(--fs-pc-large);
