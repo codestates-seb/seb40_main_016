@@ -52,12 +52,29 @@ const Footer = () => {
         <p>
           <span>대표이사</span>
           <span>
-            <GithubLink href="https://github.com/jaybknd">김정민</GithubLink> /{" "}
-            <GithubLink href="https://github.com/kugnas">남상욱</GithubLink> /{" "}
-            <GithubLink href="https://github.com/appstew">조지선</GithubLink> /{" "}
-            <GithubLink href="https://github.com/ssunip">송인선</GithubLink> /{" "}
-            <GithubLink href="https://github.com/kyh1685">김윤희</GithubLink> /{" "}
-            <GithubLink href="https://github.com/SuRyeon-Lee">이수련</GithubLink>
+            <GithubLink href="https://github.com/jaybknd" target="_blank">
+              김정민
+            </GithubLink>{" "}
+            /{" "}
+            <GithubLink href="https://github.com/kugnas" target="_blank">
+              남상욱
+            </GithubLink>{" "}
+            /{" "}
+            <GithubLink href="https://github.com/appstew" target="_blank">
+              조지선
+            </GithubLink>{" "}
+            /{" "}
+            <GithubLink href="https://github.com/ssunip" target="_blank">
+              송인선
+            </GithubLink>{" "}
+            /{" "}
+            <GithubLink href="https://github.com/kyh1685" target="_blank">
+              김윤희
+            </GithubLink>{" "}
+            /{" "}
+            <GithubLink href="https://github.com/SuRyeon-Lee" target="_blank">
+              이수련
+            </GithubLink>
           </span>
         </p>
         <p>
