@@ -1,7 +1,25 @@
 import { createGlobalStyle } from "styled-components";
 import variables from "./GloabalVariables";
+import TmoneyRoundWindExtraBold from "../font/TmoneyRoundWindExtraBold.ttf";
+import TmoneyRoundWindRegular from "../font/TmoneyRoundWindRegular.ttf";
 
 const GlobalStyle = createGlobalStyle`
+  @font-face {
+      font-family: 'TmoneyRoundWindExtraBold';
+      src: local('TmoneyRoundWindExtraBold');
+      font-weight: normal;
+      font-style: normal;
+      src: url(${TmoneyRoundWindExtraBold}) format('truetype');
+  }
+
+  @font-face {
+      font-family: 'TmoneyRoundWindRegular';
+      src: local('TmoneyRoundWindRegular');
+      font-weight: normal;
+      font-style: normal;
+      src: url(${TmoneyRoundWindRegular}) format('truetype');
+  }
+
   html, body, div, span, applet, object, iframe,
   h1, h2, h3, h4, h5, h6, p, blockquote, pre,
   a, abbr, acronym, address, big, cite, code,
@@ -21,6 +39,7 @@ const GlobalStyle = createGlobalStyle`
   	font-size: 100%;
   	font: inherit;
   	vertical-align: baseline;
+    font-family: TmoneyRoundWindRegular;
   }
   /* HTML5 display-role reset for older browsers */
   article, aside, details, figcaption, figure, 
