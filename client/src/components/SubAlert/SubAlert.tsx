@@ -25,14 +25,19 @@ const SubscribeAlert = styled.div`
   top: 30%;
   right: 3%;
   height: 90px;
-  background-color: #ffffff;
+  background-color: #ffffffe6;
   z-index: 25;
   display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 10px;
+  color: var(--color-light-black);
   box-shadow: 0px 3px 10px var(--color-gray);
   animation: ${movein} 0.5s ease forwards, ${moveout} 0.5s 3s ease forwards;
+
+  @media screen and (max-width: 736px) {
+    height: 60px;
+  }
 `;
 
 const AlertContent = styled.div`
@@ -45,11 +50,19 @@ const AlertContent = styled.div`
   .alert-cat {
     width: 50px;
     margin-bottom: 10px;
+
+    @media screen and (max-width: 736px) {
+      width: 40px;
+    }
   }
 
   p {
     font-size: var(--fs-pc-small);
     font-weight: 700;
+
+    @media screen and (max-width: 736px) {
+      font-size: var(--fs-pc-xsmall);
+    }
   }
 `;
 
@@ -79,16 +92,9 @@ const SubAlert = () => {
 
         const eventSource = new EventSource(`https://api.givemesnack.me/sse`, eventSourceInitDict);
 
-        eventSource.onopen = () => {
-          console.log("구독 Stream이 연결되었습니다.");
-        };
-
         eventSource.onmessage = (event: any) => {
           const data = event.data;
-          console.log(event);
-          // lsatId.current = event.lastEventId;
-          // setSseContent(data);
-          // handleOpenSubAlert();
+
           if (!data.includes("EventStream is Created")) {
             const data = JSON.parse(event.data);
             handleOpenSubAlert();
@@ -97,13 +103,10 @@ const SubAlert = () => {
             setTimeout(() => {
               setOpenSubAlert(false);
             }, 6000);
-
-            console.log(data.type);
           }
         };
 
         eventSource.onerror = () => {
-          console.log("구독 Stream의 연결이 종료되었습니다.");
           eventSource.close();
         };
       }
