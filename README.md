@@ -239,10 +239,8 @@ https://givemesnack.me/
 |🔥 remove|파일을 삭제하는 작업만 수행한 경우|
 
 
+![ezgif com-gif-maker (1)](https://user-images.githubusercontent.com/78314354/205866589-1a7f3718-a1d6-48c9-918d-1be4c81befc2.gif)
 
-
-
-![architecture](https://user-images.githubusercontent.com/78314354/205858819-f5d2515b-b11b-44d3-bc4b-ede4a73bc064.mp4)
 
 
 
