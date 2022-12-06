@@ -34,12 +34,7 @@ const ServiceIntro = () => {
 
   useEffect(() => {
     const confetti = new JSConfetti();
-    confetti.addConfetti(/* {
-      emojis: ["🥳", "🐱", "🐶", "🎉", "🎊", "💖"],
-      emojiSize: 50,
-      confettiNumber: 60,
-      confettiRadius: 6,
-    } */);
+    confetti.addConfetti();
   }, []);
 
   return (
