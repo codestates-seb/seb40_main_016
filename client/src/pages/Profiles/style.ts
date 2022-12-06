@@ -73,6 +73,7 @@ export const FollowBtn = styled.div`
   color: var(--color-white);
   font-size: var(--fs-pc-small);
   cursor: pointer;
+  white-space: nowrap;
 
   &.follow {
     background-color: var(--color-white);
@@ -80,6 +81,7 @@ export const FollowBtn = styled.div`
   }
 
   @media screen and (max-width: 736px) {
+    margin-left: 20px;
     padding: 0px 25px;
     height: 35px;
     font-size: 12px;

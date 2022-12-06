@@ -19,6 +19,7 @@ import { ReactComponent as BoneWIcon } from "../../assets/img/bone-w-icon.svg";
 import { ReactComponent as FishIcon } from "../../assets/img/fish-icon.svg";
 import { ReactComponent as FishWIcon } from "../../assets/img/fish-w-icon.svg";
 import { ReactComponent as CrownIcon } from "../../assets/img/crown-icon.svg";
+import { useLocation } from "react-router-dom";
 
 const MostRecieved = styled.div`
   padding: 10px 0px;
@@ -237,11 +238,18 @@ const ProfileArticles = ({ profileUserId, handleArticlesNum, detailHandler, setA
   const [totalPage, setTotalPage] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(false);
   const obsRef = useRef(null);
+  const { pathname } = useLocation();
 
   const handleImgBoxClick = (articleId: number) => {
     setArticleId(articleId);
     detailHandler();
   };
+
+  useEffect(() => {
+    setUserArticles(null);
+    setMostReceivedArticles([]);
+    setPage(1);
+  }, [pathname]);
 
   const getUserArticles = (profileUserId: number, page: number) => {
     setLoading(true);
@@ -269,6 +277,7 @@ const ProfileArticles = ({ profileUserId, handleArticlesNum, detailHandler, setA
 
   useEffect(() => {
     const observer = new IntersectionObserver(([entry]) => {
+      console.log("observer", entry.isIntersecting, page, totalPage);
       if (entry.isIntersecting && page <= totalPage) {
         getUserArticles(profileUserId, page);
       }
@@ -281,7 +290,7 @@ const ProfileArticles = ({ profileUserId, handleArticlesNum, detailHandler, setA
     return () => {
       observer.disconnect();
     };
-  }, [page, totalPage]);
+  }, [page, totalPage, pathname]);
 
   return (
     <>
@@ -300,13 +309,12 @@ const ProfileArticles = ({ profileUserId, handleArticlesNum, detailHandler, setA
                 <CrownIcon className="crown-icon" />
                 <ArticleList>
                   {mostReceivedArticles.map((article: UserArticles) => (
-                    <Article
-                      key={article.articleId}
-                      onClick={() => {
-                        handleImgBoxClick(article.articleId);
-                      }}
-                    >
-                      <AvatarBox>
+                    <Article key={article.articleId}>
+                      <AvatarBox
+                        onClick={() => {
+                          handleImgBoxClick(article.articleId);
+                        }}
+                      >
                         <Avatar
                           className="avatar"
                           bgUrl={article.articleImg.images[0].imgUrl}

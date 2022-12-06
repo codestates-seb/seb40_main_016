@@ -1,6 +1,6 @@
 import { useEffect, useState, Dispatch, SetStateAction } from "react";
 import { useRecoilValue } from "recoil";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 
 import OuterContainer from "../../components/OuterContainer/OuterConainer";
 import InnerContainer from "../../components/InnerContainer/InnerContainer";
@@ -14,7 +14,7 @@ import UnFollowPopUp from "../../components/MyPage/UnFollowPopUp";
 import TopButton from "../../components/TopButton/TopButton";
 
 import { GetProfile } from "../../api/mypage";
-import { GetIsSubscribe, PostSubscribe, DeleteSubscribe } from "../../api/subscribe";
+import { GetIsSubscribe, PostSubscribe } from "../../api/subscribe";
 
 import userInfoState from "../../_state/userInfoState";
 import accessTokenState from "../../_state/accessTokenState";
@@ -53,6 +53,7 @@ const Profiles = ({ detailHandler, setArticleId }: Prop) => {
   const myInfo = useRecoilValue(userInfoState);
   const token = useRecoilValue(accessTokenState);
   const isLogin = useRecoilValue(isLoginState);
+  const pathname = useLocation().pathname;
   const [nowTab, setNowTab] = useState<string>("게시물");
   const [onFollow, setOnFollow] = useState<boolean>(false);
   const [openFollowModal, setOpenFollowModal] = useState<boolean>(false);
@@ -74,7 +75,7 @@ const Profiles = ({ detailHandler, setArticleId }: Prop) => {
     GetProfile(profileUserId).then((res: any) => {
       setUserInfo(res.data.data);
     });
-  }, []);
+  }, [pathname]);
 
   useEffect(() => {
     GetIsSubscribe(myInfo.userId, profileUserId).then((res: any) => {
@@ -180,7 +181,7 @@ const Profiles = ({ detailHandler, setArticleId }: Prop) => {
                     case "간식":
                       return (
                         <>
-                          <ProfileSnacks profileUserId={profileUserId} />
+                          <ProfileSnacks profileUserId={profileUserId} pathname={pathname} />
                         </>
                       );
                     default:
