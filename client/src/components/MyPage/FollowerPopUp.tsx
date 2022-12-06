@@ -11,11 +11,11 @@ import { ReactComponent as CloseBtn } from "../../assets/img/close-icon.svg";
 
 const FollowerModal = styled.div`
   position: absolute;
-  left: 40%;
+  left: calc(45% - 20px);
+  display: block;
   z-index: 3;
   width: 200px;
-  height: 250px;
-  max-height: 85vh;
+  min-height: 250px;
   border-radius: 20px;
   box-sizing: border-box;
   background-color: #fff;
@@ -54,13 +54,17 @@ const FollowerModalHeader = styled.div`
   }
 `;
 
-const FollowerBox = styled.div`
-  margin: 10px 0px;
-  overflow: auto;
+const FollowerContainer = styled.div`
+  height: 200px;
+  overflow: scroll;
 
   &::-webkit-scrollbar {
     display: none;
   }
+`;
+
+const FollowerBox = styled.div`
+  margin: 10px 0px;
 `;
 
 const Follower = styled.div`
@@ -159,20 +163,25 @@ const FollowerPopUp = ({ setIsOn, userId }: Prop) => {
             <span>나를 팔로우한 사람이 없습니다.</span>
           </NoFollowerContainer>
         ) : (
-          <>
+          <FollowerContainer>
             {followerList.map((follower: FollowerListProps) => (
               <FollowerBox key={follower.followingId}>
-                <Follower>
-                  <FollowerImg onClick={() => navigate(`/profiles/${follower.followingId}`)}>
+                <Follower
+                  onClick={() => {
+                    navigate(`/profiles/${follower.followingId}`);
+                    window.location.reload();
+                  }}
+                >
+                  <FollowerImg>
                     <Avatar className="follow-avatar" bgUrl={follower.followingImg} width="40px" height="40px" />
                   </FollowerImg>
-                  <FollowerName onClick={() => navigate(`/profiles/${follower.followingId}`)}>
+                  <FollowerName>
                     <span>{follower.followingName}</span>
                   </FollowerName>
                 </Follower>
               </FollowerBox>
             ))}
-          </>
+          </FollowerContainer>
         )}
       </FollowerModal>
       <Backdrop onClick={() => setIsOn(false)} />
