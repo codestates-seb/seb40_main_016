@@ -65,4 +65,5 @@ cloud:
       static: ap-northeast-2
     stack:
       auto: false
-
+cdn:
+  url: https://img.givemesnack.me/
