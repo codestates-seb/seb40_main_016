@@ -6,3 +6,7 @@ declare module "*.svg" {
   export default src;
 }
 declare module "*.ttf";
+declare module "*.mp3" {
+  const value: any;
+  export default value;
+}
