@@ -1,6 +1,5 @@
 import OuterContainer from "../../components/OuterContainer/OuterConainer";
-import InnerContainer from "../../components/InnerContainer/InnerContainer";
-import ProjectIntro from "../../components/Introduce/ProjectIntro/ProjectIntro";
+import ServiceIntro from "../../components/Introduce/ServiceIntro/ServiceIntro";
 import TopButton from "../../components/TopButton/TopButton";
 
 import { Wrapper } from "./style";
@@ -10,10 +9,8 @@ const Introduce = () => {
     <>
       <Wrapper>
         <OuterContainer>
-          <InnerContainer>
-            <ProjectIntro />
-            <TopButton />
-          </InnerContainer>
+          <ServiceIntro />
+          <TopButton />
         </OuterContainer>
       </Wrapper>
     </>
