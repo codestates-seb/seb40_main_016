@@ -1,32 +1,26 @@
-package com.cocoa.catdog.message;
+package com.cocoa.catdog.message.sse;
 
-import com.cocoa.catdog.user.entity.User;
+import com.cocoa.catdog.message.event.Event;
+import com.cocoa.catdog.message.event.EventDto;
+import com.cocoa.catdog.message.event.EventMapper;
+import com.cocoa.catdog.message.event.EventRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.atomic.AtomicLong;
-import java.util.stream.Collectors;
 
 @Component
+@RequiredArgsConstructor
 @Slf4j
 public class SseEmitterService {
     private final EmitterRepository emitterRepository;
     private final EventRepository eventRepository;
+    private final EventMapper eventMapper;
 
-    SseEmitterService (EmitterRepository emitterRepository, EventRepository eventRepository) {
-        this.emitterRepository = emitterRepository;
-        this.eventRepository = eventRepository;
-    }
-
-    SseEmitter add (Long userId, String lastEventId) {
+    public SseEmitter add (Long userId, String lastEventId) {
         String emitterId = "U"+userId+"@"+System.currentTimeMillis();
         SseEmitter emitter = emitterRepository.save(emitterId, new SseEmitter(10000L));
 
@@ -64,8 +58,9 @@ public class SseEmitterService {
     }
 
 
-    public void send(Long userId, String type, String content, String url) {
-        Event event = eventRepository.save(Event.builder().userId(userId).type(type).content(content).url(url).isRead(false).build());
+    public void send(EventDto.Message eventDto) {
+        Event event = eventRepository.save(eventMapper.DtoToEntity(eventDto));
+        Long userId = event.getUserId();
         String eventId = "U"+userId+"@"+System.currentTimeMillis();
         Object eventCache = emitterRepository.saveEventCache(eventId, event);
         Map<String, SseEmitter> emitters = emitterRepository.findAllEmitterStartWithByMemberId(userId.toString());

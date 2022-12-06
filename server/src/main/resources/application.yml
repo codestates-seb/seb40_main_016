@@ -31,6 +31,20 @@ spring:
             scope:
               - email
               - profile
+#  kafka:
+#    bootstrap-servers: localhost:9092
+#    consumer:
+#
+#      enable-auto-commit: true
+#      max-poll-records: 1000
+#
+#
+#      group-id: oingdaddy
+#
+#      auto-offset-reset: latest
+#
+#    template:
+#      default-topic: oingdaddy
 mail:
   address:
     admin: admin@gmail.com

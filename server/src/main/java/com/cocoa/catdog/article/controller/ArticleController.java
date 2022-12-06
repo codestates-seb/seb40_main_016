@@ -10,6 +10,9 @@ import com.cocoa.catdog.article.service.ArticleService;
 import com.cocoa.catdog.auth.jwt.JwtTokenizer;
 import com.cocoa.catdog.exception.BusinessLogicException;
 import com.cocoa.catdog.exception.ExceptionCode;
+//import com.cocoa.catdog.message.kafka.KafkaArticleDto;
+//import com.cocoa.catdog.message.kafka.KafkaProducer;
+import com.cocoa.catdog.message.event.EventService;
 import com.cocoa.catdog.response.MultiResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -31,32 +34,23 @@ public class ArticleController {
     private final ArticleService articleService;
     private final ArticleMapper mapper;
     private final JwtTokenizer jwtTokenizer;
+    private final EventService eventService;
+//    private final KafkaProducer kafkaProducer;
 
     /*
     * 게시물 등록
     * */
     @PostMapping(consumes = {"multipart/form-data"})
     @ResponseStatus(HttpStatus.CREATED)
-    ArticleDto.Response postArticle(@RequestHeader(name = "Authorization") String token,
+    void postArticle(@RequestHeader(name = "Authorization") String token,
                                     @Valid @RequestPart(value = "postDto") ArticleDto.Post postDto,
                                     @RequestPart(required = false, value = "file") List<MultipartFile> files
     ) throws Exception {
         Article article = mapper.postDtoToEntity(postDto);
-
-        return mapper.entityToResponseDto(
-                articleService.saveArticle(article, jwtTokenizer.getUserId(token), files));
+//        kafkaProducer.sendObject(KafkaArticleDto.builder().article(article).userId(jwtTokenizer.getUserId(token)).build()); //kafka
+        eventService.postArticle(article, jwtTokenizer.getUserId(token), files);
     }
 
-    //테스트
-    @PostMapping("/test")
-    @ResponseStatus(HttpStatus.CREATED)
-    ArticleDto.Response postArticleTest(@RequestHeader(name = "Authorization") String token,
-                                    @Valid @RequestBody ArticleDto.Post postDto) {
-        Article article = mapper.postDtoToEntity(postDto);
-
-        return mapper.entityToResponseDto(
-                articleService.saveArticleTest(article, jwtTokenizer.getUserId(token)));
-    }
 
     /*
     * 게시물 수정

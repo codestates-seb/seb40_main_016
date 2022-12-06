@@ -1,4 +1,4 @@
-package com.cocoa.catdog.message;
+package com.cocoa.catdog.message.sse;
 
 import lombok.NoArgsConstructor;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
