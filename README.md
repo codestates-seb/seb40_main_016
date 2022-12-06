@@ -16,6 +16,8 @@ https://givemesnack.me/
 |😺고양이|guest@abc.com|guest123|
 |👶사람|guestman@abc.com|guest123|
 
+- 구글 OAuth2 계정: cocoacatdog@gmail.com
+
 <br/>
 
 ## 🐈 프로젝트 소개
