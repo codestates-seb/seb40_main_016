@@ -1,7 +1,7 @@
 /*
 담당 : 김윤희
 생성 : 2022.11.17
-수정 : 2022.11.27
+수정 : 2023.04.11
 소개 : 이미지 업로드 컴포넌트
 설명 : 
   - 글 작성, 수정시 사용되는 이미지 업로드 컴포넌트입니다.
@@ -18,7 +18,7 @@
     />
 */
 
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useEffect } from "react";
 
 import PhotoPreview from "../PhotoPreview/PhotoPreview";
 
@@ -74,19 +74,13 @@ const PhotoUpload = ({
   };
 
   const createPhotoPreview = uploadedPhotos.map((photo, index) => {
-    const isDeleteImage = (element: any) => {
-      return element.uploadedPhoto === photo.uploadedPhoto;
-    };
-
     const deletePhoto = () => {
-      const deletePhoto = uploadedPhotos.findIndex(isDeleteImage);
-
-      if (!uploadedPhotos[deletePhoto].file) {
-        const deletedPhoto = uploadedPhotos[deletePhoto].uploadedPhoto;
+      if (!uploadedPhotos[index].file) {
+        const deletedPhoto = uploadedPhotos[index].uploadedPhoto;
         setDeletePhotos((photos) => [...photos, deletedPhoto]);
       }
 
-      uploadedPhotos.splice(deletePhoto, 1);
+      uploadedPhotos.splice(index, 1);
       setUploadedPhotos((photos) => [...photos]);
       if (uploadedPhotos.length === 0) setIsAddPhoto((isAddPhoto) => !isAddPhoto);
     };
